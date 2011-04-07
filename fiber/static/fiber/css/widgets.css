@@ -1,0 +1,27 @@
+/* ---[ CKEditor ]--- */
+
+.cke_skin_kama {
+	float: left;
+}
+
+.cke_button_bold .cke_icon,
+.cke_button_italic .cke_icon,
+.cke_button_indent .cke_icon,
+.cke_button_outdent .cke_icon,
+.cke_button_bulletedlist .cke_icon,
+.cke_button_numberedlist .cke_icon,
+.cke_button_unlink .cke_icon,
+.cke_button_source .cke_icon {
+	background-image: url(../images/ckeditor/bg-editor-toolbar-buttons.png) !important;
+}
+
+.cke_button_bold .cke_icon         { background-position: -22px  -2px !important; }
+.cke_button_italic .cke_icon       { background-position: -42px  -2px !important; }
+.cke_button_indent .cke_icon       { background-position: -202px -2px !important; }
+.cke_button_outdent .cke_icon      { background-position: -222px -2px !important; }
+.cke_button_bulletedlist .cke_icon { background-position: -322px -2px !important; }
+.cke_button_numberedlist .cke_icon { background-position: -342px -2px !important; }
+.cke_button_unlink .cke_icon       { background-position: -442px -2px !important; }
+.cke_button_source .cke_icon       { background-position: -542px -2px !important; }
+
+.cke_button_source .cke_label  { display: none !important; }

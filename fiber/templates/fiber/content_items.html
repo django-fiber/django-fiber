@@ -1,0 +1,13 @@
+{% if user.is_staff %}
+	<div data-fiber-data='{"type": "content_item", "add_url": "{{ ContentItem.get_add_url }}", "page_id": {{ fiber_page.id}}, "block_name": "{{ fiber_block_name }}"}'>
+	{% for content_item in fiber_content_items %}
+		{% include 'fiber/content_item.html' %}
+	{% endfor %}
+	</div>
+{% else %}
+	<div>
+	{% for content_item in fiber_content_items %}
+		{% include 'fiber/content_item.html' %}
+	{% endfor %}
+	</div>
+{% endif %}

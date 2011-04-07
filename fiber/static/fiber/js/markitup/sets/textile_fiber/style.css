@@ -1,0 +1,50 @@
+/* -------------------------------------------------------------------
+// markItUp!
+// By Jay Salvat - http://markitup.jaysalvat.com/
+// ------------------------------------------------------------------*/
+.markItUp .markItUpButton1 a {
+	background-image:url(images/h1.png);
+}
+.markItUp .markItUpButton2 a {
+	background-image:url(images/h2.png);
+}
+.markItUp .markItUpButton3 a {
+	background-image:url(images/h3.png);
+}
+.markItUp .markItUpButton4 a {
+	background-image:url(images/paragraph.png);
+}
+
+.markItUp .markItUpButton5 a {
+	background-image:url(images/bold.png);
+}
+.markItUp .markItUpButton6 a {
+	background-image:url(images/italic.png);
+}
+
+.markItUp .markItUpButton7 a {
+	background-image:url(images/list-bullet.png);
+}
+.markItUp .markItUpButton8 a {
+	background-image:url(images/list-numeric.png);
+}
+
+.markItUp .markItUpButton9 a {
+	background-image:url(/media/static/fiber/images/ckeditor/icon-pagelink.png);
+}
+
+.markItUp .markItUpButton10 a {
+	background-image:url(/media/static/fiber/images/ckeditor/icon-filelink.png);
+}
+
+.markItUp .markItUpButton11 a {
+	background-image:url(/media/static/fiber/images/ckeditor/icon-imagelink.png);
+}
+
+.markItUp .markItUpButton12 a {
+	background-image:url(/media/static/fiber/images/ckeditor/icon-customlink.png);
+}
+
+.markItUp .markItUpButton13 a {
+	background-image:url(/media/static/fiber/images/ckeditor/icon-image.png);
+}

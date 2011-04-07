@@ -1,0 +1,199 @@
+/*
+Copyright (c) 2010, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.com/yui/license.html
+version: 3.3.0
+build: 3167
+*/
+
+#wpr-admin-layer div,
+#wpr-admin-layer dl,
+#wpr-admin-layer dt,
+#wpr-admin-layer dd,
+#wpr-admin-layer ul,
+#wpr-admin-layer ol,
+#wpr-admin-layer li,
+#wpr-admin-layer h1,
+#wpr-admin-layer h2,
+#wpr-admin-layer h3,
+#wpr-admin-layer h4,
+#wpr-admin-layer h5,
+#wpr-admin-layer h6,
+#wpr-admin-layer pre,
+#wpr-admin-layer code,
+#wpr-admin-layer ins,
+#wpr-admin-layer form,
+#wpr-admin-layer fieldset,
+#wpr-admin-layer legend,
+#wpr-admin-layer input,
+#wpr-admin-layer textarea,
+#wpr-admin-layer p
+#wpr-admin-layer a,
+#wpr-admin-layer blockquote,
+#wpr-admin-layer th,
+#wpr-admin-layer td,
+
+#wpr-admin-sidebar div,
+#wpr-admin-sidebar dl,
+#wpr-admin-sidebar dt,
+#wpr-admin-sidebar dd,
+#wpr-admin-sidebar ul,
+#wpr-admin-sidebar ol,
+#wpr-admin-sidebar li,
+#wpr-admin-sidebar h1,
+#wpr-admin-sidebar h2,
+#wpr-admin-sidebar h3,
+#wpr-admin-sidebar h4,
+#wpr-admin-sidebar h5,
+#wpr-admin-sidebar h6,
+#wpr-admin-sidebar pre,
+#wpr-admin-sidebar code,
+#wpr-admin-sidebar ins,
+#wpr-admin-sidebar form,
+#wpr-admin-sidebar fieldset,
+#wpr-admin-sidebar legend,
+#wpr-admin-sidebar input,
+#wpr-admin-sidebar textarea,
+#wpr-admin-sidebar p,
+#wpr-admin-sidebar a, 
+#wpr-admin-sidebar blockquote,
+#wpr-admin-sidebar th,
+#wpr-admin-sidebar td {
+	margin: 0;
+	border: 0;
+	outline: 0;
+	padding: 0;
+	vertical-align: baseline;
+	font-family: 'Lucida Grande', 'DejaVu Sans', 'Bitstream Vera Sans', Verdana, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	color: #000;
+	background-color: transparent;
+}
+
+#wpr-admin-layer table,
+#wpr-admin-sidebar table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#wpr-admin-layer fieldset,
+#wpr-admin-layer img,
+
+#wpr-admin-sidebar fieldset,
+#wpr-admin-sidebar img {
+	border: 0;
+}
+
+#wpr-admin-layer address,
+#wpr-admin-layer caption,
+#wpr-admin-layer cite,
+#wpr-admin-layer code,
+#wpr-admin-layer ins,
+#wpr-admin-layer dfn,
+#wpr-admin-layer em,
+#wpr-admin-layer strong,
+#wpr-admin-layer th,
+#wpr-admin-layer var,
+
+#wpr-admin-sidebar address,
+#wpr-admin-sidebar caption,
+#wpr-admin-sidebar cite,
+#wpr-admin-sidebar code,
+#wpr-admin-sidebar ins,
+#wpr-admin-sidebar dfn,
+#wpr-admin-sidebar em,
+#wpr-admin-sidebar strong,
+#wpr-admin-sidebar th,
+#wpr-admin-sidebar var {
+	font-style: normal;
+	font-weight: normal;
+}
+
+#wpr-admin-layer li,
+#wpr-admin-sidebar li {
+	list-style: none;
+	background: none;
+}
+
+#wpr-admin-layer caption,
+#wpr-admin-layer th,
+
+#wpr-admin-sidebar caption,
+#wpr-admin-sidebar th {
+	text-align: left;
+}
+
+#wpr-admin-layer h1,
+#wpr-admin-layer h2,
+#wpr-admin-layer h3,
+#wpr-admin-layer h4,
+#wpr-admin-layer h5,
+#wpr-admin-layer h6,
+
+#wpr-admin-sidebar h1,
+#wpr-admin-sidebar h2,
+#wpr-admin-sidebar h3,
+#wpr-admin-sidebar h4,
+#wpr-admin-sidebar h5,
+#wpr-admin-sidebar h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+
+#wpr-admin-layer q:before,
+#wpr-admin-layer q:after,
+
+#wpr-admin-sidebar q:before,
+#wpr-admin-sidebar q:after {
+	content: '';
+}
+
+#wpr-admin-layer abbr,
+#wpr-admin-layer acronym,
+
+#wpr-admin-sidebar abbr,
+#wpr-admin-sidebar acronym {
+	border: 0;
+	font-variant: normal;
+}
+
+#wpr-admin-layer sup,
+#wpr-admin-sidebar sup {
+	vertical-align: text-top;
+}
+
+#wpr-admin-layer sub,
+#wpr-admin-sidebar sub, {
+	vertical-align: text-bottom;
+}
+
+#wpr-admin-layer input,
+#wpr-admin-layer textarea,
+#wpr-admin-layer select,
+
+#wpr-admin-sidebar input,
+#wpr-admin-sidebar textarea,
+#wpr-admin-sidebar select {
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+	background: none;
+}
+
+#wpr-admin-layer input,
+#wpr-admin-layer textarea,
+#wpr-admin-layer select,
+
+#wpr-admin-sidebar input,
+#wpr-admin-sidebar textarea,
+#wpr-admin-sidebar select {
+	font-size: 100%;
+}
+
+#wpr-admin-layer legend,
+#wpr-admin-sidebar legend {
+	color: #000;
+}

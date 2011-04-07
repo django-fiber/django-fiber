@@ -1,0 +1,113 @@
+
+<ul class="UIAPIPlugin-toc">
+<li><a href="#overview">Overview</a></li>
+<li><a href="#options">Arguments</a></li>
+</ul>
+<div class="UIAPIPlugin">
+  <h1>jQuery UI Clip Effect</h1>
+  <div id="overview">
+    <h2 class="top-header">Overview</h2>
+    <div id="overview-main">
+        <p>Clips the element on or off, vertically or horizontally.</p>
+    </div>
+    <div id="overview-dependencies">
+        <h3>Dependencies</h3>
+        <ul>
+<li>Effects Core</li>
+</ul>
+    </div>
+    <div id="overview-example">
+        <h3>Example</h3>
+        <div id="overview-example" class="example">
+<ul><li><a href="#demo"><span>Demo</span></a></li><li><a href="#source"><span>View Source</span></a></li></ul>
+<p><div id="demo" class="tabs-container" rel="170">
+Hides the element by clipping it off horizontal.<br />
+</p>
+<pre>
+$(&quot;div&quot;).<a href="http://docs.jquery.com/Events/click" title="Events/click">click</a>(function () {
+      $(this).<a href="http://docs.jquery.com/UI/Effects/hide" title="UI/Effects/hide">hide</a>(&quot;clip&quot;, { direction: &quot;horizontal&quot; }, 1000);
+});
+
+</pre>
+<p></div><div id="source" class="tabs-container">
+</p>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;link href=&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;
+  &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js&quot;&gt;&lt;/script&gt;
+  &lt;style type=&quot;text/css&quot;&gt;
+  div { margin: 0px; width: 100px; height: 80px; background: green; border: 1px solid black; position: relative; }
+&lt;/style&gt;
+
+  &lt;script&gt;
+  $(document).ready(function() {
+    
+$(&quot;div&quot;).<a href="http://docs.jquery.com/Events/click" title="Events/click">click</a>(function () {
+      $(this).<a href="http://docs.jquery.com/UI/Effects/hide" title="UI/Effects/hide">hide</a>(&quot;clip&quot;, { direction: &quot;horizontal&quot; }, 1000);
+});
+
+  });
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body style="font-size:62.5%;"&gt;
+  &lt;div&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p></div>
+</p><p></div>
+    </div>
+  </div>
+  <div id="options">
+    <h2 class="top-header">Arguments</h2>
+    <ul class="options-list">
+      
+<li class="option" id="option-direction">
+  <div class="option-header">
+    <h3 class="option-name"><a href="#option-direction">direction</a></h3>
+    <dl>
+      <dt class="option-type-label">Type:</dt>
+        <dd class="option-type">String</dd>
+      
+      <dt class="option-default-label">Default:</dt>
+        <dd class="option-default">"vertical"</dd>
+      
+    </dl>
+  </div>
+  <div class="option-description">
+    <p>The direction of the effect. Can be "vertical" or "horizontal".</p>
+  </div>
+</li>
+
+
+<li class="option" id="option-mode">
+  <div class="option-header">
+    <h3 class="option-name"><a href="#option-mode">mode</a></h3>
+    <dl>
+      <dt class="option-type-label">Type:</dt>
+        <dd class="option-type">String</dd>
+      
+      <dt class="option-default-label">Default:</dt>
+        <dd class="option-default">"hide"</dd>
+      
+    </dl>
+  </div>
+  <div class="option-description">
+    <p>The mode of the effect. Can be "show" or "hide".</p>
+  </div>
+</li>
+
+    </ul>
+  </div>
+</div>
+
+</p><!-- 
+Pre-expand include size: 5400 bytes
+Post-expand include size: 6639 bytes
+Template argument size: 3883 bytes
+Maximum: 2097152 bytes
+-->
+
+<!-- Saved in parser cache with key jqdocs_docs:pcache:idhash:2616-1!1!0!!en!2 and timestamp 20101119130621 -->

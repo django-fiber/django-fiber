@@ -1,0 +1,2 @@
+recursive-include fiber/templates *
+recursive-include fiber/static *

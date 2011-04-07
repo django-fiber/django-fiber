@@ -1,0 +1,52 @@
+{% load fiber_tags i18n %}
+<div id="wpr-admin-layer">
+	<div id="admin-layer"></div>
+</div>
+
+<div id="wpr-admin-sidebar">
+	<div id="admin-sidebar">
+		<div id="admin-sidebar-top-section">
+			<p class="backend"><a href="/admin/">{% trans 'Backend' %}</a></p>
+			<p class="logout"><a href="{{ logout_url }}">{% trans 'Log out' %}</a></p>
+		</div>
+		<div id="admin-sidebar-page-section">
+			<h2>Pages</h2>
+			<div id="admin-sidebar-page-tree" class="sidebar-tree">
+				<ul>
+					{% for menu in menus %}
+						<li>
+							<a href="#">{{ menu }}</a>
+							{% show_menu menu 1 999 "all" %}
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div id="admin-sidebar-content-section">
+			<h2>Content</h2>
+			<div id="admin-sidebar-content-tree" class="sidebar-tree">
+				<ul>
+					{% for group in content_groups %}
+						{% if group.content_items %}
+							<li id="content-group-{{ group.title|slugify }}">
+								<a href="#">{{ group.title }}</a>
+								<ul>
+									{% for content_item in group.content_items %}
+										<li data-fiber-data='{"type": "content_item", "id": {{ content_item.id }}, "url": "{{ content_item.get_change_url }}"}'>
+											<a href="#">{{ content_item }}</a>
+										</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div id="btn-toggle-admin-sidebar"></div>
+</div>
+
+<div id="wpr-admin-busy">
+	<div id="admin-busy"></div>
+</div>

@@ -1,0 +1,144 @@
+
+<ul class="UIAPIPlugin-toc">
+<li><a href="#overview">Overview</a></li>
+<li><a href="#options">Arguments</a></li>
+</ul>
+<div class="UIAPIPlugin">
+  <h1>jQuery UI Size Effect</h1>
+  <div id="overview">
+    <h2 class="top-header">Overview</h2>
+    <div id="overview-main">
+        <p>Resize an element to a specified width and height. </p>
+    </div>
+    <div id="overview-dependencies">
+        <h3>Dependencies</h3>
+        <ul>
+<li>Effects Core</li>
+<li>Scale effect</li>
+</ul>
+    </div>
+    <div id="overview-example">
+        <h3>Example</h3>
+        <div id="overview-example" class="example">
+<ul><li><a href="#demo"><span>Demo</span></a></li><li><a href="#source"><span>View Source</span></a></li></ul>
+<p><div id="demo" class="tabs-container" rel="170">
+Size an element to 200 x 60.<br />
+</p>
+<pre>
+$(&quot;div&quot;).<a href="http://docs.jquery.com/Events/click" title="Events/click">click</a>(function () {
+      $(this).<a href="http://docs.jquery.com/UI/Effects/effect" title="UI/Effects/effect">effect</a>(&quot;size&quot;, { to: {width: 200,height: 60} }, 1000);
+});
+
+</pre>
+<p></div><div id="source" class="tabs-container">
+</p>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;link href=&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;
+  &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js&quot;&gt;&lt;/script&gt;
+  &lt;style type=&quot;text/css&quot;&gt;
+  div { margin: 0px; width: 100px; height: 80px; background: green; border: 1px solid black; position: relative; }
+&lt;/style&gt;
+
+  &lt;script&gt;
+  $(document).ready(function() {
+    
+$(&quot;div&quot;).<a href="http://docs.jquery.com/Events/click" title="Events/click">click</a>(function () {
+      $(this).<a href="http://docs.jquery.com/UI/Effects/effect" title="UI/Effects/effect">effect</a>(&quot;size&quot;, { to: {width: 200,height: 60} }, 1000);
+});
+
+  });
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body style="font-size:62.5%;"&gt;
+  &lt;div&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p></div>
+</p><p></div>
+    </div>
+  </div>
+  <div id="options">
+    <h2 class="top-header">Arguments</h2>
+    <ul class="options-list">
+      
+<li class="option" id="option-from">
+  <div class="option-header">
+    <h3 class="option-name"><a href="#option-from">from</a></h3>
+    <dl>
+      <dt class="option-type-label">Type:</dt>
+        <dd class="option-type">Object</dd>
+      
+    </dl>
+  </div>
+  <div class="option-description">
+    <p>state at beginning, usually not needed.{ height: .., width: .. }</p>
+  </div>
+</li>
+
+
+<li class="option" id="option-to">
+  <div class="option-header">
+    <h3 class="option-name"><a href="#option-to">to</a></h3>
+    <dl>
+      <dt class="option-type-label">Type:</dt>
+        <dd class="option-type">Object</dd>
+      
+    </dl>
+  </div>
+  <div class="option-description">
+    <p>Height and width to resize to.{ height: .., width: .. }</p>
+  </div>
+</li>
+
+
+<li class="option" id="option-origin">
+  <div class="option-header">
+    <h3 class="option-name"><a href="#option-origin">origin</a></h3>
+    <dl>
+      <dt class="option-type-label">Type:</dt>
+        <dd class="option-type">Array</dd>
+      
+      <dt class="option-default-label">Default:</dt>
+        <dd class="option-default">['middle','center']</dd>
+      
+    </dl>
+  </div>
+  <div class="option-description">
+    <p>the vanishing point, default for show/hide</p>
+  </div>
+</li>
+
+
+<li class="option" id="option-scale">
+  <div class="option-header">
+    <h3 class="option-name"><a href="#option-scale">scale</a></h3>
+    <dl>
+      <dt class="option-type-label">Type:</dt>
+        <dd class="option-type">String</dd>
+      
+      <dt class="option-default-label">Default:</dt>
+        <dd class="option-default">"both"</dd>
+      
+    </dl>
+  </div>
+  <div class="option-description">
+    <p>Which areas of the element will be resized: 'both', 'box', 'content' Box resizes the border and padding of the element Content resizes any content inside of the element</p>
+  </div>
+</li>
+
+    </ul>
+  </div>
+</div>
+
+</p><!-- 
+Pre-expand include size: 6671 bytes
+Post-expand include size: 8527 bytes
+Template argument size: 5153 bytes
+Maximum: 2097152 bytes
+-->
+
+<!-- Saved in parser cache with key jqdocs_docs:pcache:idhash:2757-1!1!0!!en!2 and timestamp 20101119075005 -->
