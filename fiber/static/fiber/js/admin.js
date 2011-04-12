@@ -887,11 +887,17 @@ var AddButton = Class.extend({ // TODO: subclass to AddPageButton / AddContentIt
 	},
 
 	show: function() {
+		if ($.browser.msie && parseInt($.browser.version, 10) == 7) {
+			this.add_button.addClass('ui-button'); // only necessary for IE7
+		}
 		this.add_button.show();
 		this.set_position();
 	},
 
 	hide: function() {
+		if ($.browser.msie && parseInt($.browser.version, 10) == 7) {
+			this.add_button.removeClass('ui-button'); // only necessary for IE7
+		}
 		this.add_button.hide();
 	}
 });
