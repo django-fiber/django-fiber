@@ -7,7 +7,7 @@ Installation:
 
 ::
 
-	$ pip install git+ssh://git@github.com/leukeleu/django-fiber.git#egg=fiber
+	$ pip install git+git://github.com/ridethepony/django-fiber.git#egg=fiber
 
 
 Requirements:
@@ -15,7 +15,7 @@ Requirements:
 
 ::
 
-	$ pip install django-mptt==0.4.1
+	$ pip install django-mptt==0.4.2
 	$ pip install hg+http://bitbucket.org/jespern/django-piston/#egg=django-piston
 	$ pip install django-staticfiles==0.3.4
 	$ pip install beautifulsoup==3.2.0
