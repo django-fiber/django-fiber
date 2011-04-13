@@ -222,7 +222,7 @@ function extend_CKEditor() {
 		exec: function(editor) {
 
 			// show image select dialog
-			var image_select_dialog = new ImageSelectDialog();
+			var image_select_dialog = new Fiber.ImageSelectDialog();
 
 			image_select_dialog.action_click = function() {
 				var selected_image_path = $(this.uiDialog.find('tr.ui-state-highlight td')[0]).text();
