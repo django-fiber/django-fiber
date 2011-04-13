@@ -27,7 +27,6 @@ def strip_whitespace(text):
     ).strip()
 
 
-
 class ContentItemTest(TestCase):
     def generate_data(self):
         """
@@ -43,7 +42,7 @@ class ContentItemTest(TestCase):
 
         content_a = ContentItem.objects.create(name='a')
         content_b = ContentItem.objects.create(name='b')
-        ContentItem.objects.create(name='c')
+        content_c = ContentItem.objects.create(name='c')
 
         PageContentItem.objects.create(page=page1, content_item=content_a)
         PageContentItem.objects.create(page=page2, content_item=content_a)
@@ -58,12 +57,10 @@ class ContentItemTest(TestCase):
             format_list([g['title'] for g in content_groups], must_sort=False, separator=';'),
             'used more than once;unused;used once;recently changed'
         )
-
         self.assertEquals(
             format_list(content_groups[0]['content_items']),
             'a'
         )
-
         self.assertEquals(
             format_list(content_groups[1]['content_items']),
             'c'
@@ -123,12 +120,12 @@ class PageTest(TestCase):
         ---------ghi (/section2/ghi/)
         """
         page_home = Page.objects.create(title='home')
-        page_section1 = Page.objects.create(title='section1', parent=page_home, relative_url='section1')
-        page_section2 = Page.objects.create(title='section2', parent=page_home, relative_url='section2')
-        page_abc = Page.objects.create(title='abc', parent=page_section1, relative_url='abc')
-        Page.objects.create(title='xyz', parent=page_abc, relative_url='xyz')
+        page_section1 = Page.objects.create(title='section1', parent=page_home, url='section1')
+        page_section2 = Page.objects.create(title='section2', parent=page_home, url='section2')
+        page_abc = Page.objects.create(title='abc', parent=page_section1, url='abc')
+        Page.objects.create(title='xyz', parent=page_abc, url='xyz')
         page_def = Page.objects.create(title='def', parent=page_section2, url='/def/')  # absolute url
-        page_ghi = Page.objects.create(title='ghi', parent=page_section2, relative_url='ghi')
+        page_ghi = Page.objects.create(title='ghi', parent=page_section2, url='ghi')
         page_ghi.move_to(page_def, 'right')
 
     def test_move_page(self):
@@ -157,7 +154,7 @@ class PageTest(TestCase):
         self.assertEquals(page_abc.get_previous_sibling(), None)
         self.assertEquals(page_abc.get_next_sibling().title, 'def')
 
-        # -> references in content items are changed
+        # references in content items are changed
         self.assertEquals(
             strip_whitespace(
                 ContentItem.objects.get(name='a').content_html
@@ -216,10 +213,10 @@ class PageTest(TestCase):
 
         # change relative url of page 'abc'
         page_abc = Page.objects.get(title='abc')
-        page_abc.relative_url = 'a_b_c'
+        page_abc.url = 'a_b_c'
         page_abc.save()
 
-        # -> references in content items are changed
+        # references in content items are changed
         self.assertEquals(
             strip_whitespace(
                 ContentItem.objects.get(name='a').content_html
@@ -288,11 +285,10 @@ class TestTemplateTags(TestCase):
         # generate data
         main = Page.objects.create(title='main')
         home = Page.objects.create(title='home', parent=main, url='/')
-        Page.objects.create(title='section1', parent=home, relative_url='section1')
+        Page.objects.create(title='section1', parent=home, url='section1')
 
         user = User.objects.create_user('user1', 'u@ser.nl')
         user.is_staff = False
-
 
         # render menu with all pages
         t = Template("""
@@ -318,11 +314,10 @@ class TestTemplateTags(TestCase):
         # generate data
         main = Page.objects.create(title='main')
         home = Page.objects.create(title='home', parent=main, url='/')
-        Page.objects.create(title='section1', parent=home, relative_url='section1')
+        Page.objects.create(title='section1', parent=home, url='section1')
 
-        user = User.objects.create_user('user1', 'u@ser.nl')
+        user = User.objects.create_user('username', 'p4ssw0rd')
         user.is_staff = True
-
 
         # render menu with all pages
         t = Template("""
@@ -336,9 +331,11 @@ class TestTemplateTags(TestCase):
         })
         self.assertEquals(
             strip_whitespace(t.render(c)),
-            '<ul><li class="home first last">'\
+            '<ul data-fiber-data=\'{"type": "page", "add_url": "/admin/fiber/fiber_admin/fiber/page/add/", "parent_id": 1}\'>'\
+            '<li class="home first last">'\
             '<a href="/" data-fiber-data=\'{"type": "page", "id": 2, "parent_id": 1, "url": "/admin/fiber/fiber_admin/fiber/page/2/", "add_url": "/admin/fiber/fiber_admin/fiber/page/add/", "base_url": "/"}\'>home</a>'\
-            '<ul><li class="section1 first last">'\
+            '<ul data-fiber-data=\'{"type": "page", "add_url": "/admin/fiber/fiber_admin/fiber/page/add/", "parent_id": 2}\'>'\
+            '<li class="section1 first last">'\
             '<a href="/section1/" data-fiber-data=\'{"type": "page", "id": 3, "parent_id": 2, "url": "/admin/fiber/fiber_admin/fiber/page/3/", "add_url": "/admin/fiber/fiber_admin/fiber/page/add/", "base_url": "/section1/"}\'>section1</a>'\
             '</li></ul>'\
             '</li></ul>'
