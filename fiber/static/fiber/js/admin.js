@@ -945,6 +945,7 @@ var DroppableArea = Class.extend({
 					}
 				}
 			}, this),
+			tolerance: 'pointer',
 			hoverClass: 'ui-state-hover',
 			activeClass: 'ui-state-active'
 		});
@@ -1771,7 +1772,6 @@ var FiberItem = Class.extend({
 			this.$element.draggable({
 				scope: 'content_item',
 				revert: 'invalid',
-				cursorAt: { left: (this.$element.outerWidth() / 2), top: (this.$element.outerHeight() / 2) },
 				zIndex: 1001,
 				start: function() {
 					adminPage.show_droppables();
