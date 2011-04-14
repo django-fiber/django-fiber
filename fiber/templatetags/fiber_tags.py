@@ -15,7 +15,7 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
     try:
         root_page = Page.objects.get(title=menu_name, parent=None)
     except Page.DoesNotExist:
-        raise Page.DoesNotExist('Menu does not exist')
+        raise Page.DoesNotExist("Menu does not exist.\nNo top-level page found with the title '%s'." % menu_name)
 
     current_page = None
     if 'fiber_page' in context and expand != 'all':
