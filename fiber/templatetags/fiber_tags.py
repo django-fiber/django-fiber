@@ -13,11 +13,7 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
     menu_pages = []
 
     try:
-        root_page = Page.objects.get(title=menu_name)
-        if root_page.is_root_node():
-            pass
-        else:
-            raise Page.DoesNotExist('Menu does not exist')
+        root_page = Page.objects.get(title=menu_name, parent=None)
     except Page.DoesNotExist:
         raise Page.DoesNotExist('Menu does not exist')
 
