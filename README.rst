@@ -165,6 +165,8 @@ You can write out menus with the 'show_menu' template tag::
 
 	{% show_menu "menu_name" min_level max_level ["all_descendants / all"] %}
 
+The menu name refers to a top-level node in the page tree.
+
 Examples
 ........
 
