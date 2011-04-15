@@ -10,6 +10,14 @@ Fiber.remove_textarea = function(textarea) {};
 // some plugins use jQuery() instead of $()
 jQuery = $;
 
+// create stubs to communicate errors
+var console = window.console;
+if (!console)
+{
+	var stub = function() {};
+	console = {log: stub, warn: stub, error: stub};
+}
+
 var busyIndicator = {
 	show: function() {
 		$('#wpr-admin-busy').show();
@@ -194,6 +202,9 @@ var AdminForm = Class.extend({
 			this.form = $(forms[0]);
 
 			this.form.append('<input type="hidden" name="_continue" />'); // this prevents the redirect to the changelist
+		}
+		else {
+			console.error("get_form_from_HTML() - unable to find correct admin form! Results are: ", forms)
 		}
 	},
 
