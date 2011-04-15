@@ -189,7 +189,7 @@ var AdminForm = Class.extend({
 
 	// get the form element from the HTML that is returned by the XHR
 	get_form_from_HTML: function(html) {
-		var forms = $(document.createElement('div')).html(this.strip_HTML(html)).find('form');
+		var forms = $(document.createElement('div')).html(this.strip_HTML(html)).find('#content-main form[id$=_form]');
 		if (forms.length == 1) {
 			this.form = $(forms[0]);
 
