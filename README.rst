@@ -22,6 +22,20 @@ Requirements:
 	$ pip install django_compressor==0.5.3
 	$ pip install textile==2.1.4
 	$ pip install PIL==1.1.7
+	$ pip install South==0.7.3  # optional
+
+Or you could add the following lines to your project's requirements.txt
+
+::
+
+	django-mptt==0.4.2
+	hg+http://bitbucket.org/jespern/django-piston/#egg=django-piston
+	django-staticfiles==0.3.4
+	beautifulsoup==3.2.0
+	django_compressor==0.5.3
+	textile==2.1.4
+	PIL==1.1.7
+	South==0.7.3  # optional
 
 
 Settings:
@@ -64,7 +78,8 @@ settings.py
 		'static',
 	)
 
-        COMPRESS_JS_FILTERS = ()
+	COMPRESS_JS_FILTERS = ()
+
 
 Optional settings:
 ==================
