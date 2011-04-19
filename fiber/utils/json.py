@@ -4,6 +4,7 @@ from django.utils import simplejson as json
 
 
 class JSONWidget(forms.Textarea):
+
     def render(self, name, value, attrs=None):
         if isinstance(value, dict):
             value = json.dumps(value, indent=2)
@@ -11,10 +12,11 @@ class JSONWidget(forms.Textarea):
 
 
 class JSONFormField(forms.CharField):
+
     def __init__(self, *args, **kwargs):
         kwargs['widget'] = JSONWidget
         super(JSONFormField, self).__init__(*args, **kwargs)
-    
+
     def clean(self, value):
         if not value:
             return None
