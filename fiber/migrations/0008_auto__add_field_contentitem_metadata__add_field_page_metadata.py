@@ -8,29 +8,30 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Deleting field 'Page.relative_url'
-        db.delete_column('fiber_page', 'relative_url')
+        # Adding field 'ContentItem.metadata'
+        db.add_column('fiber_contentitem', 'metadata', self.gf('fiber.utils.json.JSONField')(null=True, blank=True), keep_default=False)
 
-        # Deleting field 'Page.named_url'
-        db.delete_column('fiber_page', 'named_url')
+        # Adding field 'Page.metadata'
+        db.add_column('fiber_page', 'metadata', self.gf('fiber.utils.json.JSONField')(null=True, blank=True), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Adding field 'Page.relative_url'
-        db.add_column('fiber_page', 'relative_url', self.gf('django.db.models.fields.CharField')(default='', max_length=255, blank=True), keep_default=False)
+        # Deleting field 'ContentItem.metadata'
+        db.delete_column('fiber_contentitem', 'metadata')
 
-        # Adding field 'Page.named_url'
-        db.add_column('fiber_page', 'named_url', self.gf('django.db.models.fields.CharField')(default='', max_length=255, blank=True), keep_default=False)
+        # Deleting field 'Page.metadata'
+        db.delete_column('fiber_page', 'metadata')
 
 
     models = {
         'fiber.contentitem': {
             'Meta': {'object_name': 'ContentItem'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'content_html': ('fiber.utils.fields.FiberHTMLField', [], {}),
             'content_markup': ('fiber.utils.fields.FiberMarkupField', [], {}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'metadata': ('fiber.utils.json.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'protected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
@@ -61,6 +62,7 @@ class Migration(SchemaMigration):
             'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'mark_current_regexes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'metadata': ('fiber.utils.json.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'subpages'", 'null': 'True', 'to': "orm['fiber.Page']"}),
             'protected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'redirect_page': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'redirected_pages'", 'null': 'True', 'to': "orm['fiber.Page']"}),

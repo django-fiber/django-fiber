@@ -49,7 +49,7 @@ class PageAdmin(MPTTModelAdmin):
     form = PageForm
     fieldsets = (
         (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name',)}),
-        ('Advanced options', {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'protected',)}),
+        ('Advanced options', {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'protected', 'metadata',)}),
     )
     inlines = (PageContentItemInline,)
     list_display = ('title', 'url', 'redirect_page','get_absolute_url', 'move_links',)
@@ -109,7 +109,7 @@ class ContentItemAdmin(admin.ModelAdmin):
     form = ContentItemAdminForm
     fieldsets = (
         (None, {'fields': ('name', get_editor_field_name('content_html'))}),
-        ('Advanced options', {'classes': ('collapse',), 'fields': ('protected',)}),
+        ('Advanced options', {'classes': ('collapse',), 'fields': ('protected', 'metadata',)}),
     )
 
 admin.site.register(ContentItem, ContentItemAdmin)

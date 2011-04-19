@@ -38,15 +38,11 @@ class FiberHTMLField(FiberTextField):
 FORMFIELD_FOR_DBFIELD_DEFAULTS[FiberMarkupField] = {'widget': FiberTextarea}
 FORMFIELD_FOR_DBFIELD_DEFAULTS[FiberHTMLField] = {'widget': FiberTextarea}
 
-
 try:
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules(
-        [],
-        [
-            "^fiber\.utils\.fields.FiberMarkupField",
-            "^fiber\.utils\.fields.FiberHTMLField"
-        ]
-    )
+    add_introspection_rules([], [
+        '^fiber\.utils\.fields\.FiberMarkupField',
+        '^fiber\.utils\.fields\.FiberHTMLField'
+    ])
 except ImportError:
     pass

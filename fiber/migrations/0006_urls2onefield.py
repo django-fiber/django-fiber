@@ -25,7 +25,8 @@ class Migration(DataMigration):
         'fiber.contentitem': {
             'Meta': {'object_name': 'ContentItem'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'html': ('django.db.models.fields.TextField', [], {}),
+            'content_html': ('fiber.utils.fields.FiberHTMLField', [], {}),
+            'content_markup': ('fiber.utils.fields.FiberMarkupField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'protected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),

@@ -16,6 +16,7 @@ from fiber import editor
 from app_settings import IMAGES_DIR, FILES_DIR
 
 from utils.urls import get_named_url_from_quoted_url, is_quoted_url
+from utils.json import JSONField
 
 
 class ContentItemManager(models.Manager):
@@ -101,6 +102,8 @@ class ContentItem(models.Model):
     content_html = FiberHTMLField(verbose_name='Content')
     protected = models.BooleanField(default=False)
 
+    metadata = JSONField(blank=True, null=True)
+
     objects = ContentItemManager()
 
     def __unicode__(self):
@@ -148,6 +151,8 @@ class Page(MPTTModel):
     protected = models.BooleanField(default=False)
 
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem')
+
+    metadata = JSONField(blank=True, null=True)
 
     objects = PageManager()
 
