@@ -1,18 +1,9 @@
 from django import forms
 from django.contrib import admin
-
+from fiber.utils.urls import is_quoted_url, get_named_url_from_quoted_url
 from mptt.admin import MPTTModelAdmin
 from mptt.forms import TreeNodeChoiceField
-
-from fiber.editor import get_editor_field_name
-
-from models import Page, ContentItem, PageContentItem, Image, File
-from utils.urls import get_named_url_from_quoted_url, is_quoted_url
-
-class FiberAdminSite(admin.AdminSite):
-    pass
-
-fiber_admin_site = FiberAdminSite(name='fiber_admin')
+from fiber.models import PageContentItem, Page
 
 
 class PageForm(forms.ModelForm):
@@ -72,59 +63,3 @@ class PageAdmin(MPTTModelAdmin):
 
     move_links.short_description = 'Move'
     move_links.allow_tags = True
-
-
-admin.site.register(Page, PageAdmin)
-
-
-class FiberAdminPageAdmin(MPTTModelAdmin):
-    form = PageForm
-    fieldsets = (
-        (None, {'fields': ('title', 'url', 'redirect_page')}),
-    )
-
-    def save_model(self, request, obj, form, change):
-        if 'before_page_id' in request.POST:
-            before_page = Page.objects.get(pk=int(request.POST['before_page_id']))
-            obj.parent = before_page.parent
-            obj.insert_at(before_page, position='left', save=False)
-        elif 'below_page_id' in request.POST:
-            below_page = Page.objects.get(pk=int(request.POST['below_page_id']))
-            obj.parent = below_page
-            obj.insert_at(below_page, position='last-child', save=False)
-
-        super(FiberAdminPageAdmin, self).save_model(request, obj, form, change)
-
-
-fiber_admin_site.register(Page, FiberAdminPageAdmin)
-
-
-class ContentItemAdminForm(forms.ModelForm):
-    class Meta:
-        model = ContentItem
-
-
-class ContentItemAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__',)
-    form = ContentItemAdminForm
-    fieldsets = (
-        (None, {'fields': ('name', get_editor_field_name('content_html'))}),
-        ('Advanced options', {'classes': ('collapse',), 'fields': ('protected', 'metadata',)}),
-    )
-
-admin.site.register(ContentItem, ContentItemAdmin)
-
-
-class FiberAdminContentItemAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__',)
-    form = ContentItemAdminForm
-    fieldsets = (
-        (None, {'classes': ('hide-label',), 'fields': (get_editor_field_name('content_html'),)}),
-    )
-fiber_admin_site.register(ContentItem, FiberAdminContentItemAdmin)
-
-
-admin.site.register(Image)
-
-
-admin.site.register(File)
