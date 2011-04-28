@@ -14,5 +14,8 @@ class ContentItemAdmin(admin.ModelAdmin):
     form = ContentItemAdminForm
     fieldsets = (
         (None, {'fields': ('name', get_editor_field_name('content_html'))}),
-        ('Advanced options', {'classes': ('collapse',), 'fields': ('protected', 'metadata',)}),
+        ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('protected', 'metadata',)
+        }),
     )

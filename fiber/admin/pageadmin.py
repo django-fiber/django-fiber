@@ -39,8 +39,13 @@ class PageContentItemInline(admin.TabularInline):
 class PageAdmin(MPTTModelAdmin):
     form = PageForm
     fieldsets = (
-        (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name',)}),
-        ('Advanced options', {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'protected', 'metadata',)}),
+        (None, {
+            'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name',)
+        }),
+        ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('mark_current_regexes', 'show_in_menu', 'protected', 'metadata',)
+        }),
     )
     inlines = (PageContentItemInline,)
     list_display = ('title', 'url', 'redirect_page','get_absolute_url', 'move_links',)
@@ -52,11 +57,11 @@ class PageAdmin(MPTTModelAdmin):
         move_down = u'\u2007'
 
         # first child cannot be moved up
-        if (not object.is_first_child()):
+        if not object.is_first_child():
             move_up = u'<a href="%s/move_up">\u2191</a>' % object.pk
 
         # last child cannot be moved down
-        if (not object.is_last_child()):
+        if not object.is_last_child():
             move_down = u'<a href="%s/move_down">\u2193</a>' % object.pk
 
         return move_up + move_down
