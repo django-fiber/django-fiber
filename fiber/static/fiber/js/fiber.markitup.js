@@ -6,8 +6,8 @@ Fiber.enhance_textarea = function(textarea) {
 
 	var header = $textarea.parent('.markItUpContainer').find('.markItUpHeader');
 	header.find('li.select_page a').click(function() {
-		// Restore textarea selection.
-		$textarea.caret(caret);
+		// Save selection in textarea. This is necessary for ie.
+		var caret = $textarea.caret();
 
 		var page_select_dialog = new Fiber.PageSelectDialog();
 		page_select_dialog.action_click = function() {
