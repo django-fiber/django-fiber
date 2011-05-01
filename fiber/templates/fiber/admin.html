@@ -10,7 +10,7 @@
 			<p class="logout"><a href="{{ logout_url }}">{% trans 'Log out' %}</a></p>
 		</div>
 		<div id="admin-sidebar-page-section">
-			<h2>Pages</h2>
+			<h2>{% trans "Pages" %}</h2>
 			<div id="admin-sidebar-page-tree" class="sidebar-tree">
 				<ul>
 					{% for menu in menus %}
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 		<div id="admin-sidebar-content-section">
-			<h2>Content</h2>
+			<h2>{% trans "Content" %}</h2>
 			<div id="admin-sidebar-content-tree" class="sidebar-tree">
 				<ul>
 					{% for group in content_groups %}
