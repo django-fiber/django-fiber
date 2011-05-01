@@ -103,7 +103,7 @@ class ContentItem(models.Model):
     content_html = FiberHTMLField(verbose_name=_('Content'))
     protected = models.BooleanField(_('protected'), default=False)
 
-    metadata = JSONField(blank=True, null=True)
+    metadata = JSONField(_('metadata'), blank=True, null=True)
 
     objects = ContentItemManager()
 
@@ -124,6 +124,10 @@ class ContentItem(models.Model):
     def get_change_url(self):
         named_url = 'fiber_admin:%s_%s_change' % (self._meta.app_label, self._meta.object_name.lower())
         return reverse(named_url, args=(self.id, ))
+
+    class Meta:
+        verbose_name = _('content item')
+        verbose_name_plural = _('content items')
 
 
 class PageManager(models.Manager):
@@ -246,6 +250,8 @@ class Page(MPTTModel):
         return self.page_content_items.filter(block_name=block_name).order_by('sort')
 
     class Meta:
+        verbose_name = _('page')
+        verbose_name_plural = _('pages')
         ordering = ('tree_id', 'lft')
 
 
@@ -312,6 +318,8 @@ class Image(models.Model):
         return self.image.path
 
     class Meta:
+        verbose_name = _('image')
+        verbose_name_plural = _('images')
         ordering = ('image', )
 
 
@@ -328,4 +336,6 @@ class File(models.Model):
         return self.file.path
 
     class Meta:
+        verbose_name = _('file')
+        verbose_name_plural = _('files')
         ordering = ('file', )
