@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-01 16:34+0200\n"
-"PO-Revision-Date: 2011-05-01 09:42\n"
+"POT-Creation-Date: 2011-05-01 16:58+0200\n"
+"PO-Revision-Date: 2011-05-01 10:05\n"
 "Last-Translator:   <info@simons-design.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,6 +27,70 @@ msgid ""
 "Please enter a correct username and password. Note that both fields are"
 " case-sensitive."
 msgstr ""
+
+#: models.py:98 models.py:138 models.py:294 models.py:319
+msgid "created"
+msgstr "aanmaak"
+
+#: models.py:99 models.py:139 models.py:295 models.py:320
+msgid "updated"
+msgstr "bewerking"
+
+#: models.py:101
+msgid "name"
+msgstr "naam"
+
+#: models.py:102 models.py:103
+msgid "Content"
+msgstr "Inhoud"
+
+#: models.py:104 models.py:152
+msgid "protected"
+msgstr "beschermd"
+
+#: models.py:145 models.py:298 models.py:323
+msgid "title"
+msgstr "titel"
+
+#: models.py:146
+msgid "URL"
+msgstr ""
+
+#: models.py:148
+msgid "mark current regexes"
+msgstr "reguliere expressies voor current css class"
+
+#: models.py:150
+msgid "template name"
+msgstr "template naam"
+
+#: models.py:151
+msgid "show in menu"
+msgstr "toon in menu"
+
+#: models.py:287
+msgid "block name"
+msgstr "naam gedeelte"
+
+#: models.py:288
+msgid "sort"
+msgstr "volgorde"
+
+#: models.py:297
+msgid "image"
+msgstr "afbeelding"
+
+#: models.py:299
+msgid "width"
+msgstr "breedte"
+
+#: models.py:300
+msgid "height"
+msgstr "hoogte"
+
+#: models.py:322
+msgid "file"
+msgstr "bestand"
 
 #: templates/fiber/admin.html:9
 msgid "Backend"
