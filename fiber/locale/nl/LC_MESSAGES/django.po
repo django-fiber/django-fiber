@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-01 17:38+0200\n"
-"PO-Revision-Date: 2011-05-01 10:42\n"
+"POT-Creation-Date: 2011-05-01 17:47+0200\n"
+"PO-Revision-Date: 2011-05-01 10:49\n"
 "Last-Translator:   <info@simons-design.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,6 +27,22 @@ msgid ""
 "Please enter a correct username and password. Note that both fields are"
 " case-sensitive."
 msgstr ""
+
+#: models.py:54
+msgid "used more than once"
+msgstr "meer dan één keer gebruikt"
+
+#: models.py:55
+msgid "unused"
+msgstr "ongebruikt"
+
+#: models.py:56
+msgid "used once"
+msgstr "één keer gebruikt"
+
+#: models.py:57
+msgid "recently changed"
+msgstr "recent gewijzigd"
 
 #: models.py:98 models.py:142 models.py:300 models.py:327
 msgid "created"
