@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-01 21:46+0200\n"
-"PO-Revision-Date: 2011-05-01 14:46\n"
+"POT-Creation-Date: 2011-05-01 22:18+0200\n"
+"PO-Revision-Date: 2011-05-01 15:18\n"
 "Last-Translator:   <info@simons-design.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +17,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.6.0\n"
+
+#: admin.py:21 models.py:150
+msgid "URL"
+msgstr ""
+
+#: admin.py:22
+msgid "Example: '/section-1/products' or 'products' or '\"some_named_url\"'"
+msgstr "Voorbeeld: '/sectie-1/producten' of 'producten' of '\"a_named_url\"'"
+
+#: admin.py:23
+msgid ""
+"This value must contain only letters, numbers, underscores, dashes or "
+"slashes."
+msgstr ""
+"Deze waarde mag alleen letters, cijfers, liggende strepen en schuine "
+"strepen bevatten."
+
+#: admin.py:24
+msgid "Redirect page"
+msgstr "Automatische doorverwijzing"
+
+#: admin.py:74
+msgid "Move"
+msgstr "Verplaatsen"
 
 #: admin_views.py:28
 msgid "This account is inactive."
@@ -85,10 +109,6 @@ msgstr "pagina"
 msgid "title"
 msgstr "titel"
 
-#: models.py:150
-msgid "URL"
-msgstr ""
-
 #: models.py:151
 msgid "redirect page"
 msgstr "automatische doorverwijzing"
@@ -99,7 +119,7 @@ msgstr "reguliere expressies voor current CSS selector"
 
 #: models.py:154
 msgid "template name"
-msgstr "template naam"
+msgstr "sjabloonnaam"
 
 #: models.py:155
 msgid "show in menu"
