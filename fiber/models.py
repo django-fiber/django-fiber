@@ -51,10 +51,10 @@ class ContentItemManager(models.Manager):
                 recently_changed.append(content_item)
 
         return [
-            dict(title='used more than once', content_items=multiple),
-            dict(title='unused', content_items=unused),
-            dict(title='used once', content_items=once),
-            dict(title='recently changed', content_items=recently_changed),
+            dict(title=_('used more than once'), content_items=multiple),
+            dict(title=_('unused'), content_items=unused),
+            dict(title=_('used once'), content_items=once),
+            dict(title=_('recently changed'), content_items=recently_changed),
         ]
 
     def rename_url(self, old_url, new_url):
