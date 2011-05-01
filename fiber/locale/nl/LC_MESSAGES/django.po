@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-01 21:18+0200\n"
-"PO-Revision-Date: 2011-05-01 14:26\n"
+"POT-Creation-Date: 2011-05-01 21:46+0200\n"
+"PO-Revision-Date: 2011-05-01 14:46\n"
 "Last-Translator:   <info@simons-design.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -68,13 +68,18 @@ msgstr "beschermd"
 msgid "metadata"
 msgstr ""
 
-#: models.py:129
+#: models.py:129 models.py:291
 msgid "content item"
 msgstr "Inhoud"
 
-#: models.py:130
+#: models.py:130 models.py:158
 msgid "content items"
 msgstr "Inhoud"
+
+#: models.py:145
+#, fuzzy
+msgid "parent"
+msgstr "pagina"
 
 #: models.py:149 models.py:304 models.py:331
 msgid "title"
@@ -83,6 +88,10 @@ msgstr "titel"
 #: models.py:150
 msgid "URL"
 msgstr ""
+
+#: models.py:151
+msgid "redirect page"
+msgstr "automatische doorverwijzing"
 
 #: models.py:152
 msgid "mark current regexes"
@@ -96,7 +105,7 @@ msgstr "template naam"
 msgid "show in menu"
 msgstr "toon in menu"
 
-#: models.py:253
+#: models.py:253 models.py:292
 msgid "page"
 msgstr "pagina"
 
