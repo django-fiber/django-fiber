@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-01 17:47+0200\n"
-"PO-Revision-Date: 2011-05-01 10:49\n"
+"POT-Creation-Date: 2011-05-01 21:18+0200\n"
+"PO-Revision-Date: 2011-05-01 14:26\n"
 "Last-Translator:   <info@simons-design.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +56,7 @@ msgstr "bewerking"
 msgid "name"
 msgstr "naam"
 
-#: models.py:102 models.py:103
+#: models.py:102 models.py:103 templates/fiber/admin.html:26
 msgid "Content"
 msgstr "Inhoud"
 
@@ -138,8 +138,12 @@ msgstr "bestanden"
 
 #: templates/fiber/admin.html:9
 msgid "Backend"
-msgstr ""
+msgstr "Back-end"
 
 #: templates/fiber/admin.html:10
 msgid "Log out"
 msgstr "Log uit"
+
+#: templates/fiber/admin.html:13
+msgid "Pages"
+msgstr "Pagina’s"
