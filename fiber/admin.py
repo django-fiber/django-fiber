@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
 from mptt.admin import MPTTModelAdmin
 from mptt.forms import TreeNodeChoiceField
@@ -17,10 +18,10 @@ fiber_admin_site = FiberAdminSite(name='fiber_admin')
 
 class PageForm(forms.ModelForm):
     parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3*unichr(160), empty_label='---------', required=False)
-    url = forms.RegexField(label='URL', required=False, max_length=100, regex=r'^[-\w/\.\:"]+$',
-        help_text = 'Example: \'/section-1/products\' or \'products\' or \'"some_named_url"\'',
-        error_message = 'This value must contain only letters, numbers, underscores, dashes or slashes.')
-    redirect_page = TreeNodeChoiceField(queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160), empty_label='---------', required=False)
+    url = forms.RegexField(label=_('URL'), required=False, max_length=100, regex=r'^[-\w/\.\:"]+$',
+        help_text = _("""Example: '/section-1/products' or 'products' or '"some_named_url"'"""),
+        error_message = _('This value must contain only letters, numbers, underscores, dashes or slashes.'))
+    redirect_page = TreeNodeChoiceField(label=_('Redirect page'), queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160), empty_label='---------', required=False)
 
     class Meta:
         model = Page
@@ -70,7 +71,7 @@ class PageAdmin(MPTTModelAdmin):
 
         return move_up + move_down
 
-    move_links.short_description = 'Move'
+    move_links.short_description = _('Move')
     move_links.allow_tags = True
 
 
