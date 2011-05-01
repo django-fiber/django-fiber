@@ -142,20 +142,20 @@ class Page(MPTTModel):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
 
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='subpages')
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='subpages', verbose_name=_('parent'))
 
     # TODO: add keywords, description (as meta?)
 
     title = models.CharField(_('title'), blank=True, max_length=255)
     url = models.CharField(_('URL'), blank=True, max_length=255)
-    redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages')
+    redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'))
     mark_current_regexes = models.TextField(_('mark current regexes'), blank=True)
     # TODO: add `alias_page` field
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
     show_in_menu = models.BooleanField(_('show in menu'), default=True)
     protected = models.BooleanField(_('protected'), default=False)
 
-    content_items = models.ManyToManyField(ContentItem, through='PageContentItem')
+    content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
 
     metadata = JSONField(blank=True, null=True)
 
@@ -288,8 +288,8 @@ class PageContentItemManager(models.Manager):
 
 
 class PageContentItem(models.Model):
-    content_item = models.ForeignKey(ContentItem)
-    page = models.ForeignKey(Page, related_name='page_content_items')
+    content_item = models.ForeignKey(ContentItem, verbose_name=_('content item'))
+    page = models.ForeignKey(Page, related_name='page_content_items', verbose_name=_('page'))
     block_name = models.CharField(_('block name'), max_length=255)
     sort = models.IntegerField(_('sort'), blank=True, null=True)
 
