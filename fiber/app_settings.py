@@ -11,4 +11,4 @@ IMAGES_DIR = getattr(settings, 'FIBER_IMAGES_DIR', 'uploads/images')
 if not hasattr(settings, 'MPTT_ADMIN_LEVEL_INDENT'):
     settings.MPTT_ADMIN_LEVEL_INDENT = 30
 
-EDITOR = getattr(settings, 'FIBER_EDITOR', 'fiber.editor_definitions.CKEditor')
+EDITOR = getattr(settings, 'FIBER_EDITOR', 'fiber.editor_definitions.ckeditor.EDITOR')

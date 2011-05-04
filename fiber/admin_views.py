@@ -5,8 +5,6 @@ from django.utils import simplejson
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 
-from textile import textile
-
 from models import Page
 
 
@@ -62,6 +60,8 @@ def page_move_down(request, id):
 
 @csrf_exempt
 def render_textile(request):
+    from textile import textile
+
     return HttpResponse(
         textile(request.POST['data'])
     )

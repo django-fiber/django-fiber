@@ -7,35 +7,28 @@ Installation:
 
 ::
 
-	$ pip install git+git://github.com/ridethepony/django-fiber.git#egg=fiber
+	$ pip install django-fiber
 
 
 Requirements:
 =============
 
-::
-
-	$ pip install django-mptt==0.4.2
-	$ pip install hg+http://bitbucket.org/jespern/django-piston/#egg=django-piston
-	$ pip install django-staticfiles==0.3.4
-	$ pip install beautifulsoup==3.2.0
-	$ pip install django_compressor==0.5.3
-	$ pip install textile==2.1.4
-	$ pip install PIL==1.1.7
-	$ pip install South==0.7.3  # optional
-
-Or you could add the following lines to your project's requirements.txt
+These dependencies are automatically installed:
 
 ::
 
-	django-mptt==0.4.2
-	hg+http://bitbucket.org/jespern/django-piston/#egg=django-piston
-	django-staticfiles==0.3.4
-	beautifulsoup==3.2.0
-	django_compressor==0.5.3
-	textile==2.1.4
-	PIL==1.1.7
-	South==0.7.3  # optional
+	django-mptt>=0.4.2
+	django-piston==0.2.3rc1   # from hg+http://bitbucket.org/jespern/django-piston@c4b2d21db51a#egg=django-piston-0.2.3rc1
+	django-staticfiles>=1.0.1
+	beautifulsoup>=3.2.0
+	django-compressor>=0.7.1
+
+Optionally, you may need:
+
+::
+
+	textile>=2.1.5
+	South>=0.7.3
 
 
 Settings:
@@ -77,6 +70,11 @@ settings.py
 	STATICFILES_MEDIA_DIRNAMES = (
 		'static',
 	)
+	STATICFILES_FINDERS = (
+		'staticfiles.finders.FileSystemFinder',
+		'staticfiles.finders.AppDirectoriesFinder',
+		'compressor.finders.CompressorFinder',
+	)
 
 	COMPRESS_JS_FILTERS = ()
 
@@ -112,16 +110,10 @@ Post-installation:
 Create database tables::
 
 	$ python manage.py syncdb
-	$ python manage.py migrate fiber
 
-All static Fiber files need to be symlinked in (or copied to) your media folder.
-For Django < 1.3, execute the following admin command::
+All static Fiber files need to be symlinked in (or copied to) your media folder::
 
-	$ python manage.py build_static --link
-
-When Django 1.3 hits the stage, this will be handled by django.contrib.staticfiles::
-
-	$ python manage.py collectstatic
+	$ python manage.py collectstatic --link
 
 
 Usage:
