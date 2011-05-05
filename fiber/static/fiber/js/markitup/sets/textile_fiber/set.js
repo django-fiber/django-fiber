@@ -13,8 +13,7 @@
 
 // Changed mySettings into markitup_settings
 markitup_settings = {
-	previewParserPath: '/admin/fiber/render_textile/',
-	onShiftEnter:		{keepDefault:false, replaceWith:'\n\n'},
+	onShiftEnter: {keepDefault:false, replaceWith:'\n\n'},
 	markupSet: [
 		{name:'Heading 1', key:'1', openWith:'h1(!(([![Class]!]))!). ', placeHolder:'Your title here...' },
 		{name:'Heading 2', key:'2', openWith:'h2(!(([![Class]!]))!). ', placeHolder:'Your title here...' },

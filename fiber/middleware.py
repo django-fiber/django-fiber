@@ -2,6 +2,7 @@ import re
 import random
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.utils.encoding import smart_unicode
@@ -153,7 +154,7 @@ class AdminPageMiddleware(object):
         return True
 
     def is_django_admin(self, request):
-        return re.search(r'^admin/', request.path.lstrip('/'))
+        return re.search(r'^%s' % (reverse('admin:index').lstrip('/')), request.path.lstrip('/'))
 
     def get_header_html(self, request):
         t = loader.get_template('fiber/header.html')
@@ -161,16 +162,18 @@ class AdminPageMiddleware(object):
             request,
             {
                 'editor_template_js': self.editor_settings.get('template_js'),
-                'editor_template_css': self.editor_settings.get('template_css')
-            }
+                'editor_template_css': self.editor_settings.get('template_css'),
+                'BACKEND_BASE_URL': reverse('admin:index'),
+                'FIBER_LOGIN_URL': reverse('fiber_login'),
+            },
         )
         return t.render(c)
 
     def get_logout_url(self, request):
         if request.META['QUERY_STRING']:
-            return '/admin/logout/?next=%s?%s' % (request.path, request.META['QUERY_STRING'])
+            return '%s?next=%s?%s' % (reverse('admin:logout'), request.path, request.META['QUERY_STRING'])
         else:
-            return '/admin/logout/?next=%s' % request.path
+            return '%s?next=%s' % (reverse('admin:logout'), request.path)
 
     def get_editor_settings(self):
         return import_element(EDITOR)

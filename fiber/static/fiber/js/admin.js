@@ -232,7 +232,7 @@ var AdminForm = Class.extend({
 var LoginFormDialog = AdminFormDialog.extend({
 
 	defaults: {
-		url: '/admin/',
+		url: BACKEND_BASE_URL,
 		width: 340,
 		height: 'auto',
 		start_width: 340
@@ -259,7 +259,7 @@ var LoginFormDialog = AdminFormDialog.extend({
 	action_click: function() {
 		this.admin_form.form.ajaxSubmit({
 			cache: false,
-			url: '/admin/fiber/login/',
+			url: FIBER_LOGIN_URL,
 			type: 'POST',
 			context: this,
 			datatype: 'json',
