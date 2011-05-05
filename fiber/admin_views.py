@@ -3,7 +3,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
-from django.views.decorators.csrf import csrf_exempt
 
 from models import Page
 
@@ -56,12 +55,3 @@ def page_move_down(request, id):
             page.move_to(next_sibling_page, position='right')
 
     return HttpResponseRedirect('../../')
-
-
-@csrf_exempt
-def render_textile(request):
-    from textile import textile
-
-    return HttpResponse(
-        textile(request.POST['data'])
-    )

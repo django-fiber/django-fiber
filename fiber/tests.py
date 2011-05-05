@@ -1,6 +1,7 @@
-from django.test import TestCase
-from django.template import Template, Context
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.template import Template, Context
+from django.test import TestCase
 
 from models import ContentItem, Page, PageContentItem
 
@@ -28,6 +29,7 @@ def strip_whitespace(text):
 
 
 class ContentItemTest(TestCase):
+
     def generate_data(self):
         """
         Generate test data:
@@ -75,6 +77,7 @@ class ContentItemTest(TestCase):
         )
 
     def test_rename_url(self):
+
         def check_content(name, html):
             self.assertEquals(
                 strip_whitespace(
@@ -109,6 +112,7 @@ class ContentItemTest(TestCase):
 
 
 class PageTest(TestCase):
+
     def generate_data(self):
         """
         ---home
@@ -181,6 +185,7 @@ class PageTest(TestCase):
         self.assertEquals(page_xyz.get_next_sibling().title, 'ghi')
 
     def test_get_absolute_url(self):
+
         def test_url(title, url):
             self.assertEquals(
                 Page.objects.get(title=title).get_absolute_url(),
@@ -232,7 +237,9 @@ class PageTest(TestCase):
 
 
 class PageContentItemTest(TestCase):
+
     def test_move(self):
+
         def get_content(page_id, block_name='main'):
             page = Page.objects.get(id=page_id)
             return format_list(
@@ -281,6 +288,7 @@ class PageContentItemTest(TestCase):
 
 
 class TestTemplateTags(TestCase):
+
     def test_show_user_menu(self):
         # generate data
         main = Page.objects.create(title='main')
@@ -309,7 +317,7 @@ class TestTemplateTags(TestCase):
             '</li></ul>'\
             '</li></ul>'
         )
-        
+
     def test_show_admin_menu(self):
         # generate data
         main = Page.objects.create(title='main')
@@ -331,12 +339,16 @@ class TestTemplateTags(TestCase):
         })
         self.assertEquals(
             strip_whitespace(t.render(c)),
-            '<ul data-fiber-data=\'{"type": "page", "add_url": "/admin/fiber/fiber_admin/fiber/page/add/", "parent_id": 1}\'>'\
+            '<ul data-fiber-data=\'{"type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 1}\'>'\
             '<li class="home first last">'\
-            '<a href="/" data-fiber-data=\'{"type": "page", "id": 2, "parent_id": 1, "url": "/admin/fiber/fiber_admin/fiber/page/2/", "add_url": "/admin/fiber/fiber_admin/fiber/page/add/", "base_url": "/"}\'>home</a>'\
-            '<ul data-fiber-data=\'{"type": "page", "add_url": "/admin/fiber/fiber_admin/fiber/page/add/", "parent_id": 2}\'>'\
+            '<a href="/" data-fiber-data=\'{"type": "page", "id": 2, "parent_id": 1, "url": "%(fiber_admin_page_edit_url_two)s", "add_url": "%(fiber_admin_page_add_url)s", "base_url": "/"}\'>home</a>'\
+            '<ul data-fiber-data=\'{"type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 2}\'>'\
             '<li class="section1 first last">'\
-            '<a href="/section1/" data-fiber-data=\'{"type": "page", "id": 3, "parent_id": 2, "url": "/admin/fiber/fiber_admin/fiber/page/3/", "add_url": "/admin/fiber/fiber_admin/fiber/page/add/", "base_url": "/section1/"}\'>section1</a>'\
+            '<a href="/section1/" data-fiber-data=\'{"type": "page", "id": 3, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_three)s", "add_url": "%(fiber_admin_page_add_url)s", "base_url": "/section1/"}\'>section1</a>'\
             '</li></ul>'\
-            '</li></ul>'
+            '</li></ul>' % {
+                'fiber_admin_page_add_url': reverse('fiber_admin:fiber_page_add'),
+                'fiber_admin_page_edit_url_two': reverse('fiber_admin:fiber_page_change', args=(2, )),
+                'fiber_admin_page_edit_url_three': reverse('fiber_admin:fiber_page_change', args=(3, )),
+            }
         )
