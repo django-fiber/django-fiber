@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-06 16:28+0200\n"
-"PO-Revision-Date: 2011-05-06 09:30\n"
+"POT-Creation-Date: 2011-05-06 16:33+0200\n"
+"PO-Revision-Date: 2011-05-06 09:34\n"
 "Last-Translator:   <info@simons-design.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -55,8 +55,8 @@ msgstr "Selecteer een bestand"
 msgid "Select page"
 msgstr "Kies pagina"
 
-#: static/fiber/js/admin.js:1190 static/fiber/js/admin.js.py:1887
-#: static/fiber/js/admin.js:1893
+#: static/fiber/js/admin.js:1190 static/fiber/js/admin.js.py:1364
+#: static/fiber/js/admin.js:1887 static/fiber/js/admin.js.py:1893
 msgid "Edit"
 msgstr "Bewerken"
 
@@ -64,7 +64,7 @@ msgstr "Bewerken"
 msgid "Add sub page"
 msgstr "Subpagina toevoegen"
 
-#: static/fiber/js/admin.js:1210
+#: static/fiber/js/admin.js:1210 static/fiber/js/admin.js.py:1372
 msgid "Delete"
 msgstr "Verwijderen"
 

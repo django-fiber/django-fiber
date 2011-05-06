@@ -1419,7 +1419,7 @@ var adminPage = {
 							var contextmenu = $('<ul class="ui-context-menu"></ul>');
 
 							contextmenu.append(
-								$('<li><a href="#">Edit</a></li>').click(function() {
+								$('<li><a href="#">'+gettext('Edit')+'</a></li>').click(function() {
 									new ChangeContentItemFormDialog({
 										url: data.url
 									});
@@ -1427,7 +1427,7 @@ var adminPage = {
 							);
 
 							contextmenu.append(
-								$('<li><a href="#">Delete</a></li>').click(function() {
+								$('<li><a href="#">'+gettext('Delete')+'</a></li>').click(function() {
 									var confirmationDialog = $('<div></div>').dialog({
 										modal: true,
 										resizable: false,
