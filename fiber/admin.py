@@ -26,7 +26,6 @@ class PageForm(forms.ModelForm):
         help_text = 'Example: \'/section-1/products\' or \'products\' or \'"some_named_url"\'',
         error_message = 'This value must contain only letters, numbers, underscores, dashes or slashes.')
     redirect_page = TreeNodeChoiceField(queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160), empty_label='---------', required=False)
-    template_name = forms.ChoiceField(choices=[['', '----------']]+list(TEMPLATE_CHOICES), required=False)
 
     class Meta:
         model = Page
@@ -53,22 +52,11 @@ class PageContentItemInline(admin.TabularInline):
 
 class PageAdmin(MPTTModelAdmin):
 
-    def __init__(self, *args, **kwargs):
-        super(PageAdmin, self).__init__(*args, **kwargs)
-        # remove template choices, if there are no choices
-        if len(TEMPLATE_CHOICES) == 0:
-            self.fieldsets = (
-                (None, {'fields': ('parent', 'title', 'url', 'redirect_page')}),
-                ('Advanced options', {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'protected', 'metadata',)}),
-            )
-        else:
-            self.fieldsets = (
-                (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name')}),
-                ('Advanced options', {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'protected', 'metadata',)}),
-            )
-
     form = PageForm
-
+    fieldsets = (
+        (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name')}),
+        ('Advanced options', {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'protected', 'metadata',)}),
+    )
 
     inlines = (PageContentItemInline,)
     list_display = ('title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links',)
@@ -116,12 +104,18 @@ class PageAdmin(MPTTModelAdmin):
 admin.site.register(Page, PageAdmin)
 
 
+class FiberAdminPageForm(PageForm):
+    template_name = forms.ChoiceField(choices=TEMPLATE_CHOICES, required=False, label=_('Template'))
+
+
 class FiberAdminPageAdmin(MPTTModelAdmin):
+
+    form = FiberAdminPageForm
 
     def __init__(self, *args, **kwargs):
         super(FiberAdminPageAdmin, self).__init__(*args, **kwargs)
 
-        # remove template choices, if there are no choices
+        # remove template choices if there are no choices
         if len(TEMPLATE_CHOICES) == 0:
             self.fieldsets =  (
                 (None, {'fields': ('title', 'url', 'redirect_page')}),
@@ -130,8 +124,6 @@ class FiberAdminPageAdmin(MPTTModelAdmin):
             self.fieldsets = (
                 (None, {'fields': ('title', 'url', 'template_name', 'redirect_page')}),
             )
-
-    form = PageForm
 
     def save_model(self, request, obj, form, change):
         if 'before_page_id' in request.POST:
