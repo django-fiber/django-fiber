@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib import admin
+from django.conf import settings
+from django.utils.translation import gettext as _
 
 from mptt.admin import MPTTModelAdmin
 from mptt.forms import TreeNodeChoiceField
@@ -69,26 +71,30 @@ class PageAdmin(MPTTModelAdmin):
 
 
     inlines = (PageContentItemInline,)
-    list_display = ('title', 'url', 'redirect_page','get_absolute_url', 'move_links',)
+    list_display = ('title', 'url', 'redirect_page','get_absolute_url', 'action_links',)
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page')
 
-    def move_links(self, object):
-        move_up = u'\u2007'
-        move_down = u'\u2007'
+    def action_links(self, page):
+        actions = ''
 
-        # first child cannot be moved up
-        if (not object.is_first_child()):
-            move_up = u'<a href="%s/move_up">\u2191</a>' % object.pk
+        # first child cannot be moved up, last child cannot be moved down
+        actions += u'<a href="%s/move_up">\u2191</a> ' % page.pk if not page.is_first_child() else u'\u2007 '
+        actions += u'<a href="%s/move_down">\u2193</a> ' % page.pk if not page.is_last_child() else u'\u2007 '
 
-        # last child cannot be moved down
-        if (not object.is_last_child()):
-            move_down = u'<a href="%s/move_down">\u2193</a>' % object.pk
+        # add subpage, view on site
+        actions += u'<a href="add/?%s=%s" title="%s"><img src="%simg/admin/icon_addlink.gif" width="10" height="10" alt="%s" /></a> ' %\
+                   (self.model._mptt_meta.parent_attr, page.pk, _('Add child'), settings.ADMIN_MEDIA_PREFIX, _('Add child'))
 
-        return move_up + move_down
+        url = page.get_absolute_url()
+        if url:
+            actions += u'<a href="%s" title="%s" target="_blank"><img src="%simg/admin/selector-search.gif" width="16" height="16" alt="%s" /></a>' %\
+                       (url, _('View on site'), settings.ADMIN_MEDIA_PREFIX, _('View on site'))
 
-    move_links.short_description = 'Move'
-    move_links.allow_tags = True
+        return actions
+
+    action_links.short_description = 'Actions'
+    action_links.allow_tags = True
 
 
 admin.site.register(Page, PageAdmin)
