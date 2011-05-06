@@ -12,7 +12,7 @@ setup(
         'beautifulsoup>=3.2.0',
         'django-compressor>=0.7.1',
     ],
-    dependency_links = ["hg+http://bitbucket.org/jespern/django-piston@c4b2d21db51a#egg=django-piston-0.2.3rc1"],
+    dependency_links=['http://bitbucket.org/jespern/django-piston/get/c4b2d21db51a.tar.gz#egg=django-piston-0.2.3rc1'],
 
     description='Django Fiber - a simple, user-friendly CMS for all your Django projects',
     long_description=open('README.rst').read(),
