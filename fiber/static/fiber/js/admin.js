@@ -1243,7 +1243,7 @@ var adminPage = {
 								var contextmenu = $('<ul class="ui-context-menu"></ul>');
 
 								contextmenu.append(
-									$('<li><a href="#">Edit</a></li>').click($.proxy(function() {
+									$('<li><a href="#">'+gettext('Edit')+'</a></li>').click($.proxy(function() {
 										var change_page_form_dialog = new ChangePageFormDialog({
 											url: page_data.url,
 											page_id: page_data.id,
@@ -1253,7 +1253,7 @@ var adminPage = {
 								);
 
 								contextmenu.append(
-									$('<li><a href="#">Add sub page</a></li>').click($.proxy(function() {
+									$('<li><a href="#">'+gettext('Add sub page')+'</a></li>').click($.proxy(function() {
 										var add_page_form_dialog = new ChangePageFormDialog({
 											url: page_data.add_url,
 											below_page_id: page_data.id,
@@ -1263,7 +1263,7 @@ var adminPage = {
 								);
 
 								contextmenu.append(
-									$('<li><a href="#">Delete</a></li>').click($.proxy(function() {
+									$('<li><a href="#">'+gettext('Delete')+'</a></li>').click($.proxy(function() {
 
 										// show a confirmation dialog, that also warns about sub pages that will be removed
 										var confirmation_dialog = $('<div></div>').dialog({
