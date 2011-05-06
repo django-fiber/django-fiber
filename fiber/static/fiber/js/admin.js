@@ -434,7 +434,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 		var button_pane = this.uiDialog.parent().find('.ui-dialog-buttonpane');
 
-		$('<button type="button">Upload a new file</button>')
+		$('<button type="button">'+gettext('Upload a new file')+'</button>')
 			.prependTo(button_pane)
 			.attr({
 				'class': 'upload',
