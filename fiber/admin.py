@@ -78,11 +78,11 @@ class PageAdmin(MPTTModelAdmin):
         move_down = u'\u2007'
 
         # first child cannot be moved up
-        if (not object.is_first_child()):
+        if not object.is_first_child():
             move_up = u'<a href="%s/move_up">\u2191</a>' % object.pk
 
         # last child cannot be moved down
-        if (not object.is_last_child()):
+        if not object.is_last_child():
             move_down = u'<a href="%s/move_down">\u2193</a>' % object.pk
 
         return move_up + move_down

@@ -187,14 +187,14 @@ class Page(MPTTModel):
                     return '' # TODO: make sure this can never happen (in model.save()?)
 
     def is_first_child(self):
-        if (self.is_root_node()):
+        if self.is_root_node():
             return True
-        return (self.parent and (self.lft == self.parent.lft + 1))
+        return self.parent and (self.lft == self.parent.lft + 1)
 
     def is_last_child(self):
-        if (self.is_root_node()):
+        if self.is_root_node():
             return True
-        return (self.parent and (self.rght + 1 == self.parent.rght))
+        return self.parent and (self.rght + 1 == self.parent.rght)
 
     def move_page(self, parent_id, left_id=0):
         """
