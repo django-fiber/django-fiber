@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-06 14:52+0200\n"
-"PO-Revision-Date: 2011-05-06 07:58\n"
+"POT-Creation-Date: 2011-05-06 15:07+0200\n"
+"PO-Revision-Date: 2011-05-06 08:10\n"
 "Last-Translator:   <info@simons-design.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,9 +18,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.6.0\n"
 
-#: static/fiber/js/admin.js:47 static/fiber/js/admin.js.py:51
+#: static/fiber/js/admin.js:47
 msgid "Action"
-msgstr "Bewerken"
+msgstr "Bewerking"
 
 #: static/fiber/js/admin.js:57
 msgid "Cancel"
@@ -29,6 +29,14 @@ msgstr "Annuleer"
 #: static/fiber/js/admin.js:223
 msgid "Fiber Login"
 msgstr "Fiber log in"
+
+#: static/fiber/js/admin.js:226
+msgid "Login"
+msgstr "Inloggen"
+
+#: static/fiber/js/admin.js:310
+msgid "Save"
+msgstr "Opslaan"
 
 #: static/fiber/js/admin.js:475
 msgid "Select an image"

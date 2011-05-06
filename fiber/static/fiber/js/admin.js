@@ -55,7 +55,7 @@ var AdminDialog = Class.extend({
 
 		this.uiDialog.dialog('option', 'buttons', {
 			'Action': {
-				text: gettext('Action'), // TODO: dynamically fill in action
+				text: 'Action', // TODO: dynamically fill in action
 				click: $.proxy(function() {
 					this.action_click();
 				}, this)
@@ -252,7 +252,7 @@ var LoginFormDialog = AdminFormDialog.extend({
 		this.uiDialog.dialog('option', 'title', gettext('Fiber Login')); // TODO: dynamically fill in action
 		// TODO: is this the correct place for this?
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
-		action_button.find('.ui-button-text').text('Login').attr('id', 'login_button');
+		action_button.find('.ui-button-text').text(gettext('Login')).attr('id', 'login_button');
 
 	},
 
@@ -340,7 +340,7 @@ var ChangeFormDialog = AdminFormDialog.extend({
 
 		// TODO: is this the correct place for this?
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
-		action_button.find('.ui-button-text').text('Save');
+		action_button.find('.ui-button-text').text(gettext('Save'));
 	},
 
 	action_click: function() {
