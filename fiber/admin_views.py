@@ -37,9 +37,9 @@ def fiber_login(request):
 def page_move_up(request, id):
     page = Page.objects.get(pk=id)
 
-    if (page):
+    if page:
         previous_sibling_page = page.get_previous_sibling()
-        if (previous_sibling_page):
+        if previous_sibling_page:
             page.move_to(previous_sibling_page, position='left')
 
     return HttpResponseRedirect('../../')
@@ -49,9 +49,9 @@ def page_move_up(request, id):
 def page_move_down(request, id):
     page = Page.objects.get(pk=id)
 
-    if (page):
+    if page:
         next_sibling_page = page.get_next_sibling()
-        if (next_sibling_page):
+        if next_sibling_page:
             page.move_to(next_sibling_page, position='right')
 
     return HttpResponseRedirect('../../')
