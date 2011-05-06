@@ -71,25 +71,41 @@ class PageAdmin(MPTTModelAdmin):
 
 
     inlines = (PageContentItemInline,)
-    list_display = ('title', 'url', 'redirect_page','get_absolute_url', 'action_links',)
+    list_display = ('title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links',)
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page')
+
+    def view_on_site(self, page):
+        view_on_site = ''
+
+        absolute_url = page.get_absolute_url()
+        if absolute_url:
+            view_on_site += u'<a href="%s" title="%s" target="_blank"><img src="%sfiber/admin/images/world.gif" width="16" height="16" alt="%s" /></a>' % \
+                       (absolute_url, _('View on site'), settings.STATIC_URL, _('View on site'))
+
+        return view_on_site
+
+    view_on_site.short_description = ''
+    view_on_site.allow_tags = True
+
 
     def action_links(self, page):
         actions = ''
 
         # first child cannot be moved up, last child cannot be moved down
-        actions += u'<a href="%s/move_up">\u2191</a> ' % page.pk if not page.is_first_child() else u'\u2007 '
-        actions += u'<a href="%s/move_down">\u2193</a> ' % page.pk if not page.is_last_child() else u'\u2007 '
+        if not page.is_first_child():
+            actions += u'<a href="%s/move_up" title="%s"><img src="%sfiber/admin/images/arrow_up.gif" width="16" height="16" alt="%s" /></a> ' % (page.pk, _('Move up'), settings.STATIC_URL, _('Move up'))
+        else:
+            actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (settings.STATIC_URL,)
+            
+        if not page.is_last_child():
+            actions += u'<a href="%s/move_down" title="%s"><img src="%sfiber/admin/images/arrow_down.gif" width="16" height="16" alt="%s" /></a> ' % (page.pk, _('Move down'), settings.STATIC_URL, _('Move down'))
+        else:
+            actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (settings.STATIC_URL,)
 
-        # add subpage, view on site
-        actions += u'<a href="add/?%s=%s" title="%s"><img src="%simg/admin/icon_addlink.gif" width="10" height="10" alt="%s" /></a> ' %\
-                   (self.model._mptt_meta.parent_attr, page.pk, _('Add child'), settings.ADMIN_MEDIA_PREFIX, _('Add child'))
-
-        url = page.get_absolute_url()
-        if url:
-            actions += u'<a href="%s" title="%s" target="_blank"><img src="%simg/admin/selector-search.gif" width="16" height="16" alt="%s" /></a>' %\
-                       (url, _('View on site'), settings.ADMIN_MEDIA_PREFIX, _('View on site'))
+        # add subpage
+        actions += u'<a href="add/?%s=%s" title="%s"><img src="%sfiber/admin/images/page_new.gif" width="16" height="16" alt="%s" /></a> ' % \
+                   (self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL, _('Add sub page'))
 
         return actions
 
