@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-06 16:33+0200\n"
-"PO-Revision-Date: 2011-05-06 09:34\n"
+"POT-Creation-Date: 2011-05-06 17:01+0200\n"
+"PO-Revision-Date: 2011-05-06 10:02\n"
 "Last-Translator:   <info@simons-design.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Action"
 msgstr "Bewerking"
 
-#: static/fiber/js/admin.js:57
+#: static/fiber/js/admin.js:57 static/fiber/js/admin.js.py:1246
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -55,8 +55,8 @@ msgstr "Selecteer een bestand"
 msgid "Select page"
 msgstr "Kies pagina"
 
-#: static/fiber/js/admin.js:1190 static/fiber/js/admin.js.py:1364
-#: static/fiber/js/admin.js:1887 static/fiber/js/admin.js.py:1893
+#: static/fiber/js/admin.js:1190 static/fiber/js/admin.js.py:1369
+#: static/fiber/js/admin.js:1892 static/fiber/js/admin.js.py:1898
 msgid "Edit"
 msgstr "Bewerken"
 
@@ -64,18 +64,19 @@ msgstr "Bewerken"
 msgid "Add sub page"
 msgstr "Subpagina toevoegen"
 
-#: static/fiber/js/admin.js:1210 static/fiber/js/admin.js.py:1372
+#: static/fiber/js/admin.js:1210 static/fiber/js/admin.js.py:1219
+#: static/fiber/js/admin.js:1377
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: static/fiber/js/admin.js:1250
+#: static/fiber/js/admin.js:1255
 #, perl-format
 msgid "<p>Are you sure you want to delete the page \"<strong>%s</strong>\"?</p>"
 msgstr ""
 "<p>Weet u zeker dat u de pagina <strong>\"%s\"</strong> wilt "
 "verwijderen?</p>"
 
-#: static/fiber/js/admin.js:1254
+#: static/fiber/js/admin.js:1259
 #, perl-format
 msgid ""
 "<p>There is <strong>%s page</strong> below this page that will also be "
@@ -84,7 +85,7 @@ msgstr ""
 "<p> Er is <strong>%s pagina</strong> onder deze pagina die ook zal "
 "worden verwijderd.</p>"
 
-#: static/fiber/js/admin.js:1256
+#: static/fiber/js/admin.js:1261
 #, perl-format
 msgid ""
 "<p>There are <strong>%s pages</strong> below this page that will also "
@@ -93,15 +94,15 @@ msgstr ""
 "<p>Er zijn <strong>%s pagina’s</strong> onder deze pagina die ook "
 "zullen worden verwijderd.</p>"
 
-#: static/fiber/js/admin.js:1260 static/fiber/js/admin.js.py:1398
+#: static/fiber/js/admin.js:1265 static/fiber/js/admin.js.py:1403
 msgid "Are you sure?"
 msgstr "Weet u het zeker?"
 
-#: static/fiber/js/admin.js:1399
+#: static/fiber/js/admin.js:1404
 msgid "<p>Are you sure you want to delete this item?</p>"
 msgstr "<p>Weet u zeker dat u dit item wilt verwijderen?</p>"
 
-#: static/fiber/js/admin.js:1899
+#: static/fiber/js/admin.js:1904
 msgid "Remove from page"
 msgstr "Verwijder van pagina"
 

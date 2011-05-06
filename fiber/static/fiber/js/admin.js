@@ -1272,34 +1272,39 @@ var adminPage = {
 											width: 400,
 											position: ['center', 40],
 											buttons: {
-												'Delete': function() {
-													$this = $(this);
-													$this.dialog('close');
+												'Delete': {
+													text: gettext('Delete'),
+													click: function() {
+														$this = $(this);
+														$this.dialog('close');
 
-													busyIndicator.show();
+														busyIndicator.show();
 
-													$.ajax({
-														url: '/api/v1/page/' + page_data.id + '/',
-														type: 'DELETE',
-														data: {},
-														success: function(data) {
-															// when successful, reload the current page
-															reloadPage({
-																error: function() {
-																	// If page reload fails, because current page is deleted, then
-																	// go to the parent of the deleted page.
-																	reloadPage({
-																		id: page_data.parent_id
-																	});
-																}
-															});
-														}
-													});
-
+														$.ajax({
+															url: '/api/v1/page/' + page_data.id + '/',
+															type: 'DELETE',
+															data: {},
+															success: function(data) {
+																// when successful, reload the current page
+																reloadPage({
+																	error: function() {
+																		// If page reload fails, because current page is deleted, then
+																		// go to the parent of the deleted page.
+																		reloadPage({
+																			id: page_data.parent_id
+																		});
+																	}
+																});
+															}
+														});
+													}
 												},
-												'Cancel': function() {
-													$this = $(this);
-													$this.dialog('close');
+												'Cancel': {
+													text: gettext('Cancel'),
+													click: function() {
+														$this = $(this);
+														$this.dialog('close');
+													}
 												}
 											}
 										});
