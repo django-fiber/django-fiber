@@ -51,17 +51,17 @@ var AdminDialog = Class.extend({
 			position: ['center', 40]
 		});
 
-		this.uiDialog.dialog('option', 'title', 'Action'); // TODO: dynamically fill in action
+		this.uiDialog.dialog('option', 'title', gettext('Action')); // TODO: dynamically fill in action
 
 		this.uiDialog.dialog('option', 'buttons', {
 			'Action': {
-				text: 'Action', // TODO: dynamically fill in action
+				text: gettext('Action'), // TODO: dynamically fill in action
 				click: $.proxy(function() {
 					this.action_click();
 				}, this)
 			},
 			'Cancel': {
-				text: 'Cancel',
+				text: gettext('Cancel'),
 				click: $.proxy(function() {
 					this.cancel_click();
 				}, this)
