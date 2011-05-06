@@ -523,7 +523,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		this.image_select_grid = $(document.createElement('table')).attr('id', 'ui-image-select-grid'); // the id attribute is necessary for jqGrid
 		this.image_select_grid_pager = $(document.createElement('div')).attr('id', 'ui-image-select-grid-pager');
 		this.image_select_filter = $(document.createElement('div')).attr('id', 'ui-image-select-filter');
-		this.image_select_filter.append($(document.createElement('label')).attr({ id: 'ui-image-select-filter-label'}).text('Filter by filename'));
+		this.image_select_filter.append($(document.createElement('label')).attr({ id: 'ui-image-select-filter-label'}).text(gettext('Filter by filename')));
 		this.image_select_filter.append($(document.createElement('input')).attr({ id: 'ui-image-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.image_select_filter);
 		this.uiDialog.append(this.image_select_grid);

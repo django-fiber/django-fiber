@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-06 17:15+0200\n"
-"PO-Revision-Date: 2011-05-06 10:17\n"
+"POT-Creation-Date: 2011-05-06 17:21+0200\n"
+"PO-Revision-Date: 2011-05-06 10:21\n"
 "Last-Translator:   <info@simons-design.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -51,6 +51,10 @@ msgstr "Selecteer"
 #: static/fiber/js/admin.js:475
 msgid "Select an image"
 msgstr "Selecteer een afbeelding"
+
+#: static/fiber/js/admin.js:488
+msgid "Filter by filename"
+msgstr "Filteren op bestandsnaam"
 
 #: static/fiber/js/admin.js:580
 msgid "Select a file"
