@@ -505,7 +505,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
 		action_button.attr('id', 'action-button');
 
-		action_button.find('.ui-button-text').text('Select');
+		action_button.find('.ui-button-text').text(gettext('Select'));
 
 		action_button.attr('disabled', 'disabled');
 		action_button.addClass('ui-button-disabled ui-state-disabled');
@@ -612,7 +612,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 		var actionButton = this.uiDialog.parent().find(':button:contains("Action")');
 		actionButton.attr('id', 'action-button');
 
-		actionButton.find('.ui-button-text').text('Select');
+		actionButton.find('.ui-button-text').text(gettext('Select'));
 
 		actionButton.attr('disabled', 'disabled');
 		actionButton.addClass('ui-button-disabled ui-state-disabled');
@@ -720,7 +720,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
 		action_button.attr('id', 'action-button');
 
-		action_button.find('.ui-button-text').text('Select');
+		action_button.find('.ui-button-text').text(gettext('Select'));
 
 		action_button.attr('disabled', 'disabled');
 		action_button.addClass('ui-button-disabled ui-state-disabled');
