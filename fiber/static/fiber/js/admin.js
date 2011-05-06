@@ -1304,13 +1304,13 @@ var adminPage = {
 											}
 										});
 
-										var confirmation_text = '<p>Are you sure you want to delete the page "<strong>' + $.trim($this.text()) + '</strong>"?</p>';
+										var confirmation_text = interpolate(gettext('<p>Are you sure you want to delete the page "<strong>%s</strong>"?</p>'), [$.trim($this.text())]);
 										var num_sub_pages = $this.parent('li').find('li a').size();
 										if (num_sub_pages) {
 											if (num_sub_pages == 1) {
-												confirmation_text += '<p>There is <strong>' + num_sub_pages + ' page</strong> below this page that will also be deleted.</p>';
+												confirmation_text += interpolate(gettext('<p>There is <strong>%s page</strong> below this page that will also be deleted.</p>'), [num_sub_pages]);
 											} else {
-												confirmation_text += '<p>There are <strong>' + num_sub_pages + ' pages</strong> below this page that will also be deleted.</p>';
+												confirmation_text += interpolate(gettext('<p>There are <strong>%s pages</strong> below this page that will also be deleted.</p>'), [num_sub_pages]);
 											}
 										}
 
@@ -1953,19 +1953,19 @@ var FiberItem = Class.extend({
 
 		if (this.element_data.type == 'page') {
 			contextmenu.append(
-				$('<li><a href="#">Edit</a></li>').click(
+				$('<li><a href="#">'+gettext('Edit')+'</a></li>').click(
 					$.proxy(this.edit_page, this)
 				)
 			);
 		} else if (this.element_data.type == 'content_item') {
 			contextmenu.append(
-				$('<li><a href="#">Edit</a></li>').click(
+				$('<li><a href="#">'+gettext('Edit')+'</a></li>').click(
 					$.proxy(this.edit_content_item, this)
 				)
 			);
 
 			contextmenu.append(
-				$('<li><a href="#">Remove from page</a></li>').click(
+				$('<li><a href="#">'+gettext('Remove from page')+'</a></li>').click(
 					$.proxy(this.remove_from_page, this)
 				)
 			);
