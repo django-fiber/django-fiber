@@ -1439,22 +1439,28 @@ var adminPage = {
 										width: 400,
 										position: ['center', 40],
 										buttons: {
-											'Delete': function() {
-												$(this).dialog('close');
+											'Delete': {
+												text: gettext('Delete'),
+												click: function() {
+													$(this).dialog('close');
 
-												busyIndicator.show();
+													busyIndicator.show();
 
-												$.ajax({
-													url: '/api/v1/content_item/' + data.id + '/',
-													type: 'DELETE',
-													data: {},
-													success: function(data) {
-														reloadPage();
-													}
-												});
+													$.ajax({
+														url: '/api/v1/content_item/' + data.id + '/',
+														type: 'DELETE',
+														data: {},
+														success: function(data) {
+															reloadPage();
+														}
+													});
+												}
 											},
-											'Cancel': function() {
-												$(this).dialog('close');
+											'Cancel': {
+												text: gettext('Cancel'),
+												click: function() {
+													$(this).dialog('close');
+												}
 											}
 										}
 									});
