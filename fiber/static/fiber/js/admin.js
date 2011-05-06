@@ -544,7 +544,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		this.image_select_grid.jqGrid({
 			url: this.options.url,
 			datatype: 'json',
-			colNames: ['url', 'Image', 'Filename', 'Size', 'Updated'],
+			colNames: ['url', gettext('Image'), gettext('Filename'), gettext('Size'), gettext('Updated')],
 			colModel: [
 				{ name: 'url', index: 'url', hidden: true },
 				{ name: 'image', index: 'image', width: 120, resizable: false, sortable: false, formatter: thumbnail_formatter },
@@ -646,7 +646,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 			url: this.options.url,
 			datatype: 'json',
 			data: { 'filename': 'praxis'},
-			colNames: ['url', 'Filename', 'Updated'],
+			colNames: ['url', gettext('Filename'), gettext('Updated')],
 			colModel: [
 				{ name: 'url', index: 'url', hidden: true },
 				{ name: 'filename', index: 'filename', width: 360, resizable: false },
