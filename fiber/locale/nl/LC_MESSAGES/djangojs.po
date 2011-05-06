@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-06 14:15+0200\n"
-"PO-Revision-Date: 2011-05-06 07:27\n"
+"POT-Creation-Date: 2011-05-06 14:52+0200\n"
+"PO-Revision-Date: 2011-05-06 07:58\n"
 "Last-Translator:   <info@simons-design.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,6 +25,30 @@ msgstr "Bewerken"
 #: static/fiber/js/admin.js:57
 msgid "Cancel"
 msgstr "Annuleer"
+
+#: static/fiber/js/admin.js:223
+msgid "Fiber Login"
+msgstr "Fiber log in"
+
+#: static/fiber/js/admin.js:475
+msgid "Select an image"
+msgstr "Selecteer een afbeelding"
+
+#: static/fiber/js/admin.js:580
+msgid "Select a file"
+msgstr "Selecteer een bestand"
+
+#: static/fiber/js/admin.js:686
+msgid "Select page"
+msgstr "Kies pagina"
+
+#: static/fiber/js/admin.js:1260 static/fiber/js/admin.js.py:1398
+msgid "Are you sure?"
+msgstr "Weet u het zeker?"
+
+#: static/fiber/js/admin.js:1399
+msgid "<p>Are you sure you want to delete this item?</p>"
+msgstr "<p>Weet u zeker dat u dit item wilt verwijderen?</p>"
 
 #~ msgid "this is to be translated"
 #~ msgstr "Dit is om te worden vertaald"

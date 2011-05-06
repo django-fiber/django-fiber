@@ -249,7 +249,7 @@ var LoginFormDialog = AdminFormDialog.extend({
 		}, this);
 		this.admin_form.load();
 
-		this.uiDialog.dialog('option', 'title', 'Fiber Login'); // TODO: dynamically fill in action
+		this.uiDialog.dialog('option', 'title', gettext('Fiber Login')); // TODO: dynamically fill in action
 		// TODO: is this the correct place for this?
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
 		action_button.find('.ui-button-text').text('Login').attr('id', 'login_button');
@@ -510,7 +510,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		action_button.attr('disabled', 'disabled');
 		action_button.addClass('ui-button-disabled ui-state-disabled');
 
-		this.uiDialog.dialog('option', 'title', 'Select an image');
+		this.uiDialog.dialog('option', 'title', gettext('Select an image'));
 
 		this.init_dialog_success();
 	},
@@ -617,7 +617,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 		actionButton.attr('disabled', 'disabled');
 		actionButton.addClass('ui-button-disabled ui-state-disabled');
 
-		this.uiDialog.dialog('option', 'title', 'Select a file');
+		this.uiDialog.dialog('option', 'title', gettext('Select a file'));
 
 		this.init_dialog_success();
 	},
@@ -725,7 +725,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 		action_button.attr('disabled', 'disabled');
 		action_button.addClass('ui-button-disabled ui-state-disabled');
 
-		this.uiDialog.dialog('option', 'title', 'Select page');
+		this.uiDialog.dialog('option', 'title', gettext('Select page'));
 
 		this.init_dialog_success();
 	},
@@ -1314,7 +1314,7 @@ var adminPage = {
 											}
 										}
 
-										confirmation_dialog.dialog('option', 'title', 'Are you sure?');
+										confirmation_dialog.dialog('option', 'title', gettext('Are you sure?'));
 										confirmation_dialog.html(confirmation_text);
 									}, this))
 								);
@@ -1453,8 +1453,8 @@ var adminPage = {
 											}
 										}
 									});
-									confirmationDialog.dialog('option', 'title', 'Are you sure?');
-									confirmationDialog.html('<p>Are you sure you want to delete this item?</p>');
+									confirmationDialog.dialog('option', 'title', gettext('Are you sure?'));
+									confirmationDialog.html(gettext('<p>Are you sure you want to delete this item?</p>'));
 								})
 							);
 
