@@ -2,6 +2,7 @@ import datetime
 import re
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
@@ -50,10 +51,10 @@ class ContentItemManager(models.Manager):
                 recently_changed.append(content_item)
 
         return [
-            dict(title='used more than once', content_items=multiple),
-            dict(title='unused', content_items=unused),
-            dict(title='used once', content_items=once),
-            dict(title='recently changed', content_items=recently_changed),
+            dict(title=_('used more than once'), content_items=multiple),
+            dict(title=_('unused'), content_items=unused),
+            dict(title=_('used once'), content_items=once),
+            dict(title=_('recently changed'), content_items=recently_changed),
         ]
 
     def rename_url(self, old_url, new_url):
@@ -94,15 +95,15 @@ class ContentItemManager(models.Manager):
 
 
 class ContentItem(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)
 
-    name = models.CharField(blank=True, max_length=255)
-    content_markup = FiberMarkupField(verbose_name='Content')
-    content_html = FiberHTMLField(verbose_name='Content')
-    protected = models.BooleanField(default=False)
+    name = models.CharField(_('name'), blank=True, max_length=255)
+    content_markup = FiberMarkupField(verbose_name=_('Content'))
+    content_html = FiberHTMLField(verbose_name=_('Content'))
+    protected = models.BooleanField(_('protected'), default=False)
 
-    metadata = JSONField(blank=True, null=True)
+    metadata = JSONField(_('metadata'), blank=True, null=True)
 
     objects = ContentItemManager()
 
@@ -124,6 +125,10 @@ class ContentItem(models.Model):
         named_url = 'fiber_admin:%s_%s_change' % (self._meta.app_label, self._meta.object_name.lower())
         return reverse(named_url, args=(self.id, ))
 
+    class Meta:
+        verbose_name = _('content item')
+        verbose_name_plural = _('content items')
+
 
 class PageManager(models.Manager):
 
@@ -134,23 +139,23 @@ class PageManager(models.Manager):
 
 
 class Page(MPTTModel):
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)
 
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='subpages')
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='subpages', verbose_name=_('parent'))
 
     # TODO: add keywords, description (as meta?)
 
-    title = models.CharField(blank=True, max_length=255)
-    url = models.CharField(blank=True, max_length=255)
-    redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages')
-    mark_current_regexes = models.TextField(blank=True)
+    title = models.CharField(_('title'), blank=True, max_length=255)
+    url = models.CharField(_('URL'), blank=True, max_length=255)
+    redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'))
+    mark_current_regexes = models.TextField(_('mark current regexes'), blank=True)
     # TODO: add `alias_page` field
-    template_name = models.CharField(blank=True, max_length=70)
-    show_in_menu = models.BooleanField(default=True)
-    protected = models.BooleanField(default=False)
+    template_name = models.CharField(_('template name'), blank=True, max_length=70)
+    show_in_menu = models.BooleanField(_('show in menu'), default=True)
+    protected = models.BooleanField(_('protected'), default=False)
 
-    content_items = models.ManyToManyField(ContentItem, through='PageContentItem')
+    content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
 
     metadata = JSONField(blank=True, null=True)
 
@@ -245,6 +250,8 @@ class Page(MPTTModel):
         return self.page_content_items.filter(block_name=block_name).order_by('sort')
 
     class Meta:
+        verbose_name = _('page')
+        verbose_name_plural = _('pages')
         ordering = ('tree_id', 'lft')
 
 
@@ -281,22 +288,22 @@ class PageContentItemManager(models.Manager):
 
 
 class PageContentItem(models.Model):
-    content_item = models.ForeignKey(ContentItem)
-    page = models.ForeignKey(Page, related_name='page_content_items')
-    block_name = models.CharField(max_length=255)
-    sort = models.IntegerField(blank=True, null=True)
+    content_item = models.ForeignKey(ContentItem, verbose_name=_('content item'))
+    page = models.ForeignKey(Page, related_name='page_content_items', verbose_name=_('page'))
+    block_name = models.CharField(_('block name'), max_length=255)
+    sort = models.IntegerField(_('sort'), blank=True, null=True)
 
     objects = PageContentItemManager()
 
 
 class Image(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)
 
-    image = models.ImageField(upload_to=IMAGES_DIR, max_length=255)
-    title = models.CharField(max_length=255)
-    width = models.IntegerField(blank=True, null=True)
-    height = models.IntegerField(blank=True, null=True)
+    image = models.ImageField(_('image'), upload_to=IMAGES_DIR, max_length=255)
+    title = models.CharField(_('title'), max_length=255)
+    width = models.IntegerField(_('width'), blank=True, null=True)
+    height = models.IntegerField(_('height'), blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.get_image_information()
@@ -311,15 +318,17 @@ class Image(models.Model):
         return self.image.path
 
     class Meta:
+        verbose_name = _('image')
+        verbose_name_plural = _('images')
         ordering = ('image', )
 
 
 class File(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(_('created'), auto_now_add=True)
+    updated = models.DateTimeField(_('updated'), auto_now=True)
 
-    file = models.FileField(upload_to=FILES_DIR, max_length=255)
-    title = models.CharField(max_length=255)
+    file = models.FileField(_('file'), upload_to=FILES_DIR, max_length=255)
+    title = models.CharField(_('title'), max_length=255)
 
     def __unicode__(self):
         if self.file.path.startswith(settings.MEDIA_ROOT):
@@ -327,4 +336,6 @@ class File(models.Model):
         return self.file.path
 
     class Meta:
+        verbose_name = _('file')
+        verbose_name_plural = _('files')
         ordering = ('file', )

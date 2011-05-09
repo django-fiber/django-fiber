@@ -51,7 +51,7 @@ var AdminDialog = Class.extend({
 			position: ['center', 40]
 		});
 
-		this.uiDialog.dialog('option', 'title', 'Action'); // TODO: dynamically fill in action
+		this.uiDialog.dialog('option', 'title', gettext('Action')); // TODO: dynamically fill in action
 
 		this.uiDialog.dialog('option', 'buttons', {
 			'Action': {
@@ -61,7 +61,7 @@ var AdminDialog = Class.extend({
 				}, this)
 			},
 			'Cancel': {
-				text: 'Cancel',
+				text: gettext('Cancel'),
 				click: $.proxy(function() {
 					this.cancel_click();
 				}, this)
@@ -249,10 +249,10 @@ var LoginFormDialog = AdminFormDialog.extend({
 		}, this);
 		this.admin_form.load();
 
-		this.uiDialog.dialog('option', 'title', 'Fiber Login'); // TODO: dynamically fill in action
+		this.uiDialog.dialog('option', 'title', gettext('Fiber Login')); // TODO: dynamically fill in action
 		// TODO: is this the correct place for this?
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
-		action_button.find('.ui-button-text').text('Login').attr('id', 'login_button');
+		action_button.find('.ui-button-text').text(gettext('Login')).attr('id', 'login_button');
 
 	},
 
@@ -340,7 +340,7 @@ var ChangeFormDialog = AdminFormDialog.extend({
 
 		// TODO: is this the correct place for this?
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
-		action_button.find('.ui-button-text').text('Save');
+		action_button.find('.ui-button-text').text(gettext('Save'));
 	},
 
 	action_click: function() {
@@ -434,7 +434,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 		var button_pane = this.uiDialog.parent().find('.ui-dialog-buttonpane');
 
-		$('<button type="button">Upload a new file</button>')
+		$('<button type="button">'+gettext('Upload a new file')+'</button>')
 			.prependTo(button_pane)
 			.attr({
 				'class': 'upload',
@@ -505,12 +505,12 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
 		action_button.attr('id', 'action-button');
 
-		action_button.find('.ui-button-text').text('Select');
+		action_button.find('.ui-button-text').text(gettext('Select'));
 
 		action_button.attr('disabled', 'disabled');
 		action_button.addClass('ui-button-disabled ui-state-disabled');
 
-		this.uiDialog.dialog('option', 'title', 'Select an image');
+		this.uiDialog.dialog('option', 'title', gettext('Select an image'));
 
 		this.init_dialog_success();
 	},
@@ -523,7 +523,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		this.image_select_grid = $(document.createElement('table')).attr('id', 'ui-image-select-grid'); // the id attribute is necessary for jqGrid
 		this.image_select_grid_pager = $(document.createElement('div')).attr('id', 'ui-image-select-grid-pager');
 		this.image_select_filter = $(document.createElement('div')).attr('id', 'ui-image-select-filter');
-		this.image_select_filter.append($(document.createElement('label')).attr({ id: 'ui-image-select-filter-label'}).text('Filter by filename'));
+		this.image_select_filter.append($(document.createElement('label')).attr({ id: 'ui-image-select-filter-label'}).text(gettext('Filter by filename')));
 		this.image_select_filter.append($(document.createElement('input')).attr({ id: 'ui-image-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.image_select_filter);
 		this.uiDialog.append(this.image_select_grid);
@@ -544,7 +544,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		this.image_select_grid.jqGrid({
 			url: this.options.url,
 			datatype: 'json',
-			colNames: ['url', 'Image', 'Filename', 'Size', 'Updated'],
+			colNames: ['url', gettext('Image'), gettext('Filename'), gettext('Size'), gettext('Updated')],
 			colModel: [
 				{ name: 'url', index: 'url', hidden: true },
 				{ name: 'image', index: 'image', width: 120, resizable: false, sortable: false, formatter: thumbnail_formatter },
@@ -612,12 +612,12 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 		var actionButton = this.uiDialog.parent().find(':button:contains("Action")');
 		actionButton.attr('id', 'action-button');
 
-		actionButton.find('.ui-button-text').text('Select');
+		actionButton.find('.ui-button-text').text(gettext('Select'));
 
 		actionButton.attr('disabled', 'disabled');
 		actionButton.addClass('ui-button-disabled ui-state-disabled');
 
-		this.uiDialog.dialog('option', 'title', 'Select a file');
+		this.uiDialog.dialog('option', 'title', gettext('Select a file'));
 
 		this.init_dialog_success();
 	},
@@ -646,7 +646,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 			url: this.options.url,
 			datatype: 'json',
 			data: { 'filename': 'praxis'},
-			colNames: ['url', 'Filename', 'Updated'],
+			colNames: ['url', gettext('Filename'), gettext('Updated')],
 			colModel: [
 				{ name: 'url', index: 'url', hidden: true },
 				{ name: 'filename', index: 'filename', width: 360, resizable: false },
@@ -720,12 +720,12 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
 		action_button.attr('id', 'action-button');
 
-		action_button.find('.ui-button-text').text('Select');
+		action_button.find('.ui-button-text').text(gettext('Select'));
 
 		action_button.attr('disabled', 'disabled');
 		action_button.addClass('ui-button-disabled ui-state-disabled');
 
-		this.uiDialog.dialog('option', 'title', 'Select page');
+		this.uiDialog.dialog('option', 'title', gettext('Select page'));
 
 		this.init_dialog_success();
 	},
@@ -1243,7 +1243,7 @@ var adminPage = {
 								var contextmenu = $('<ul class="ui-context-menu"></ul>');
 
 								contextmenu.append(
-									$('<li><a href="#">Edit</a></li>').click($.proxy(function() {
+									$('<li><a href="#">'+gettext('Edit')+'</a></li>').click($.proxy(function() {
 										var change_page_form_dialog = new ChangePageFormDialog({
 											url: page_data.url,
 											page_id: page_data.id,
@@ -1253,7 +1253,7 @@ var adminPage = {
 								);
 
 								contextmenu.append(
-									$('<li><a href="#">Add sub page</a></li>').click($.proxy(function() {
+									$('<li><a href="#">'+gettext('Add sub page')+'</a></li>').click($.proxy(function() {
 										var add_page_form_dialog = new ChangePageFormDialog({
 											url: page_data.add_url,
 											below_page_id: page_data.id,
@@ -1263,7 +1263,7 @@ var adminPage = {
 								);
 
 								contextmenu.append(
-									$('<li><a href="#">Delete</a></li>').click($.proxy(function() {
+									$('<li><a href="#">'+gettext('Delete')+'</a></li>').click($.proxy(function() {
 
 										// show a confirmation dialog, that also warns about sub pages that will be removed
 										var confirmation_dialog = $('<div></div>').dialog({
@@ -1272,49 +1272,54 @@ var adminPage = {
 											width: 400,
 											position: ['center', 40],
 											buttons: {
-												'Delete': function() {
-													$this = $(this);
-													$this.dialog('close');
+												'Delete': {
+													text: gettext('Delete'),
+													click: function() {
+														$this = $(this);
+														$this.dialog('close');
 
-													busyIndicator.show();
+														busyIndicator.show();
 
-													$.ajax({
-														url: '/api/v1/page/' + page_data.id + '/',
-														type: 'DELETE',
-														data: {},
-														success: function(data) {
-															// when successful, reload the current page
-															reloadPage({
-																error: function() {
-																	// If page reload fails, because current page is deleted, then
-																	// go to the parent of the deleted page.
-																	reloadPage({
-																		id: page_data.parent_id
-																	});
-																}
-															});
-														}
-													});
-
+														$.ajax({
+															url: '/api/v1/page/' + page_data.id + '/',
+															type: 'DELETE',
+															data: {},
+															success: function(data) {
+																// when successful, reload the current page
+																reloadPage({
+																	error: function() {
+																		// If page reload fails, because current page is deleted, then
+																		// go to the parent of the deleted page.
+																		reloadPage({
+																			id: page_data.parent_id
+																		});
+																	}
+																});
+															}
+														});
+													}
 												},
-												'Cancel': function() {
-													$this = $(this);
-													$this.dialog('close');
+												'Cancel': {
+													text: gettext('Cancel'),
+													click: function() {
+														$this = $(this);
+														$this.dialog('close');
+													}
 												}
 											}
 										});
 
-										var confirmation_text = '<p>Are you sure you want to delete the page "<strong>' + $.trim($this.text()) + '</strong>"?</p>';
+										var confirmation_text = interpolate(gettext('<p>Are you sure you want to delete the page "<strong>%s</strong>"?</p>'), [$.trim($this.text())]);
 										var num_sub_pages = $this.parent('li').find('li a').size();
 										if (num_sub_pages) {
 											if (num_sub_pages == 1) {
-												confirmation_text += '<p>There is <strong>' + num_sub_pages + ' page</strong> below this page that will also be deleted.</p>';
+												confirmation_text += interpolate(gettext('<p>There is <strong>%s page</strong> below this page that will also be deleted.</p>'), [num_sub_pages]);
 											} else {
-												confirmation_text += '<p>There are <strong>' + num_sub_pages + ' pages</strong> below this page that will also be deleted.</p>';
+												confirmation_text += interpolate(gettext('<p>There are <strong>%s pages</strong> below this page that will also be deleted.</p>'), [num_sub_pages]);
 											}
 										}
 
-										confirmation_dialog.dialog('option', 'title', 'Are you sure?');
+										confirmation_dialog.dialog('option', 'title', gettext('Are you sure?'));
 										confirmation_dialog.html(confirmation_text);
 									}, this))
 								);
@@ -1419,7 +1424,7 @@ var adminPage = {
 							var contextmenu = $('<ul class="ui-context-menu"></ul>');
 
 							contextmenu.append(
-								$('<li><a href="#">Edit</a></li>').click(function() {
+								$('<li><a href="#">'+gettext('Edit')+'</a></li>').click(function() {
 									new ChangeContentItemFormDialog({
 										url: data.url
 									});
@@ -1427,34 +1432,40 @@ var adminPage = {
 							);
 
 							contextmenu.append(
-								$('<li><a href="#">Delete</a></li>').click(function() {
+								$('<li><a href="#">'+gettext('Delete')+'</a></li>').click(function() {
 									var confirmationDialog = $('<div></div>').dialog({
 										modal: true,
 										resizable: false,
 										width: 400,
 										position: ['center', 40],
 										buttons: {
-											'Delete': function() {
-												$(this).dialog('close');
+											'Delete': {
+												text: gettext('Delete'),
+												click: function() {
+													$(this).dialog('close');
 
-												busyIndicator.show();
+													busyIndicator.show();
 
-												$.ajax({
-													url: '/api/v1/content_item/' + data.id + '/',
-													type: 'DELETE',
-													data: {},
-													success: function(data) {
-														reloadPage();
-													}
-												});
+													$.ajax({
+														url: '/api/v1/content_item/' + data.id + '/',
+														type: 'DELETE',
+														data: {},
+														success: function(data) {
+															reloadPage();
+														}
+													});
+												}
 											},
-											'Cancel': function() {
-												$(this).dialog('close');
+											'Cancel': {
+												text: gettext('Cancel'),
+												click: function() {
+													$(this).dialog('close');
+												}
 											}
 										}
 									});
-									confirmationDialog.dialog('option', 'title', 'Are you sure?');
-									confirmationDialog.html('<p>Are you sure you want to delete this item?</p>');
+									confirmationDialog.dialog('option', 'title', gettext('Are you sure?'));
+									confirmationDialog.html(gettext('<p>Are you sure you want to delete this item?</p>'));
 								})
 							);
 
@@ -1953,19 +1964,19 @@ var FiberItem = Class.extend({
 
 		if (this.element_data.type == 'page') {
 			contextmenu.append(
-				$('<li><a href="#">Edit</a></li>').click(
+				$('<li><a href="#">'+gettext('Edit')+'</a></li>').click(
 					$.proxy(this.edit_page, this)
 				)
 			);
 		} else if (this.element_data.type == 'content_item') {
 			contextmenu.append(
-				$('<li><a href="#">Edit</a></li>').click(
+				$('<li><a href="#">'+gettext('Edit')+'</a></li>').click(
 					$.proxy(this.edit_content_item, this)
 				)
 			);
 
 			contextmenu.append(
-				$('<li><a href="#">Remove from page</a></li>').click(
+				$('<li><a href="#">'+gettext('Remove from page')+'</a></li>').click(
 					$.proxy(this.remove_from_page, this)
 				)
 			);
