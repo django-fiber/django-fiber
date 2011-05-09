@@ -87,7 +87,7 @@ These settings are optional (default values are shown)::
 	FIBER_DEFAULT_TEMPLATE = 'base.html'
 	FIBER_TEMPLATE_CHOICES = []
 
-	FIBER_EXCLUDE_URLS = (r'^admin/',)
+	FIBER_EXCLUDE_URLS = []
 
 	FIBER_IMAGES_DIR = 'uploads/images'
 	FIBER_FILES_DIR = 'uploads/files'
