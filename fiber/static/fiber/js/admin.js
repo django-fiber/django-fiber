@@ -1576,12 +1576,6 @@ var adminPage = {
 		this.admin_content_tree = $('#admin-sidebar-content-tree');
 		this.toggle_button = $('#btn-toggle-admin-sidebar');
 
-		$(document.body)
-			.children(':first-child')
-			.nextUntil('#wpr-admin-layer')
-			.andSelf()
-			.wrapAll('<div id="wpr-body"></div>');
-
 		this.admin_page_tree.hide();
 		this.admin_content_tree.hide();
 

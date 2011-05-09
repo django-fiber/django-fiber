@@ -83,9 +83,11 @@ class AdminPageMiddleware(object):
                 # Inject header html in head.
                 # Add fiber-data attribute to body tag.
                 response.content = self.body_re.sub(
-                    r"<head>\g<IN_HEAD>%s</head>\g<AFTER_HEAD><body data-fiber-data='%s'\g<IN_BODY_TAG>>\g<BODY_CONTENTS>%s</body>" % (
+                    r"<head>\g<IN_HEAD>%s</head>\g<AFTER_HEAD><body data-fiber-data='%s'\g<IN_BODY_TAG>>%s\g<BODY_CONTENTS>%s%s</body>" % (
                         self.get_header_html(request),
                         simplejson.dumps(fiber_data),
+                        '<div id="wpr-body">',
+                        '</div>',
                         admin_html,
                     ),
                     smart_unicode(response.content)
