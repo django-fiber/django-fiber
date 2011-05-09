@@ -1,62 +1,74 @@
-# Ductch Translations for django-fiber
-# Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Bram Simons <info@simons-design.nl>, 2011.
-# 
-#, fuzzy
+# Dutch Translations for Django Fiber
+# Copyright (C) 2011 Ride The Pony
+# This file is distributed under the same license as the Django Fiber package.
+# Ride The Pony <info@ridethepony.org>, 2011.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-01 22:58+0200\n"
-"PO-Revision-Date: 2011-05-06 07:25\n"
-"Last-Translator:   <info@simons-design.nl>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2011-05-08 14:16+0200\n"
+"PO-Revision-Date: 2011-05-09 12:06+0100\n"
+"Last-Translator: Dennis Bunskoek <dbunskoek@leukeleu.nl>\n"
+"Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.6.0\n"
 
-#: admin.py:21 models.py:150
+#: admin.py:25
+#: models.py:150
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
-#: admin.py:22
+#: admin.py:26
 msgid "Example: '/section-1/products' or 'products' or '\"some_named_url\"'"
-msgstr "Voorbeeld: '/sectie-1/producten' of 'producten' of '\"a_named_url\"'"
+msgstr "Voorbeeld: '/sectie-1/producten' of 'producten' of '\"een_named_url\"'"
 
-#: admin.py:23
-msgid ""
-"This value must contain only letters, numbers, underscores, dashes or "
-"slashes."
-msgstr ""
-"Deze waarde mag alleen letters, cijfers, liggende strepen en schuine "
-"strepen bevatten."
+#: admin.py:27
+msgid "This value must contain only letters, numbers, underscores, dashes or slashes."
+msgstr "Deze waarde mag alleen letters, cijfers, underscores, min-tekens en schuine strepen bevatten."
 
-#: admin.py:24
+#: admin.py:28
 msgid "Redirect page"
 msgstr "Automatische doorverwijzing"
 
-#: admin.py:74
-msgid "Move"
-msgstr "Verplaatsen"
+#: admin.py:72
+msgid "View on site"
+msgstr "Toon op site"
 
-#: admin_views.py:28
+#: admin.py:85
+msgid "Move up"
+msgstr "Verplaats omhoog"
+
+#: admin.py:90
+msgid "Move down"
+msgstr "Verplaats omlaag"
+
+#: admin.py:96
+msgid "Add sub page"
+msgstr "Voeg een subpagina toe"
+
+#: admin.py:100
+msgid "Actions"
+msgstr "Acties"
+
+#: admin.py:108
+msgid "Template"
+msgstr "Sjabloon"
+
+#: admin_views.py:25
 msgid "This account is inactive."
 msgstr "Dit account is inactief."
 
-#: admin_views.py:33
-msgid ""
-"Please enter a correct username and password. Note that both fields are"
-" case-sensitive."
-msgstr ""
-"Voer een correcte gebruikersnaam en wachtwoord in. Let op, de velden "
-"zijn hoofdletter-gevoelig."
+#: admin_views.py:30
+msgid "Please enter a correct username and password. Note that both fields are case-sensitive."
+msgstr "Voer een correcte gebruikersnaam en wachtwoord in. Let op, de velden zijn hoofdlettergevoelig."
 
 #: models.py:54
 msgid "used more than once"
-msgstr "meer dan één keer gebruikt"
+msgstr "meerdere keren gebruikt"
 
 #: models.py:55
 msgid "unused"
@@ -70,44 +82,56 @@ msgstr "één keer gebruikt"
 msgid "recently changed"
 msgstr "recent gewijzigd"
 
-#: models.py:98 models.py:142 models.py:300 models.py:327
+#: models.py:98
+#: models.py:142
+#: models.py:300
+#: models.py:327
 msgid "created"
-msgstr "aanmaak"
+msgstr "aangemaakt"
 
-#: models.py:99 models.py:143 models.py:301 models.py:328
+#: models.py:99
+#: models.py:143
+#: models.py:301
+#: models.py:328
 msgid "updated"
-msgstr "bewerking"
+msgstr "bijgewerkt"
 
 #: models.py:101
 msgid "name"
 msgstr "naam"
 
-#: models.py:102 models.py:103 templates/fiber/admin.html:26
+#: models.py:102
+#: models.py:103
+#: templates/fiber/admin.html:26
 msgid "Content"
-msgstr "Inhoud"
+msgstr "Content"
 
-#: models.py:104 models.py:156
+#: models.py:104
+#: models.py:156
 msgid "protected"
 msgstr "beschermd"
 
 #: models.py:106
 msgid "metadata"
-msgstr ""
+msgstr "metadata"
 
-#: models.py:129 models.py:291
+#: models.py:129
+#: models.py:291
 msgid "content item"
-msgstr "Inhoud"
+msgstr "content item"
 
-#: models.py:130 models.py:158
+#: models.py:130
+#: models.py:158
 msgid "content items"
-msgstr "Inhoud"
+msgstr "content items"
 
 #: models.py:145
-#, fuzzy
 msgid "parent"
-msgstr "pagina"
+msgstr "parent"
 
-#: models.py:149 models.py:304 models.py:331
+#: models.py:149
+#: models.py:304
+#: models.py:331
 msgid "title"
 msgstr "titel"
 
@@ -117,7 +141,7 @@ msgstr "automatische doorverwijzing"
 
 #: models.py:152
 msgid "mark current regexes"
-msgstr "reguliere expressies voor current CSS selector"
+msgstr "reguliere expressies markeren als current"
 
 #: models.py:154
 msgid "template name"
@@ -127,7 +151,8 @@ msgstr "sjabloonnaam"
 msgid "show in menu"
 msgstr "toon in menu"
 
-#: models.py:253 models.py:292
+#: models.py:253
+#: models.py:292
 msgid "page"
 msgstr "pagina"
 
@@ -137,13 +162,14 @@ msgstr "pagina’s"
 
 #: models.py:293
 msgid "block name"
-msgstr "naam gedeelte"
+msgstr "block naam"
 
 #: models.py:294
 msgid "sort"
-msgstr "volgorde"
+msgstr "sortering"
 
-#: models.py:303 models.py:321
+#: models.py:303
+#: models.py:321
 msgid "image"
 msgstr "afbeelding"
 
@@ -159,7 +185,8 @@ msgstr "hoogte"
 msgid "images"
 msgstr "afbeeldingen"
 
-#: models.py:330 models.py:339
+#: models.py:330
+#: models.py:339
 msgid "file"
 msgstr "bestand"
 
@@ -169,12 +196,13 @@ msgstr "bestanden"
 
 #: templates/fiber/admin.html:9
 msgid "Backend"
-msgstr "Back-end"
+msgstr "Backend"
 
 #: templates/fiber/admin.html:10
 msgid "Log out"
-msgstr "Log uit"
+msgstr "Uitloggen"
 
 #: templates/fiber/admin.html:13
 msgid "Pages"
 msgstr "Pagina’s"
+
