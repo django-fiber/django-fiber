@@ -1468,8 +1468,23 @@ var adminPage = {
 									confirmationDialog.html(gettext('<p>Are you sure you want to delete this item?</p>'));
 								})
 							);
+							if (data.used_on_pages.length >= 1) {
+								var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
 
-							contextmenu.menu().removeClass('ui-corner-all');
+								$(data.used_on_pages).each(function(index) {
+									context_submenu_used_on_pages.append(
+										$('<li><a href="#">'+data.used_on_pages[index].title+'</a></li>').click(function() {
+											location.href = data.used_on_pages[index].url;
+										})
+									);
+								});
+
+								contextmenu.append(
+									$('<li><a href="#">'+gettext('Used on pages')+'</a></li>').prepend(context_submenu_used_on_pages)
+								);
+							}
+							contextmenu.flyoutmenu().removeClass('ui-corner-all');
+
 							$(document.body).append(contextmenu);
 							contextmenu.offset({ left: event.pageX, top: event.pageY });
 						}
@@ -1974,9 +1989,23 @@ var FiberItem = Class.extend({
 					$.proxy(this.remove_from_page, this)
 				)
 			);
+			if (this.element_data.used_on_pages.length > 1) {
+				var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
+				$(this.element_data.used_on_pages).each(function(index, value) {
+					context_submenu_used_on_pages.append(
+						$('<li><a href="#">'+value.title+'</a></li>').click(function() {
+							location.href = value.url;
+						})
+					);
+				});
+
+				contextmenu.append(
+					$('<li><a href="#">'+gettext('Used on pages')+'</a></li>').prepend(context_submenu_used_on_pages)
+				);
+			}
 		}
 
-		contextmenu.menu().removeClass('ui-corner-all');
+		contextmenu.flyoutmenu().removeClass('ui-corner-all');
 		$(document.body).append(contextmenu);
 
 		contextmenu.offset({ left: e.pageX, top: e.pageY });

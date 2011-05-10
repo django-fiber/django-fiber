@@ -124,6 +124,7 @@ def do_show_page_content(parser, token):
 
 
 class ShowPageContentNode(template.Node):
+
     def __init__(self, page, block_name):
         self.page = template.Variable(page)
         self.block_name = block_name
@@ -165,6 +166,7 @@ def do_captureas(parser, token):
 
 
 class CaptureasNode(template.Node):
+
     def __init__(self, nodelist, varname):
         self.nodelist = nodelist
         self.varname = varname
@@ -177,13 +179,14 @@ class CaptureasNode(template.Node):
 
 def get_editable_attrs(instance):
     data = {
-        "url": get_admin_change_url(instance)
+        "url": get_admin_change_url(instance),
     }
 
     return "data-fiber-data='%s'" % simplejson.dumps(data)
 
 
 class EditableAttrsNode(template.Node):
+
     def __init__(self, instance_var):
         self.instance_var = template.Variable(instance_var)
 
@@ -203,3 +206,37 @@ def editable_attrs(parser, token):
         raise template.TemplateSyntaxError, "%r tag requires one argument" % token.contents.split()[0]
 
     return EditableAttrsNode(instance_var)
+
+
+def get_content_used_on_pages_json(instance):
+    page_content_items = instance.page_content_items.all()
+    json_pages = []
+    for page_content_item in page_content_items:
+        json_pages.append({
+            'title': page_content_item.page.title,
+            'url': page_content_item.page.get_absolute_url(),
+        })
+    return simplejson.dumps(json_pages)
+
+
+class ContentUsedOnPagesJSONNode(template.Node):
+
+    def __init__(self, instance_var):
+        self.instance_var = template.Variable(instance_var)
+
+    def render(self, context):
+        try:
+            instance = self.instance_var.resolve(context)
+            return get_content_used_on_pages_json(instance)
+        except template.VariableDoesNotExist:
+            return ''
+
+
+@register.tag(name='content_used_on_pages_json')
+def content_used_on_pages_json(parser, token):
+    try:
+        instance_var = token.split_contents()[1]
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires one argument" % token.contents.split()[0]
+
+    return ContentUsedOnPagesJSONNode(instance_var)
