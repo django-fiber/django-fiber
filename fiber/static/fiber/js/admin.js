@@ -798,10 +798,11 @@ var ChangePageFormDialog = ChangeFormDialog.extend({
 				this.form.append(extra_field);
 			}
 
-			// automatically slugify the title field
 			$('#id_title').attr('autocomplete', 'off');
-			$('#id_title').slugify('#id_url');
-
+			if (!$('#id_url').val()) {
+				// automatically slugify the title field
+				$('#id_title').slugify('#id_url');
+			}
 		};
 	}
 });
