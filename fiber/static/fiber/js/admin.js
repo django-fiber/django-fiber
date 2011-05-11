@@ -491,7 +491,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
 		url: '/api/v1/images.jqgrid-json',
-		width: 480,
+		width: 520,
 		height: 'auto',
 		start_width: 480,
 		start_height: 'auto'
@@ -550,12 +550,12 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 				{ name: 'image', index: 'image', width: 120, resizable: false, sortable: false, formatter: thumbnail_formatter },
 				{ name: 'filename', index: 'filename', width: 160, resizable: false },
 				{ name: 'size', index: 'size', width: 80, resizable: false },
-				{ name: 'updated', index: 'updated', width: 120, resizable: false }
+				{ name: 'updated', index: 'updated', width: 160, resizable: false }
 			],
 			rowNum: 50,
 			pager: '#ui-image-select-grid-pager',
 			shrinkToFit: false,
-			width: 480,
+			width: 520,
 			height: 300,
 			sortname: 'updated',
 			sortorder: 'desc',
@@ -598,7 +598,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
 		url: '/api/v1/files.jqgrid-json',
-		width: 480,
+		width: 520,
 		height: 'auto',
 		start_width: 480,
 		start_height: 'auto'
@@ -650,12 +650,12 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 			colModel: [
 				{ name: 'url', index: 'url', hidden: true },
 				{ name: 'filename', index: 'filename', width: 360, resizable: false },
-				{ name: 'updated', index: 'updated', width: 120, resizable: false }
+				{ name: 'updated', index: 'updated', width: 160, resizable: false }
 			],
 			rowNum: 50,
 			pager: '#ui-file-select-grid-pager',
 			shrinkToFit: false,
-			width: 480,
+			width: 520,
 			height: 300,
 			sortname: 'updated',
 			sortorder: 'desc',
