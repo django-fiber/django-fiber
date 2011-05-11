@@ -1,3 +1,6 @@
+from django.utils.translation import ugettext_lazy as _
+
+
 def friendly_datetime(date_time):
     """
     Given a datetime object or an int() Unix timestamp, return a friendly
@@ -21,23 +24,23 @@ def friendly_datetime(date_time):
 
     if days_diff == 0:
         if seconds_diff < 10:
-            return 'just now'
+            return _('just now')
         if seconds_diff < 60:
-            return str(seconds_diff) + ' seconds ago'
+            return  _('%s seconds ago') % str(seconds_diff)
         if seconds_diff < 120:
             return  'a minute ago'
         if seconds_diff < 3600:
-            return str(seconds_diff / 60) + ' minutes ago'
+            return  _('%s minutes ago') % str(seconds_diff / 60)
         if seconds_diff < 7200:
             return 'an hour ago'
         if seconds_diff < 86400:
-            return str(seconds_diff / 3600) + ' hours ago'
+            return  _('%s hours ago') % str(seconds_diff / 3600)
     if days_diff == 1:
-        return 'yesterday'
+        return _('yesterday')
     if days_diff < 7:
-        return str(days_diff) + ' days ago'
+        return  _('%s days ago') % str(days_diff)
     if days_diff < 31:
-        return str(days_diff / 7) + ' weeks ago'
+        return  _('%s weeks ago') % str(days_diff / 7)
     if days_diff < 365:
-        return str(days_diff / 30) + ' months ago'
-    return str(days_diff / 365) + ' years ago'
+        return  _('%s months ago') % str(days_diff / 30)
+    return _('%s years ago') % str(days_diff / 365)
