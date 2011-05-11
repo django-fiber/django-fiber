@@ -32,7 +32,7 @@ def friendly_datetime(date_time):
         if seconds_diff < 3600:
             return  _('%s minutes ago') % str(seconds_diff / 60)
         if seconds_diff < 7200:
-            return 'an hour ago'
+            return _('an hour ago')
         if seconds_diff < 86400:
             return  _('%s hours ago') % str(seconds_diff / 3600)
     if days_diff == 1:

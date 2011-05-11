@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-11 11:56+0200\n"
-"PO-Revision-Date: 2011-05-11 11:58\n"
+"POT-Creation-Date: 2011-05-11 12:46+0200\n"
+"PO-Revision-Date: 2011-05-11 12:58\n"
 "Last-Translator: Bram Simons <bsimons@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,8 +26,12 @@ msgid "Example: '/section-1/products' or 'products' or '\"some_named_url\"'"
 msgstr "Voorbeeld: '/sectie-1/producten' of 'producten' of '\"een_named_url\"'"
 
 #: admin.py:27
-msgid "This value must contain only letters, numbers, underscores, dashes or slashes."
-msgstr "Deze waarde mag alleen letters, cijfers, underscores, min-tekens en schuine strepen bevatten."
+msgid ""
+"This value must contain only letters, numbers, underscores, dashes or "
+"slashes."
+msgstr ""
+"Deze waarde mag alleen letters, cijfers, underscores, min-tekens en "
+"schuine strepen bevatten."
 
 #: admin.py:28
 msgid "Redirect page"
@@ -62,8 +66,12 @@ msgid "This account is inactive."
 msgstr "Dit account is inactief."
 
 #: admin_views.py:30
-msgid "Please enter a correct username and password. Note that both fields are case-sensitive."
-msgstr "Voer een correcte gebruikersnaam en wachtwoord in. Let op, de velden zijn hoofdlettergevoelig."
+msgid ""
+"Please enter a correct username and password. Note that both fields are"
+" case-sensitive."
+msgstr ""
+"Voer een correcte gebruikersnaam en wachtwoord in. Let op, de velden "
+"zijn hoofdlettergevoelig."
 
 #: models.py:54
 msgid "used more than once"
@@ -202,6 +210,10 @@ msgstr "%s seconden geleden"
 #, python-format
 msgid "%s minutes ago"
 msgstr "%s minuten geleden"
+
+#: utils/date.py:35
+msgid "an hour ago"
+msgstr "1 uur geleden"
 
 #: utils/date.py:37
 #, python-format
