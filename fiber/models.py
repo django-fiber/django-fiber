@@ -61,6 +61,7 @@ class ContentItemManager(models.Manager):
         """
         Change the urls in all content pages. Also changes the urls that begin with this url.
         """
+
         def rename_html(html):
             return re.sub(
                 r"""(\s)href=(["'])%s""" % old_url,
@@ -72,7 +73,7 @@ class ContentItemManager(models.Manager):
             if not 'rename_url_expressions' in editor.editor:
                 return markup
             else:
-                expressions = editor.editor['rename_url_expressions'];
+                expressions = editor.editor['rename_url_expressions']
                 return re.sub(
                     expressions[0] % old_url,
                     expressions[1] % new_url,
@@ -288,7 +289,7 @@ class PageContentItemManager(models.Manager):
 
 
 class PageContentItem(models.Model):
-    content_item = models.ForeignKey(ContentItem, verbose_name=_('content item'))
+    content_item = models.ForeignKey(ContentItem, related_name='page_content_items', verbose_name=_('content item'))
     page = models.ForeignKey(Page, related_name='page_content_items', verbose_name=_('page'))
     block_name = models.CharField(_('block name'), max_length=255)
     sort = models.IntegerField(_('sort'), blank=True, null=True)
