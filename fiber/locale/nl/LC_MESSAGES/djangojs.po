@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-13 09:23+0200\n"
-"PO-Revision-Date: 2011-05-13 02:24\n"
+"POT-Creation-Date: 2011-05-13 10:04+0200\n"
+"PO-Revision-Date: 2011-05-13 03:07\n"
 "Last-Translator: Bram Simons <bsimons@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "MIME-Version: 1.0\n"
@@ -145,6 +145,10 @@ msgstr "Link naar een bestand op deze site"
 #: static/fiber/js/fiber.ckeditor.js:141
 msgid "Link to an Image in This Site"
 msgstr "Link naar een afbeelding op deze site"
+
+#: static/fiber/js/fiber.ckeditor.js:152
+msgid "Please Enter a Link"
+msgstr "Voer een link in"
 
 #: static/fiber/js/fiber.ckeditor.js:172
 msgid "Custom Link"

@@ -166,7 +166,7 @@ function extend_CKEditor() {
 		exec: function(editor) {
 
 			// prompt for custom link - TODO: create custom jQuery UI dialog for this
-			var custom_link = window.prompt('Please Enter A Link', 'http://');
+			var custom_link = window.prompt(gettext('Please Enter a Link'), 'http://');
 
 			// delete any existing links on the selected text
 			editor.document.$.execCommand('unlink', false, null);
