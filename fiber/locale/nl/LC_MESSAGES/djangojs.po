@@ -2,14 +2,14 @@
 # Copyright (C) 2011 Ride The Pony
 # This file is distributed under the same license as the Django Fiber package.
 # Ride The Pony <info@ridethepony.org>, 2011.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-10 15:09+0200\n"
-"PO-Revision-Date: 2011-05-10 15:17+0100\n"
-"Last-Translator: Michael <mvandewaeter@leukeleu.nl>\n"
+"POT-Creation-Date: 2011-05-13 09:11+0200\n"
+"PO-Revision-Date: 2011-05-13 02:14\n"
+"Last-Translator: Bram Simons <bsimons@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,8 +21,7 @@ msgstr ""
 msgid "Action"
 msgstr "Bewerking"
 
-#: static/fiber/js/admin.js:57
-#: static/fiber/js/admin.js.py:1246
+#: static/fiber/js/admin.js:57 static/fiber/js/admin.js.py:1246
 #: static/fiber/js/admin.js:1402
 msgid "Cancel"
 msgstr "Annuleren"
@@ -43,8 +42,7 @@ msgstr "Opslaan"
 msgid "Upload a new file"
 msgstr "Upload nieuw bestand"
 
-#: static/fiber/js/admin.js:470
-#: static/fiber/js/admin.js.py:575
+#: static/fiber/js/admin.js:470 static/fiber/js/admin.js.py:575
 #: static/fiber/js/admin.js:681
 msgid "Select"
 msgstr "Selecteer"
@@ -57,12 +55,11 @@ msgstr "Selecteer een afbeelding"
 msgid "Filter by filename"
 msgstr "Filter op bestandsnaam"
 
-#: static/fiber/js/admin.js:509
+#: static/fiber/js/admin.js:509 static/fiber/js/fiber.ckeditor.js:220
 msgid "Image"
 msgstr "Afbeelding"
 
-#: static/fiber/js/admin.js:509
-#: static/fiber/js/admin.js.py:609
+#: static/fiber/js/admin.js:509 static/fiber/js/admin.js.py:609
 msgid "Filename"
 msgstr "Bestandsnaam"
 
@@ -70,8 +67,7 @@ msgstr "Bestandsnaam"
 msgid "Size"
 msgstr "Afmetingen"
 
-#: static/fiber/js/admin.js:509
-#: static/fiber/js/admin.js.py:609
+#: static/fiber/js/admin.js:509 static/fiber/js/admin.js.py:609
 msgid "Updated"
 msgstr "Bijgewerkt"
 
@@ -83,10 +79,8 @@ msgstr "Selecteer een bestand"
 msgid "Select page"
 msgstr "Kies pagina"
 
-#: static/fiber/js/admin.js:1190
-#: static/fiber/js/admin.js.py:1369
-#: static/fiber/js/admin.js:1907
-#: static/fiber/js/admin.js.py:1913
+#: static/fiber/js/admin.js:1190 static/fiber/js/admin.js.py:1369
+#: static/fiber/js/admin.js:1907 static/fiber/js/admin.js.py:1913
 msgid "Edit"
 msgstr "Bewerken"
 
@@ -94,30 +88,37 @@ msgstr "Bewerken"
 msgid "Add sub page"
 msgstr "Subpagina toevoegen"
 
-#: static/fiber/js/admin.js:1210
-#: static/fiber/js/admin.js.py:1219
-#: static/fiber/js/admin.js:1377
-#: static/fiber/js/admin.js.py:1385
+#: static/fiber/js/admin.js:1210 static/fiber/js/admin.js.py:1219
+#: static/fiber/js/admin.js:1377 static/fiber/js/admin.js.py:1385
 msgid "Delete"
 msgstr "Verwijderen"
 
 #: static/fiber/js/admin.js:1255
 #, perl-format
 msgid "<p>Are you sure you want to delete the page \"<strong>%s</strong>\"?</p>"
-msgstr "<p>Weet u zeker dat u de pagina <strong>\"%s\"</strong> wilt verwijderen?</p>"
+msgstr ""
+"<p>Weet u zeker dat u de pagina <strong>\"%s\"</strong> wilt "
+"verwijderen?</p>"
 
 #: static/fiber/js/admin.js:1259
 #, perl-format
-msgid "<p>There is <strong>%s page</strong> below this page that will also be deleted.</p>"
-msgstr "<p> Er is <strong>%s pagina</strong> onder deze pagina die ook zal worden verwijderd.</p>"
+msgid ""
+"<p>There is <strong>%s page</strong> below this page that will also be "
+"deleted.</p>"
+msgstr ""
+"<p> Er is <strong>%s pagina</strong> onder deze pagina die ook zal "
+"worden verwijderd.</p>"
 
 #: static/fiber/js/admin.js:1261
 #, perl-format
-msgid "<p>There are <strong>%s pages</strong> below this page that will also be deleted.</p>"
-msgstr "<p>Er zijn <strong>%s pagina’s</strong> onder deze pagina die ook zullen worden verwijderd.</p>"
+msgid ""
+"<p>There are <strong>%s pages</strong> below this page that will also "
+"be deleted.</p>"
+msgstr ""
+"<p>Er zijn <strong>%s pagina’s</strong> onder deze pagina die ook "
+"zullen worden verwijderd.</p>"
 
-#: static/fiber/js/admin.js:1265
-#: static/fiber/js/admin.js.py:1409
+#: static/fiber/js/admin.js:1265 static/fiber/js/admin.js.py:1409
 msgid "Are you sure?"
 msgstr "Weet je het zeker?"
 
@@ -125,14 +126,37 @@ msgstr "Weet je het zeker?"
 msgid "<p>Are you sure you want to delete this item?</p>"
 msgstr "<p>Weet je zeker dat je dit item wilt verwijderen?</p>"
 
-#: static/fiber/js/admin.js:1425
-#: static/fiber/js/admin.js.py:1934
+#: static/fiber/js/admin.js:1425 static/fiber/js/admin.js.py:1934
 msgid "Used on pages"
 msgstr "Gebruikt op pagina’s"
 
 #: static/fiber/js/admin.js:1919
 msgid "Remove from page"
 msgstr "Verwijderen van pagina"
+
+#: static/fiber/js/fiber.ckeditor.js:67
+msgid "Link to a Page in This Site"
+msgstr "Link naar een pagina op deze site"
+
+#: static/fiber/js/fiber.ckeditor.js:104
+msgid "Link to a File in This Site"
+msgstr "Link naar een bestand op deze site"
+
+#: static/fiber/js/fiber.ckeditor.js:141
+msgid "Link to an Image in This Site"
+msgstr "Link naar een afbeelding op deze site"
+
+#: static/fiber/js/fiber.ckeditor.js:172
+msgid "Custom Link"
+msgstr "Aangepaste link"
+
+#: static/fiber/js/fiber.ckeditor.js:191
+msgid "Unlink"
+msgstr "Verwijder link"
+
+#: static/fiber/js/fiber.ckeditor.js:256
+msgid "Table"
+msgstr "Tabel"
 
 #~ msgid "this is to be translated"
 #~ msgstr "Dit is om te worden vertaald"
