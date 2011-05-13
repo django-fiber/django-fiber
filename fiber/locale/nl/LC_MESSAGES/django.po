@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-11 12:46+0200\n"
-"PO-Revision-Date: 2011-05-11 12:58\n"
+"POT-Creation-Date: 2011-05-13 11:25+0200\n"
+"PO-Revision-Date: 2011-05-13 04:30\n"
 "Last-Translator: Bram Simons <bsimons@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "MIME-Version: 1.0\n"
@@ -36,6 +36,20 @@ msgstr ""
 #: admin.py:28
 msgid "Redirect page"
 msgstr "Automatische doorverwijzing"
+
+#: admin.py:35
+msgid "No reverse match found for the named url"
+msgstr "Geen 'reverse match' gevonden voor de 'named url'"
+
+#: admin.py:42
+msgid "A named url can't be combined with a redirect page"
+msgstr ""
+"Een 'named url' kan niet worden gecombineerd met een automatische "
+"doorverwijzing"
+
+#: admin.py:58 admin.py:155
+msgid "Advanced options"
+msgstr "Uitgebreide opties"
 
 #: admin.py:72
 msgid "View on site"
@@ -112,6 +126,10 @@ msgstr "beschermd"
 #: models.py:107
 msgid "metadata"
 msgstr "metadata"
+
+#: models.py:118
+msgid "[ EMPTY ]"
+msgstr "[ LEEG ]"
 
 #: models.py:130 models.py:292
 msgid "content item"

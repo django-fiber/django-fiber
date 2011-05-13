@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-13 10:04+0200\n"
-"PO-Revision-Date: 2011-05-13 03:07\n"
+"POT-Creation-Date: 2011-05-13 11:09+0200\n"
+"PO-Revision-Date: 2011-05-13 04:10\n"
 "Last-Translator: Bram Simons <bsimons@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "MIME-Version: 1.0\n"
@@ -41,6 +41,10 @@ msgstr "Opslaan"
 #: static/fiber/js/admin.js:403
 msgid "Upload a new file"
 msgstr "Upload nieuw bestand"
+
+#: static/fiber/js/admin.js:438
+msgid "Upload failed."
+msgstr "Uploaden mislukt."
 
 #: static/fiber/js/admin.js:470 static/fiber/js/admin.js.py:575
 #: static/fiber/js/admin.js:681

@@ -470,7 +470,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 		uploader.bind('Error', function(up, error) {
 			if (error.code != plupload.INIT_ERROR) {
-				alert('Upload failed.');
+				alert(gettext('Upload failed.'));
 			}
 		});
 
