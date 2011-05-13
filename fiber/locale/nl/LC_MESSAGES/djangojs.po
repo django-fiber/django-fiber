@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-13 09:11+0200\n"
-"PO-Revision-Date: 2011-05-13 02:14\n"
+"POT-Creation-Date: 2011-05-13 09:23+0200\n"
+"PO-Revision-Date: 2011-05-13 02:24\n"
 "Last-Translator: Bram Simons <bsimons@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "MIME-Version: 1.0\n"
@@ -51,7 +51,7 @@ msgstr "Selecteer"
 msgid "Select an image"
 msgstr "Selecteer een afbeelding"
 
-#: static/fiber/js/admin.js:488
+#: static/fiber/js/admin.js:488 static/fiber/js/admin.js.py:592
 msgid "Filter by filename"
 msgstr "Filter op bestandsnaam"
 
@@ -76,8 +76,8 @@ msgid "Select a file"
 msgstr "Selecteer een bestand"
 
 #: static/fiber/js/admin.js:686
-msgid "Select page"
-msgstr "Kies pagina"
+msgid "Select a page"
+msgstr "Kies een pagina"
 
 #: static/fiber/js/admin.js:1190 static/fiber/js/admin.js.py:1369
 #: static/fiber/js/admin.js:1907 static/fiber/js/admin.js.py:1913
