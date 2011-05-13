@@ -6,6 +6,7 @@ Fiber.enhance_textarea = function(textarea) {
 	// - collapsible areas should work, etc.
 
 	CKEDITOR.replace(textarea, {
+		language: LANGUAGE_CODE,
 		extraPlugins: 'fpagelink,ffilelink,fimagelink,fcustomlink,funlink,fimage,ftable,tabletools',
 		removePlugins: 'scayt,menubutton,forms,image,link',
 		toolbar:
