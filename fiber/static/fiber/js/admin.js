@@ -629,7 +629,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 		this.file_select_grid = $(document.createElement('table')).attr('id', 'ui-file-select-grid'); // the id attribute is necessary for jqGrid
 		this.file_select_grid_pager = $(document.createElement('div')).attr('id', 'ui-file-select-grid-pager');
 		this.file_select_filter = $(document.createElement('div')).attr('id', 'ui-file-select-filter');
-		this.file_select_filter.append($(document.createElement('label')).attr({ id: 'ui-file-select-filter-label'}).text('Filter by filename'));
+		this.file_select_filter.append($(document.createElement('label')).attr({ id: 'ui-file-select-filter-label'}).text(gettext('Filter by filename')));
 		this.file_select_filter.append($(document.createElement('input')).attr({ id: 'ui-file-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.file_select_filter);
 		this.uiDialog.append(this.file_select_grid);
@@ -725,7 +725,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 		action_button.attr('disabled', 'disabled');
 		action_button.addClass('ui-button-disabled ui-state-disabled');
 
-		this.uiDialog.dialog('option', 'title', gettext('Select page'));
+		this.uiDialog.dialog('option', 'title', gettext('Select a page'));
 
 		this.init_dialog_success();
 	},
