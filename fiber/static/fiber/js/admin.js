@@ -500,6 +500,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 	// override default dialog window
 	init_dialog: function() {
 		// don't call _super, just call init_dialog_success at the end
+		this.uiDialog.dialog('option', 'zIndex', 1200); // set z-index here, because it can't set by _super
 
 		// enhance action button
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
@@ -607,6 +608,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 	// override default dialog window
 	init_dialog: function() {
 		// don't call _super, just call init_dialog_success at the end
+		this.uiDialog.dialog('option', 'zIndex', 1200); // set z-index here, because it can't set by _super
 
 		// enhance action button
 		var actionButton = this.uiDialog.parent().find(':button:contains("Action")');
@@ -715,6 +717,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 	// override default dialog window
 	init_dialog: function() {
 		// don't call _super, just call init_dialog_success at the end
+		this.uiDialog.dialog('option', 'zIndex', 1200); // set z-index here, because it can't set by _super
 
 		// enhance action button
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');

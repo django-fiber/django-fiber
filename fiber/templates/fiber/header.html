@@ -1,7 +1,7 @@
 {% load compress %}
 
 {% compress js %}
-<script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+<script src="{% url django.views.i18n.javascript_catalog %}" type="text/javascript"></script>
 
 <script type="text/javascript">
 	var STATIC_URL = '{{ STATIC_URL }}';

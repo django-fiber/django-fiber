@@ -21,15 +21,16 @@ Fiber.enhance_textarea = function(textarea) {
 		],
 		format_tags: 'p;h2;h3;h4',
 		toolbarCanCollapse: false,
-		resize_maxWidth: 610
+		resize_maxWidth: 610,
+		baseFloatZIndex: 1100
 	});
-}
+};
 
 Fiber.remove_textarea = function(textarea) {
 	if (textarea.id in CKEDITOR.instances) {
 		CKEDITOR.remove(CKEDITOR.instances[textarea.id]);
 	}
-}
+};
 
 function extend_CKEditor() {
 
@@ -287,7 +288,7 @@ function extend_CKEditor() {
 			});
 		}
 	});
-};
+}
 
 extend_CKEditor();
 
