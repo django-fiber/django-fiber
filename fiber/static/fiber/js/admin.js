@@ -470,7 +470,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 		uploader.bind('Error', function(up, error) {
 			if (error.code != plupload.INIT_ERROR) {
-				alert('Upload failed.');
+				alert(gettext('Upload failed.'));
 			}
 		});
 
@@ -491,7 +491,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
 		url: '/api/v1/images.jqgrid-json',
-		width: 480,
+		width: 520,
 		height: 'auto',
 		start_width: 480,
 		start_height: 'auto'
@@ -551,12 +551,12 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 				{ name: 'image', index: 'image', width: 120, resizable: false, sortable: false, formatter: thumbnail_formatter },
 				{ name: 'filename', index: 'filename', width: 160, resizable: false },
 				{ name: 'size', index: 'size', width: 80, resizable: false },
-				{ name: 'updated', index: 'updated', width: 120, resizable: false }
+				{ name: 'updated', index: 'updated', width: 160, resizable: false }
 			],
 			rowNum: 50,
 			pager: '#ui-image-select-grid-pager',
 			shrinkToFit: false,
-			width: 480,
+			width: 520,
 			height: 300,
 			sortname: 'updated',
 			sortorder: 'desc',
@@ -599,7 +599,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
 		url: '/api/v1/files.jqgrid-json',
-		width: 480,
+		width: 520,
 		height: 'auto',
 		start_width: 480,
 		start_height: 'auto'
@@ -631,7 +631,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 		this.file_select_grid = $(document.createElement('table')).attr('id', 'ui-file-select-grid'); // the id attribute is necessary for jqGrid
 		this.file_select_grid_pager = $(document.createElement('div')).attr('id', 'ui-file-select-grid-pager');
 		this.file_select_filter = $(document.createElement('div')).attr('id', 'ui-file-select-filter');
-		this.file_select_filter.append($(document.createElement('label')).attr({ id: 'ui-file-select-filter-label'}).text('Filter by filename'));
+		this.file_select_filter.append($(document.createElement('label')).attr({ id: 'ui-file-select-filter-label'}).text(gettext('Filter by filename')));
 		this.file_select_filter.append($(document.createElement('input')).attr({ id: 'ui-file-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.file_select_filter);
 		this.uiDialog.append(this.file_select_grid);
@@ -652,12 +652,12 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 			colModel: [
 				{ name: 'url', index: 'url', hidden: true },
 				{ name: 'filename', index: 'filename', width: 360, resizable: false },
-				{ name: 'updated', index: 'updated', width: 120, resizable: false }
+				{ name: 'updated', index: 'updated', width: 160, resizable: false }
 			],
 			rowNum: 50,
 			pager: '#ui-file-select-grid-pager',
 			shrinkToFit: false,
-			width: 480,
+			width: 520,
 			height: 300,
 			sortname: 'updated',
 			sortorder: 'desc',
@@ -728,7 +728,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 		action_button.attr('disabled', 'disabled');
 		action_button.addClass('ui-button-disabled ui-state-disabled');
 
-		this.uiDialog.dialog('option', 'title', gettext('Select page'));
+		this.uiDialog.dialog('option', 'title', gettext('Select a page'));
 
 		this.init_dialog_success();
 	},
@@ -1471,8 +1471,23 @@ var adminPage = {
 									confirmationDialog.html(gettext('<p>Are you sure you want to delete this item?</p>'));
 								})
 							);
+							if (data.used_on_pages.length >= 1) {
+								var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
 
-							contextmenu.menu().removeClass('ui-corner-all');
+								$(data.used_on_pages).each(function(index) {
+									context_submenu_used_on_pages.append(
+										$('<li><a href="#">'+data.used_on_pages[index].title+'</a></li>').click(function() {
+											location.href = data.used_on_pages[index].url;
+										})
+									);
+								});
+
+								contextmenu.append(
+									$('<li><a href="#">'+gettext('Used on pages')+'</a></li>').prepend(context_submenu_used_on_pages)
+								);
+							}
+							contextmenu.flyoutmenu().removeClass('ui-corner-all');
+
 							$(document.body).append(contextmenu);
 							contextmenu.offset({ left: event.pageX, top: event.pageY });
 						}
@@ -1977,9 +1992,23 @@ var FiberItem = Class.extend({
 					$.proxy(this.remove_from_page, this)
 				)
 			);
+			if (this.element_data.used_on_pages.length > 1) {
+				var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
+				$(this.element_data.used_on_pages).each(function(index, value) {
+					context_submenu_used_on_pages.append(
+						$('<li><a href="#">'+value.title+'</a></li>').click(function() {
+							location.href = value.url;
+						})
+					);
+				});
+
+				contextmenu.append(
+					$('<li><a href="#">'+gettext('Used on pages')+'</a></li>').prepend(context_submenu_used_on_pages)
+				);
+			}
 		}
 
-		contextmenu.menu().removeClass('ui-corner-all');
+		contextmenu.flyoutmenu().removeClass('ui-corner-all');
 		$(document.body).append(contextmenu);
 
 		contextmenu.offset({ left: e.pageX, top: e.pageY });

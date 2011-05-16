@@ -6,6 +6,7 @@ Fiber.enhance_textarea = function(textarea) {
 	// - collapsible areas should work, etc.
 
 	CKEDITOR.replace(textarea, {
+		language: LANGUAGE_CODE,
 		extraPlugins: 'fpagelink,ffilelink,fimagelink,fcustomlink,funlink,fimage,ftable,tabletools',
 		removePlugins: 'scayt,menubutton,forms,image,link',
 		toolbar:
@@ -69,7 +70,7 @@ function extend_CKEditor() {
 		init: function(editor) {
 			editor.addCommand('fpagelink', fpagelinkCmd);
 			editor.ui.addButton('fPageLink', {
-				label: 'Link To A Page In This Site',
+				label: gettext('Link to a Page in This Site'),
 				command: 'fpagelink',
 				icon: STATIC_URL + 'fiber/images/ckeditor/icon-pagelink.png'
 			});
@@ -111,7 +112,7 @@ function extend_CKEditor() {
 		init: function(editor) {
 			editor.addCommand('ffilelink', ffilelinkCmd);
 			editor.ui.addButton('fFileLink', {
-				label: 'Link To A File In This Site',
+				label: gettext('Link to a File in This Site'),
 				command: 'ffilelink',
 				icon: STATIC_URL + 'fiber/images/ckeditor/icon-filelink.png'
 			});
@@ -153,7 +154,7 @@ function extend_CKEditor() {
 		init: function(editor) {
 			editor.addCommand('fimagelink', fimagelinkCmd);
 			editor.ui.addButton('fImageLink', {
-				label: 'Link To An Image In This Site',
+				label: gettext('Link to an Image in This Site'),
 				command: 'fimagelink',
 				icon: STATIC_URL + 'fiber/images/ckeditor/icon-imagelink.png'
 			});
@@ -166,7 +167,7 @@ function extend_CKEditor() {
 		exec: function(editor) {
 
 			// prompt for custom link - TODO: create custom jQuery UI dialog for this
-			var custom_link = window.prompt('Please Enter A Link', 'http://');
+			var custom_link = window.prompt(gettext('Please Enter a Link'), 'http://');
 
 			// delete any existing links on the selected text
 			editor.document.$.execCommand('unlink', false, null);
@@ -189,7 +190,7 @@ function extend_CKEditor() {
 		init: function(editor) {
 			editor.addCommand('fcustomlink', fcustomlinkCmd);
 			editor.ui.addButton('fCustomLink', {
-				label: 'Custom Link',
+				label: gettext('Custom Link'),
 				command: 'fcustomlink',
 				icon: STATIC_URL + 'fiber/images/ckeditor/icon-customlink.png'
 			});
@@ -210,7 +211,7 @@ function extend_CKEditor() {
 		init: function(editor) {
 			editor.addCommand('funlink', funlinkCmd);
 			editor.ui.addButton('fUnlink', {
-				label: 'Unlink',
+				label: gettext('Unlink'),
 				command: 'funlink',
 				icon: STATIC_URL + 'fiber/images/ckeditor/icon-unlink.png'
 			});
@@ -243,7 +244,7 @@ function extend_CKEditor() {
 		init: function(editor) {
 			editor.addCommand('fimage', fimageCmd);
 			editor.ui.addButton('fImage', {
-				label: 'Image',
+				label: gettext('Image'),
 				command: 'fimage',
 				icon: STATIC_URL + 'fiber/images/ckeditor/icon-image.png'
 			});
@@ -282,7 +283,7 @@ function extend_CKEditor() {
 		init: function(editor) {
 			editor.addCommand('ftable', ftableCmd);
 			editor.ui.addButton('fTable', {
-				label: 'Table',
+				label: gettext('Table'),
 				command: 'ftable',
 				icon: STATIC_URL + 'fiber/images/ckeditor/icon-table.png'
 			});

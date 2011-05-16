@@ -54,7 +54,6 @@ class AdminPageMiddleware(object):
             return HttpResponseRedirect('%s%s' % (url_without_fiber, querystring))
         else:
             fiber_data = {}
-            admin_html = ''
 
             is_login = self.show_login(request, response)
             if is_login or self.show_admin(request, response):
@@ -73,25 +72,31 @@ class AdminPageMiddleware(object):
                             'content_groups': ContentItem.objects.get_content_groups(),
                             'logout_url': self.get_logout_url(request),
                         })
-                        admin_html = t.render(c)
+
+                        # Inject admin html in body.
+                        response.content = self.body_re.sub(
+                            r"<head>\g<IN_HEAD></head>\g<AFTER_HEAD><body\g<IN_BODY_TAG>>%s\g<BODY_CONTENTS>%s%s</body>" % (
+                                '<div id="wpr-body">',
+                                '</div>',
+                                t.render(c),
+                            ),
+                            smart_unicode(response.content)
+                        )
 
                         fiber_data['frontend'] = True
                         if 'fiber_page' in c:
                             fiber_data['page_id'] = c['fiber_page'].id
 
-                # Inject admin html in body.
                 # Inject header html in head.
                 # Add fiber-data attribute to body tag.
                 response.content = self.body_re.sub(
-                    r"<head>\g<IN_HEAD>%s</head>\g<AFTER_HEAD><body data-fiber-data='%s'\g<IN_BODY_TAG>>%s\g<BODY_CONTENTS>%s%s</body>" % (
+                    r"<head>\g<IN_HEAD>%s</head>\g<AFTER_HEAD><body data-fiber-data='%s'\g<IN_BODY_TAG>>\g<BODY_CONTENTS></body>" % (
                         self.get_header_html(request),
                         simplejson.dumps(fiber_data),
-                        '<div id="wpr-body">',
-                        '</div>',
-                        admin_html,
                     ),
                     smart_unicode(response.content)
                 )
+
         return response
 
     def set_login_session(self, request, response):
