@@ -801,10 +801,23 @@ var ChangePageFormDialog = ChangeFormDialog.extend({
 				this.form.append(extra_field);
 			}
 
-			// automatically slugify the title field
-			$('#id_title').attr('autocomplete', 'off');
-			$('#id_title').slugify('#id_url');
+			var $url_field = $('#id_url');
+			var $title_field = $('#id_title');
 
+			// remove autocompletion from title field
+			$title_field.attr('autocomplete', 'off');
+
+			// automatically slugify the title field when the url field is initially empty
+			if (!$url_field.val()) {
+				$title_field.slugify($url_field);
+			}
+
+			// automatically (re)start slugifying the title field when the url field is emptied
+			$url_field.change(function() {
+				if (!$url_field.val()) {
+					$title_field.slugify($url_field);
+				}
+			});
 		};
 	}
 });
