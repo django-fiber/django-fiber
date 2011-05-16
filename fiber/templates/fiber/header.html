@@ -1,8 +1,8 @@
 {% load compress %}
 
-{% compress js %}
 <script src="{% url django.views.i18n.javascript_catalog %}" type="text/javascript"></script>
 
+{% compress js %}
 <script type="text/javascript">
 	var LANGUAGE_CODE = '{{ LANGUAGE_CODE }}'
 	var STATIC_URL = '{{ STATIC_URL }}';
