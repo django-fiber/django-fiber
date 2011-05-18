@@ -8,8 +8,9 @@ setup(
     install_requires=[
         'django-mptt>=0.4.2',
         'django-piston==0.2.3rc1',
-        'django-staticfiles>=1.0.1',
         'beautifulsoup>=3.2.0',
+        'PIL>=1.1.7',
+        'django-staticfiles>=1.0.1',
         'django-compressor>=0.7.1',
     ],
     dependency_links=['http://bitbucket.org/jespern/django-piston/get/c4b2d21db51a.tar.gz#egg=django-piston-0.2.3rc1'],
