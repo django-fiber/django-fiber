@@ -787,7 +787,6 @@ var ChangePageFormDialog = ChangeFormDialog.extend({
 
 		this.admin_form.options.before_page_id = this.options.before_page_id;
 		this.admin_form.options.below_page_id = this.options.below_page_id;
-		this.admin_form.options.base_url = this.options.base_url;
 		this.admin_form.set_interaction = function() {
 			if (this.options.before_page_id) {
 				extra_field = $('<input type="hidden" name="before_page_id" />');
@@ -859,8 +858,7 @@ var AddButton = Class.extend({ // TODO: subclass to AddPageButton / AddContentIt
 			params = {
 				url: this.options.add_url,
 				before_page_id: this.options.before_page_id,
-				below_page_id: this.options.parent_id, // TODO: rename below_page_id to parent_id?
-				base_url: this.options.base_url
+				below_page_id: this.options.parent_id // TODO: rename below_page_id to parent_id?
 			};
 
 			new ChangePageFormDialog(params); // TODO: create AddPageFormDialog?
@@ -1262,8 +1260,7 @@ var adminPage = {
 									$('<li><a href="#">'+gettext('Edit')+'</a></li>').click($.proxy(function() {
 										var change_page_form_dialog = new ChangePageFormDialog({
 											url: page_data.url,
-											page_id: page_data.id,
-											base_url: page_data.base_url
+											page_id: page_data.id
 										});
 									}, this))
 								);
@@ -1272,8 +1269,7 @@ var adminPage = {
 									$('<li><a href="#">'+gettext('Add sub page')+'</a></li>').click($.proxy(function() {
 										var add_page_form_dialog = new ChangePageFormDialog({
 											url: page_data.add_url,
-											below_page_id: page_data.id,
-											base_url: page_data.base_url
+											below_page_id: page_data.id
 										});
 									}, this))
 								);
@@ -1846,15 +1842,24 @@ var FiberItem = Class.extend({
 			params = {
 				before_page_id: this.element_data.id
 			};
-		} else if (this.element_data.type == 'content_item') {
-			params = {
-				before_page_content_item_id: this.element_data.id
-			};
-		}
 
-		this.button = new AddButton(
-			this, params
-		);
+			this.button = new AddButton(
+				this, params
+			);
+		} else if (this.element_data.type == 'content_item') {
+			if (
+				this.element_data.block_name &&
+				this.element_data.page_id
+			) {
+				params = {
+					before_page_content_item_id: this.element_data.page_content_item_id
+				};
+
+				this.button = new AddButton(
+					this, params
+				);
+			}
+		}
 	},
 
 	button_position: function() {
@@ -2048,8 +2053,7 @@ var FiberItem = Class.extend({
 
 		var changePageFormDialog = new ChangePageFormDialog({
 			url: this.element_data.url,
-			page_id: this.element_data.id,
-			base_url: this.element_data.base_url
+			page_id: this.element_data.id
 		});
 	},
 

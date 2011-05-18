@@ -341,10 +341,10 @@ class TestTemplateTags(TestCase):
             strip_whitespace(t.render(c)),
             '<ul data-fiber-data=\'{"type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 1}\'>'\
             '<li class="home first last">'\
-            '<a href="/" data-fiber-data=\'{"type": "page", "id": 2, "parent_id": 1, "url": "%(fiber_admin_page_edit_url_two)s", "add_url": "%(fiber_admin_page_add_url)s", "base_url": "/"}\'>home</a>'\
+            '<a href="/" data-fiber-data=\'{"type": "page", "id": 2, "parent_id": 1, "url": "%(fiber_admin_page_edit_url_two)s", "add_url": "%(fiber_admin_page_add_url)s"}\'>home</a>'\
             '<ul data-fiber-data=\'{"type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 2}\'>'\
             '<li class="section1 first last">'\
-            '<a href="/section1/" data-fiber-data=\'{"type": "page", "id": 3, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_three)s", "add_url": "%(fiber_admin_page_add_url)s", "base_url": "/section1/"}\'>section1</a>'\
+            '<a href="/section1/" data-fiber-data=\'{"type": "page", "id": 3, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_three)s", "add_url": "%(fiber_admin_page_add_url)s"}\'>section1</a>'\
             '</li></ul>'\
             '</li></ul>' % {
                 'fiber_admin_page_add_url': reverse('fiber_admin:fiber_page_add'),
