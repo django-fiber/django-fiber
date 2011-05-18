@@ -26,7 +26,7 @@ markitup_settings = {
 		{name:'Bulleted list', openWith:'(!(* |!|*)!)'},
 		{name:'Numeric list', openWith:'(!(# |!|#)!)'},
 		{separator:'---------------' },
-		{name:'Link To A Page In This Site', className: 'select_page', placeHolder: 'page'},
+		{name:'Link To A Page In This Site', className: 'select_page'},
 		{name:'Link To A File In This Site', className: 'select_file'},
 		{name:'Link To An Image In This Site', className: 'select_link_to_image'},
 		{name:'Custom Link', openWith:'"', closeWith:'":[![Link:!:http://]!]', placeHolder: 'link' },
