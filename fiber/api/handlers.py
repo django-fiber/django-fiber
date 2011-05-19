@@ -10,6 +10,7 @@ from fiber.utils.date import friendly_datetime
 from fiber.models import Page, PageContentItem, ContentItem, Image, File
 
 
+
 class PageHandler(BaseHandler):
     allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
     fields = ('data', 'children', 'show_in_menu')
@@ -132,7 +133,7 @@ class PageContentItemHandler(BaseHandler):
             all_page_content_items = PageContentItem.objects.filter(block_name=block_name).order_by('sort')
             sort_max = all_page_content_items.aggregate(Max('sort'))['sort__max']
             if sort_max != None:
-                sort =  sort_max + 1
+                sort = sort_max + 1
             else:
                 sort = 0
 

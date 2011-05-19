@@ -13,3 +13,6 @@ if not hasattr(settings, 'MPTT_ADMIN_LEVEL_INDENT'):
     settings.MPTT_ADMIN_LEVEL_INDENT = 30
 
 EDITOR = getattr(settings, 'FIBER_EDITOR', 'fiber.editor_definitions.ckeditor.EDITOR')
+
+METADATA_PAGE_SCHEMA = getattr(settings, 'FIBER_METADATA_PAGE_SCHEMA', {})
+METADATA_CONTENT_SCHEMA = getattr(settings, 'FIBER_METADATA_CONTENT_SCHEMA', {})

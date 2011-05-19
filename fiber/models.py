@@ -14,7 +14,7 @@ from utils.fields import FiberMarkupField, FiberHTMLField
 
 from fiber import editor
 
-from app_settings import IMAGES_DIR, FILES_DIR
+from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA
 
 from utils.urls import get_named_url_from_quoted_url, is_quoted_url
 from utils.json import JSONField
@@ -104,7 +104,7 @@ class ContentItem(models.Model):
     content_html = FiberHTMLField(verbose_name=_('Content'))
     protected = models.BooleanField(_('protected'), default=False)
 
-    metadata = JSONField(_('metadata'), blank=True, null=True)
+    metadata = JSONField(_('metadata'), blank=True, null=True, schema=METADATA_CONTENT_SCHEMA, prefill_from='fiber.models.ContentItem')
 
     objects = ContentItemManager()
 
@@ -158,7 +158,7 @@ class Page(MPTTModel):
 
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
 
-    metadata = JSONField(blank=True, null=True)
+    metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
 
     objects = PageManager()
 

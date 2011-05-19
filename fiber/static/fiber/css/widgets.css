@@ -25,3 +25,51 @@
 .cke_button_source .cke_icon       { background-position: -542px -2px !important; }
 
 .cke_button_source .cke_label  { display: none !important; }
+
+
+/* ---[ Combobox ]--- */
+
+.ui-menu .ui-menu-item {
+	list-style: none;
+}
+.ui-button { margin-left: -1px; }
+.ui-button-icon-only .ui-button-text { padding: .15em; }
+.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
+
+
+/* ---[ JSON widget ]--- */
+
+.fiber-json-widget table {
+	margin-bottom: 1em;
+}
+
+.fiber-json-widget input[type=text],
+.fiber-json-widget textarea {
+	width: 20em;
+}
+
+.fiber-json-widget select {
+	width: 20.8em;
+}
+
+.fiber-json-widget .ui-autocomplete-input {
+	width: 17.9em;
+}
+
+.fiber-json-widget a.deletelink {
+	margin-left: 5px;
+	cursor: pointer;
+	color: #cc3434
+}
+
+.fiber-json-widget a.add-btn {
+	cursor: pointer;
+	margin-left: 5px;
+	color: #5b80b2;
+  background: url("../../admin/img/admin/icon_addlink.gif") no-repeat scroll 0 0.25em transparent;
+  padding-left: 12px;	
+}
+
+.fiber-json-widget tr.add-row {
+	background: url("../../admin/img/admin/nav-bg.gif") repeat-x scroll left top #e1e1e1;
+}

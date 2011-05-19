@@ -92,6 +92,9 @@ These settings are optional (default values are shown)::
 	FIBER_IMAGES_DIR = 'uploads/images'
 	FIBER_FILES_DIR = 'uploads/files'
 
+	FIBER_METADATA_PAGE_SCHEMA = {}
+	FIBER_METADATA_CONTENT_SCHEMA = {}
+
 	COMPRESS = [the opposite of DEBUG]
 
 

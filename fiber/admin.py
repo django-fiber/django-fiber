@@ -62,7 +62,7 @@ class PageAdmin(MPTTModelAdmin):
     list_display = ('title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links',)
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page')
-
+    
     def view_on_site(self, page):
         view_on_site = ''
 
@@ -76,7 +76,6 @@ class PageAdmin(MPTTModelAdmin):
     view_on_site.short_description = ''
     view_on_site.allow_tags = True
 
-
     def action_links(self, page):
         actions = ''
 
@@ -85,7 +84,7 @@ class PageAdmin(MPTTModelAdmin):
             actions += u'<a href="%s/move_up" title="%s"><img src="%sfiber/admin/images/arrow_up.gif" width="16" height="16" alt="%s" /></a> ' % (page.pk, _('Move up'), settings.STATIC_URL, _('Move up'))
         else:
             actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (settings.STATIC_URL,)
-            
+
         if not page.is_last_child():
             actions += u'<a href="%s/move_down" title="%s"><img src="%sfiber/admin/images/arrow_down.gif" width="16" height="16" alt="%s" /></a> ' % (page.pk, _('Move down'), settings.STATIC_URL, _('Move down'))
         else:
@@ -117,7 +116,7 @@ class FiberAdminPageAdmin(MPTTModelAdmin):
 
         # remove template choices if there are no choices
         if len(TEMPLATE_CHOICES) == 0:
-            self.fieldsets =  (
+            self.fieldsets = (
                 (None, {'fields': ('title', 'url', 'redirect_page')}),
             )
         else:

@@ -2,6 +2,8 @@ var fiber_jQuery = $.noConflict(true);
 
 // fiber namespace
 var Fiber = {};
+Fiber.enhance_combobox = function(select) {};
+Fiber.enhance_jsontextarea = function(select) {};
 Fiber.enhance_textarea = function(textarea) {};
 Fiber.remove_textarea = function(textarea) {};
 
@@ -386,6 +388,18 @@ function enhance_textareas(container) {
 	});
 }
 
+function enhance_comboboxes(container) {
+	container.find('select.fiber-combobox').each(function() {
+		Fiber.enhance_combobox(this);
+	});
+}
+
+function enhance_jsontextareas(container) {
+	container.find('textarea.fiber-jsonwidget').each(function() {
+		Fiber.enhance_jsontextarea(this);
+	});
+}
+
 var ChangeForm = AdminForm.extend({
 
 	set_styling: function() {
@@ -400,6 +414,8 @@ var ChangeForm = AdminForm.extend({
 
 	set_interaction: function() {
 		enhance_textareas(this.form);
+		enhance_comboboxes(this.form);
+		enhance_jsontextareas(this.form);
 	},
 
 	destroy: function() {
@@ -1601,6 +1617,8 @@ var adminPage = {
 
 	init_backend: function() {
 		enhance_textareas($(document.body));
+		enhance_comboboxes($(document.body));
+		enhance_jsontextareas($(document.body));
 	},
 
 	init: function(body_fiber_data) {
