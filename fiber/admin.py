@@ -32,14 +32,14 @@ class PageForm(forms.ModelForm):
 
     def clean_url(self):
         if is_quoted_url(self.cleaned_data['url']) and not get_named_url_from_quoted_url(self.cleaned_data['url']):
-            raise forms.ValidationError('No reverse match found for the named url')
+            raise forms.ValidationError(_('No reverse match found for the named url'))
         return self.cleaned_data['url']
 
     def clean_redirect_page(self):
         if self.cleaned_data['redirect_page']:
             try:
                 if self.cleaned_data['url'] and is_quoted_url(self.cleaned_data['url']):
-                    raise forms.ValidationError('A named url can\'t be combined with a redirect page')
+                    raise forms.ValidationError(_('A named url can\'t be combined with a redirect page'))
             except KeyError:
                 pass
         return self.cleaned_data['redirect_page']
@@ -55,7 +55,7 @@ class PageAdmin(MPTTModelAdmin):
     form = PageForm
     fieldsets = (
         (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name')}),
-        ('Advanced options', {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'protected', 'metadata',)}),
+        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'protected', 'metadata',)}),
     )
 
     inlines = (PageContentItemInline,)
@@ -151,7 +151,7 @@ class ContentItemAdmin(admin.ModelAdmin):
     form = ContentItemAdminForm
     fieldsets = (
         (None, {'fields': ('name', get_editor_field_name('content_html'))}),
-        ('Advanced options', {'classes': ('collapse',), 'fields': ('protected', 'metadata',)}),
+        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('protected', 'metadata',)}),
     )
 
 admin.site.register(ContentItem, ContentItemAdmin)

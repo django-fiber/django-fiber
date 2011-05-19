@@ -19,8 +19,9 @@ These dependencies are automatically installed:
 
 	django-mptt>=0.4.2
 	django-piston==0.2.3rc1
-	django-staticfiles>=1.0.1
 	beautifulsoup>=3.2.0
+	PIL>=1.1.7
+	django-staticfiles>=1.0.1
 	django-compressor>=0.7.1
 
 Optionally, you may need:
@@ -65,11 +66,10 @@ settings.py
 	)
 
 	import os
-	STATIC_ROOT = os.path.join(MEDIA_ROOT, 'static')
-	STATIC_URL = MEDIA_URL + 'static/'
-	STATICFILES_MEDIA_DIRNAMES = (
-		'static',
-	)
+	BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+	STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+	STATIC_URL = '/static/'
 	STATICFILES_FINDERS = (
 		'staticfiles.finders.FileSystemFinder',
 		'staticfiles.finders.AppDirectoriesFinder',
@@ -108,6 +108,11 @@ urls.py
 	(r'^admin/fiber/', include('fiber.admin_urls')),
 	(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', {'packages': ('fiber',),}),
 	...
+
+	if settings.DEBUG:
+		urlpatterns += patterns('staticfiles.views',
+			url(r'^static/(?P<path>.*)$', 'serve'),
+		)
 
 
 Post-installation:

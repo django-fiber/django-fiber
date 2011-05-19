@@ -2,14 +2,14 @@
 # Copyright (C) 2011 Ride The Pony
 # This file is distributed under the same license as the Django Fiber package.
 # Ride The Pony <info@ridethepony.org>, 2011.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-08 14:16+0200\n"
-"PO-Revision-Date: 2011-05-09 12:06+0100\n"
-"Last-Translator: Dennis Bunskoek <dbunskoek@leukeleu.nl>\n"
+"POT-Creation-Date: 2011-05-13 13:16+0200\n"
+"PO-Revision-Date: 2011-05-13 06:17\n"
+"Last-Translator:   <bsimons@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,8 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.6.0\n"
 
-#: admin.py:25
-#: models.py:150
+#: admin.py:25 models.py:151
 msgid "URL"
 msgstr "URL"
 
@@ -27,12 +26,30 @@ msgid "Example: '/section-1/products' or 'products' or '\"some_named_url\"'"
 msgstr "Voorbeeld: '/sectie-1/producten' of 'producten' of '\"een_named_url\"'"
 
 #: admin.py:27
-msgid "This value must contain only letters, numbers, underscores, dashes or slashes."
-msgstr "Deze waarde mag alleen letters, cijfers, underscores, min-tekens en schuine strepen bevatten."
+msgid ""
+"This value must contain only letters, numbers, underscores, dashes or "
+"slashes."
+msgstr ""
+"Deze waarde mag alleen letters, cijfers, underscores, min-tekens en "
+"schuine strepen bevatten."
 
 #: admin.py:28
 msgid "Redirect page"
 msgstr "Automatische doorverwijzing"
+
+#: admin.py:35
+msgid "No reverse match found for the named url"
+msgstr "Geen 'reverse match' gevonden voor de 'named url'"
+
+#: admin.py:42
+msgid "A named url can't be combined with a redirect page"
+msgstr ""
+"Een 'named url' kan niet worden gecombineerd met een automatische "
+"doorverwijzing"
+
+#: admin.py:58 admin.py:155
+msgid "Advanced options"
+msgstr "Uitgebreide opties"
 
 #: admin.py:72
 msgid "View on site"
@@ -63,8 +80,12 @@ msgid "This account is inactive."
 msgstr "Dit account is inactief."
 
 #: admin_views.py:30
-msgid "Please enter a correct username and password. Note that both fields are case-sensitive."
-msgstr "Voer een correcte gebruikersnaam en wachtwoord in. Let op, de velden zijn hoofdlettergevoelig."
+msgid ""
+"Please enter a correct username and password. Note that both fields are"
+" case-sensitive."
+msgstr ""
+"Voer een correcte gebruikersnaam en wachtwoord in. Let op, de velden "
+"zijn hoofdlettergevoelig."
 
 #: models.py:54
 msgid "used more than once"
@@ -82,115 +103,103 @@ msgstr "één keer gebruikt"
 msgid "recently changed"
 msgstr "recent gewijzigd"
 
-#: models.py:98
-#: models.py:142
-#: models.py:300
-#: models.py:327
+#: models.py:99 models.py:143 models.py:301 models.py:328
 msgid "created"
 msgstr "aangemaakt"
 
-#: models.py:99
-#: models.py:143
-#: models.py:301
-#: models.py:328
+#: models.py:100 models.py:144 models.py:302 models.py:329
 msgid "updated"
 msgstr "bijgewerkt"
 
-#: models.py:101
+#: models.py:102
 msgid "name"
 msgstr "naam"
 
-#: models.py:102
-#: models.py:103
-#: templates/fiber/admin.html:26
+#: models.py:103 models.py:104 templates/fiber/admin.html:26
 msgid "Content"
 msgstr "Content"
 
-#: models.py:104
-#: models.py:156
+#: models.py:105 models.py:157
 msgid "protected"
 msgstr "beschermd"
 
-#: models.py:106
+#: models.py:107
 msgid "metadata"
 msgstr "metadata"
 
-#: models.py:129
-#: models.py:291
+#: models.py:118
+msgid "[ EMPTY ]"
+msgstr "[ LEEG ]"
+
+#: models.py:130 models.py:292
 msgid "content item"
 msgstr "content item"
 
-#: models.py:130
-#: models.py:158
+#: models.py:131 models.py:159
 msgid "content items"
 msgstr "content items"
 
-#: models.py:145
+#: models.py:146
 msgid "parent"
 msgstr "parent"
 
-#: models.py:149
-#: models.py:304
-#: models.py:331
+#: models.py:150 models.py:305 models.py:332
 msgid "title"
 msgstr "titel"
 
-#: models.py:151
+#: models.py:152
 msgid "redirect page"
 msgstr "automatische doorverwijzing"
 
-#: models.py:152
+#: models.py:153
 msgid "mark current regexes"
 msgstr "reguliere expressies markeren als current"
 
-#: models.py:154
+#: models.py:155
 msgid "template name"
 msgstr "sjabloonnaam"
 
-#: models.py:155
+#: models.py:156
 msgid "show in menu"
 msgstr "toon in menu"
 
-#: models.py:253
-#: models.py:292
+#: models.py:254 models.py:293
 msgid "page"
 msgstr "pagina"
 
-#: models.py:254
+#: models.py:255
 msgid "pages"
 msgstr "pagina’s"
 
-#: models.py:293
+#: models.py:294
 msgid "block name"
 msgstr "block naam"
 
-#: models.py:294
+#: models.py:295
 msgid "sort"
 msgstr "sortering"
 
-#: models.py:303
-#: models.py:321
+#: models.py:304 models.py:322
 msgid "image"
 msgstr "afbeelding"
 
-#: models.py:305
+#: models.py:306
 msgid "width"
 msgstr "breedte"
 
-#: models.py:306
+#: models.py:307
 msgid "height"
 msgstr "hoogte"
 
-#: models.py:322
+#: models.py:323
 msgid "images"
 msgstr "afbeeldingen"
 
-#: models.py:330
-#: models.py:339
+#: models.py:331 models.py:340
 msgid "file"
 msgstr "bestand"
 
-#: models.py:340
+#: models.py:341
 msgid "files"
 msgstr "bestanden"
 
@@ -206,3 +215,53 @@ msgstr "Uitloggen"
 msgid "Pages"
 msgstr "Pagina’s"
 
+#: utils/date.py:27
+msgid "just now"
+msgstr "zojuist"
+
+#: utils/date.py:29
+#, python-format
+msgid "%s seconds ago"
+msgstr "%s seconden geleden"
+
+#: utils/date.py:33
+#, python-format
+msgid "%s minutes ago"
+msgstr "%s minuten geleden"
+
+#: utils/date.py:35
+msgid "an hour ago"
+msgstr "1 uur geleden"
+
+#: utils/date.py:37
+#, python-format
+msgid "%s hours ago"
+msgstr "%s uur geleden"
+
+#: utils/date.py:39
+msgid "yesterday"
+msgstr "gisteren"
+
+#: utils/date.py:41
+#, python-format
+msgid "%s days ago"
+msgstr "%s dagen geleden"
+
+#: utils/date.py:43
+msgid "a week ago"
+msgstr "1 week geleden"
+
+#: utils/date.py:45
+#, python-format
+msgid "%s weeks ago"
+msgstr "%s weken geleden"
+
+#: utils/date.py:47
+#, python-format
+msgid "%s months ago"
+msgstr "%s maanden geleden"
+
+#: utils/date.py:48
+#, python-format
+msgid "%s years ago"
+msgstr "%s jaar geleden"

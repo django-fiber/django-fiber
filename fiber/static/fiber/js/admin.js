@@ -486,7 +486,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 		uploader.bind('Error', function(up, error) {
 			if (error.code != plupload.INIT_ERROR) {
-				alert('Upload failed.');
+				alert(gettext('Upload failed.'));
 			}
 		});
 
@@ -507,7 +507,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
 		url: '/api/v1/images.jqgrid-json',
-		width: 480,
+		width: 520,
 		height: 'auto',
 		start_width: 480,
 		start_height: 'auto'
@@ -516,6 +516,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 	// override default dialog window
 	init_dialog: function() {
 		// don't call _super, just call init_dialog_success at the end
+		this.uiDialog.dialog('option', 'zIndex', 1200); // set z-index here, because it can't set by _super
 
 		// enhance action button
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
@@ -566,12 +567,12 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 				{ name: 'image', index: 'image', width: 120, resizable: false, sortable: false, formatter: thumbnail_formatter },
 				{ name: 'filename', index: 'filename', width: 160, resizable: false },
 				{ name: 'size', index: 'size', width: 80, resizable: false },
-				{ name: 'updated', index: 'updated', width: 120, resizable: false }
+				{ name: 'updated', index: 'updated', width: 160, resizable: false }
 			],
 			rowNum: 50,
 			pager: '#ui-image-select-grid-pager',
 			shrinkToFit: false,
-			width: 480,
+			width: 520,
 			height: 300,
 			sortname: 'updated',
 			sortorder: 'desc',
@@ -614,7 +615,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
 		url: '/api/v1/files.jqgrid-json',
-		width: 480,
+		width: 520,
 		height: 'auto',
 		start_width: 480,
 		start_height: 'auto'
@@ -623,6 +624,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 	// override default dialog window
 	init_dialog: function() {
 		// don't call _super, just call init_dialog_success at the end
+		this.uiDialog.dialog('option', 'zIndex', 1200); // set z-index here, because it can't set by _super
 
 		// enhance action button
 		var actionButton = this.uiDialog.parent().find(':button:contains("Action")');
@@ -645,7 +647,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 		this.file_select_grid = $(document.createElement('table')).attr('id', 'ui-file-select-grid'); // the id attribute is necessary for jqGrid
 		this.file_select_grid_pager = $(document.createElement('div')).attr('id', 'ui-file-select-grid-pager');
 		this.file_select_filter = $(document.createElement('div')).attr('id', 'ui-file-select-filter');
-		this.file_select_filter.append($(document.createElement('label')).attr({ id: 'ui-file-select-filter-label'}).text('Filter by filename'));
+		this.file_select_filter.append($(document.createElement('label')).attr({ id: 'ui-file-select-filter-label'}).text(gettext('Filter by filename')));
 		this.file_select_filter.append($(document.createElement('input')).attr({ id: 'ui-file-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.file_select_filter);
 		this.uiDialog.append(this.file_select_grid);
@@ -666,12 +668,12 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 			colModel: [
 				{ name: 'url', index: 'url', hidden: true },
 				{ name: 'filename', index: 'filename', width: 360, resizable: false },
-				{ name: 'updated', index: 'updated', width: 120, resizable: false }
+				{ name: 'updated', index: 'updated', width: 160, resizable: false }
 			],
 			rowNum: 50,
 			pager: '#ui-file-select-grid-pager',
 			shrinkToFit: false,
-			width: 480,
+			width: 520,
 			height: 300,
 			sortname: 'updated',
 			sortorder: 'desc',
@@ -731,6 +733,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 	// override default dialog window
 	init_dialog: function() {
 		// don't call _super, just call init_dialog_success at the end
+		this.uiDialog.dialog('option', 'zIndex', 1200); // set z-index here, because it can't set by _super
 
 		// enhance action button
 		var action_button = this.uiDialog.parent().find(':button:contains("Action")');
@@ -741,7 +744,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 		action_button.attr('disabled', 'disabled');
 		action_button.addClass('ui-button-disabled ui-state-disabled');
 
-		this.uiDialog.dialog('option', 'title', gettext('Select page'));
+		this.uiDialog.dialog('option', 'title', gettext('Select a page'));
 
 		this.init_dialog_success();
 	},
@@ -800,7 +803,6 @@ var ChangePageFormDialog = ChangeFormDialog.extend({
 
 		this.admin_form.options.before_page_id = this.options.before_page_id;
 		this.admin_form.options.below_page_id = this.options.below_page_id;
-		this.admin_form.options.base_url = this.options.base_url;
 		this.admin_form.set_interaction = function() {
 			if (this.options.before_page_id) {
 				extra_field = $('<input type="hidden" name="before_page_id" />');
@@ -814,10 +816,23 @@ var ChangePageFormDialog = ChangeFormDialog.extend({
 				this.form.append(extra_field);
 			}
 
-			// automatically slugify the title field
-			$('#id_title').attr('autocomplete', 'off');
-			$('#id_title').slugify('#id_url');
+			var $url_field = $('#id_url');
+			var $title_field = $('#id_title');
 
+			// remove autocompletion from title field
+			$title_field.attr('autocomplete', 'off');
+
+			// automatically slugify the title field when the url field is initially empty
+			if (!$url_field.val()) {
+				$title_field.slugify($url_field);
+			}
+
+			// automatically (re)start slugifying the title field when the url field is emptied
+			$url_field.change(function() {
+				if (!$url_field.val()) {
+					$title_field.slugify($url_field);
+				}
+			});
 		};
 	}
 });
@@ -859,8 +874,7 @@ var AddButton = Class.extend({ // TODO: subclass to AddPageButton / AddContentIt
 			params = {
 				url: this.options.add_url,
 				before_page_id: this.options.before_page_id,
-				below_page_id: this.options.parent_id, // TODO: rename below_page_id to parent_id?
-				base_url: this.options.base_url
+				below_page_id: this.options.parent_id // TODO: rename below_page_id to parent_id?
 			};
 
 			new ChangePageFormDialog(params); // TODO: create AddPageFormDialog?
@@ -1262,8 +1276,7 @@ var adminPage = {
 									$('<li><a href="#">'+gettext('Edit')+'</a></li>').click($.proxy(function() {
 										var change_page_form_dialog = new ChangePageFormDialog({
 											url: page_data.url,
-											page_id: page_data.id,
-											base_url: page_data.base_url
+											page_id: page_data.id
 										});
 									}, this))
 								);
@@ -1272,8 +1285,7 @@ var adminPage = {
 									$('<li><a href="#">'+gettext('Add sub page')+'</a></li>').click($.proxy(function() {
 										var add_page_form_dialog = new ChangePageFormDialog({
 											url: page_data.add_url,
-											below_page_id: page_data.id,
-											base_url: page_data.base_url
+											below_page_id: page_data.id
 										});
 									}, this))
 								);
@@ -1848,15 +1860,24 @@ var FiberItem = Class.extend({
 			params = {
 				before_page_id: this.element_data.id
 			};
-		} else if (this.element_data.type == 'content_item') {
-			params = {
-				before_page_content_item_id: this.element_data.id
-			};
-		}
 
-		this.button = new AddButton(
-			this, params
-		);
+			this.button = new AddButton(
+				this, params
+			);
+		} else if (this.element_data.type == 'content_item') {
+			if (
+				this.element_data.block_name &&
+				this.element_data.page_id
+			) {
+				params = {
+					before_page_content_item_id: this.element_data.page_content_item_id
+				};
+
+				this.button = new AddButton(
+					this, params
+				);
+			}
+		}
 	},
 
 	button_position: function() {
@@ -2050,8 +2071,7 @@ var FiberItem = Class.extend({
 
 		var changePageFormDialog = new ChangePageFormDialog({
 			url: this.element_data.url,
-			page_id: this.element_data.id,
-			base_url: this.element_data.base_url
+			page_id: this.element_data.id
 		});
 	},
 

@@ -1,9 +1,10 @@
 {% load compress %}
 
-{% compress js %}
-<script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+<script src="{% url django.views.i18n.javascript_catalog %}" type="text/javascript"></script>
 
+{% compress js %}
 <script type="text/javascript">
+	var LANGUAGE_CODE = '{{ LANGUAGE_CODE }}'
 	var STATIC_URL = '{{ STATIC_URL }}';
 	var BACKEND_BASE_URL = '{{ BACKEND_BASE_URL }}';
 	var FIBER_LOGIN_URL = '{{ FIBER_LOGIN_URL }}';
@@ -23,11 +24,10 @@
 <script src="{{ STATIC_URL }}fiber/js/jquery.cookie.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}fiber/js/jsTree.v.1.0rc2/jquery.jstree.js" type="text/javascript"></script>
 
-<script src="{{ STATIC_URL }}fiber/js/jquery.jqGrid-3.8/js/i18n/grid.locale-en.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}fiber/js/jquery.jqGrid-3.8/js/i18n/grid.locale-{{ LANGUAGE_CODE|slice:"2" }}.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}fiber/js/jquery.jqGrid-3.8/js/jquery.jqGrid.min.js" type="text/javascript"></script>
 
 <script src="{{ STATIC_URL }}fiber/js/jquery.form-2.73.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}fiber/js/jquery.caret.1.02.js" type="text/javascript"></script>
 
 <script src="{{ STATIC_URL }}fiber/js/plupload/plupload.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}fiber/js/plupload/plupload.html5.js" type="text/javascript"></script>

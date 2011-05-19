@@ -115,7 +115,7 @@ class ContentItem(models.Model):
             contents = ' '.join(strip_tags(self.content_html).strip().split())
             if len(contents) > 50:
                 contents = contents[:50] + '...'
-            return contents or '[ EMPTY ]'
+            return contents or _('[ EMPTY ]')
 
     @classmethod
     def get_add_url(cls):
