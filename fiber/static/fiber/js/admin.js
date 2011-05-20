@@ -270,6 +270,11 @@ var LoginFormDialog = AdminFormDialog.extend({
 					this.after_action_success();
 				} else {
 					var errornote = this.admin_form.form.find('p.errornote');
+					// check if errornote already exists
+					if (errornote.length == 0) {
+						var errornote = $('<p class="errornote"></p>');
+						this.admin_form.form.prepend(errornote);
+					}
 					errornote.text(data.message);
 				}
 			}
@@ -301,23 +306,22 @@ var LoginForm = AdminForm.extend({
 
 	// get the form element from the HTML that is returned by the XHR
 	get_form_from_HTML: function(html) {
-		var errornote = $(document.createElement('p')).addClass('errornote');
-		var forms = $(document.createElement('div')).html(this.strip_HTML(html)).find('form');
+		var forms = $(document.createElement('div')).html(this.strip_HTML(html)).find('#content-main form[id$=-form]');
+
 		if (forms.length == 1) {
 			this.form = $(forms[0]);
-			this.form.prepend(errornote);
 		}
 	},
 
 	set_interaction: function() {
 		this.form.find('#id_username').focus();
 		this.form.find('#id_password').keypress(function (e) {
-				if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-					$('#login_button').click();
-					return false;
-				} else {
-					return true;
-				}
+			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+				$('#login_button').click();
+				return false;
+			} else {
+				return true;
+			}
 		});
 	},
 
