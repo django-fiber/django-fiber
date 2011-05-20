@@ -2,6 +2,7 @@ import datetime
 import re
 
 from django.db import models
+from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -115,7 +116,7 @@ class ContentItem(models.Model):
             contents = ' '.join(strip_tags(self.content_html).strip().split())
             if len(contents) > 50:
                 contents = contents[:50] + '...'
-            return contents or _('[ EMPTY ]')
+            return contents or ugettext('[ EMPTY ]') # TODO: find out why ugettext_lazy doesn't work here
 
     @classmethod
     def get_add_url(cls):
