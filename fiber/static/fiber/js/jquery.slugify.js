@@ -10,4 +10,4 @@ jQuery.fn.slugify = function(obj) {
 		var slug = jQuery(this).val().replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-]/g,'').toLowerCase();
 		jQuery(this).data('obj').val(slug);
 	});
-}
+};

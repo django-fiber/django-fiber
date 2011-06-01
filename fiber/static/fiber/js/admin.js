@@ -271,8 +271,8 @@ var LoginFormDialog = AdminFormDialog.extend({
 				} else {
 					var errornote = this.admin_form.form.find('p.errornote');
 					// check if errornote already exists
-					if (errornote.length == 0) {
-						var errornote = $('<p class="errornote"></p>');
+					if (errornote.length === 0) {
+						errornote = $('<p class="errornote"></p>');
 						this.admin_form.form.prepend(errornote);
 					}
 					errornote.text(data.message);
@@ -1635,6 +1635,11 @@ var adminPage = {
 		enhance_textareas($(document.body));
 		enhance_comboboxes($(document.body));
 		enhance_jsontextareas($(document.body));
+		var backend_toolbar = $('<div id="fiber-backend-toolbar"></div>');
+		var frontend_button = $('<p class="frontend"></p>').appendTo(backend_toolbar);
+		var link = $(document.createElement('a')).text(gettext('Frontend')).attr('href', '/').attr('title', gettext('Frontend')).appendTo(frontend_button);
+		$('<span class="icon"></span>').prependTo(link);
+		backend_toolbar.prependTo($('body'));
 	},
 
 	init: function(body_fiber_data) {

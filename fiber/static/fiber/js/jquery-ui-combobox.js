@@ -45,13 +45,6 @@
 									return false;
 								}
 							});
-							// if ( !valid ) {
-							// 	// remove invalid value, as it didn't match anything
-							// 	$( this ).val( "" );
-							// 	select.val( "" );
-							// 	input.data( "autocomplete" ).term = "";
-							// 	return false;
-							// }
 						}
 					}
 				})

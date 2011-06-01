@@ -2,11 +2,11 @@
 
 Fiber.enhance_combobox = function(select) {
 	$(select).combobox();
-}
+};
 
 Fiber.enhance_jsontextarea = function(textarea) {
 	// hide the textarea
-	$(textarea).hide()
+	$(textarea).hide();
 
 	// put everything in a wrapper for styling
 	var wpr_all = $('<div class="fiber-json-widget" />').insertBefore(textarea);
@@ -25,11 +25,13 @@ Fiber.enhance_jsontextarea = function(textarea) {
 	var adder = $('<select/>').attr('id', textarea.name+'-adder').appendTo(td2_add);
 	$('<a/>').text(gettext('Add')).attr('class', textarea.name+'-add-btn add-btn').appendTo(td3_add);
 
-	var current_json = $.parseJSON(textarea.value)
-	var used_keys = []
+	var current_json = $.parseJSON(textarea.value);
+	var used_keys = [];
 
-	for (key in current_json) {
-		add_field(key, current_json[key]);
+	for (var key in current_json) {
+		if (current_json[key]) {
+			add_field(key, current_json[key]);
+		}
 	}
 	
 	// add toggle bar
@@ -49,11 +51,11 @@ Fiber.enhance_jsontextarea = function(textarea) {
 
 	// on blur update json-textarea
 	$('.'+textarea.name+'-key-value-pair select, .'+textarea.name+'-key-value-pair input, .'+textarea.name+'-key-value-pair textarea, .'+textarea.name+'-key-value-pair .ui-autocomplete-input').live('blur', function(){
-		if (current_json == null) {
-			current_json = {}
+		if (current_json === null) {
+			current_json = {};
 		}
 		current_json[$(this).parent('td').parent('tr').attr('key-data')] = $(this).val();
-		generate_json()
+		generate_json();
 	});
 
 	// update add-new-key-value-pair selectbox with choices not already used
@@ -68,7 +70,7 @@ Fiber.enhance_jsontextarea = function(textarea) {
 	// on click add key-value-pair
 	$('a.'+textarea.name+'-add-btn').live('click', function(){
 		new_key = $(this).parent('td').siblings('td.key').children('input').val();
-		if (new_key == '') {
+		if (new_key === '') {
 			alert(gettext('Key can not be empty'));
 		} else {
 			if ($.inArray(new_key, used_keys) != -1) {
@@ -77,8 +79,8 @@ Fiber.enhance_jsontextarea = function(textarea) {
 				add_field(new_key, '');
 				$(this).parent('td').siblings('td.key').children('input').val('');
 				$('#'+textarea.name+'-adder option[value="'+new_key+'"]').remove();
-				if (current_json == null) {
-					current_json = {}
+				if (current_json === null) {
+					current_json = {};
 				}
 				current_json[new_key] = $('#'+textarea.name+'-key-'+new_key).val();
 				generate_json();
@@ -92,7 +94,7 @@ Fiber.enhance_jsontextarea = function(textarea) {
 	});
 
 	function add_field(key, value) {
-		used_keys.push(key)
+		used_keys.push(key);
 		var row = $('<tr/>').attr('class', textarea.name+'-key-value-pair').attr('key-data', key).insertBefore(tr_add);
 		var td1 = $('<td/>').appendTo(row);
 		var td2 = $('<td/>').appendTo(row);
@@ -102,24 +104,27 @@ Fiber.enhance_jsontextarea = function(textarea) {
 		// check if this key has a special description
 		if (key in schema[textarea.name]) {
 			if ('widget' in schema[textarea.name][key]) {
-				if (schema[textarea.name][key]['widget'] == 'select' || schema[textarea.name][key]['widget'] == 'combobox') {
+				if (schema[textarea.name][key].widget == 'select' || schema[textarea.name][key].widget == 'combobox') {
 					// add a select widget
 					var select_widget = $('<select/>').attr('id', textarea.name+'-key-'+key).appendTo(td2);
 					if ('values' in schema[textarea.name][key]) {
-						for (select_value in schema[textarea.name][key]['values']) {
-							var option = $('<option/>').attr('value', schema[textarea.name][key]['values'][select_value]).text(schema[textarea.name][key]['values'][select_value]).appendTo(select_widget);
-							// set current value as selected
-							if (schema[textarea.name][key]['values'][select_value] == value) {
-								$(option).attr('selected', 'selected');
+						var select_values = schema[textarea.name][key].values;
+						for (var select_value in select_values) {
+							if (select_values[select_value]) {
+								var option = $('<option/>').attr('value', select_values[select_value]).text(select_values[select_value]).appendTo(select_widget);
+								// set current value as selected
+								if (select_values[select_value] == value) {
+									$(option).attr('selected', 'selected');
+								}
 							}
 						}
 					}
 
-					if (schema[textarea.name][key]['widget'] == 'combobox') {
+					if (schema[textarea.name][key].widget == 'combobox') {
 						$(select_widget).combobox();
 					}
 
-				} else if (schema[textarea.name][key]['widget'] == 'textarea') {
+				} else if (schema[textarea.name][key].widget == 'textarea') {
 					// add a textarea widget
 					$('<textarea/>').attr('id', textarea.name+'-key-'+key).attr('value', value).appendTo(td2);
 
@@ -157,7 +162,7 @@ Fiber.enhance_jsontextarea = function(textarea) {
 		}
 	}
 
-}
+};
 
 Fiber.enhance_textarea = function(textarea) {
 	// TODO: add Django-like behavior:

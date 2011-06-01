@@ -6,8 +6,8 @@
 <div id="wpr-admin-sidebar">
 	<div id="admin-sidebar">
 		<div id="admin-sidebar-top-section">
-			<p class="backend"><a href="{% url admin:index %}">{% trans 'Backend' %}</a></p>
 			<p class="logout"><a href="{{ logout_url }}">{% trans 'Log out' %}</a></p>
+			<p class="backend"><a href="{% url admin:index %}" title="{% trans 'Backend' %}"><span class="icon"></span>{% trans 'Backend' %}</a></p>
 		</div>
 		<div id="admin-sidebar-page-section">
 			<h2>{% trans "Pages" %}</h2>
