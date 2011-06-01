@@ -34,11 +34,11 @@
 <script src="{{ STATIC_URL }}fiber/js/plupload/plupload.flash.js" type="text/javascript"></script>
 
 <script src="{{ STATIC_URL }}fiber/js/admin.js" type="text/javascript"></script>
+{% endcompress %}
 
 {% if editor_template_js %}
 	{% include editor_template_js %}
 {% endif %}
-{% endcompress %}
 
 {% compress css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}fiber/css/admin-reset.css" type="text/css" media="screen" />

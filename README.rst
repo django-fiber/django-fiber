@@ -76,8 +76,6 @@ settings.py
 		'compressor.finders.CompressorFinder',
 	)
 
-	COMPRESS_JS_FILTERS = ()
-
 
 Optional settings:
 ==================
