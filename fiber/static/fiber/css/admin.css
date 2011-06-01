@@ -559,3 +559,9 @@ ul.ui-context-menu {
 	font-size: 0;
 	line-height: 0;
 }
+
+/* ---[ Django admin ]--- */
+
+span.nobr {
+	white-space: nowrap;
+}

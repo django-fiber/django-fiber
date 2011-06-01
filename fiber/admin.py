@@ -94,7 +94,7 @@ class PageAdmin(MPTTModelAdmin):
         actions += u'<a href="add/?%s=%s" title="%s"><img src="%sfiber/admin/images/page_new.gif" width="16" height="16" alt="%s" /></a> ' % \
                    (self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL, _('Add sub page'))
 
-        return actions
+        return u'<span class="nobr">%s</span>' % (actions,)
 
     action_links.short_description = _('Actions')
     action_links.allow_tags = True
