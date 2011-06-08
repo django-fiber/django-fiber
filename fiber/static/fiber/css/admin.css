@@ -68,7 +68,7 @@ div.ui-dialog form label,
 	z-index: 900;
 }
 
-#wpr-admin-sidebar.hidden {
+#wpr-admin-sidebar.df-hidden {
 	left: -230px;
 }
 
@@ -96,7 +96,7 @@ div.ui-dialog form label,
 	background: #333 url(../images/button-toggle-sidebar.gif) no-repeat 0 50%;
 }
 
-#wpr-admin-sidebar #btn-toggle-admin-sidebar.hidden {
+#wpr-admin-sidebar #btn-toggle-admin-sidebar.df-hidden {
 	background-position: -10px 50%;
 }
 

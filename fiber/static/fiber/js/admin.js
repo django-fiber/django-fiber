@@ -1603,16 +1603,16 @@ var adminPage = {
 		this.wpr_admin_sidebar.hidden = false;
 
 		$('body').addClass('admin-sidebar');
-		this.toggle_button.removeClass('hidden');
-		this.wpr_admin_sidebar.removeClass('hidden');
+		this.toggle_button.removeClass('df-hidden');
+		this.wpr_admin_sidebar.removeClass('df-hidden');
 	},
 
 	hide_sidebar: function() {
 		this.wpr_admin_sidebar.hidden = true;
 
 		$('body').removeClass('admin-sidebar');
-		this.toggle_button.addClass('hidden');
-		this.wpr_admin_sidebar.addClass('hidden');
+		this.toggle_button.addClass('df-hidden');
+		this.wpr_admin_sidebar.addClass('df-hidden');
 	},
 
 	init_admin_sidebar: function() {
