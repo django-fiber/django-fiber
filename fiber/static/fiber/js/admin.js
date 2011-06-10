@@ -235,9 +235,9 @@ var LoginFormDialog = AdminFormDialog.extend({
 
 	defaults: {
 		url: BACKEND_BASE_URL,
-		width: 340,
+		width: 238,
 		height: 'auto',
-		start_width: 340
+		start_width: 238
 	},
 
 	// initialize the login form
@@ -801,6 +801,12 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 
 var ChangePageFormDialog = ChangeFormDialog.extend({
 
+	defaults: {
+		width: 325,
+		height: 'auto',
+		start_width: 325
+	},
+
 	init_dialog: function() {
 		var extra_field;
 		this._super();
@@ -1298,7 +1304,7 @@ var adminPage = {
 									$('<li><a href="#">'+gettext('Delete')+'</a></li>').click($.proxy(function() {
 
 										// show a confirmation dialog, that also warns about sub pages that will be removed
-										var confirmation_dialog = $('<div></div>').dialog({
+										var confirmation_dialog = $('<div class="dialog"></div>').dialog({
 											modal: true,
 											resizable: false,
 											width: 400,

@@ -11,7 +11,6 @@ body.admin-sidebar div#wpr-body {
 #wpr-admin-layer,
 #wpr-admin-sidebar,
 .ui-context-menu,
-.ui-dialog-content,
 div.ui-dialog form label,
 #ui-file-select-filter-label,
 #ui-image-select-filter-label {
@@ -351,7 +350,7 @@ ins.jstree-icon {
 
 .ui-jqgrid tr.ui-row-ltr td {
 	padding: 3px 5px;
-	border-right: none;
+	border: 0;
 }
 
 .ui-jqgrid .loading.ui-state-active {
@@ -365,12 +364,23 @@ ins.jstree-icon {
 }
 
 #gview_ui-image-select-grid .ui-jqgrid-btable .ui-widget-content td {
+	border: 0;
 	padding: 0 5px;
 }
 
 #gview_ui-image-select-grid .ui-jqgrid-btable .ui-widget-content td img {
 	margin-top: 6px;
 	width: 111px;
+}
+
+#ui-image-select-grid table tr {
+	border: 0;
+	border-bottom: 1px solid #ccc;
+}
+
+.ui-jqgrid tr.ui-row-ltr td,
+#ui-image-select-grid table tr td {
+	border: 0;
 }
 
 /*---[ Aristo customizations ]---*/
@@ -390,6 +400,10 @@ ins.ui-icon {
 .ui-menu .ui-menu-item a.ui-state-hover,
 .ui-menu .ui-menu-item a.ui-state-active {
 	margin: 0;
+}
+
+.ui-dialog .ui-dialog-content {
+	padding: 0;
 }
 
 div.ui-dialog form {
@@ -416,6 +430,12 @@ div.ui-dialog form label,
 	clear: none;
 }
 
+div.ui-dialog form label {
+	float: none;
+	margin: 0;
+	text-align: left;
+}
+
 #ui-file-select-filter-label,
 #ui-image-select-filter-label {
 	margin-left: 200px;
@@ -426,16 +446,15 @@ div.ui-dialog form input[type="password"],
 div.ui-dialog form select,
 #ui-file-select-filter-input,
 #ui-image-select-filter-input {
-	margin: 0;
-	margin-bottom: 5px;
-	border: 1px inset #000;
+	margin: 0 0 5px 0;
+	border: 1px solid #666;
 	outline: none;
 	padding: 0 3px;
 	height: 22px;
 	display: block;
 	text-align: left;
 	vertical-align: top;
-	width: auto;
+	width: 100%;
 	font: inherit;
 	text-decoration: inherit;
 	text-transform: inherit;
@@ -450,7 +469,6 @@ div.ui-dialog form select,
 div.ui-dialog form p.errornote,
 div.ui-dialog form p.help {
 	margin-top: 5px;
-	margin-left: 110px;
 	font: inherit;
 	text-decoration: inherit;
 	text-transform: inherit;
@@ -460,7 +478,9 @@ div.ui-dialog form p.help {
 }
 
 div.ui-dialog form p.help {
-	color: #0000ff;
+	font-size: 11px;
+	line-height: 120%;
+	color: #999;
 	font-style: italic;
 }
 
@@ -484,10 +504,6 @@ div.ui-dialog form h2 {
 	font-size: 100%;
 }
 
-.ui-dialog .ui-dialog-content {
-	padding: 0;
-}
-
 .ui-dialog .hide-label {
 	margin: 0;
 }
@@ -502,6 +518,7 @@ div.ui-dialog form h2 {
 
 .ui-dialog .ui-dialog-buttonpane {
 	margin-top: 0;
+	padding: 0;
 	border-top: 1px solid #a6a6a6;
 	background: #d5d5d5;
 	background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#c2c2c2));
@@ -545,6 +562,9 @@ div.plupload.html5 input {
 ul.ui-context-menu {
 	position: absolute;
 	z-index: 910;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 
 /* ---[ Clearing elements ]--- */
@@ -564,4 +584,44 @@ ul.ui-context-menu {
 
 span.nobr {
 	white-space: nowrap;
+}
+
+.ui-dialog .ui-dialog-content.dialog {
+	padding: 10px 15px;
+}
+
+.ui-dialog .ui-dialog-content.dialog p {
+	margin-bottom: 1em;
+	line-height: 150%;
+}
+
+/* ---[ Custom Forms ]--- */
+
+#contentitem_form {
+	overflow: hidden;
+}
+
+#login-form,
+#page_form {
+	padding: 10px 15px;
+}
+
+#login-form {
+	width: 200px;
+}
+
+#page_form {
+	width: 287px;
+}
+
+#page_form select {
+	border: auto;
+	padding-right: 0;
+	width: 100%;
+}
+
+#ui-file-select-filter-input,
+#ui-image-select-filter-input {
+	margin-top: 5px;
+	width: 170px;
 }
