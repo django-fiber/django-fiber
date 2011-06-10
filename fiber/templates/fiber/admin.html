@@ -1,17 +1,17 @@
 {% load fiber_tags i18n %}
-<div id="wpr-admin-layer">
-	<div id="admin-layer"></div>
+<div id="wpr-df-layer">
+	<div id="df-layer"></div>
 </div>
 
-<div id="wpr-admin-sidebar">
-	<div id="admin-sidebar">
-		<div id="admin-sidebar-top-section">
+<div id="wpr-df-sidebar">
+	<div id="df-sidebar">
+		<div id="df-sidebar-top-section">
 			<p class="logout"><a href="{{ logout_url }}">{% trans 'Log out' %}</a></p>
 			<p class="backend"><a href="{% url admin:index %}" title="{% trans 'Backend' %}"><span class="icon"></span>{% trans 'Backend' %}</a></p>
 		</div>
-		<div id="admin-sidebar-page-section">
+		<div id="df-sidebar-page-section">
 			<h2>{% trans "Pages" %}</h2>
-			<div id="admin-sidebar-page-tree" class="sidebar-tree">
+			<div id="df-sidebar-page-tree" class="sidebar-tree">
 				<ul>
 					{% for menu in menus %}
 						<li>
@@ -22,9 +22,9 @@
 				</ul>
 			</div>
 		</div>
-		<div id="admin-sidebar-content-section">
+		<div id="df-sidebar-content-section">
 			<h2>{% trans "Content" %}</h2>
-			<div id="admin-sidebar-content-tree" class="sidebar-tree">
+			<div id="df-sidebar-content-tree" class="sidebar-tree">
 				<ul>
 					{% for group in content_groups %}
 						{% if group.content_items %}
@@ -44,9 +44,9 @@
 			</div>
 		</div>
 	</div>
-	<div id="btn-toggle-admin-sidebar"></div>
+	<div id="btn-toggle-df-sidebar"></div>
 </div>
 
-<div id="wpr-admin-busy">
-	<div id="admin-busy"></div>
+<div id="wpr-df-busy">
+	<div id="df-busy"></div>
 </div>

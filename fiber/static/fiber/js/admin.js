@@ -14,10 +14,10 @@ jQuery = $;
 
 var busyIndicator = {
 	show: function() {
-		$('#wpr-admin-busy').show();
+		$('#wpr-df-busy').show();
 	},
 	hide: function() {
-		$('#wpr-admin-busy').hide();
+		$('#wpr-df-busy').hide();
 	}
 };
 
@@ -158,7 +158,7 @@ var AdminRESTDialog = AdminDialog.extend({
 });
 
 
-// abstract class for a basic admin form
+// abstract class for a basic df admin form
 var AdminForm = Class.extend({
 
 	defaults: {},
@@ -857,7 +857,7 @@ var AddButton = Class.extend({ // TODO: subclass to AddPageButton / AddContentIt
 		this.fiber_item = fiber_item;
 		this.mouse_is_over = null;
 
-		this.admin_layer = $('#admin-layer');
+		this.admin_layer = $('#df-layer');
 
 		this.set_options(options);
 		this.set_appearance();
@@ -951,7 +951,7 @@ var DroppableArea = Class.extend({
 	init: function(fiber_item, options) {
 		this.fiber_item = fiber_item;
 
-		this.admin_layer = $('#admin-layer');
+		this.admin_layer = $('#df-layer');
 
 		this.set_options(options);
 		this.set_appearance();
@@ -1176,7 +1176,7 @@ var adminPage = {
 
 	// get fiber elements in page (excluding admin divs).
 	get_fiber_elements: function() {
-		var page_divs = $(document.body).children(':visible').not('#wpr-admin-layer, #wpr-admin-sidebar');
+		var page_divs = $(document.body).children(':visible').not('#wpr-df-layer, #wpr-df-sidebar');
 		return page_divs.find('[data-fiber-data]');
 	},
 
@@ -1564,7 +1564,7 @@ var adminPage = {
 
 		function toggle_sidebar() {
 			wpr_admin_sidebar.hidden = wpr_admin_sidebar.hidden ? false : true;
-			$.cookie('admin-sidebar-hidden', wpr_admin_sidebar.hidden, { path: '/' });
+			$.cookie('df-sidebar-hidden', wpr_admin_sidebar.hidden, { path: '/' });
 			if (wpr_admin_sidebar.hidden) {
 				this.hide_sidebar();
 			} else {
@@ -1592,7 +1592,7 @@ var adminPage = {
 	},
 
 	init_toggle_admin_sidebar: function() {
-		var hidden = $.cookie('admin-sidebar-hidden') == 'true' ? true : false;
+		var hidden = $.cookie('df-sidebar-hidden') == 'true' ? true : false;
 		if (hidden) {
 			this.hide_sidebar();
 		}
@@ -1608,7 +1608,7 @@ var adminPage = {
 	show_sidebar: function() {
 		this.wpr_admin_sidebar.hidden = false;
 
-		$('body').addClass('admin-sidebar');
+		$('body').addClass('df-sidebar');
 		this.toggle_button.removeClass('df-hidden');
 		this.wpr_admin_sidebar.removeClass('df-hidden');
 	},
@@ -1616,18 +1616,18 @@ var adminPage = {
 	hide_sidebar: function() {
 		this.wpr_admin_sidebar.hidden = true;
 
-		$('body').removeClass('admin-sidebar');
+		$('body').removeClass('df-sidebar');
 		this.toggle_button.addClass('df-hidden');
 		this.wpr_admin_sidebar.addClass('df-hidden');
 	},
 
 	init_admin_sidebar: function() {
-		this.wpr_admin_layer = $('#wpr-admin-layer');
-		this.wpr_admin_sidebar = $('#wpr-admin-sidebar');
-		this.admin_sidebar = $('#admin-sidebar');
-		this.admin_page_tree = $('#admin-sidebar-page-tree');
-		this.admin_content_tree = $('#admin-sidebar-content-tree');
-		this.toggle_button = $('#btn-toggle-admin-sidebar');
+		this.wpr_admin_layer = $('#wpr-df-layer');
+		this.wpr_admin_sidebar = $('#wpr-df-sidebar');
+		this.admin_sidebar = $('#df-sidebar');
+		this.admin_page_tree = $('#df-sidebar-page-tree');
+		this.admin_content_tree = $('#df-sidebar-content-tree');
+		this.toggle_button = $('#btn-toggle-df-sidebar');
 
 		this.admin_page_tree.hide();
 		this.admin_content_tree.hide();
@@ -1666,7 +1666,7 @@ var adminPage = {
 		});
 
 		// hide context menus when scrolling the sidebar
-		$('#admin-sidebar').bind('scroll', function() {
+		$('#df-sidebar').bind('scroll', function() {
 			$(document.body).find('.ui-context-menu').remove();
 		});
 

@@ -1,0 +1,199 @@
+/*
+Copyright (c) 2010, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.com/yui/license.html
+version: 3.3.0
+build: 3167
+*/
+
+#wpr-df-layer div,
+#wpr-df-layer dl,
+#wpr-df-layer dt,
+#wpr-df-layer dd,
+#wpr-df-layer ul,
+#wpr-df-layer ol,
+#wpr-df-layer li,
+#wpr-df-layer h1,
+#wpr-df-layer h2,
+#wpr-df-layer h3,
+#wpr-df-layer h4,
+#wpr-df-layer h5,
+#wpr-df-layer h6,
+#wpr-df-layer pre,
+#wpr-df-layer code,
+#wpr-df-layer ins,
+#wpr-df-layer form,
+#wpr-df-layer fieldset,
+#wpr-df-layer legend,
+#wpr-df-layer input,
+#wpr-df-layer textarea,
+#wpr-df-layer p
+#wpr-df-layer a,
+#wpr-df-layer blockquote,
+#wpr-df-layer th,
+#wpr-df-layer td,
+
+#wpr-df-sidebar div,
+#wpr-df-sidebar dl,
+#wpr-df-sidebar dt,
+#wpr-df-sidebar dd,
+#wpr-df-sidebar ul,
+#wpr-df-sidebar ol,
+#wpr-df-sidebar li,
+#wpr-df-sidebar h1,
+#wpr-df-sidebar h2,
+#wpr-df-sidebar h3,
+#wpr-df-sidebar h4,
+#wpr-df-sidebar h5,
+#wpr-df-sidebar h6,
+#wpr-df-sidebar pre,
+#wpr-df-sidebar code,
+#wpr-df-sidebar ins,
+#wpr-df-sidebar form,
+#wpr-df-sidebar fieldset,
+#wpr-df-sidebar legend,
+#wpr-df-sidebar input,
+#wpr-df-sidebar textarea,
+#wpr-df-sidebar p,
+#wpr-df-sidebar a, 
+#wpr-df-sidebar blockquote,
+#wpr-df-sidebar th,
+#wpr-df-sidebar td {
+	margin: 0;
+	border: 0;
+	outline: 0;
+	padding: 0;
+	vertical-align: baseline;
+	font-family: 'Lucida Grande', 'DejaVu Sans', 'Bitstream Vera Sans', Verdana, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	color: #000;
+	background-color: transparent;
+}
+
+#wpr-df-layer table,
+#wpr-df-sidebar table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+#wpr-df-layer fieldset,
+#wpr-df-layer img,
+
+#wpr-df-sidebar fieldset,
+#wpr-df-sidebar img {
+	border: 0;
+}
+
+#wpr-df-layer address,
+#wpr-df-layer caption,
+#wpr-df-layer cite,
+#wpr-df-layer code,
+#wpr-df-layer ins,
+#wpr-df-layer dfn,
+#wpr-df-layer em,
+#wpr-df-layer strong,
+#wpr-df-layer th,
+#wpr-df-layer var,
+
+#wpr-df-sidebar address,
+#wpr-df-sidebar caption,
+#wpr-df-sidebar cite,
+#wpr-df-sidebar code,
+#wpr-df-sidebar ins,
+#wpr-df-sidebar dfn,
+#wpr-df-sidebar em,
+#wpr-df-sidebar strong,
+#wpr-df-sidebar th,
+#wpr-df-sidebar var {
+	font-style: normal;
+	font-weight: normal;
+}
+
+#wpr-df-layer li,
+#wpr-df-sidebar li {
+	list-style: none;
+	background: none;
+}
+
+#wpr-df-layer caption,
+#wpr-df-layer th,
+
+#wpr-df-sidebar caption,
+#wpr-df-sidebar th {
+	text-align: left;
+}
+
+#wpr-df-layer h1,
+#wpr-df-layer h2,
+#wpr-df-layer h3,
+#wpr-df-layer h4,
+#wpr-df-layer h5,
+#wpr-df-layer h6,
+
+#wpr-df-sidebar h1,
+#wpr-df-sidebar h2,
+#wpr-df-sidebar h3,
+#wpr-df-sidebar h4,
+#wpr-df-sidebar h5,
+#wpr-df-sidebar h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+
+#wpr-df-layer q:before,
+#wpr-df-layer q:after,
+
+#wpr-df-sidebar q:before,
+#wpr-df-sidebar q:after {
+	content: '';
+}
+
+#wpr-df-layer abbr,
+#wpr-df-layer acronym,
+
+#wpr-df-sidebar abbr,
+#wpr-df-sidebar acronym {
+	border: 0;
+	font-variant: normal;
+}
+
+#wpr-df-layer sup,
+#wpr-df-sidebar sup {
+	vertical-align: text-top;
+}
+
+#wpr-df-layer sub,
+#wpr-df-sidebar sub, {
+	vertical-align: text-bottom;
+}
+
+#wpr-df-layer input,
+#wpr-df-layer textarea,
+#wpr-df-layer select,
+
+#wpr-df-sidebar input,
+#wpr-df-sidebar textarea,
+#wpr-df-sidebar select {
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+	background: none;
+}
+
+#wpr-df-layer input,
+#wpr-df-layer textarea,
+#wpr-df-layer select,
+
+#wpr-df-sidebar input,
+#wpr-df-sidebar textarea,
+#wpr-df-sidebar select {
+	font-size: 100%;
+}
+
+#wpr-df-layer legend,
+#wpr-df-sidebar legend {
+	color: #000;
+}
