@@ -14,10 +14,10 @@ jQuery = $;
 
 var busyIndicator = {
 	show: function() {
-		$('#wpr-df-busy').show();
+		$('#df-wpr-busy').show();
 	},
 	hide: function() {
-		$('#wpr-df-busy').hide();
+		$('#df-wpr-busy').hide();
 	}
 };
 
@@ -235,9 +235,9 @@ var LoginFormDialog = AdminFormDialog.extend({
 
 	defaults: {
 		url: BACKEND_BASE_URL,
-		width: 238,
+		width: 250,
 		height: 'auto',
-		start_width: 238
+		start_width: 250
 	},
 
 	// initialize the login form
@@ -1176,7 +1176,7 @@ var adminPage = {
 
 	// get fiber elements in page (excluding admin divs).
 	get_fiber_elements: function() {
-		var page_divs = $(document.body).children(':visible').not('#wpr-df-layer, #wpr-df-sidebar');
+		var page_divs = $(document.body).children(':visible').not('#df-wpr-layer, #df-wpr-sidebar');
 		return page_divs.find('[data-fiber-data]');
 	},
 
@@ -1622,12 +1622,12 @@ var adminPage = {
 	},
 
 	init_admin_sidebar: function() {
-		this.wpr_admin_layer = $('#wpr-df-layer');
-		this.wpr_admin_sidebar = $('#wpr-df-sidebar');
+		this.wpr_admin_layer = $('#df-wpr-layer');
+		this.wpr_admin_sidebar = $('#df-wpr-sidebar');
 		this.admin_sidebar = $('#df-sidebar');
 		this.admin_page_tree = $('#df-sidebar-page-tree');
 		this.admin_content_tree = $('#df-sidebar-content-tree');
-		this.toggle_button = $('#btn-toggle-df-sidebar');
+		this.toggle_button = $('#df-btn-toggle-sidebar');
 
 		this.admin_page_tree.hide();
 		this.admin_content_tree.hide();
