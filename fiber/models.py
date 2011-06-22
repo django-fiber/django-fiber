@@ -214,28 +214,26 @@ class Page(MPTTModel):
             return True
         return self.parent and (self.rght + 1 == self.parent.rght)
 
-    def move_page(self, parent_id, left_id=0):
+    def move_page(self, target_page_id, position):
         """
-        Moves the page.
+        Moves the page relative to the target page.
 
         Parameters:
-          - parent_id: the new parent
-          - left_id: the page to the left (0 if it not applicable)
+          - target_page_id: target page
+          - positon
+
+        E.g. move page after page 123
+          move_page(123, 'after')
         """
         old_url = self.get_absolute_url()
+        target_page = Page.objects.get(pk=target_page_id)
 
-        if left_id:
-            # move the node to the right of the left node
-            self.move_to(
-                Page.objects.get(pk=left_id),
-                'right',
-            )
-        else:
-            # move the node to the first child of the parent
-            self.move_to(
-                Page.objects.get(pk=parent_id),
-                'first-child',
-            )
+        if position == 'before':
+            self.move_to(target_page, 'left')
+        elif position == 'after':
+            self.move_to(target_page, 'right')
+        elif position == 'inside':
+            self.move_to(target_page, 'first-child')
 
         # change url in content items
         if old_url:

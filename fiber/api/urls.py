@@ -29,4 +29,5 @@ urlpatterns = patterns('',
     url(r'^files/$', file_upload_handler),
     url(r'^images/$', image_upload_handler),
     url(r'^content_item/(?P<id>\d+)/$', content_item_handler),
+    url(r'^content_item/$', content_item_handler)
 )

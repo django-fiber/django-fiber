@@ -1,6 +1,7 @@
 import os
 
 from django.db.models import F, Max
+from django.template.defaultfilters import slugify
 
 from piston.handler import BaseHandler
 from piston.utils import rc
@@ -13,22 +14,28 @@ from fiber.models import Page, PageContentItem, ContentItem, Image, File
 
 class PageHandler(BaseHandler):
     allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
-    fields = ('data', 'children', 'show_in_menu')
+    fields = ('label', 'id', 'url', 'edit_url', 'add_url', 'children',)
     model = Page
 
     @classmethod
-    def data(cls, page):
-        return {
-            'title': page.title,
-            'attr': {
-                'data-fiber-data': '{"type": "page", "id": %d}' % page.id,
-                'href': page.get_absolute_url(),
-            }
-        }
+    def label(cls, page):
+        return page.title
+
+    @classmethod
+    def url(cls, page):
+        return page.get_absolute_url()
 
     @classmethod
     def children(cls, page):
         return page.get_children()
+
+    @classmethod
+    def edit_url(cls, page):
+        return page.get_change_url()
+
+    @classmethod
+    def add_url(cls, page):
+        return Page.get_add_url()
 
     def read(self, request, id=None):
         if id:
@@ -79,8 +86,8 @@ class PageHandler(BaseHandler):
         if data.get('action') == 'move':
             self._move(
                 int(id),
-                int(data['parent_id']),
-                int(data['left_id']),
+                int(data['target_id']),
+                data['position'],
             )
         else:
             # TODO: check if this situation occurs
@@ -92,17 +99,17 @@ class PageHandler(BaseHandler):
 
         return rc.DELETED
 
-    def _move(self, page_id, parent_id, left_id):
+    def _move(self, moved_page_id, target_page_id, position):
         """
         Moves the node. Parameters:
-        - page_id: the page to move
-        - parent_id: the new parent
-        - left_id: the node to the left (0 if it does not exist)
+        - moved_page_id: the page to move
+        - target_id: the target page
+        - position: relative position to target page ('before', 'after' or 'inside')
         """
-        page = Page.objects.get(pk=page_id)
+        page = Page.objects.get(pk=moved_page_id)
         page.move_page(
-            parent_id,
-            left_id,
+            target_page_id,
+            position
         )
 
 
@@ -290,5 +297,30 @@ class ImageUploadHandler(BaseHandler):
 
 
 class ContentItemHandler(BaseHandler):
-    allowed_methods = ('DELETE',)
+    allowed_methods = ('GET', 'DELETE',)
     model = ContentItem
+
+    def read(self, request):
+        result = []
+        for group in ContentItem.objects.get_content_groups():
+            if group['content_items']:
+                label = unicode(group['title'])
+                group_info = dict(
+                    label=label,
+                    id=slugify(label)
+                )
+
+                children = []
+                for content_item in group['content_items']:
+                    children.append(
+                        dict(
+                            label=unicode(content_item),
+                            id=content_item.id,
+                            url=content_item.get_change_url()
+                        )
+                    )
+
+                group_info['children'] = children
+                result.append(group_info)
+
+        return result
