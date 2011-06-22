@@ -193,75 +193,122 @@ div.ui-dialog form label,
 	background: transparent url(../images/button-add.png) no-repeat;
 }
 
-/*---[ jsTree ]---*/
-
-ins.jstree-icon {
-	background-color: transparent;
+/*---jqTree---*/
+#df-wpr-sidebar ul.tree,
+#df-wpr-sidebar ul.tree ul,
+ul.tree,
+ul.tree ul {
+	list-style: none outside;
+	margin-bottom: 0;
 }
 
-#df-wpr-sidebar .jstree,
-.jstree {
-	border: 0;
-	background: transparent;
-	overflow-x: hidden;
+#df-wpr-sidebar ul.tree ul,
+ul.tree ul {
+	margin-left: 12px;
 }
 
-#df-wpr-sidebar .jstree ul ul,
-.jstree ul ul {
-	margin-left: 17px;
+#df-wpr-sidebar ul.tree li.closed > ul,
+ul.tree li.closed > ul {
+	display: none;
 }
 
-#df-wpr-sidebar .jstree li a,
-.jstree li a {
-	width: 100%;
+#df-wpr-sidebar ul.tree li,
+ul.tree li {
+	margin-left: 0;
+}
+
+#df-wpr-sidebar ul.tree a.toggler,
+ul.tree a.toggler {
+	background: url(treeDownTriangleBlack.png) no-repeat 0 50%;
+	width: 12px;
+	display: block;
+	float: left;
+	text-indent: -9999px;
+}
+
+#df-wpr-sidebar ul.tree span,
+#df-wpr-sidebar ul.tree a,
+ul.tree span,
+ul.tree a {
+	cursor: pointer;
+}
+
+#df-wpr-sidebar ul.tree li > span,
+ul.tree li > span {
+	margin-left: 12px;
 	padding: 2px;
 }
 
-#df-wpr-sidebar .jstree li a ins,
-.jstree li a ins {
-	margin-right: 3px;
+#df-wpr-sidebar ul.tree li.folder > span,
+ul.tree li.folder > span {
+	margin-left: 0;
 }
 
-#df-wpr-sidebar .jstree li a.ui-state-default,
-.jstree li a.ui-state-default {
-	border: none;
-	background: none;
-	color: #333;
-	font-weight: normal;
+#df-wpr-sidebar ul.tree a.toggler.closed,
+ul.tree a.toggler.closed {
+	background-image: url(treeRightTriangleBlack.png);
 }
 
-#df-wpr-sidebar .jstree li a.ui-state-hover,
-.jstree li a.ui-state-hover {
-	background: #dfdfdf;
-	background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#d3d3d3));
-	background: -moz-linear-gradient(top, #eaeaea, #d3d3d3);
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#eaeaea', endColorstr='#d3d3d3');
-	color: #333;
-	text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
+#df-wpr-sidebar span.dragging,
+span.dragging {
+	color: #fff;
+	background: #000;
+	opacity: 0.6;
+	cursor: pointer;
+	padding: 2px 8px;
 }
 
-#df-wpr-sidebar .jstree li a.ui-state-active,
-.jstree li a.ui-state-active {
-	background: #97bdd6;
-	background: -webkit-gradient(linear, left top, left bottom, from(#bee0f5), to(#89afca));
-	background: -moz-linear-gradient(top, #bee0f5, #89afca);
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#bee0f5', endColorstr='#89afca');
-	color: #1c4257;
-	font-size: 100%;
-	font-weight: normal;
-	text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
+#df-wpr-sidebar ul.tree span.ghost,
+ul.tree span.ghost {
+	border: dashed 2px #aaa;
+	margin-left: 12px;
+	width: auto;
+	color: #fff;
+	float: none;
+	display: inline;
 }
 
-#df-wpr-sidebar .jstree .ui-state-default .ui-icon,
-.jstree .ui-state-default .ui-icon {
-	background: url(../images/ckeditor/icon-page.png);
-	background-position: 0 0;
+#df-wpr-sidebar ul.tree span.ghost.folder,
+ul.tree span.ghost.folder {
+	margin-left: 0;
+	background-image: none;
 }
 
-#df-wpr-sidebar .jstree li.menu-separator,
-.jstree li.menu-separator {
-	margin-top: 14px;
+#df-wpr-sidebar ul.tree span.ghost.inside,
+ul.tree span.ghost.inside {
+	margin-left: 36px;
 }
+
+#df-wpr-sidebar ul.tree span.selected,
+ul.tree span.selected {
+	background: #000;
+	color: #fff;
+}
+
+/*---jqtree extra---*/
+ul.tree,
+#df-wpr-sidebar ul.tree {
+	margin-left: 17px;
+}
+
+#df-sidebar-page-tree li.menu > a.toggler,
+#df-sidebar-page-tree li.menu > span {
+	display: none;
+}
+
+#df-sidebar-page-tree li.menu {
+	margin-top: 8px;
+}
+
+#df-sidebar-page-tree li.menu:first-child {
+	margin-top: 0;
+}
+
+#df-sidebar-page-tree li.menu > ul {
+	margin-left: 0;
+}
+
+/*---busy---*/
 
 #df-wpr-busy {
 	display: none;

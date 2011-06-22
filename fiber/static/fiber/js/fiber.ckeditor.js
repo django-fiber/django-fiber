@@ -208,7 +208,7 @@ function extend_CKEditor() {
 			var page_select_dialog = new Fiber.PageSelectDialog();
 
 			page_select_dialog.action_click = function() {
-				var selected_page_path = this.uiDialog.find('a.ui-state-active').attr('href');
+				var selected_page_path = page_select_dialog.get_selected_url();
 
 				// delete any existing links on the selected text
 				editor.document.$.execCommand('unlink', false, null);
