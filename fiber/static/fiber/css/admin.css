@@ -597,31 +597,31 @@ span.nobr {
 
 /* ---[ Custom Forms ]--- */
 
-.df-sidebar #contentitem_form {
+.df-admin #contentitem_form {
 	overflow: hidden;
 }
 
-.df-sidebar #login-form,
-.df-sidebar #page_form {
+.df-admin #login-form,
+.df-admin #page_form {
 	padding: 10px 15px;
 }
 
-.df-sidebar #login-form {
+.df-admin #login-form {
 	width: 200px;
 }
 
-.df-sidebar #page_form {
+.df-admin #page_form {
 	width: 287px;
 }
 
-.df-sidebar #page_form select {
+.df-admin #page_form select {
 	border: auto;
 	padding-right: 0;
 	width: 100%;
 }
 
-.df-sidebar #ui-file-select-filter-input,
-.df-sidebar #ui-image-select-filter-input {
+.df-admin #ui-file-select-filter-input,
+.df-admin #ui-image-select-filter-input {
 	margin-top: 5px;
 	width: 170px;
 }

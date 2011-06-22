@@ -1652,6 +1652,7 @@ var adminPage = {
 		this.body_fiber_data = body_fiber_data;
 
 		if (body_fiber_data.frontend) {
+			$('body').addClass('df-admin');
 			this.init_admin_sidebar();
 			this.init_admin_elements();
 		}
@@ -2106,6 +2107,7 @@ $(window).ready(function() {
 	adminPage.init(body_fiber_data);
 
 	if (body_fiber_data.show_login) {
+		$('body').addClass('df-admin');
 		loginform = new LoginFormDialog();
 	}
 });
