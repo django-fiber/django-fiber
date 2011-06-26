@@ -1195,7 +1195,7 @@ var adminPage = {
 		});
 	},
 
-	handle_page_contextmenu: function(node) {
+	handle_page_contextmenu: function(event, node) {
 		// remove other visible context menus
 		$(document.body).find('.ui-context-menu').remove();
 
@@ -1368,7 +1368,7 @@ var adminPage = {
 		);
 	},
 
-	handle_content_contextmenu: function(node) {
+	handle_content_contextmenu: function(event, node) {
 		if (node.hasChildren()) {
 			return;
 		}
