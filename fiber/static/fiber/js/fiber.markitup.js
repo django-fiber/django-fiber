@@ -7,9 +7,6 @@ Fiber.enhance_textarea = function(textarea) {
 	// Helper class to retrieve/replace user text selection in IE
 	var UserSelectionIE = function() {
 		this.textRange = (document.selection && document.selection.createRange) ? document.selection.createRange() : false;
-		if (!this.textRange) {
-			return false;
-		}
 	};
 	UserSelectionIE.prototype.markItUp = function(options) {
 		if (this.textRange && options) {
@@ -41,7 +38,7 @@ Fiber.enhance_textarea = function(textarea) {
 		page_select_dialog.action_click = function() {
 			var selected_page_path = this.uiDialog.find('a.ui-state-active').attr('href');
 
-			if (userSelectionIE) {
+			if (userSelectionIE.textRange) {
 				// Replace textarea selection for IE
 				userSelectionIE.markItUp({
 					openWith: '"',
@@ -70,7 +67,7 @@ Fiber.enhance_textarea = function(textarea) {
 		file_select_dialog.action_click = function() {
 			var selected_file_path = $(this.uiDialog.find('tr.ui-state-highlight td')[0]).text();
 
-			if (userSelectionIE) {
+			if (userSelectionIE.textRange) {
 				// Replace textarea selection for IE
 				userSelectionIE.markItUp({
 					openWith: '"',
@@ -99,7 +96,7 @@ Fiber.enhance_textarea = function(textarea) {
 		image_select_dialog.action_click = function() {
 			var selected_image_path = $(this.uiDialog.find('tr.ui-state-highlight td')[0]).text();
 
-			if (userSelectionIE) {
+			if (userSelectionIE.textRange) {
 				// Replace textarea selection for IE
 				userSelectionIE.markItUp({
 					openWith: '"',
@@ -129,7 +126,7 @@ Fiber.enhance_textarea = function(textarea) {
 			var selected_image_path = $(this.uiDialog.find('tr.ui-state-highlight td')[0]).text();
 			var selected_image_textile = '!' + selected_image_path + '!';
 
-			if (userSelectionIE) {
+			if (userSelectionIE.textRange) {
 				// Replace textarea selection for IE
 				userSelectionIE.markItUp({
 					replaceWith: selected_image_textile
