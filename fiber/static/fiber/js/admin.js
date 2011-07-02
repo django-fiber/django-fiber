@@ -763,7 +763,6 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 			function(pages) {
 				self.page_tree_div.tree({
 					data: pages[0].children,
-					selectable: true,
 					onClick: function() {
 						self.enableActionButton();
 					}
@@ -1319,7 +1318,8 @@ var adminPage = {
 								return (node.menu != true);
 							},
 							onMoveNode: this.handle_page_move,
-							onContextMenu: this.handle_page_contextmenu
+							onContextMenu: this.handle_page_contextmenu,
+							selectable: true
 						});
 
 						$tree.show();
