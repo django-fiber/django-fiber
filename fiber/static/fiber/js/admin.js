@@ -235,9 +235,9 @@ var LoginFormDialog = AdminFormDialog.extend({
 
 	defaults: {
 		url: BACKEND_BASE_URL,
-		width: 340,
+		width: 250,
 		height: 'auto',
-		start_width: 340
+		start_width: 250
 	},
 
 	// initialize the login form
