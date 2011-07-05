@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
 from django.utils.html import strip_tags
+from django.utils import simplejson
 
 from mptt.models import MPTTModel
 
@@ -126,6 +127,16 @@ class ContentItem(models.Model):
     def get_change_url(self):
         named_url = 'fiber_admin:%s_%s_change' % (self._meta.app_label, self._meta.object_name.lower())
         return reverse(named_url, args=(self.id, ))
+
+    def get_used_on_pages_json(self):
+        page_content_items = self.page_content_items.all()
+        json_pages = []
+        for page_content_item in page_content_items:
+            json_pages.append({
+                'title': page_content_item.page.title,
+                'url': page_content_item.page.get_absolute_url(),
+            })
+        return simplejson.dumps(json_pages)
 
     class Meta:
         verbose_name = _('content item')

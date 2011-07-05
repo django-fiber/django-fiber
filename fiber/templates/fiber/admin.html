@@ -32,7 +32,7 @@
 								<a href="#">{{ group.title }}</a>
 								<ul>
 									{% for content_item in group.content_items %}
-										<li data-fiber-data='{"type": "content_item", "id": {{ content_item.id }}, "url": "{{ content_item.get_change_url }}", "used_on_pages": {% content_used_on_pages_json content_item %}}'>
+										<li data-fiber-data='{"type": "content_item", "id": {{ content_item.id }}, "url": "{{ content_item.get_change_url }}", "used_on_pages": {{ content_item.get_used_on_pages_json|safe|escape_json_for_html }}}'>
 											<a href="#">{{ content_item }}</a>
 										</li>
 									{% endfor %}
