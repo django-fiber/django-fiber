@@ -136,7 +136,7 @@ class ContentItem(models.Model):
                 'title': page_content_item.page.title,
                 'url': page_content_item.page.get_absolute_url(),
             })
-        return simplejson.dumps(json_pages)
+        return json_pages
 
     class Meta:
         verbose_name = _('content item')

@@ -316,7 +316,8 @@ class ContentItemHandler(BaseHandler):
                         dict(
                             label=unicode(content_item),
                             id=content_item.id,
-                            url=content_item.get_change_url()
+                            url=content_item.get_change_url(),
+                            used_on_pages=content_item.get_used_on_pages_json()
                         )
                     )
 
