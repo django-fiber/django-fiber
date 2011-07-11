@@ -44,6 +44,12 @@ class PageForm(forms.ModelForm):
                 pass
         return self.cleaned_data['redirect_page']
 
+    def clean_title(self):
+        """
+        Strips extra whitespace
+        """
+        return self.cleaned_data.get('title', '').strip()
+
 
 class PageContentItemInline(admin.TabularInline):
     model = PageContentItem
