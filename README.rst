@@ -50,28 +50,28 @@ settings.py
 ::
 
 	MIDDLEWARE_CLASSES = (
-		...
-		'fiber.middleware.ObfuscateEmailAddressMiddleware',
-		'fiber.middleware.AdminPageMiddleware',
-		'fiber.middleware.PageFallbackMiddleware',
-		...
+	    ...
+	    'fiber.middleware.ObfuscateEmailAddressMiddleware',
+	    'fiber.middleware.AdminPageMiddleware',
+	    'fiber.middleware.PageFallbackMiddleware',
+	    ...
 	)
 
 	TEMPLATE_CONTEXT_PROCESSORS = (
-		...
-		'django.core.context_processors.request',
-		'staticfiles.context_processors.static_url',
-		'fiber.context_processors.page_info',
-		...
+	    ...
+	    'django.core.context_processors.request',
+	    'staticfiles.context_processors.static_url',
+	    'fiber.context_processors.page_info',
+	    ...
 	)
 
 	INSTALLED_APPS = (
-		...
-		'mptt',
-		'staticfiles',
-		'compressor',
-		'fiber',
-		...
+	    ...
+	    'mptt',
+	    'staticfiles',
+	    'compressor',
+	    'fiber',
+	    ...
 	)
 
 	import os
@@ -80,9 +80,9 @@ settings.py
 	STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 	STATIC_URL = '/static/'
 	STATICFILES_FINDERS = (
-		'staticfiles.finders.FileSystemFinder',
-		'staticfiles.finders.AppDirectoriesFinder',
-		'compressor.finders.CompressorFinder',
+	    'staticfiles.finders.FileSystemFinder',
+	    'staticfiles.finders.AppDirectoriesFinder',
+	    'compressor.finders.CompressorFinder',
 	)
 
 
@@ -113,17 +113,17 @@ urls.py
 	from django.conf import settings
 
 	urlpatterns = patterns('',
-		...
-		(r'^api/v1/', include('fiber.api.urls')),
-		(r'^admin/fiber/', include('fiber.admin_urls')),
-		(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', {'packages': ('fiber',),}),
-		...
+	    ...
+	    (r'^api/v1/', include('fiber.api.urls')),
+	    (r'^admin/fiber/', include('fiber.admin_urls')),
+	    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', {'packages': ('fiber',),}),
+	    ...
 	)
 
 	if settings.DEBUG:
-		urlpatterns += patterns('staticfiles.views',
-			url(r'^static/(?P<path>.*)$', 'serve'),
-		)
+	    urlpatterns += patterns('staticfiles.views',
+	        url(r'^static/(?P<path>.*)$', 'serve'),
+	    )
 
 
 Post-installation:
