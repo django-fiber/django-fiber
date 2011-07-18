@@ -69,7 +69,6 @@ class AdminPageMiddleware(object):
                         t = loader.get_template('fiber/admin.html')
                         c = RequestContext(request, {
                             'menus': Page.tree.root_nodes(),
-                            'content_groups': ContentItem.objects.get_content_groups(),
                             'logout_url': self.get_logout_url(request),
                         })
 
