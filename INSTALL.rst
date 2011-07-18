@@ -1,14 +1,6 @@
-============
-Django Fiber
-============
-
-Do you want to see a Django Fiber screencast, to get a feel for what it can do for you? Check it out here:
-http://vimeo.com/ridethepony/django-fiber
-
-Or, if you want to quickly try out Django Fiber on your machine, install the Django Fiber example project:
-https://github.com/ridethepony/django-fiber-example
-
-Convinced? Want to use Django Fiber in your own Django project? Then follow the instructions below:
+========================================
+Installation instructions for Django 1.3
+========================================
 
 
 Installation:
@@ -107,7 +99,7 @@ All static Fiber files need to be symlinked in (or copied to) your media folder:
 	$ python manage.py collectstatic --link
 
 
-Further documentation:
-======================
+Documentation:
+==============
 
 You can find usage instructions, and other documentation, in the docs folder.

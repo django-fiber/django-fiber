@@ -6,14 +6,12 @@ setup(
     license='Apache License, Version 2.0',
 
     install_requires=[
-        'django-mptt>=0.4.2',
-        'django-piston==0.2.3rc1',
-        'beautifulsoup>=3.2.0',
         'PIL>=1.1.7',
-        'django-staticfiles>=1.0.1',
+        'django-piston==0.2.3rc1',
+        'django-mptt>=0.4.2',
         'django-compressor>=0.7.1',
     ],
-    dependency_links=['http://bitbucket.org/jespern/django-piston/get/c4b2d21db51a.tar.gz#egg=django-piston-0.2.3rc1'],
+    dependency_links=['http://bitbucket.org/brodie/django-piston/get/c4e6eb8f7eb5.tar.gz#egg=django-piston-0.2.3rc1'],
 
     description='Django Fiber - a simple, user-friendly CMS for all your Django projects',
     long_description=open('README.rst').read(),

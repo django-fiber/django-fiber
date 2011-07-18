@@ -1,20 +1,12 @@
-============
-Django Fiber
-============
-
-Do you want to see a Django Fiber screencast, to get a feel for what it can do for you? Check it out here:
-http://vimeo.com/ridethepony/django-fiber
-
-Or, if you want to quickly try out Django Fiber on your machine, install the Django Fiber example project:
-https://github.com/ridethepony/django-fiber-example
-
-Convinced? Want to use Django Fiber in your own Django project? Then follow the instructions below:
+==========================================
+Installation instructions for Django 1.2.x
+==========================================
 
 
 Installation:
 =============
 
-We're assuming you are using Django 1.3. If you need to install Django Fiber with an older Django version, you can find instructions in the docs folder.
+These are the installation instructions for Django 1.2.x.
 
 ::
 
@@ -32,6 +24,12 @@ These dependencies are automatically installed:
 	django-piston==0.2.3rc1
 	django-mptt>=0.4.2
 	django-compressor>=0.7.1
+
+You need to install one dependency by hand when you're using Django 1.2.x:
+
+::
+
+	django-staticfiles>=1.0.1
 
 
 Settings:
@@ -52,12 +50,13 @@ settings.py
 
 	TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
 	    'django.core.context_processors.request',
+	    'staticfiles.context_processors.static_url',
 	    'fiber.context_processors.page_info',
 	)
 
 	INSTALLED_APPS = (
 	    ...
-	    'django.contrib.staticfiles',
+	    'staticfiles',
 	    'piston',
 	    'mptt',
 	    'compressor',
@@ -70,7 +69,9 @@ settings.py
 
 	STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 	STATIC_URL = '/static/'
-	STATICFILES_FINDERS = DEFAULT_SETTINGS.STATICFILES_FINDERS + (
+	STATICFILES_FINDERS = (
+	    'staticfiles.finders.FileSystemFinder',
+	    'staticfiles.finders.AppDirectoriesFinder',
 	    'compressor.finders.CompressorFinder',
 	)
 
@@ -90,7 +91,7 @@ urls.py
 	)
 
 	if settings.DEBUG:
-	    urlpatterns += patterns('django.contrib.staticfiles.views',
+	    urlpatterns += patterns('staticfiles.views',
 	        url(r'^static/(?P<path>.*)$', 'serve'),
 	    )
 
