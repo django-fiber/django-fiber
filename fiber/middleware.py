@@ -11,8 +11,8 @@ from django.utils import simplejson
 from utils.import_util import import_element
 
 from app_settings import EXCLUDE_URLS, EDITOR
-from views import page
 from models import Page, ContentItem
+from views import page
 
 
 class PageFallbackMiddleware(object):

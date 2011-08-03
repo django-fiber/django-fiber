@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.models import MPTTModel
 
 from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA
-from fiber import managers
+import managers
 from utils.fields import FiberMarkupField, FiberHTMLField
 from utils.json import JSONField
 from utils.urls import get_named_url_from_quoted_url, is_quoted_url
