@@ -8,12 +8,7 @@ from fiber.editor import get_editor_field_name
 from app_settings import TEMPLATE_CHOICES
 from models import Page, ContentItem, PageContentItem, Image, File
 import admin_forms as forms
-
-
-class FiberAdminSite(admin.AdminSite):
-    pass
-
-fiber_admin_site = FiberAdminSite(name='fiber_admin')
+import fiber_admin
 
 
 class ContentItemAdmin(admin.ModelAdmin):
@@ -123,5 +118,5 @@ admin.site.register(Image)
 admin.site.register(File)
 admin.site.register(Page, PageAdmin)
 
-fiber_admin_site.register(ContentItem, FiberAdminContentItemAdmin)
-fiber_admin_site.register(Page, FiberAdminPageAdmin)
+fiber_admin.site.register(ContentItem, FiberAdminContentItemAdmin)
+fiber_admin.site.register(Page, FiberAdminPageAdmin)
