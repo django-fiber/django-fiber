@@ -11,8 +11,8 @@ from django.utils import simplejson
 from utils.import_util import import_element
 
 from app_settings import EXCLUDE_URLS, EDITOR
-from views import page
 from models import Page, ContentItem
+from views import page
 
 
 class PageFallbackMiddleware(object):
@@ -75,13 +75,9 @@ class AdminPageMiddleware(object):
 
                         # Inject admin html in body.
                         response.content = self.body_re.sub(
-                            r"<head>\g<IN_HEAD></head>\g<AFTER_HEAD><body\g<IN_BODY_TAG>>%s\g<BODY_CONTENTS>%s%s</body>" % (
-                                '<div id="wpr-body">',
-                                '</div>',
-                                t.render(c),
-                            ),
+                            r"<head>\g<IN_HEAD></head>\g<AFTER_HEAD><body\g<IN_BODY_TAG>>%s\g<BODY_CONTENTS></body>" % ('<div id="wpr-body">',),
                             smart_unicode(response.content)
-                        )
+                        ).replace('</body>', '</div>' + t.render(c) + '</body>')
 
                         fiber_data['frontend'] = True
                         if 'fiber_page' in c:

@@ -1,6 +1,6 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.admin.views.decorators import staff_member_required
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
 

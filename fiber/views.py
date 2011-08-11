@@ -1,5 +1,5 @@
-from django.core.xheaders import populate_xheaders
 from django.conf import settings
+from django.core.xheaders import populate_xheaders
 from django.http import HttpResponse, HttpResponsePermanentRedirect, Http404
 from django.template import loader, RequestContext
 from django.views.decorators.csrf import csrf_protect
@@ -16,7 +16,7 @@ from models import Page
 @csrf_protect
 def page(request, url):
     if not url.endswith('/') and settings.APPEND_SLASH:
-        return HttpResponsePermanentRedirect("%s/" % request.path)
+        return HttpResponsePermanentRedirect('%s/' % request.path)
 
     context = RequestContext(request)
     if 'fiber_page' not in context:
