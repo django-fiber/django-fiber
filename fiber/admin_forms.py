@@ -17,7 +17,7 @@ class ContentItemAdminForm(forms.ModelForm):
 class PageForm(forms.ModelForm):
 
     parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3*unichr(160), empty_label='---------', required=False)
-    url = forms.RegexField(label=_('URL'), required=False, max_length=100, regex=r'^[-\w/\.\:"]+$',
+    url = forms.RegexField(label=_('URL'), required=False, max_length=100, regex=r'^[-\w/\.\:@#&+\?!="]+$',
         help_text = _("""Example: '/section-1/products' or 'products' or '"some_named_url"'"""),
         error_message = _('This value must contain only letters, numbers, underscores, dashes or slashes.'))
     redirect_page = TreeNodeChoiceField(label=_('Redirect page'), queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160), empty_label='---------', required=False)
