@@ -277,8 +277,12 @@ li.hidden-in-menu {
 	color: #999;
 }
 
-#df-wpr-sidebar .jstree li.hidden-in-menu .ui-state-default .ui-icon {
+#df-wpr-sidebar .jstree li.hidden-in-menu > .ui-state-default .ui-icon {
 	background: url(../images/ckeditor/icon-page-hidden.png);
+}
+
+#df-wpr-sidebar .jstree li.redirect > .ui-state-default .ui-icon {
+	background: url(../images/ckeditor/icon-page-redirect.png);
 }
 
 #df-wpr-busy {
