@@ -24,6 +24,7 @@ class ContentItem(models.Model):
     content_html = FiberHTMLField(verbose_name=_('Content'))
     protected = models.BooleanField(_('protected'), default=False)
     metadata = JSONField(_('metadata'), blank=True, null=True, schema=METADATA_CONTENT_SCHEMA, prefill_from='fiber.models.ContentItem')
+    template_name = models.CharField(_('template name'), blank=True, max_length=70)
 
     objects = managers.ContentItemManager()
 

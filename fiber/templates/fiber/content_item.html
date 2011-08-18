@@ -13,6 +13,10 @@
 {% else %}
 	<div class="content">
 {% endif %}
+{% if content_item.template_name %}
+	{% include content_item.template_name with content_item=content_item %}
+{% else %}
 	{{ content_item.content_html|safe }}
-	</div>
+{% endif %}
+</div>
 {% endif %}
