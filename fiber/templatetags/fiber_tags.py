@@ -57,7 +57,7 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
     """
     Remove pages that the current user isn't supposed to see.
     """
-    visible_pages_for_user = Page.objects.visible_pages_for_user(context['user']).filter(show_in_menu=True)
+    visible_pages_for_user = Page.objects.visible_pages_for_user(context['user'])
     menu_pages = list(set(menu_pages) & set(visible_pages_for_user))
 
     """

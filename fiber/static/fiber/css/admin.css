@@ -263,6 +263,28 @@ ins.jstree-icon {
 	margin-top: 14px;
 }
 
+li.hidden-in-menu {
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+}
+
+#df-wpr-sidebar .jstree li.hidden-in-menu {
+	opacity: 1;
+	filter: alpha(opacity=100);
+}
+
+#df-wpr-sidebar .jstree li.hidden-in-menu a {
+	color: #999;
+}
+
+#df-wpr-sidebar .jstree li.hidden-in-menu > .ui-state-default .ui-icon {
+	background: url(../images/ckeditor/icon-page-hidden.png);
+}
+
+#df-wpr-sidebar .jstree li.redirect > .ui-state-default .ui-icon {
+	background: url(../images/ckeditor/icon-page-redirect.png);
+}
+
 #df-wpr-busy {
 	display: none;
 	position: fixed;

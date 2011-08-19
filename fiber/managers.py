@@ -86,6 +86,8 @@ class PageManager(models.Manager):
 
     def visible_pages_for_user(self, user):
         visible_pages_qs = self.get_query_set()
+        if not user.is_staff:
+            visible_pages_qs = visible_pages_qs.filter(show_in_menu=True)
 
         return visible_pages_qs
 
