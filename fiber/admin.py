@@ -20,8 +20,8 @@ class ContentItemAdmin(admin.ModelAdmin):
     list_display = ('__unicode__',)
     form = forms.ContentItemAdminForm
     fieldsets = (
-        (None, {'fields': ('name', get_editor_field_name('content_html'), 'template_name')}),
-        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('protected', 'metadata',)}),
+        (None, {'fields': ('name', get_editor_field_name('content_html'),)}),
+        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('template_name', 'protected', 'metadata',)}),
     )
 
 
