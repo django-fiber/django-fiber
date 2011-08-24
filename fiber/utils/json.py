@@ -63,6 +63,17 @@ class JSONField(models.TextField):
             pass
         return value
 
+    def _get_json_value(self, value):
+        if not value:
+            return ''
+        elif isinstance(value, basestring):
+            return value
+        else:
+            return json.dumps(value)
+
+    def get_prep_value(self, value, *args, **kwargs):
+        return self._get_json_value(value)
+
     def get_db_prep_save(self, value, *args, **kwargs):
         if not value:
             return None
@@ -72,8 +83,7 @@ class JSONField(models.TextField):
 
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)
-        return self.get_db_prep_value(value)
-
+        return self._get_json_value(value)
 
 try:
     from south.modelsinspector import add_introspection_rules
