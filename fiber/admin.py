@@ -16,6 +16,18 @@ class FiberAdminSite(admin.AdminSite):
 fiber_admin_site = FiberAdminSite(name='fiber_admin')
 
 
+class FileAdmin(admin.ModelAdmin):
+    list_display = ('title', '__unicode__')
+    date_hierarchy = 'updated'
+    search_fields = ('title', )
+
+
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('title', '__unicode__')
+    date_hierarchy = 'updated'
+    search_fields = ('title', )
+
+
 class ContentItemAdmin(admin.ModelAdmin):
     list_display = ('__unicode__',)
     form = forms.ContentItemAdminForm
@@ -23,6 +35,8 @@ class ContentItemAdmin(admin.ModelAdmin):
         (None, {'fields': ('name', get_editor_field_name('content_html'),)}),
         (_('Advanced options'), {'classes': ('collapse',), 'fields': ('template_name', 'protected', 'metadata',)}),
     )
+    date_hierarchy = 'updated'
+    search_fields = ('name', get_editor_field_name('content_html'))
 
 
 class PageContentItemInline(admin.TabularInline):
@@ -119,8 +133,8 @@ class FiberAdminPageAdmin(MPTTModelAdmin):
 
 
 admin.site.register(ContentItem, ContentItemAdmin)
-admin.site.register(Image)
-admin.site.register(File)
+admin.site.register(Image, ImageAdmin)
+admin.site.register(File, FileAdmin)
 admin.site.register(Page, PageAdmin)
 
 fiber_admin_site.register(ContentItem, FiberAdminContentItemAdmin)
