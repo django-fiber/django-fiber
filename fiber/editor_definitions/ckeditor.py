@@ -1,3 +1,3 @@
 EDITOR = {
-    'template_js': 'fiber/ckeditor_js.html'
+    'template_js': 'fiber/ckeditor_js.html',
 }
