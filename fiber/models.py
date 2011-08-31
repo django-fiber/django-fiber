@@ -143,6 +143,28 @@ class Page(MPTTModel):
             return True
         return self.parent and (self.rght + 1 == self.parent.rght)
 
+    def get_ancestors_include_self(self):
+        """
+        This method is currently used because there is no include_self
+        parameter in MPTTModel's get_ancestors() method. This will probably
+        land in django-mptt 0.5
+        """
+        if self.is_root_node():
+            return self._tree_manager.filter(pk=self.pk)
+
+        opts = self._mptt_meta
+
+        left = getattr(self, opts.left_attr)
+        right = getattr(self, opts.right_attr)
+
+        qs = self._tree_manager._mptt_filter(
+            left__lte=left,
+            right__gte=right,
+            tree_id=self._mpttfield('tree_id'),
+        )
+
+        return qs.order_by(opts.left_attr)
+
     def move_page(self, parent_id, left_id=0):
         """
         Moves the page.

@@ -18,7 +18,7 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
         raise Page.DoesNotExist("Menu does not exist.\nNo top-level page found with the title '%s'." % menu_name)
 
     current_page = None
-    if 'fiber_page' in context and expand != 'all':
+    if 'fiber_page' in context:
         current_page = context['fiber_page']
 
     if current_page and current_page.get_root() == root_page:
@@ -27,21 +27,23 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
         plus the pages one level below the current page,
         but stay inside min_level and max_level
         """
-        for page in current_page.get_ancestors():
+        for page in current_page.get_ancestors_include_self():
             if min_level <= page.level:
                 if page.level <= max_level:
-                    menu_pages.extend(page.get_siblings(True))
+                    menu_pages.extend(page.get_siblings(include_self=True))
                 else:
                     break
-
-        if min_level <= current_page.level <= max_level:
-            menu_pages.extend(current_page.get_siblings(True))
+            elif min_level == page.level + 1:
+                if expand == 'all':
+                    print page
+                    menu_pages.extend(page.get_descendants().filter(level__range=(min_level, max_level)))
+                    break
 
         if min_level <= (current_page.level + 1) <= max_level:
             if not expand:
                 menu_pages.extend(current_page.get_children())
             elif expand == 'all_descendants':
-                menu_pages.extend(current_page.get_descendants())
+                menu_pages.extend(current_page.get_descendants().filter(level__range=(min_level, max_level)))
 
     else:
         """
