@@ -35,7 +35,6 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
                     break
             elif min_level == page.level + 1:
                 if expand == 'all':
-                    print page
                     menu_pages.extend(page.get_descendants().filter(level__range=(min_level, max_level)))
                     break
 
