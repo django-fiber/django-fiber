@@ -356,7 +356,8 @@ var ChangeFormDialog = AdminFormDialog.extend({
 			cache: false,
 			context: this,
 			success: function(responseText, statusText, xhr, $form) {
-				var response_change_form = new ChangeForm();
+				var url = this.admin_form.options.url,
+					response_change_form = new ChangeForm();
 
 				response_change_form.get_form_from_HTML(responseText);
 
@@ -364,10 +365,11 @@ var ChangeFormDialog = AdminFormDialog.extend({
 					this.admin_form.destroy();
 					this.admin_form = response_change_form;
 
-					this.admin_form.set_form_action();
+					this.admin_form.set_form_action(url);
 					this.admin_form.set_styling();
 					this.append_form();
 					this.admin_form.set_interaction();
+					busyIndicator.hide();
 				} else {
 					this.after_action_success(responseText, statusText, xhr, $form);
 				}
