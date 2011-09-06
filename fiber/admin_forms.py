@@ -5,7 +5,7 @@ from mptt.forms import TreeNodeChoiceField
 
 from app_settings import TEMPLATE_CHOICES
 from models import Page, ContentItem
-from utils.urls import get_named_url_from_quoted_url, is_quoted_url
+from utils.urls import is_quoted_url
 
 
 class ContentItemAdminForm(forms.ModelForm):
@@ -17,9 +17,6 @@ class ContentItemAdminForm(forms.ModelForm):
 class PageForm(forms.ModelForm):
 
     parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3*unichr(160), empty_label='---------', required=False)
-    url = forms.RegexField(label=_('URL'), required=False, max_length=100, regex=r'^[-\w/\.\:"]+$',
-        help_text = _("""Example: '/section-1/products' or 'products' or '"some_named_url"'"""),
-        error_message = _('This value must contain only letters, numbers, underscores, dashes or slashes.'))
     redirect_page = TreeNodeChoiceField(label=_('Redirect page'), queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160), empty_label='---------', required=False)
 
     class Meta:
@@ -39,11 +36,6 @@ class PageForm(forms.ModelForm):
             except KeyError:
                 pass
         return self.cleaned_data['redirect_page']
-
-    def clean_url(self):
-        if is_quoted_url(self.cleaned_data['url']) and not get_named_url_from_quoted_url(self.cleaned_data['url']):
-            raise forms.ValidationError(_('No reverse match found for the named url'))
-        return self.cleaned_data['url']
 
 
 class FiberAdminPageForm(PageForm):

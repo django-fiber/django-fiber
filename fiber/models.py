@@ -11,7 +11,7 @@ from mptt.models import MPTTModel
 
 from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA
 import managers
-from utils.fields import FiberMarkupField, FiberHTMLField
+from utils.fields import FiberURLField, FiberMarkupField, FiberHTMLField
 from utils.json import JSONField
 from utils.urls import get_named_url_from_quoted_url, is_quoted_url
 
@@ -67,7 +67,7 @@ class Page(MPTTModel):
     parent = models.ForeignKey('self', null=True, blank=True, related_name='subpages', verbose_name=_('parent'))
     # TODO: add keywords, description (as meta?)
     title = models.CharField(_('title'), blank=True, max_length=255)
-    url = models.CharField(_('URL'), blank=True, max_length=255)
+    url = FiberURLField(blank=True)
     redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'))
     mark_current_regexes = models.TextField(_('mark current regexes'), blank=True)
     # TODO: add `alias_page` field

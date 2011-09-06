@@ -1,9 +1,28 @@
 from django.db import models
 from django.contrib.admin.options import FORMFIELD_FOR_DBFIELD_DEFAULTS
+from django.utils.translation import ugettext_lazy as _
 
 from fiber import editor
 
 from widgets import FiberTextarea
+import form_fields
+import validators
+
+
+class FiberURLField(models.CharField):
+    description = _('URL')
+
+    def __init__(self, verbose_name=None, name=None, **kwargs):
+        kwargs['max_length'] = kwargs.get('max_length', 255)
+        super(FiberURLField, self).__init__(verbose_name, name, **kwargs)
+        self.validators.append(validators.FiberURLValidator())
+
+    def formfield(self, **kwargs):
+        defaults = {
+            'form_class': form_fields.FiberURLField,
+        }
+        defaults.update(kwargs)
+        return super(FiberURLField, self).formfield(**defaults)
 
 
 class FiberTextField(models.TextField):
