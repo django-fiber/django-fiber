@@ -9,12 +9,13 @@
  */
 
 // JSLint defined globals
-/*global plupload:false, File:false, window:false, atob:false, FormData:false, FileReader:false */
+/*global plupload:false, File:false, window:false, atob:false, FormData:false, FileReader:false, ArrayBuffer:false, Uint8Array:false, BlobBuilder:false, unescape:false */
 
-(function(plupload) {
-	var fakeSafariDragDrop, ExifParser;
+(function(window, document, plupload, undef) {
+	var html5files = {}, // queue of original File objects
+		fakeSafariDragDrop;
 
-	function readFile(file, callback) {
+	function readFileAsDataURL(file, callback) {
 		var reader;
 
 		// Use FileReader if it's available
@@ -29,10 +30,26 @@
 		}
 	}
 
-	function scaleImage(image_file, max_width, max_height, mime, callback) {
-		var canvas, context, img, scale;
+	function readFileAsBinary(file, callback) {
+		var reader;
 
-		readFile(image_file, function(data) {
+		// Use FileReader if it's available
+		if ("FileReader" in window) {
+			reader = new FileReader();
+			reader.readAsBinaryString(file);
+			reader.onload = function() {
+				callback(reader.result);
+			};
+		} else {
+			return callback(file.getAsBinary());
+		}
+	}
+
+	function scaleImage(file, resize, mime, callback) {
+		var canvas, context, img, scale,
+			up = this;
+			
+		readFileAsDataURL(html5files[file.id], function(data) {
 			// Setup canvas and context
 			canvas = document.createElement("canvas");
 			canvas.style.display = 'none';
@@ -41,12 +58,24 @@
 
 			// Load image
 			img = new Image();
+			img.onerror = img.onabort = function() {
+				// Failed to load, the image may be invalid
+				callback({success : false});
+			};
 			img.onload = function() {
-				var width, height, percentage, APP1, parser;
+				var width, height, percentage, jpegHeaders, exifParser;
+				
+				if (!resize['width']) {
+					resize['width'] = img.width;
+				}
+				
+				if (!resize['height']) {
+					resize['height'] = img.height;	
+				}
+				
+				scale = Math.min(resize.width / img.width, resize.height / img.height);
 
-				scale = Math.min(max_width / img.width, max_height / img.height);
-
-				if (scale < 1) {
+				if (scale < 1 || (scale === 1 && mime === 'image/jpeg')) {
 					width = Math.round(img.width * scale);
 					height = Math.round(img.height * scale);
 
@@ -54,22 +83,52 @@
 					canvas.width = width;
 					canvas.height = height;
 					context.drawImage(img, 0, 0, width, height);
-
-					// Get original EXIF info
-					parser = new ExifParser();
-					parser.init(atob(data.substring(data.indexOf('base64,') + 7)));
-					APP1 = parser.APP1({width: width, height: height});
+					
+					// Preserve JPEG headers
+					if (mime === 'image/jpeg') {
+						jpegHeaders = new JPEG_Headers(atob(data.substring(data.indexOf('base64,') + 7)));
+						if (jpegHeaders['headers'] && jpegHeaders['headers'].length) {
+							exifParser = new ExifParser();			
+											
+							if (exifParser.init(jpegHeaders.get('exif')[0])) {
+								// Set new width and height
+								exifParser.setExif('PixelXDimension', width);
+								exifParser.setExif('PixelYDimension', height);
+																							
+								// Update EXIF header
+								jpegHeaders.set('exif', exifParser.getBinary());
+								
+								// trigger Exif events only if someone listens to them
+								if (up.hasEventListener('ExifData')) {
+									up.trigger('ExifData', file, exifParser.EXIF());
+								}
+								
+								if (up.hasEventListener('GpsData')) {
+									up.trigger('GpsData', file, exifParser.GPS());
+								}
+							}
+						}
+						
+						if (resize['quality']) {							
+							// Try quality property first
+							try {
+								data = canvas.toDataURL(mime, resize['quality'] / 100);	
+							} catch (e) {
+								data = canvas.toDataURL(mime);	
+							}
+						}
+					} else {
+						data = canvas.toDataURL(mime);
+					}
 
 					// Remove data prefix information and grab the base64 encoded data and decode it
-					data = canvas.toDataURL(mime);
 					data = data.substring(data.indexOf('base64,') + 7);
 					data = atob(data);
 
-					// Restore EXIF info to scaled image
-					if (APP1) {
-						parser.init(data);
-						parser.setAPP1(APP1);
-						data = parser.getBinary();
+					// Restore JPEG headers if applicable
+					if (jpegHeaders && jpegHeaders['headers'] && jpegHeaders['headers'].length) {
+						data = jpegHeaders.restore(data);
+						jpegHeaders.purge(); // free memory
 					}
 
 					// Remove canvas and execute callback with decoded image data
@@ -99,11 +158,11 @@
 		 * @return {Object} Name/value object with supported features.
 		 */
 		getFeatures : function() {
-			var xhr, hasXhrSupport, hasProgress, dataAccessSupport, sliceSupport, win = window;
+			var xhr, hasXhrSupport, hasProgress, canSendBinary, dataAccessSupport, sliceSupport;
 
 			hasXhrSupport = hasProgress = dataAccessSupport = sliceSupport = false;
-
-			if (win.XMLHttpRequest) {
+			
+			if (window.XMLHttpRequest) {
 				xhr = new XMLHttpRequest();
 				hasProgress = !!xhr.upload;
 				hasXhrSupport = !!(xhr.sendAsBinary || xhr.upload);
@@ -111,23 +170,35 @@
 
 			// Check for support for various features
 			if (hasXhrSupport) {
-				// Set dataAccessSupport only for Gecko since BlobBuilder and XHR doesn't handle binary data correctly
-				dataAccessSupport = !!(File && (File.prototype.getAsDataURL || win.FileReader) && xhr.sendAsBinary);
-				sliceSupport = !!(File && File.prototype.slice);
+				canSendBinary = !!(xhr.sendAsBinary || (window.Uint8Array && window.ArrayBuffer));
+				
+				// Set dataAccessSupport only for Gecko since BlobBuilder and XHR doesn't handle binary data correctly				
+				dataAccessSupport = !!(File && (File.prototype.getAsDataURL || window.FileReader) && canSendBinary);
+				sliceSupport = !!(File && (File.prototype.mozSlice || File.prototype.webkitSlice || File.prototype.slice)); 
 			}
 
-			// Sniff for Safari and fake drag/drop
-			fakeSafariDragDrop = navigator.userAgent.indexOf('Safari') > 0;
+			// sniff out Safari for Windows and fake drag/drop
+			fakeSafariDragDrop = plupload.ua.safari && plupload.ua.windows;
 
 			return {
-				// Detect drag/drop file support by sniffing, will try to find a better way
 				html5: hasXhrSupport, // This is a special one that we check inside the init call
-				dragdrop: win.mozInnerScreenX !== undefined || sliceSupport || fakeSafariDragDrop,
+				dragdrop: (function() {
+					// this comes directly from Modernizr: http://www.modernizr.com/
+					var div = document.createElement('div');
+					return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
+				}()),
 				jpgresize: dataAccessSupport,
 				pngresize: dataAccessSupport,
-				multipart: dataAccessSupport || !!win.FileReader || !!win.FormData,
+				multipart: dataAccessSupport || !!window.FileReader || !!window.FormData,
+				canSendBinary: canSendBinary,
+				// gecko 2/5/6 can't send blob with FormData: https://bugzilla.mozilla.org/show_bug.cgi?id=649150 
+				cantSendBlobInFormData: !!(plupload.ua.gecko && window.FormData && window.FileReader && !FileReader.prototype.readAsArrayBuffer),
 				progress: hasProgress,
-				chunking: sliceSupport || dataAccessSupport
+				chunks: sliceSupport,
+				// Safari on Windows has problems when selecting multiple files
+				multi_selection: !(plupload.ua.safari && plupload.ua.windows),
+				// WebKit and Gecko 2+ can trigger file dialog progrmmatically
+				triggerDialog: (plupload.ua.gecko && window.FormData || plupload.ua.webkit) 
 			};
 		},
 
@@ -139,21 +210,28 @@
 		 * @param {function} callback Callback to execute when the runtime initializes or fails to initialize. If it succeeds an object with a parameter name success will be set to true.
 		 */
 		init : function(uploader, callback) {
-			var html5files = {}, features;
+			var features;
 
 			function addSelectedFiles(native_files) {
-				var file, i, files = [], id;
+				var file, i, files = [], id, fileNames = {};
 
 				// Add the selected files to the file queue
 				for (i = 0; i < native_files.length; i++) {
 					file = native_files[i];
+										
+					// Safari on Windows will add first file from dragged set multiple times
+					// @see: https://bugs.webkit.org/show_bug.cgi?id=37957
+					if (fileNames[file.name]) {
+						continue;
+					}
+					fileNames[file.name] = true;
 
 					// Store away gears blob internally
 					id = plupload.guid();
 					html5files[id] = file;
 
 					// Expose id, name and size
-					files.push(new plupload.File(id, file.fileName, file.fileSize));
+					files.push(new plupload.File(id, file.fileName || file.name, file.fileSize || file.size)); // fileName / fileSize depricated
 				}
 
 				// Trigger FilesAdded event if we added any
@@ -170,24 +248,11 @@
 			}
 
 			uploader.bind("Init", function(up) {
-				var inputContainer, mimes = [], i, y, filters = up.settings.filters, ext, type, container = document.body;
+				var inputContainer, browseButton, mimes = [], i, y, filters = up.settings.filters, ext, type, container = document.body, inputFile;
 
 				// Create input container and insert it at an absolute position within the browse button
 				inputContainer = document.createElement('div');
 				inputContainer.id = up.id + '_html5_container';
-
-				// Convert extensions to mime types list
-				for (i = 0; i < filters.length; i++) {
-					ext = filters[i].extensions.split(/,/);
-
-					for (y = 0; y < ext.length; y++) {
-						type = plupload.mimeTypes[ext[y]];
-
-						if (type) {
-							mimes.push(type);
-						}
-					}
-				}
 
 				plupload.extend(inputContainer.style, {
 					position : 'absolute',
@@ -198,28 +263,105 @@
 					zIndex : 99999,
 					opacity : uploader.settings.shim_bgcolor ? '' : 0 // Force transparent if bgcolor is undefined
 				});
-
 				inputContainer.className = 'plupload html5';
 
 				if (uploader.settings.container) {
 					container = document.getElementById(uploader.settings.container);
-					container.style.position = 'relative';
+					if (plupload.getStyle(container, 'position') === 'static') {
+						container.style.position = 'relative';
+					}
 				}
 
 				container.appendChild(inputContainer);
+				
+				// Convert extensions to mime types list
+				no_type_restriction:
+				for (i = 0; i < filters.length; i++) {
+					ext = filters[i].extensions.split(/,/);
 
-				// Insert the input inide the input container
-				inputContainer.innerHTML = '<input id="' + uploader.id + '_html5" ' +
-											'style="width:100%;" type="file" accept="' + mimes.join(',') + '" ' +
-											(uploader.settings.multi_selection ? 'multiple="multiple"' : '') + ' />';
+					for (y = 0; y < ext.length; y++) {
+						
+						// If there's an asterisk in the list, then accept attribute is not required
+						if (ext[y] === '*') {
+							mimes = [];
+							break no_type_restriction;
+						}
+						
+						type = plupload.mimeTypes[ext[y]];
 
-				document.getElementById(uploader.id + '_html5').onchange = function() {
+						if (type) {
+							mimes.push(type);
+						}
+					}
+				}
+
+
+				// Insert the input inside the input container
+				inputContainer.innerHTML = '<input id="' + uploader.id + '_html5" ' + ' style="font-size:999px"' +
+											' type="file" accept="' + mimes.join(',') + '" ' +
+											(uploader.settings.multi_selection && uploader.features.multi_selection ? 'multiple="multiple"' : '') + ' />';
+
+				inputContainer.scrollTop = 100;
+				inputFile = document.getElementById(uploader.id + '_html5');
+				
+				if (up.features.triggerDialog) {
+					plupload.extend(inputFile.style, {
+						position: 'absolute',
+						width: '100%',
+						height: '100%'
+					});
+				} else {
+					// shows arrow cursor instead of the text one, bit more logical
+					plupload.extend(inputFile.style, {
+						cssFloat: 'right', 
+						styleFloat: 'right'
+					});
+				}
+				
+				inputFile.onchange = function() {
 					// Add the selected files from file input
 					addSelectedFiles(this.files);
-
+					
 					// Clearing the value enables the user to select the same file again if they want to
 					this.value = '';
 				};
+				
+				/* Since we have to place input[type=file] on top of the browse_button for some browsers (FF, Opera),
+				browse_button loses interactivity, here we try to neutralize this issue highlighting browse_button
+				with a special classes
+				TODO: needs to be revised as things will change */
+				browseButton = document.getElementById(up.settings.browse_button);
+				if (browseButton) {				
+					var hoverClass = up.settings.browse_button_hover,
+						activeClass = up.settings.browse_button_active,
+						topElement = up.features.triggerDialog ? browseButton : inputContainer;
+					
+					if (hoverClass) {
+						plupload.addEvent(topElement, 'mouseover', function() {
+							plupload.addClass(browseButton, hoverClass);	
+						}, up.id);
+						plupload.addEvent(topElement, 'mouseout', function() {
+							plupload.removeClass(browseButton, hoverClass);	
+						}, up.id);
+					}
+					
+					if (activeClass) {
+						plupload.addEvent(topElement, 'mousedown', function() {
+							plupload.addClass(browseButton, activeClass);	
+						}, up.id);
+						plupload.addEvent(document.body, 'mouseup', function() {
+							plupload.removeClass(browseButton, activeClass);	
+						}, up.id);
+					}
+
+					// Route click event to the input[type=file] element for supporting browsers
+					if (up.features.triggerDialog) {
+						plupload.addEvent(browseButton, 'click', function(e) {
+							document.getElementById(up.id + '_html5').click();
+							e.preventDefault();
+						}, up.id); 
+					}
+				}
 			});
 
 			// Add drop handler
@@ -227,7 +369,7 @@
 				var dropElm = document.getElementById(uploader.settings.drop_element);
 
 				if (dropElm) {
-					// Lets fake drag/drop on Safari by moving a inpit type file in front of the mouse pointer when we drag into the drop zone
+					// Lets fake drag/drop on Safari by moving a input type file in front of the mouse pointer when we drag into the drop zone
 					// TODO: Remove this logic once Safari has official drag/drop support
 					if (fakeSafariDragDrop) {
 						plupload.addEvent(dropElm, 'dragenter', function(e) {
@@ -241,30 +383,37 @@
 								dropInputElm.setAttribute('id', uploader.id + "_drop");
 								dropInputElm.setAttribute('multiple', 'multiple');
 
-								dropInputElm.onchange = function() {
+								plupload.addEvent(dropInputElm, 'change', function() {
 									// Add the selected files from file input
 									addSelectedFiles(this.files);
-
-									// Clearing the value enables the user to select the same file again if they want to
-									this.value = '';
-								};
+																		
+									// Remove input element
+									plupload.removeEvent(dropInputElm, 'change', uploader.id);
+									dropInputElm.parentNode.removeChild(dropInputElm);									
+								}, uploader.id);
+								
+								dropElm.appendChild(dropInputElm);
 							}
 
 							dropPos = plupload.getPos(dropElm, document.getElementById(uploader.settings.container));
 							dropSize = plupload.getSize(dropElm);
-
+							
+							if (plupload.getStyle(dropElm, 'position') === 'static') {
+								plupload.extend(dropElm.style, {
+									position : 'relative'
+								});
+							}
+              
 							plupload.extend(dropInputElm.style, {
 								position : 'absolute',
 								display : 'block',
-								top : dropPos.y + 'px',
-								left : dropPos.x + 'px',
+								top : 0,
+								left : 0,
 								width : dropSize.w + 'px',
 								height : dropSize.h + 'px',
 								opacity : 0
-							});
-
-							dropElm.appendChild(dropInputElm);
-						});
+							});							
+						}, uploader.id);
 
 						return;
 					}
@@ -272,7 +421,7 @@
 					// Block browser default drag over
 					plupload.addEvent(dropElm, 'dragover', function(e) {
 						e.preventDefault();
-					});
+					}, uploader.id);
 
 					// Attach drop handler and grab files
 					plupload.addEvent(dropElm, 'drop', function(e) {
@@ -284,35 +433,248 @@
 						}
 
 						e.preventDefault();
-					});
+					}, uploader.id);
 				}
 			});
 
 			uploader.bind("Refresh", function(up) {
-				var browseButton, browsePos, browseSize;
-
+				var browseButton, browsePos, browseSize, inputContainer, zIndex;
+					
 				browseButton = document.getElementById(uploader.settings.browse_button);
-				browsePos = plupload.getPos(browseButton, document.getElementById(up.settings.container));
-				browseSize = plupload.getSize(browseButton);
-
-				plupload.extend(document.getElementById(uploader.id + '_html5_container').style, {
-					top : browsePos.y + 'px',
-					left : browsePos.x + 'px',
-					width : browseSize.w + 'px',
-					height : browseSize.h + 'px'
-				});
+				if (browseButton) {
+					browsePos = plupload.getPos(browseButton, document.getElementById(up.settings.container));
+					browseSize = plupload.getSize(browseButton);
+					inputContainer = document.getElementById(uploader.id + '_html5_container');
+	
+					plupload.extend(inputContainer.style, {
+						top : browsePos.y + 'px',
+						left : browsePos.x + 'px',
+						width : browseSize.w + 'px',
+						height : browseSize.h + 'px'
+					});
+					
+					// for WebKit place input element underneath the browse button and route onclick event 
+					// TODO: revise when browser support for this feature will change
+					if (uploader.features.triggerDialog) {
+						if (plupload.getStyle(browseButton, 'position') === 'static') {
+							plupload.extend(browseButton.style, {
+								position : 'relative'
+							});
+						}
+						
+						zIndex = parseInt(plupload.getStyle(browseButton, 'z-index'), 10);
+						if (isNaN(zIndex)) {
+							zIndex = 0;
+						}						
+							
+						plupload.extend(browseButton.style, {
+							zIndex : zIndex
+						});						
+											
+						plupload.extend(inputContainer.style, {
+							zIndex : zIndex - 1
+						});
+					}
+				}
 			});
 
 			uploader.bind("UploadFile", function(up, file) {
 				var settings = up.settings, nativeFile, resize;
+					
+				function w3cBlobSlice(blob, start, end) {
+					var blobSlice;
+					
+					if (File.prototype.slice) {
+						try {
+							blob.slice();	// depricated version will throw WRONG_ARGUMENTS_ERR exception
+							return blob.slice(start, end);
+						} catch (e) {
+							// depricated slice method
+							return blob.slice(start, end - start); 
+						}
+					// slice method got prefixed: https://bugzilla.mozilla.org/show_bug.cgi?id=649672	
+					} else if (blobSlice = File.prototype.webkitSlice || File.prototype.mozSlice) {
+						return blobSlice.call(blob, start, end);	
+					} else {
+						return null; // or throw some exception	
+					}
+				}	
 
 				function sendBinaryBlob(blob) {
-					var chunk = 0, loaded = 0;
+					var chunk = 0, loaded = 0,
+						fr = ("FileReader" in window) ? new FileReader : null;
+						
 
 					function uploadNextChunk() {
-						var chunkBlob = blob, xhr, upload, chunks, args, multipartDeltaSize = 0,
-							boundary = '----pluploadboundary' + plupload.guid(), chunkSize, curChunkSize, formData,
-							dashdash = '--', crlf = '\r\n', multipartBlob = '', mimeType, url = up.settings.url;
+						var chunkBlob, br, chunks, args, chunkSize, curChunkSize, mimeType, url = up.settings.url;													
+
+						
+						function prepareAndSend(bin) {
+							var multipartDeltaSize = 0,
+								xhr = new XMLHttpRequest,
+								upload = xhr.upload,	
+								boundary = '----pluploadboundary' + plupload.guid(), formData, dashdash = '--', crlf = '\r\n', multipartBlob = ''
+								
+							// Do we have upload progress support
+							if (upload) {
+								upload.onprogress = function(e) {
+									file.loaded = Math.min(file.size, loaded + e.loaded - multipartDeltaSize); // Loaded can be larger than file size due to multipart encoding
+									up.trigger('UploadProgress', file);
+								};
+							}
+	
+							xhr.onreadystatechange = function() {
+								var httpStatus, chunkArgs;
+	
+								if (xhr.readyState == 4) {
+									// Getting the HTTP status might fail on some Gecko versions
+									try {
+										httpStatus = xhr.status;
+									} catch (ex) {
+										httpStatus = 0;
+									}
+	
+									// Is error status
+									if (httpStatus >= 400) {
+										up.trigger('Error', {
+											code : plupload.HTTP_ERROR,
+											message : plupload.translate('HTTP Error.'),
+											file : file,
+											status : httpStatus
+										});
+									} else {
+										// Handle chunk response
+										if (chunks) {
+											chunkArgs = {
+												chunk : chunk,
+												chunks : chunks,
+												response : xhr.responseText,
+												status : httpStatus
+											};
+	
+											up.trigger('ChunkUploaded', file, chunkArgs);
+											loaded += curChunkSize;
+	
+											// Stop upload
+											if (chunkArgs.cancelled) {
+												file.status = plupload.FAILED;
+												return;
+											}
+	
+											file.loaded = Math.min(file.size, (chunk + 1) * chunkSize);
+										} else {
+											file.loaded = file.size;
+										}
+	
+										up.trigger('UploadProgress', file);
+										
+										bin = chunkBlob = formData = multipartBlob = null; // Free memory
+										
+										// Check if file is uploaded
+										if (!chunks || ++chunk >= chunks) {
+											file.status = plupload.DONE;
+																						
+											up.trigger('FileUploaded', file, {
+												response : xhr.responseText,
+												status : httpStatus
+											});										
+										} else {										
+											// Still chunks left
+											uploadNextChunk();
+										}
+									}	
+									
+									xhr = null;
+																
+								}
+							};
+							
+	
+							// Build multipart request
+							if (up.settings.multipart && features.multipart) {
+								
+								args.name = file.target_name || file.name;
+								
+								xhr.open("post", url, true);
+								
+								// Set custom headers
+								plupload.each(up.settings.headers, function(value, name) {
+									xhr.setRequestHeader(name, value);
+								});
+								
+								
+								// if has FormData support like Chrome 6+, Safari 5+, Firefox 4, use it
+								if (typeof(bin) !== 'string' && !!window.FormData) {
+									formData = new FormData();
+	
+									// Add multipart params
+									plupload.each(plupload.extend(args, up.settings.multipart_params), function(value, name) {
+										formData.append(name, value);
+									});
+	
+									// Add file and send it
+									formData.append(up.settings.file_data_name, bin);								
+									xhr.send(formData);
+	
+									return;
+								}  // if no FormData we can still try to send it directly as last resort (see below)
+								
+								
+								if (typeof(bin) === 'string') {
+									// Trying to send the whole thing as binary...
+		
+									// multipart request
+									xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
+		
+									// append multipart parameters
+									plupload.each(plupload.extend(args, up.settings.multipart_params), function(value, name) {
+										multipartBlob += dashdash + boundary + crlf +
+											'Content-Disposition: form-data; name="' + name + '"' + crlf + crlf;
+		
+										multipartBlob += unescape(encodeURIComponent(value)) + crlf;
+									});
+		
+									mimeType = plupload.mimeTypes[file.name.replace(/^.+\.([^.]+)/, '$1').toLowerCase()] || 'application/octet-stream';
+		
+									// Build RFC2388 blob
+									multipartBlob += dashdash + boundary + crlf +
+										'Content-Disposition: form-data; name="' + up.settings.file_data_name + '"; filename="' + unescape(encodeURIComponent(file.name)) + '"' + crlf +
+										'Content-Type: ' + mimeType + crlf + crlf +
+										bin + crlf +
+										dashdash + boundary + dashdash + crlf;
+		
+									multipartDeltaSize = multipartBlob.length - bin.length;
+									bin = multipartBlob;
+								
+							
+									if (xhr.sendAsBinary) { // Gecko
+										xhr.sendAsBinary(bin);
+									} else if (features.canSendBinary) { // WebKit with typed arrays support
+										var ui8a = new Uint8Array(bin.length);
+										for (var i = 0; i < bin.length; i++) {
+											ui8a[i] = (bin.charCodeAt(i) & 0xff);
+										}
+										xhr.send(ui8a.buffer);
+									}
+									return; // will return from here only if shouldn't send binary
+								} 							
+							}
+							
+							// if no multipart, or last resort, send as binary stream
+							url = plupload.buildUrl(up.settings.url, plupload.extend(args, up.settings.multipart_params));
+							
+							xhr.open("post", url, true);
+							
+							xhr.setRequestHeader('Content-Type', 'application/octet-stream'); // Binary stream header
+								
+							// Set custom headers
+							plupload.each(up.settings.headers, function(value, name) {
+								xhr.setRequestHeader(name, value);
+							});
+												
+							xhr.send(bin); 
+						} // prepareAndSend
+
 
 						// File upload finished
 						if (file.status == plupload.DONE || file.status == plupload.FAILED || up.state == plupload.STOPPED) {
@@ -323,7 +685,7 @@
 						args = {name : file.target_name || file.name};
 
 						// Only add chunking args if needed
-						if (settings.chunk_size && features.chunking) {
+						if (settings.chunk_size && file.size > settings.chunk_size && (features.chunks || typeof(blob) == 'string')) { // blob will be of type string if it was loaded in memory 
 							chunkSize = settings.chunk_size;
 							chunks = Math.ceil(file.size / chunkSize);
 							curChunkSize = Math.min(chunkSize, file.size - (chunk * chunkSize));
@@ -334,7 +696,7 @@
 								chunkBlob = blob.substring(chunk * chunkSize, chunk * chunkSize + curChunkSize);
 							} else {
 								// Slice the chunk
-								chunkBlob = blob.slice(chunk * chunkSize, curChunkSize);
+								chunkBlob = w3cBlobSlice(blob, chunk * chunkSize, chunk * chunkSize + curChunkSize);
 							}
 
 							// Setup query string arguments
@@ -342,148 +704,19 @@
 							args.chunks = chunks;
 						} else {
 							curChunkSize = file.size;
+							chunkBlob = blob;
 						}
-
-						// Setup XHR object
-						xhr = new XMLHttpRequest();
-						upload = xhr.upload;
-
-						// Do we have upload progress support
-						if (upload) {
-							upload.onprogress = function(e) {
-								file.loaded = Math.min(file.size, loaded + e.loaded - multipartDeltaSize); // Loaded can be larger than file size due to multipart encoding
-								up.trigger('UploadProgress', file);
-							};
-						}
-
-						// Add name, chunk and chunks to query string on direct streaming
-						if (!up.settings.multipart || !features.multipart) {
-							url = plupload.buildUrl(up.settings.url, args);
-						} else {
-							args.name = file.target_name || file.name;
-						}
-
-						xhr.open("post", url, true);
-
-						xhr.onreadystatechange = function() {
-							var httpStatus, chunkArgs;
-
-							if (xhr.readyState == 4) {
-								// Getting the HTTP status might fail on some Gecko versions
-								try {
-									httpStatus = xhr.status;
-								} catch (ex) {
-									httpStatus = 0;
-								}
-
-								// Is error status
-								if (httpStatus >= 400) {
-									up.trigger('Error', {
-										code : plupload.HTTP_ERROR,
-										message : 'HTTP Error.',
-										file : file,
-										status : httpStatus
-									});
-								} else {
-									// Handle chunk response
-									if (chunks) {
-										chunkArgs = {
-											chunk : chunk,
-											chunks : chunks,
-											response : xhr.responseText,
-											status : httpStatus
-										};
-
-										up.trigger('ChunkUploaded', file, chunkArgs);
-										loaded += curChunkSize;
-
-										// Stop upload
-										if (chunkArgs.cancelled) {
-											file.status = plupload.FAILED;
-											return;
-										}
-
-										file.loaded = Math.min(file.size, (chunk + 1) * chunkSize);
-									} else {
-										file.loaded = file.size;
-									}
-
-									up.trigger('UploadProgress', file);
-
-									// Check if file is uploaded
-									if (!chunks || ++chunk >= chunks) {
-										file.status = plupload.DONE;
-										up.trigger('FileUploaded', file, {
-											response : xhr.responseText,
-											status : httpStatus
-										});
-
-										nativeFile = blob = html5files[file.id] = null; // Free memory
-									} else {
-										// Still chunks left
-										uploadNextChunk();
-									}
-								}
-
-								xhr = chunkBlob = formData = multipartBlob = null; // Free memory
+						
+						// workaround Gecko 2,5,6 FormData+Blob bug: https://bugzilla.mozilla.org/show_bug.cgi?id=649150
+						if (typeof(chunkBlob) !== 'string' && fr && features.cantSendBlobInFormData && features.chunks && up.settings.chunk_size) {// Gecko 2,5,6
+							fr.onload = function() {
+								prepareAndSend(fr.result);
 							}
-						};
-
-						// Set custom headers
-						plupload.each(up.settings.headers, function(value, name) {
-							xhr.setRequestHeader(name, value);
-						});
-
-						// Build multipart request
-						if (up.settings.multipart && features.multipart) {
-							// Has FormData support like Chrome 6+, Safari 5+, Firefox 4
-							if (!xhr.sendAsBinary) {
-								formData = new FormData();
-
-								// Add multipart params
-								plupload.each(plupload.extend(args, up.settings.multipart_params), function(value, name) {
-									formData.append(name, value);
-								});
-
-								// Add file and send it
-								formData.append(up.settings.file_data_name, chunkBlob);
-								xhr.send(formData);
-
-								return;
-							}
-
-							// Gecko multipart request
-							xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
-
-							// Append multipart parameters
-							plupload.each(plupload.extend(args, up.settings.multipart_params), function(value, name) {
-								multipartBlob += dashdash + boundary + crlf +
-									'Content-Disposition: form-data; name="' + name + '"' + crlf + crlf;
-
-								multipartBlob += unescape(encodeURIComponent(value)) + crlf;
-							});
-
-							mimeType = plupload.mimeTypes[file.name.replace(/^.+\.([^.]+)/, '$1')] || 'application/octet-stream';
-
-							// Build RFC2388 blob
-							multipartBlob += dashdash + boundary + crlf +
-								'Content-Disposition: form-data; name="' + up.settings.file_data_name + '"; filename="' + unescape(encodeURIComponent(file.name)) + '"' + crlf +
-								'Content-Type: ' + mimeType + crlf + crlf +
-								chunkBlob + crlf +
-								dashdash + boundary + dashdash + crlf;
-
-							multipartDeltaSize = multipartBlob.length - chunkBlob.length;
-							chunkBlob = multipartBlob;
+							fr.readAsBinaryString(chunkBlob);
 						} else {
-							// Binary stream header
-							xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+							prepareAndSend(chunkBlob);
 						}
-
-						if (xhr.sendAsBinary) {
-							xhr.sendAsBinary(chunkBlob); // Gecko
-						} else {
-							xhr.send(chunkBlob); // WebKit
-						}
+							
 					}
 
 					// Start uploading chunks
@@ -491,180 +724,338 @@
 				}
 
 				nativeFile = html5files[file.id];
-				resize = up.settings.resize;
-
-				if (features.jpgresize) {
-					// Resize image if it's a supported format and resize is enabled
-					if (resize && /\.(png|jpg|jpeg)$/i.test(file.name)) {
-						scaleImage(nativeFile, resize.width, resize.height, /\.png$/i.test(file.name) ? 'image/png' : 'image/jpeg', function(res) {
-							// If it was scaled send the scaled image if it failed then
-							// send the raw image and let the server do the scaling
-							if (res.success) {
-								file.size = res.data.length;
-								sendBinaryBlob(res.data);
-							} else {
-								sendBinaryBlob(nativeFile.getAsBinary());
-							}
-						});
-					} else {
-						sendBinaryBlob(nativeFile.getAsBinary());
-					}
+								
+				// Resize image if it's a supported format and resize is enabled
+				if (features.jpgresize && up.settings.resize && /\.(png|jpg|jpeg)$/i.test(file.name)) {
+					scaleImage.call(up, file, up.settings.resize, /\.png$/i.test(file.name) ? 'image/png' : 'image/jpeg', function(res) {
+						// If it was scaled send the scaled image if it failed then
+						// send the raw image and let the server do the scaling
+						if (res.success) {
+							file.size = res.data.length;
+							sendBinaryBlob(res.data);
+						} else {
+							sendBinaryBlob(nativeFile); 
+						}
+					});
+				// if there's no way to slice file without preloading it in memory, preload it
+				} else if (!features.chunks && features.jpgresize) { 
+					readFileAsBinary(nativeFile, sendBinaryBlob); 
 				} else {
-					sendBinaryBlob(nativeFile);
+					sendBinaryBlob(nativeFile); 
 				}
+			});
+			
+			
+			uploader.bind('Destroy', function(up) {
+				var name, element, container = document.body,
+					elements = {
+						inputContainer: up.id + '_html5_container',
+						inputFile: up.id + '_html5',
+						browseButton: up.settings.browse_button,
+						dropElm: up.settings.drop_element
+					};
+
+				// Unbind event handlers
+				for (name in elements) {
+					element = document.getElementById(elements[name]);
+					if (element) {
+						plupload.removeAllEvents(element, up.id);
+					}
+				}
+				plupload.removeAllEvents(document.body, up.id);
+				
+				if (up.settings.container) {
+					container = document.getElementById(up.settings.container);
+				}
+				
+				// Remove mark-up
+				container.removeChild(document.getElementById(elements.inputContainer));
 			});
 
 			callback({success : true});
 		}
 	});
+	
+	function BinaryReader() {
+		var II = false, bin;
 
-	ExifParser = function() {
-		// Private ExifParser fields
-		var Tiff, Exif, GPS, app0, app0_offset, app0_length, app1, app1_offset, data,
-			app1_length, exifIFD_offset, gpsIFD_offset, IFD0_offset, TIFFHeader_offset, undef,
-			tiffTags, exifTags, gpsTags, tagDescs;
+		// Private functions
+		function read(idx, size) {
+			var mv = II ? 0 : -8 * (size - 1), sum = 0, i;
 
-		/**
-		 * @constructor
-		 */
-		function BinaryReader() {
-			var II = false, bin;
-
-			// Private functions
-			function read(idx, size) {
-				var mv = II ? 0 : -8 * (size - 1), sum = 0, i;
-
-				for (i = 0; i < size; i++) {
-					sum |= (bin.charCodeAt(idx + i) << Math.abs(mv + i*8));
-				}
-
-				return sum;
+			for (i = 0; i < size; i++) {
+				sum |= (bin.charCodeAt(idx + i) << Math.abs(mv + i*8));
 			}
 
-			function putstr(idx, segment, replace) {
-				bin = bin.substr(0, idx) + segment + bin.substr((replace === true ? segment.length : 0) + idx);
-			}
-
-			function write(idx, num, size) {
-				var str = '', mv = II ? 0 : -8 * (size - 1), i;
-
-				for (i = 0; i < size; i++) {
-					str += String.fromCharCode((num >> Math.abs(mv + i*8)) & 255);
-				}
-
-				putstr(idx, str, true);
-			}
-
-			// Public functions
-			return {
-				II: function(order) {
-					if (order === undef) {
-						return II;
-					} else {
-						II = order;
-					}
-				},
-
-				init: function(binData) {
-					bin = binData;
-				},
-
-				SEGMENT: function(idx, segment, replace) {
-					if (!arguments.length) {
-						return bin;
-					}
-
-					if (typeof segment == 'number') {
-						return bin.substr(parseInt(idx, 10), segment);
-					}
-
-					putstr(idx, segment, replace);
-				},
-
-				BYTE: function(idx) {
-					return read(idx, 1);
-				},
-
-				SHORT: function(idx) {
-					return read(idx, 2);
-				},
-
-				LONG: function(idx, num) {
-					if (num === undef) {
-						return read(idx, 4);
-					} else {
-						write(idx, num, 4);
-					}
-				},
-
-				SLONG: function(idx) { // 2's complement notation
-					var num = read(idx, 4);
-
-					return (num > 2147483647 ? num - 4294967296 : num);
-				},
-
-				STRING: function(idx, size) {
-					var str = '';
-
-					for (size += idx; idx < size; idx++) {
-						str += String.fromCharCode(read(idx, 1));
-					}
-
-					return str;
-				}
-			};
+			return sum;
 		}
+
+		function putstr(segment, idx, length) {
+			var length = arguments.length === 3 ? length : bin.length - idx - 1;
+			
+			bin = bin.substr(0, idx) + segment + bin.substr(length + idx);
+		}
+
+		function write(idx, num, size) {
+			var str = '', mv = II ? 0 : -8 * (size - 1), i;
+
+			for (i = 0; i < size; i++) {
+				str += String.fromCharCode((num >> Math.abs(mv + i*8)) & 255);
+			}
+
+			putstr(str, idx, size);
+		}
+
+		// Public functions
+		return {
+			II: function(order) {
+				if (order === undef) {
+					return II;
+				} else {
+					II = order;
+				}
+			},
+
+			init: function(binData) {
+				II = false;
+				bin = binData;
+			},
+
+			SEGMENT: function(idx, length, segment) {				
+				switch (arguments.length) {
+					case 1: 
+						return bin.substr(idx, bin.length - idx - 1);
+					case 2: 
+						return bin.substr(idx, length);
+					case 3: 
+						putstr(segment, idx, length);
+						break;
+					default: return bin;	
+				}
+			},
+
+			BYTE: function(idx) {
+				return read(idx, 1);
+			},
+
+			SHORT: function(idx) {
+				return read(idx, 2);
+			},
+
+			LONG: function(idx, num) {
+				if (num === undef) {
+					return read(idx, 4);
+				} else {
+					write(idx, num, 4);
+				}
+			},
+
+			SLONG: function(idx) { // 2's complement notation
+				var num = read(idx, 4);
+
+				return (num > 2147483647 ? num - 4294967296 : num);
+			},
+
+			STRING: function(idx, size) {
+				var str = '';
+
+				for (size += idx; idx < size; idx++) {
+					str += String.fromCharCode(read(idx, 1));
+				}
+
+				return str;
+			}
+		};
+	}
+	
+	function JPEG_Headers(data) {
+		
+		var markers = {
+				0xFFE1: {
+					app: 'EXIF',
+					name: 'APP1',
+					signature: "Exif\0" 
+				},
+				0xFFE2: {
+					app: 'ICC',
+					name: 'APP2',
+					signature: "ICC_PROFILE\0" 
+				},
+				0xFFED: {
+					app: 'IPTC',
+					name: 'APP13',
+					signature: "Photoshop 3.0\0" 
+				}
+			},
+			headers = [], read, idx, marker = undef, length = 0, limit;
+			
+		
+		read = new BinaryReader();
+		read.init(data);
+				
+		// Check if data is jpeg
+		if (read.SHORT(0) !== 0xFFD8) {
+			return;
+		}
+		
+		idx = 2;
+		limit = Math.min(1048576, data.length);	
+			
+		while (idx <= limit) {
+			marker = read.SHORT(idx);
+			
+			// omit RST (restart) markers
+			if (marker >= 0xFFD0 && marker <= 0xFFD7) {
+				idx += 2;
+				continue;
+			}
+			
+			// no headers allowed after SOS marker
+			if (marker === 0xFFDA || marker === 0xFFD9) {
+				break;	
+			}	
+			
+			length = read.SHORT(idx + 2) + 2;	
+			
+			if (markers[marker] && 
+				read.STRING(idx + 4, markers[marker].signature.length) === markers[marker].signature) {
+				headers.push({ 
+					hex: marker,
+					app: markers[marker].app.toUpperCase(),
+					name: markers[marker].name.toUpperCase(),
+					start: idx,
+					length: length,
+					segment: read.SEGMENT(idx, length)
+				});
+			}
+			idx += length;			
+		}
+					
+		read.init(null); // free memory
+						
+		return {
+			
+			headers: headers,
+			
+			restore: function(data) {
+				read.init(data);
+				
+				// Check if data is jpeg
+				var jpegHeaders = new JPEG_Headers(data);
+				
+				if (!jpegHeaders['headers']) {
+					return false;
+				}	
+				
+				// Delete any existing headers that need to be replaced
+				for (var i = jpegHeaders['headers'].length; i > 0; i--) {
+					var hdr = jpegHeaders['headers'][i - 1];
+					read.SEGMENT(hdr.start, hdr.length, '')
+				}
+				jpegHeaders.purge();
+				
+				idx = read.SHORT(2) == 0xFFE0 ? 4 + read.SHORT(4) : 2;
+								
+				for (var i = 0, max = headers.length; i < max; i++) {
+					read.SEGMENT(idx, 0, headers[i].segment);						
+					idx += headers[i].length;
+				}
+				
+				return read.SEGMENT();
+			},
+			
+			get: function(app) {
+				var array = [];
+								
+				for (var i = 0, max = headers.length; i < max; i++) {
+					if (headers[i].app === app.toUpperCase()) {
+						array.push(headers[i].segment);
+					}
+				}
+				return array;
+			},
+			
+			set: function(app, segment) {
+				var array = [];
+				
+				if (typeof(segment) === 'string') {
+					array.push(segment);	
+				} else {
+					array = segment;	
+				}
+				
+				for (var i = ii = 0, max = headers.length; i < max; i++) {
+					if (headers[i].app === app.toUpperCase()) {
+						headers[i].segment = array[ii];
+						headers[i].length = array[ii].length;
+						ii++;
+					}
+					if (ii >= array.length) break;
+				}
+			},
+			
+			purge: function() {
+				headers = [];
+				read.init(null);
+			}
+		};		
+	}
+	
+	
+	function ExifParser() {
+		// Private ExifParser fields
+		var data, tags, offsets = {}, tagDescs;
 
 		data = new BinaryReader();
 
-		tiffTags = {
-			/*
-			The image orientation viewed in terms of rows and columns.
-
-			1 - The 0th row is at the visual top of the image, and the 0th column is the visual left-hand side.
-			2 - The 0th row is at the visual top of the image, and the 0th column is the visual left-hand side.
-			3 - The 0th row is at the visual top of the image, and the 0th column is the visual right-hand side.
-			4 - The 0th row is at the visual bottom of the image, and the 0th column is the visual right-hand side.
-			5 - The 0th row is at the visual bottom of the image, and the 0th column is the visual left-hand side.
-			6 - The 0th row is the visual left-hand side of the image, and the 0th column is the visual top.
-			7 - The 0th row is the visual right-hand side of the image, and the 0th column is the visual top.
-			8 - The 0th row is the visual right-hand side of the image, and the 0th column is the visual bottom.
-			9 - The 0th row is the visual left-hand side of the image, and the 0th column is the visual bottom.
-			*/
-			0x0112: 'Orientation',
-			0x8769: 'ExifIFDPointer',
-			0x8825:	'GPSInfoIFDPointer'
-		};
-
-		exifTags = {
-			0x9000: 'ExifVersion',
-			0xA001: 'ColorSpace',
-			0xA002: 'PixelXDimension',
-			0xA003: 'PixelYDimension',
-			0x9003: 'DateTimeOriginal',
-			0x829A: 'ExposureTime',
-			0x829D: 'FNumber',
-			0x8827: 'ISOSpeedRatings',
-			0x9201: 'ShutterSpeedValue',
-			0x9202: 'ApertureValue'	,
-			0x9207: 'MeteringMode',
-			0x9208: 'LightSource',
-			0x9209: 'Flash',
-			0xA402: 'ExposureMode',
-			0xA403: 'WhiteBalance',
-			0xA406: 'SceneCaptureType',
-			0xA404: 'DigitalZoomRatio',
-			0xA408: 'Contrast',
-			0xA409: 'Saturation',
-			0xA40A: 'Sharpness'
-		};
-
-		gpsTags = {
-			0x0000: 'GPSVersionID',
-			0x0001: 'GPSLatitudeRef',
-			0x0002: 'GPSLatitude',
-			0x0003: 'GPSLongitudeRef',
-			0x0004: 'GPSLongitude'
+		tags = {
+			tiff : {
+				/*
+				The image orientation viewed in terms of rows and columns.
+	
+				1 - The 0th row is at the visual top of the image, and the 0th column is the visual left-hand side.
+				2 - The 0th row is at the visual top of the image, and the 0th column is the visual left-hand side.
+				3 - The 0th row is at the visual top of the image, and the 0th column is the visual right-hand side.
+				4 - The 0th row is at the visual bottom of the image, and the 0th column is the visual right-hand side.
+				5 - The 0th row is at the visual bottom of the image, and the 0th column is the visual left-hand side.
+				6 - The 0th row is the visual left-hand side of the image, and the 0th column is the visual top.
+				7 - The 0th row is the visual right-hand side of the image, and the 0th column is the visual top.
+				8 - The 0th row is the visual right-hand side of the image, and the 0th column is the visual bottom.
+				9 - The 0th row is the visual left-hand side of the image, and the 0th column is the visual bottom.
+				*/
+				0x0112: 'Orientation',
+				0x8769: 'ExifIFDPointer',
+				0x8825:	'GPSInfoIFDPointer'
+			},
+			exif : {
+				0x9000: 'ExifVersion',
+				0xA001: 'ColorSpace',
+				0xA002: 'PixelXDimension',
+				0xA003: 'PixelYDimension',
+				0x9003: 'DateTimeOriginal',
+				0x829A: 'ExposureTime',
+				0x829D: 'FNumber',
+				0x8827: 'ISOSpeedRatings',
+				0x9201: 'ShutterSpeedValue',
+				0x9202: 'ApertureValue'	,
+				0x9207: 'MeteringMode',
+				0x9208: 'LightSource',
+				0x9209: 'Flash',
+				0xA402: 'ExposureMode',
+				0xA403: 'WhiteBalance',
+				0xA406: 'SceneCaptureType',
+				0xA404: 'DigitalZoomRatio',
+				0xA408: 'Contrast',
+				0xA409: 'Saturation',
+				0xA40A: 'Sharpness'
+			},
+			gps : {
+				0x0000: 'GPSVersionID',
+				0x0001: 'GPSLatitudeRef',
+				0x0002: 'GPSLatitude',
+				0x0003: 'GPSLongitudeRef',
+				0x0004: 'GPSLongitude'
+			}
 		};
 
 		tagDescs = {
@@ -782,7 +1173,7 @@
 
 		function extractTags(IFD_offset, tags2extract) {
 			var length = data.SHORT(IFD_offset), i, ii,
-				tag, type, count, tagOffset, offset, value, values = [], tags = {};
+				tag, type, count, tagOffset, offset, value, values = [], hash = {};
 
 			for (i = 0; i < length; i++) {
 				// Set binary reader pointer to beginning of the next tag
@@ -804,7 +1195,7 @@
 					case 1: // BYTE
 					case 7: // UNDEFINED
 						if (count > 4) {
-							offset = data.LONG(offset) + TIFFHeader_offset;
+							offset = data.LONG(offset) + offsets.tiffHeader;
 						}
 
 						for (ii = 0; ii < count; ii++) {
@@ -815,16 +1206,16 @@
 
 					case 2: // STRING
 						if (count > 4) {
-							offset = data.LONG(offset) + TIFFHeader_offset;
+							offset = data.LONG(offset) + offsets.tiffHeader;
 						}
 
-						tags[tag] = data.STRING(offset, count - 1);
+						hash[tag] = data.STRING(offset, count - 1);
 
 						continue;
 
 					case 3: // SHORT
 						if (count > 2) {
-							offset = data.LONG(offset) + TIFFHeader_offset;
+							offset = data.LONG(offset) + offsets.tiffHeader;
 						}
 
 						for (ii = 0; ii < count; ii++) {
@@ -835,7 +1226,7 @@
 
 					case 4: // LONG
 						if (count > 1) {
-							offset = data.LONG(offset) + TIFFHeader_offset;
+							offset = data.LONG(offset) + offsets.tiffHeader;
 						}
 
 						for (ii = 0; ii < count; ii++) {
@@ -845,7 +1236,7 @@
 						break;
 
 					case 5: // RATIONAL
-						offset = data.LONG(offset) + TIFFHeader_offset;
+						offset = data.LONG(offset) + offsets.tiffHeader;
 
 						for (ii = 0; ii < count; ii++) {
 							values[ii] = data.LONG(offset + ii*4) / data.LONG(offset + ii*4 + 4);
@@ -854,7 +1245,7 @@
 						break;
 
 					case 9: // SLONG
-						offset = data.LONG(offset) + TIFFHeader_offset;
+						offset = data.LONG(offset) + offsets.tiffHeader;
 
 						for (ii = 0; ii < count; ii++) {
 							values[ii] = data.SLONG(offset + ii*4);
@@ -863,7 +1254,7 @@
 						break;
 
 					case 10: // SRATIONAL
-						offset = data.LONG(offset) + TIFFHeader_offset;
+						offset = data.LONG(offset) + offsets.tiffHeader;
 
 						for (ii = 0; ii < count; ii++) {
 							values[ii] = data.SLONG(offset + ii*4) / data.SLONG(offset + ii*4 + 4);
@@ -878,172 +1269,133 @@
 				value = (count == 1 ? values[0] : values);
 
 				if (tagDescs.hasOwnProperty(tag) && typeof value != 'object') {
-					tags[tag] = tagDescs[tag][value];
+					hash[tag] = tagDescs[tag][value];
 				} else {
-					tags[tag] = value;
+					hash[tag] = value;
 				}
 			}
 
-			return tags;
+			return hash;
 		}
 
 		function getIFDOffsets() {
-			var idx = app1_offset + 4;
-
-			// Fix TIFF header offset
-			TIFFHeader_offset += app1_offset;
-
-			// Check if that's EXIF we are reading
-			if (data.STRING(idx, 4).toUpperCase() !== 'EXIF' || data.SHORT(idx+=4) !== 0) {
-				return;
-			}
+			var Tiff = undef, idx = offsets.tiffHeader;
 
 			// Set read order of multi-byte data
-			data.II(data.SHORT(idx+=2) == 0x4949);
+			data.II(data.SHORT(idx) == 0x4949);
 
 			// Check if always present bytes are indeed present
 			if (data.SHORT(idx+=2) !== 0x002A) {
-				return;
+				return false;
 			}
+		
+			offsets['IFD0'] = offsets.tiffHeader + data.LONG(idx += 2);
+			Tiff = extractTags(offsets['IFD0'], tags.tiff);
 
-			IFD0_offset = TIFFHeader_offset + data.LONG(idx += 2);
-			Tiff = extractTags(IFD0_offset, tiffTags);
-
-			exifIFD_offset = ('ExifIFDPointer' in Tiff ? TIFFHeader_offset + Tiff.ExifIFDPointer : undef);
-			gpsIFD_offset = ('GPSInfoIFDPointer' in Tiff ? TIFFHeader_offset + Tiff.GPSInfoIFDPointer : undef);
+			offsets['exifIFD'] = ('ExifIFDPointer' in Tiff ? offsets.tiffHeader + Tiff.ExifIFDPointer : undef);
+			offsets['gpsIFD'] = ('GPSInfoIFDPointer' in Tiff ? offsets.tiffHeader + Tiff.GPSInfoIFDPointer : undef);
 
 			return true;
 		}
-
-		function findTagValueOffset(data_app1, tegHex, offset) {
-			var length = data_app1.SHORT(offset), tagOffset, i;
-
+		
+		// At the moment only setting of simple (LONG) values, that do not require offset recalculation, is supported
+		function setTag(ifd, tag, value) {
+			var offset, length, tagOffset, valueOffset = 0;
+			
+			// If tag name passed translate into hex key
+			if (typeof(tag) === 'string') {
+				var tmpTags = tags[ifd.toLowerCase()];
+				for (hex in tmpTags) {
+					if (tmpTags[hex] === tag) {
+						tag = hex;
+						break;	
+					}
+				}
+			}
+			offset = offsets[ifd.toLowerCase() + 'IFD'];
+			length = data.SHORT(offset);
+						
 			for (i = 0; i < length; i++) {
 				tagOffset = offset + 12 * i + 2;
 
-				if (data_app1.SHORT(tagOffset) == tegHex) {
-					return tagOffset + 8;
+				if (data.SHORT(tagOffset) == tag) {
+					valueOffset = tagOffset + 8;
+					break;
 				}
 			}
+			
+			if (!valueOffset) return false;
+
+			
+			data.LONG(valueOffset, value);
+			return true;
 		}
-
-		function setNewWxH(width, height) {
-			var w_offset, h_offset,
-				offset = exifIFD_offset != undef ? exifIFD_offset - app1_offset : undef,
-				data_app1 = new BinaryReader();
-
-			data_app1.init(app1);
-			data_app1.II(data.II());
-
-			if (offset === undef) {
-				return;
-			}
-
-			// Find offset for PixelXDimension tag
-			w_offset = findTagValueOffset(data_app1, 0xA002, offset);
-			if (w_offset !== undef) {
-				data_app1.LONG(w_offset, width);
-			}
-
-			// Find offset for PixelYDimension tag
-			h_offset = findTagValueOffset(data_app1, 0xA003, offset);
-			if (h_offset !== undef) {
-				data_app1.LONG(h_offset, height);
-			}
-
-			app1 = data_app1.SEGMENT();
-		}
+		
 
 		// Public functions
 		return {
-			init: function(jpegData) {
+			init: function(segment) {
 				// Reset internal data
-				TIFFHeader_offset = 10;
-				Tiff = Exif = GPS = app0 = app0_offset = app0_length = app1 = app1_offset = app1_length = undef;
-
-				data.init(jpegData);
-
-				// Check if data is jpeg
-				if (data.SHORT(0) !== 0xFFD8) {
+				offsets = {
+					tiffHeader: 10
+				};
+				
+				if (segment === undef || !segment.length) {
 					return false;
 				}
 
-				switch (data.SHORT(2)) {
-					// app0
-					case 0xFFE0:
-						app0_offset = 2;
-						app0_length = data.SHORT(4) + 2;
+				data.init(segment);
 
-						// check if app1 follows
-						if (data.SHORT(app0_length) == 0xFFE1) {
-							app1_offset = app0_length;
-							app1_length = data.SHORT(app0_length + 2) + 2;
-						}
-						break;
-
-					// app1
-					case 0xFFE1:
-						app1_offset = 2;
-						app1_length = data.SHORT(4) + 2;
-						break;
-
-					default:
-						return false;
+				// Check if that's APP1 and that it has EXIF
+				if (data.SHORT(0) === 0xFFE1 && data.STRING(4, 5).toUpperCase() === "EXIF\0") {
+					return getIFDOffsets();
 				}
-
-				if (app1_length !== undef) {
-					getIFDOffsets();
-				}
+				return false;
 			},
-
-			APP1: function(args) {
-				if (app1_offset === undef && app1_length === undef) {
-					return;
-				}
-
-				app1 = app1 || (app1 = data.SEGMENT(app1_offset, app1_length));
-
-				// If requested alter width/height tags in app1
-				if (args !== undef && 'width' in args && 'height' in args) {
-					setNewWxH(args.width, args.height);
-				}
-
-				return app1;
-			},
-
+			
 			EXIF: function() {
+				var Exif;
+				
 				// Populate EXIF hash
-				Exif = extractTags(exifIFD_offset, exifTags);
+				Exif = extractTags(offsets.exifIFD, tags.exif);
 
 				// Fix formatting of some tags
-				Exif.ExifVersion = String.fromCharCode(
-					Exif.ExifVersion[0],
-					Exif.ExifVersion[1],
-					Exif.ExifVersion[2],
-					Exif.ExifVersion[3]
-				);
+				if (Exif.ExifVersion) {
+					Exif.ExifVersion = String.fromCharCode(
+						Exif.ExifVersion[0],
+						Exif.ExifVersion[1],
+						Exif.ExifVersion[2],
+						Exif.ExifVersion[3]
+					);
+				}
 
 				return Exif;
 			},
 
 			GPS: function() {
-				GPS = extractTags(gpsIFD_offset, gpsTags);
-				GPS.GPSVersionID = GPS.GPSVersionID.join('.');
+				var GPS;
+				
+				GPS = extractTags(offsets.gpsIFD, tags.gps);
+				
+				// iOS devices (and probably some others) do not put in GPSVersionID tag (why?..)
+				if (GPS.GPSVersionID) { 
+					GPS.GPSVersionID = GPS.GPSVersionID.join('.');
+				}
 
 				return GPS;
 			},
-
-			setAPP1: function(data_app1) {
-				if (app1_offset !== undef) {
-					return false;
-				}
-
-				data.SEGMENT((app0_offset ? app0_offset + app0_length : 2), data_app1);
+			
+			setExif: function(tag, value) {
+				// Right now only setting of width/height is possible
+				if (tag !== 'PixelXDimension' && tag !== 'PixelYDimension') return false;
+				
+				return setTag('exif', tag, value);
 			},
+
 
 			getBinary: function() {
 				return data.SEGMENT();
 			}
 		};
 	};
-})(plupload);
+})(window, document, plupload);
