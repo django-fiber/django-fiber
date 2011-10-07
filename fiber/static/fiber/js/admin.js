@@ -473,7 +473,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 		button_pane.attr('id', button_pane_id);
 
 		var uploader = new plupload.Uploader({
-			runtimes: 'html5,flash',
+			runtimes: 'flash,html5',
 			browse_button: button_id,
 			url: this.get_upload_path(),
 			flash_swf_url: STATIC_URL + 'fiber/js/plupload/plupload.flash.swf',
