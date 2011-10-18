@@ -51,6 +51,6 @@ class DjangoUploadAuthentication(DjangoStaffAuthentication):
     - The reason is that Flash uploads do not support cookies.
     """
     def is_authenticated(self, request):
-        set_session(request, request.POST.get('sessionid'))
+        set_session(request, request.GET.get('sessionid'))
 
         return super(DjangoUploadAuthentication, self).is_authenticated(request)

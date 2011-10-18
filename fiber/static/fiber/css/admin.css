@@ -556,11 +556,6 @@ div.ui-widget-overlay {
 	position: fixed;
 }
 
-/* Fix height of plupload html5 input */
-div.plupload.html5 input {
-	height: 100%;
-}
-
 #df-layer .ui-droppable {
 	position: absolute;
 	height: 16px;

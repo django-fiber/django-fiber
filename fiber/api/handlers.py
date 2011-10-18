@@ -1,5 +1,6 @@
 import os
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import F, Max
 
 from piston.handler import BaseHandler
@@ -270,23 +271,69 @@ class FileHandler(BaseHandler):
 class FileUploadHandler(BaseHandler):
     allowed_methods = ('POST',)
 
-    def create(self, request):
+    def save_xhr(self, request):
+        filename = request.GET['qqfile']
+        file = SimpleUploadedFile(filename, request.raw_post_data)
+
+        expected_length = int(request.environ.get('CONTENT_LENGTH', 0))
+        if expected_length != file.size:
+            raise Exception('File not fully uploaded')
+
         File.objects.create(
-            file=request.FILES['file'],
+            file=file,
             title='uploaded',  # TODO: empty title
         )
         return rc.CREATED
+
+    def save_form(self, request):
+        file = request.FILES['qqfile']
+        File.objects.create(
+            file=file,
+            title='uploaded',  # TODO: empty title
+        )
+        return rc.CREATED
+
+    def create(self, request):
+        if 'qqfile' in request.GET:
+            return self.save_xhr(request)
+        elif 'qqfile' in request.FILES:
+            return self.save_form(request)
+        else:
+            raise Exception('Cannot upload file; no data found in request')
 
 
 class ImageUploadHandler(BaseHandler):
     allowed_methods = ('POST',)
 
-    def create(self, request):
+    def save_xhr(self, request):
+        filename = request.GET['qqfile']
+        file = SimpleUploadedFile(filename, request.raw_post_data)
+
+        expected_length = int(request.environ.get('CONTENT_LENGTH', 0))
+        if expected_length != file.size:
+            raise Exception('File not fully uploaded')
+
         Image.objects.create(
-            image=request.FILES['file'],
+            image=file,
             title='uploaded',  # TODO: empty title
         )
         return rc.CREATED
+
+    def save_form(self, request):
+        file = request.FILES['qqfile']
+        Image.objects.create(
+            image=file,
+            title='uploaded',  # TODO: empty title
+        )
+        return rc.CREATED
+
+    def create(self, request):
+        if 'qqfile' in request.GET:
+            return self.save_xhr(request)
+        elif 'qqfile' in request.FILES:
+            return self.save_form(request)
+        else:
+            raise Exception('Cannot upload file; no data found in request')
 
 
 class ContentItemHandler(BaseHandler):

@@ -439,7 +439,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 	open: function() {
 		this._super();
-		// Create the upload button after displaying the dialog, because plupload must know the dimensions of the button.
+		// Create the upload button after displaying the dialog
 		this.create_upload_button();
 	},
 
@@ -452,60 +452,50 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 	},
 
 	create_upload_button: function() {
-		var button_id = 'upload_file_button';
-		var button_pane_id = 'select-file-buttonpane';
-
 		var button_pane = this.uiDialog.parent().find('.ui-dialog-buttonpane');
 
-		$('<button type="button">'+gettext('Upload a new file')+'</button>')
-			.prependTo(button_pane)
+		var upload_button_pane = $('<div/>').prependTo(button_pane)
+			.attr({
+				'id': 'upload-buttonpane'
+			});
+
+		var upload_button = $('<button type="button">' + gettext('Upload a new file') + '</button>')
+			.appendTo(upload_button_pane)
 			.attr({
 				'class': 'upload',
-				'id': button_id
+				'id': 'upload-file-button'
 			})
 			.button({
 				icons: {
 					primary: 'ui-icon-circle-plus'
 				}
+			})
+			.css({
+				'margin-top': 0,
+				'margin-bottom': 0,
+				'margin-right': 0
 			});
 
-		// Give button pane an id, so we can use it as container for uploader.
-		button_pane.attr('id', button_pane_id);
-
-		var uploader = new plupload.Uploader({
-			runtimes: 'html5,flash',
-			browse_button: button_id,
-			url: this.get_upload_path(),
-			flash_swf_url: STATIC_URL + 'fiber/js/plupload/plupload.flash.swf',
-			multipart_params: {
+		// Valums file uploader
+		var uploader = new qq.FileUploaderBasic({
+			element: upload_button_pane[0],
+			button: upload_button_pane[0], // connecting directly to the jQUery UI upload_button doesn't work
+			action: this.get_upload_path(),
+			params: {
 				'sessionid': $.cookie('sessionid')
 			},
-			container: button_pane_id
-		});
-
-		uploader.bind('Init', function() {
-			// connect 'FilesAdded' event after successful init
-			uploader.bind('FilesAdded', function() {
-				// start upload automatically
-				uploader.start();
-			});
-		});
-
-		uploader.bind('Error', function(up, error) {
-			if (error.code != plupload.INIT_ERROR) {
-				alert(gettext('Upload failed.'));
-			}
-		});
-
-		uploader.init();
-
-		// Bind the 'FileUploaded' event after the init. Otherwise 'total.queued' has a wrong value.
-		uploader.bind('FileUploaded', $.proxy(function() {
-			if (uploader.total.queued === 0) {
-				// all files are uploaded
+			onComplete: $.proxy(function(id, fileName, responseJSON) {
 				this.refresh_grid();
-			}
-		}, this));
+			}, this),
+			debug: false
+		});
+
+		// reset button behavior
+		upload_button_pane.css({
+			'position': 'absolute',
+			'margin-top': 8,
+			'margin-bottom': 8
+		});
 	}
 });
 
@@ -589,7 +579,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 			},
 			gridComplete: function() {
 				var num_pages = $("#ui-image-select-grid").getGridParam('lastpage');
-			    if (num_pages > 1) {
+				if (num_pages > 1) {
 					$('#ui-image-select-grid-pager').show();
 				} else {
 					$("#ui-image-select-grid-pager").hide();
@@ -690,7 +680,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 			},
 			gridComplete: function() {
 				var num_pages = $("#ui-file-select-grid").getGridParam('lastpage');
-			    if (num_pages > 1) {
+				if (num_pages > 1) {
 					$('#ui-file-select-grid-pager').show();
 				} else {
 					$("#ui-file-select-grid-pager").hide();

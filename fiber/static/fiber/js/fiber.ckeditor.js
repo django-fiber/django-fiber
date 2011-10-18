@@ -215,6 +215,7 @@ function extend_CKEditor() {
 
 				// create a new link
 				editor.focus();
+				var selection = editor.getSelection(); // need to do this to 'initialize'
 				var style = new CKEDITOR.style({
 					element: 'a',
 					attributes: {
@@ -222,7 +223,7 @@ function extend_CKEditor() {
 					}
 				});
 				style.type = CKEDITOR.STYLE_INLINE;
-				style.apply(editor);
+				style.apply(editor.document);
 
 				this.destroy();
 			};
@@ -257,6 +258,7 @@ function extend_CKEditor() {
 
 				// create a new link
 				editor.focus();
+				var selection = editor.getSelection();
 				var style = new CKEDITOR.style({
 					element: 'a',
 					attributes: {
@@ -264,7 +266,7 @@ function extend_CKEditor() {
 					}
 				});
 				style.type = CKEDITOR.STYLE_INLINE;
-				style.apply(editor);
+				style.apply(editor.document);
 
 				this.destroy();
 			};
@@ -299,6 +301,7 @@ function extend_CKEditor() {
 
 				// create a new link
 				editor.focus();
+				var selection = editor.getSelection();
 				var style = new CKEDITOR.style({
 					element: 'a',
 					attributes: {
@@ -306,7 +309,7 @@ function extend_CKEditor() {
 					}
 				});
 				style.type = CKEDITOR.STYLE_INLINE;
-				style.apply(editor);
+				style.apply(editor.document);
 
 				this.destroy();
 			};
@@ -338,6 +341,7 @@ function extend_CKEditor() {
 
 			// create a new link
 			editor.focus();
+			var selection = editor.getSelection();
 			var style = new CKEDITOR.style({
 				element: 'a',
 				attributes: {
@@ -345,7 +349,7 @@ function extend_CKEditor() {
 				}
 			});
 			style.type = CKEDITOR.STYLE_INLINE;
-			style.apply(editor);
+			style.apply(editor.document);
 		}
 	};
 
@@ -392,7 +396,7 @@ function extend_CKEditor() {
 
 			image_select_dialog.action_click = function() {
 				var selected_image_path = $(this.uiDialog.find('tr.ui-state-highlight td')[0]).text();
-				var selected_image_title = 'title';
+				var selected_image_title = '';
 
 				// create image element, and insert it
 				var imageElement = CKEDITOR.dom.element.createFromHtml('<img src="' + selected_image_path + '" title="' + CKEDITOR.tools.htmlEncode(selected_image_title) + '" />');
