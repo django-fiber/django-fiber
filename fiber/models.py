@@ -68,7 +68,7 @@ class Page(MPTTModel):
     # TODO: add keywords, description (as meta?)
     title = models.CharField(_('title'), blank=True, max_length=255)
     url = FiberURLField(blank=True)
-    redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'))
+    redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'), on_delete=models.SET_NULL)
     mark_current_regexes = models.TextField(_('mark current regexes'), blank=True)
     # TODO: add `alias_page` field
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
