@@ -1424,6 +1424,7 @@ var adminPage = {
 						}
 
 						// add context menu
+						$link.disableSelection();
 						$link.bind('contextmenu', function(event) {
 							$this = $(this);
 
@@ -1603,83 +1604,87 @@ var adminPage = {
 						}
 					});
 
-					this.admin_content_tree.bind('contextmenu', function(event) {
-						var link = $(event.target).closest('a');
+					var $content_tree_links = this.admin_content_tree.find('li a');
+					$content_tree_links.disableSelection();
+					$content_tree_links.bind('contextmenu', function(event) {
+						var link = $(event.target);
 
 						if (link.length) {
 							event.preventDefault();
 							event.stopPropagation();
 
 							var data = $.parseJSON(link.parent('li').dataset('fiber-data'));
+							if (data) {
 
-							$(document.body).find('.ui-context-menu').remove();
+								$(document.body).find('.ui-context-menu').remove();
 
-							var contextmenu = $('<ul class="ui-context-menu"></ul>');
-
-							contextmenu.append(
-								$('<li><a href="#">'+gettext('Edit')+'</a></li>').click(function() {
-									new ChangeContentItemFormDialog({
-										url: data.url
-									});
-								})
-							);
-
-							contextmenu.append(
-								$('<li><a href="#">'+gettext('Delete')+'</a></li>').click(function() {
-									var confirmationDialog = $('<div></div>').dialog({
-										modal: true,
-										resizable: false,
-										width: 400,
-										position: ['center', 40],
-										buttons: {
-											'Delete': {
-												text: gettext('Delete'),
-												click: function() {
-													$(this).dialog('close');
-
-													busyIndicator.show();
-
-													$.ajax({
-														url: '/api/v1/content_item/' + data.id + '/',
-														type: 'DELETE',
-														data: {},
-														success: function(data) {
-															reloadPage();
-														}
-													});
-												}
-											},
-											'Cancel': {
-												text: gettext('Cancel'),
-												click: function() {
-													$(this).dialog('close');
-												}
-											}
-										}
-									});
-									confirmationDialog.dialog('option', 'title', gettext('Are you sure?'));
-									confirmationDialog.html(gettext('<p>Are you sure you want to delete this item?</p>'));
-								})
-							);
-							if (data.used_on_pages.length >= 1) {
-								var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
-
-								$(data.used_on_pages).each(function(index) {
-									context_submenu_used_on_pages.append(
-										$('<li><a href="#">'+data.used_on_pages[index].title+'</a></li>').click(function() {
-											location.href = data.used_on_pages[index].url;
-										})
-									);
-								});
+								var contextmenu = $('<ul class="ui-context-menu"></ul>');
 
 								contextmenu.append(
-									$('<li><a href="#">'+gettext('Used on pages')+'</a></li>').prepend(context_submenu_used_on_pages)
+									$('<li><a href="#">'+gettext('Edit')+'</a></li>').click(function() {
+										new ChangeContentItemFormDialog({
+											url: data.url
+										});
+									})
 								);
-							}
-							contextmenu.flyoutmenu().removeClass('ui-corner-all');
 
-							$(document.body).append(contextmenu);
-							contextmenu.offset({ left: event.pageX, top: event.pageY });
+								contextmenu.append(
+									$('<li><a href="#">'+gettext('Delete')+'</a></li>').click(function() {
+										var confirmationDialog = $('<div></div>').dialog({
+											modal: true,
+											resizable: false,
+											width: 400,
+											position: ['center', 40],
+											buttons: {
+												'Delete': {
+													text: gettext('Delete'),
+													click: function() {
+														$(this).dialog('close');
+
+														busyIndicator.show();
+
+														$.ajax({
+															url: '/api/v1/content_item/' + data.id + '/',
+															type: 'DELETE',
+															data: {},
+															success: function(data) {
+																reloadPage();
+															}
+														});
+													}
+												},
+												'Cancel': {
+													text: gettext('Cancel'),
+													click: function() {
+														$(this).dialog('close');
+													}
+												}
+											}
+										});
+										confirmationDialog.dialog('option', 'title', gettext('Are you sure?'));
+										confirmationDialog.html(gettext('<p>Are you sure you want to delete this item?</p>'));
+									})
+								);
+								if (data.used_on_pages.length >= 1) {
+									var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
+
+									$(data.used_on_pages).each(function(index) {
+										context_submenu_used_on_pages.append(
+											$('<li><a href="#">'+data.used_on_pages[index].title+'</a></li>').click(function() {
+												location.href = data.used_on_pages[index].url;
+											})
+										);
+									});
+
+									contextmenu.append(
+										$('<li><a href="#">'+gettext('Used on pages')+'</a></li>').prepend(context_submenu_used_on_pages)
+									);
+								}
+								contextmenu.flyoutmenu().removeClass('ui-corner-all');
+
+								$(document.body).append(contextmenu);
+								contextmenu.offset({ left: event.pageX, top: event.pageY });
+							}
 						}
 					});
 
@@ -2142,6 +2147,7 @@ var FiberItem = Class.extend({
 			$.proxy(this.on_dblclick, this)
 		);
 
+		this.$element.disableSelection();
 		this.$element.bind('contextmenu',
 			$.proxy(this.on_contextmenu, this)
 		);
