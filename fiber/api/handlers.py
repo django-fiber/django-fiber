@@ -1,4 +1,5 @@
 import os
+from unicodedata import normalize
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import F, Max
@@ -274,6 +275,7 @@ class FileUploadHandler(BaseHandler):
     def save_xhr(self, request):
         filename = request.GET['qqfile']
         file = SimpleUploadedFile(filename, request.raw_post_data)
+        file.name = normalize('NFC', file.name)
 
         expected_length = int(request.environ.get('CONTENT_LENGTH', 0))
         if expected_length != file.size:
@@ -287,6 +289,8 @@ class FileUploadHandler(BaseHandler):
 
     def save_form(self, request):
         file = request.FILES['qqfile']
+        file.name = normalize('NFC', file.name)
+
         File.objects.create(
             file=file,
             title='uploaded',  # TODO: empty title
@@ -308,6 +312,7 @@ class ImageUploadHandler(BaseHandler):
     def save_xhr(self, request):
         filename = request.GET['qqfile']
         file = SimpleUploadedFile(filename, request.raw_post_data)
+        file.name = normalize('NFC', file.name)
 
         expected_length = int(request.environ.get('CONTENT_LENGTH', 0))
         if expected_length != file.size:
@@ -321,6 +326,8 @@ class ImageUploadHandler(BaseHandler):
 
     def save_form(self, request):
         file = request.FILES['qqfile']
+        file.name = normalize('NFC', file.name)
+
         Image.objects.create(
             image=file,
             title='uploaded',  # TODO: empty title
