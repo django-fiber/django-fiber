@@ -6,20 +6,19 @@ from utils.urls import get_named_url_from_quoted_url, is_quoted_url
 
 
 def page_info(request):
-    
-    """
-    Avoid further processing or database query if page is in EXCLUDE_URL
-    """
-    if EXCLUDE_URLS:
-        for exclude_url in EXCLUDE_URLS:
-            if re.search(exclude_url, request.path.lstrip('/')):
-                return {}
-                
     context = {}
     page = None
     current_pages = []
 
     url = request.path_info
+
+    """
+    Avoid further processing or database queries if page is in EXCLUDE_URLS.
+    """
+    if EXCLUDE_URLS:
+        for exclude_url in EXCLUDE_URLS:
+            if re.search(exclude_url, request.path.lstrip('/')):
+                return context
 
     """
     Find Page that matches the requested URL.
