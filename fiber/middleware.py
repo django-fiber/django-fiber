@@ -45,8 +45,10 @@ class AdminPageMiddleware(object):
         if self.set_login_session(request, response):
             request.session['show_fiber_admin'] = True
             url_without_fiber = request.path.replace('@fiber', '')
-            querystring_without_fiber = request.META['QUERY_STRING'].replace('@fiber', '')
-            if(querystring_without_fiber != ''):
+            querystring_without_fiber = ''
+            if request.META['QUERY_STRING']:
+                querystring_without_fiber = request.META['QUERY_STRING'].replace('@fiber', '')
+            if (querystring_without_fiber != ''):
                 querystring = '?%s' % querystring_without_fiber
             else:
                 querystring = ''
@@ -102,7 +104,7 @@ class AdminPageMiddleware(object):
         """
         if response['Content-Type'].split(';')[0] not in ('text/html', 'application/xhtml+xml'):
             return False
-        if not (request.path.endswith('@fiber') or request.META['QUERY_STRING'].endswith('@fiber')):
+        if not (request.path.endswith('@fiber') or (request.META['QUERY_STRING'] and request.META['QUERY_STRING'].endswith('@fiber'))):
             return False
         else:
             return True
