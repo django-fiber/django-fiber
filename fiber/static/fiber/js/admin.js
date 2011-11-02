@@ -2254,11 +2254,13 @@ var FiberItem = Class.extend({
 
 	// TODO: move to content item specific class (edit)
 	edit_content_item: function() {
-		adminPage.hide_admin_elements();
+		if (this.element_data.url) {
+			adminPage.hide_admin_elements();
 
-		new ChangeContentItemFormDialog({
-			url: this.element_data.url
-		});
+			new ChangeContentItemFormDialog({
+				url: this.element_data.url
+			});
+		}
 	}
 });
 
