@@ -5,22 +5,24 @@ Fiber.enhance_textarea = function(textarea) {
 	// - fieldsets should be split into tabs
 	// - collapsible areas should work, etc.
 
+	window.CKEDITOR_CONFIG_TOOLBAR = window.CKEDITOR_CONFIG_TOOLBAR || [
+		['Format'],
+		['Bold','Italic'],
+		['NumberedList','BulletedList','Outdent','Indent'],
+		['fPageLink','fFileLink','fImageLink','fCustomLink','fUnlink'],
+		['fImage','fTable'],
+		['PasteText','PasteFromWord','RemoveFormat'],
+		['Maximize'],
+		['Source']
+	];
+	window.CKEDITOR_CONFIG_FORMAT_TAGS = window.CKEDITOR_CONFIG_FORMAT_TAGS || 'p;h2;h3;h4';
+
 	CKEDITOR.replace(textarea, {
 		language: LANGUAGE_CODE,
 		extraPlugins: 'fpagelink,ffilelink,fimagelink,fcustomlink,funlink,fimage,ftable,tabletools',
 		removePlugins: 'scayt,menubutton,forms,image,link',
-		toolbar:
-		[
-			['Format'],
-			['Bold','Italic'],
-			['NumberedList','BulletedList','Outdent','Indent'],
-			['fPageLink','fFileLink','fImageLink','fCustomLink','fUnlink'],
-			['fImage','fTable'],
-			['PasteText','PasteFromWord','RemoveFormat'],
-			['Maximize'],
-			['Source']
-		],
-		format_tags: 'p;h2;h3;h4',
+		toolbar: window.CKEDITOR_CONFIG_TOOLBAR,
+		format_tags: window.CKEDITOR_CONFIG_FORMAT_TAGS,
 		toolbarCanCollapse: false,
 		resize_maxWidth: 610,
 		baseFloatZIndex: 1100
