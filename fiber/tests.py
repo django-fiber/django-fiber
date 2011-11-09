@@ -123,13 +123,16 @@ class PageTest(TestCase):
         ---------def (/def/)  # absolute url
         ---------ghi (/section2/ghi/)
         """
-        page_home = Page.objects.create(title='home')
-        page_section1 = Page.objects.create(title='section1', parent=page_home, url='section1')
-        page_section2 = Page.objects.create(title='section2', parent=page_home, url='section2')
-        page_abc = Page.objects.create(title='abc', parent=page_section1, url='abc')
-        Page.objects.create(title='xyz', parent=page_abc, url='xyz')
-        page_def = Page.objects.create(title='def', parent=page_section2, url='/def/')  # absolute url
-        page_ghi = Page.objects.create(title='ghi', parent=page_section2, url='ghi')
+        page_home_id = Page.objects.create(title='home').id
+        page_section1_id = Page.objects.create(title='section1', parent_id=page_home_id, url='section1').id
+        page_section2_id = Page.objects.create(title='section2', parent_id=page_home_id, url='section2').id
+        page_abc_id = Page.objects.create(title='abc', parent_id=page_section1_id, url='abc').id
+        Page.objects.create(title='xyz', parent_id=page_abc_id, url='xyz')
+        page_def_id = Page.objects.create(title='def', parent_id=page_section2_id, url='/def/').id  # absolute url
+        page_ghi_id = Page.objects.create(title='ghi', parent_id=page_section2_id, url='ghi').id
+
+        page_def = Page.objects.get(id=page_def_id)
+        page_ghi = Page.objects.get(id=page_ghi_id)
         page_ghi.move_to(page_def, 'right')
 
     def test_move_page(self):
