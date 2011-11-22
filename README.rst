@@ -30,7 +30,7 @@ These dependencies are automatically installed:
 
 	PIL>=1.1.7
 	django-piston==0.2.3rc1
-	django-mptt>=0.4.2
+	django-mptt==0.5.1
 	django-compressor>=0.7.1
 
 
