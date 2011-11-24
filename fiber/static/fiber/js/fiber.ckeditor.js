@@ -1,12 +1,16 @@
 (function($) {
 
 Fiber.enhance_textarea = function(textarea) {
-	// TODO: add Django-like behavior:
-	// - fieldsets should be split into tabs
-	// - collapsible areas should work, etc.
+
+	if (window.CKEDITOR_CONFIG_STYLES_SET) {
+		if (!CKEDITOR.stylesSet.get('config_styles_set')) {
+			CKEDITOR.stylesSet.add('config_styles_set', window.CKEDITOR_CONFIG_STYLES_SET);
+		}
+	}
 
 	window.CKEDITOR_CONFIG_TOOLBAR = window.CKEDITOR_CONFIG_TOOLBAR || [
 		['Format'],
+		window.CKEDITOR_CONFIG_STYLES_SET ? ['Styles'] : null,
 		['Bold','Italic'],
 		['NumberedList','BulletedList','Outdent','Indent'],
 		['fPageLink','fFileLink','fImageLink','fCustomLink','fUnlink'],
@@ -15,14 +19,14 @@ Fiber.enhance_textarea = function(textarea) {
 		['Maximize'],
 		['Source']
 	];
-	window.CKEDITOR_CONFIG_FORMAT_TAGS = window.CKEDITOR_CONFIG_FORMAT_TAGS || 'p;h2;h3;h4';
 
 	CKEDITOR.replace(textarea, {
 		language: LANGUAGE_CODE,
 		extraPlugins: 'fpagelink,ffilelink,fimagelink,fcustomlink,funlink,fimage,ftable,tabletools',
 		removePlugins: 'scayt,menubutton,forms,image,link',
 		toolbar: window.CKEDITOR_CONFIG_TOOLBAR,
-		format_tags: window.CKEDITOR_CONFIG_FORMAT_TAGS,
+		format_tags: window.CKEDITOR_CONFIG_FORMAT_TAGS || 'p;h2;h3;h4',
+		stylesSet: window.CKEDITOR_CONFIG_STYLES_SET || null,
 		toolbarCanCollapse: false,
 		resize_maxWidth: 610,
 		baseFloatZIndex: 1100

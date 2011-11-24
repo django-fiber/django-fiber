@@ -582,6 +582,9 @@ var ChangeForm = AdminForm.extend({
 	},
 
 	set_interaction: function() {
+		// TODO: add Django-like behavior:
+		// - fieldsets should be split into tabs
+		// - collapsible areas should work, etc.
 		enhance_textareas(this.form);
 		enhance_comboboxes(this.form);
 		enhance_jsontextareas(this.form);
