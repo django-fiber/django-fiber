@@ -1,16 +1,19 @@
 from django import template
 from django.utils import simplejson
+from django.utils.translation import get_language
+from django.conf import settings
 
 from fiber.models import Page, ContentItem
-
 from fiber.utils.urls import get_admin_change_url
+from fiber.app_settings import ENABLE_I18N
 
 register = template.Library()
 
 
+@register.inclusion_tag('fiber/menu.html', takes_context=True)
 def show_menu(context, menu_name, min_level, max_level, expand=None):
 
-    menu_pages = []
+    menu_pages_qs = Page.objects.none()
 
     try:
         root_page = Page.objects.get(title=menu_name, parent=None)
@@ -30,19 +33,19 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
         for page in current_page.get_ancestors_include_self():
             if min_level <= page.level:
                 if page.level <= max_level:
-                    menu_pages.extend(page.get_siblings(include_self=True))
+                    menu_pages_qs |= page.get_siblings(include_self=True)
                 else:
                     break
             elif min_level == page.level + 1:
                 if expand == 'all':
-                    menu_pages.extend(page.get_descendants().filter(level__range=(min_level, max_level)))
+                    menu_pages_qs |= page.get_descendants().filter(level__range=(min_level, max_level))
                     break
 
         if min_level <= (current_page.level + 1) <= max_level:
             if not expand:
-                menu_pages.extend(current_page.get_children())
+                menu_pages_qs |= current_page.get_children()
             elif expand == 'all_descendants':
-                menu_pages.extend(current_page.get_descendants().filter(level__range=(min_level, max_level)))
+                menu_pages_qs |= current_page.get_descendants().filter(level__range=(min_level, max_level))
 
     else:
         """
@@ -51,20 +54,28 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
         """
         if min_level == 1:
             if not expand:
-                menu_pages.extend(Page.objects.filter(tree_id=root_page.tree_id).filter(level=min_level))
+                menu_pages_qs |= Page.objects.filter(tree_id=root_page.tree_id).filter(level=min_level)
             elif expand == 'all':
-                menu_pages.extend(Page.objects.filter(tree_id=root_page.tree_id).filter(level__range=(min_level, max_level)))
+                menu_pages_qs |= Page.objects.filter(tree_id=root_page.tree_id).filter(level__range=(min_level, max_level))
 
     """
     Remove pages that the current user isn't supposed to see.
     """
     visible_pages_for_user = Page.objects.visible_pages_for_user(context['user'])
-    menu_pages = list(set(menu_pages) & set(visible_pages_for_user))
+    menu_pages_qs &= visible_pages_for_user
+
+    """
+    If i18n is enabled, remove pages that is not in the current language.
+    """
+
+    if ENABLE_I18N:
+        pages_in_current_language = Page.objects.in_current_language()
+        menu_pages_qs &= pages_in_current_language
 
     """
     Order menu_pages for use with tree_info template tag.
     """
-    menu_pages = sorted(menu_pages, key=lambda menu_page: menu_page.lft)
+    menu_pages = sorted(list(menu_pages_qs), key=lambda menu_page: menu_page.lft)
 
     """
     Find parent page for this menu
@@ -81,9 +92,29 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
     context['fiber_menu_args'] = {'menu_name': menu_name, 'min_level': min_level, 'max_level': max_level, 'expand': expand}
     return context
 
-register.inclusion_tag('fiber/menu.html', takes_context=True)(show_menu)
+
+@register.inclusion_tag('fiber/language_selector.html', takes_context=True)
+def language_selector(context):
+
+    languages = [{'code': l[0], 'title': l[1], 'url': '/%s/' % l[0], 'has_translation': False} for l in settings.LANGUAGES]
+    current_language = get_language()
+
+    if 'fiber_page' in context:
+        current_page = context['fiber_page']
+        page_translations = current_page.get_translations()
+        for lang in languages:
+            if lang['has_translation'] == False:
+                for page in page_translations:
+                    if lang['code'] == page.language:
+                        lang['url'] = page.get_absolute_url()
+                        lang['has_translation'] = True
+                        break
+    context['current_language'] = current_language
+    context['languages'] = languages
+    return context
 
 
+@register.inclusion_tag('fiber/content_item.html', takes_context=True)
 def show_content(context, content_item_name):
     content_item = None
     try:
@@ -94,8 +125,6 @@ def show_content(context, content_item_name):
     context['content_item'] = content_item
 
     return context
-
-register.inclusion_tag('fiber/content_item.html', takes_context=True)(show_content)
 
 
 @register.tag(name='show_page_content')

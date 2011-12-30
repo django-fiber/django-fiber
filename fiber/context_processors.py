@@ -1,6 +1,9 @@
 import re
 
-from app_settings import EXCLUDE_URLS
+from django.conf import settings
+from django.utils import translation
+
+from app_settings import EXCLUDE_URLS, ENABLE_I18N, I18N_PREFIX_MAIN_LANGUAGE
 from models import Page
 from utils.urls import get_named_url_from_quoted_url, is_quoted_url
 
@@ -19,6 +22,26 @@ def page_info(request):
         for exclude_url in EXCLUDE_URLS:
             if re.search(exclude_url, request.path.lstrip('/')):
                 return context
+
+    """
+    If i18n is enabled, extract the language code from the URL, and set current
+    language.
+    """
+    language = None
+    if ENABLE_I18N:
+        try:
+            first_url_part, remaining_url = url.lstrip('/').split('/', 1)
+            for l in settings.LANGUAGES:
+                if first_url_part == l[0]:
+                    language = first_url_part
+                    break
+            if language == None:
+                language = settings.LANGUAGE_CODE
+        except ValueError:
+            if not I18N_PREFIX_MAIN_LANGUAGE:
+                language = settings.LANGUAGE_CODE
+        if language != None:
+            translation.activate(language)
 
     """
     Find Page that matches the requested URL.

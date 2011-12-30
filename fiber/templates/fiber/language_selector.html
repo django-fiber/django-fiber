@@ -1,0 +1,7 @@
+<ul>
+{% for lang in languages %}
+	<li class="{% if lang == current_language %}current{% endif %}{% if lang.has_translation %} has_translation{% endif %}">
+		<a href="{{ lang.url }}">{{ lang.title }}</a>
+	</li>
+{% endfor %}
+</ul>

@@ -3,6 +3,8 @@ import re
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language
+
 
 from fiber import editor
 
@@ -83,6 +85,18 @@ class ContentItemManager(models.Manager):
 
 
 class PageManager(models.Manager):
+
+    def in_current_language(self, language=None):
+        """
+        Return a queryset containing only pages in the current language (or
+        optionally in the suplied languagage).
+        """
+        cur_lang_qs = self.get_query_set()
+        if language == None:
+            language = get_language()
+        cur_lang_qs = cur_lang_qs.filter(language__exact=language)
+
+        return cur_lang_qs
 
     def visible_pages_for_user(self, user):
         visible_pages_qs = self.get_query_set()
