@@ -4,7 +4,7 @@ from django.core.files.images import get_image_dimensions
 from django.db import models
 from django.utils.html import strip_tags
 from django.utils import simplejson
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext, get_language
 from django.utils.translation import ugettext_lazy as _
 
 from mptt.managers import TreeManager
@@ -69,8 +69,8 @@ class Page(MPTTModel):
     # TODO: add keywords, description (as meta?)
     title = models.CharField(_('title'), blank=True, max_length=255)
     url = FiberURLField(blank=True)
-    language = models.CharField(_('language'),  max_length=5, choices=settings.LANGUAGES, blank=True)
-    translation_of = models.ForeignKey('Page', verbose_name=_('translation of'), related_name='translations', blank=True, null=True, limit_choices_to={'language__exact': settings.LANGUAGE_CODE})
+    language = models.CharField(_('language'),  max_length=5, choices=settings.LANGUAGES, blank=True, help_text=_('Default\'s to the currently active language of your session.'))
+    translation_of = models.ForeignKey('Page', verbose_name=_('translation of'), related_name='translations', blank=True, null=True, limit_choices_to={'language__exact': settings.LANGUAGE_CODE}, help_text=_('Is this page a translation of a page written in the site\'s main language?'))
     redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'), on_delete=models.SET_NULL)
     mark_current_regexes = models.TextField(_('mark current regexes'), blank=True)
     # TODO: add `alias_page` field
@@ -93,6 +93,8 @@ class Page(MPTTModel):
         return self.title
 
     def save(self, *args, **kwargs):
+        if ENABLE_I18N and not self.language:
+            self.language = get_language()
         if self.id:
             old_url = Page.objects.get(id=self.id).get_absolute_url()
         else:
