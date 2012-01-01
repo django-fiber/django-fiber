@@ -15,7 +15,9 @@ from models import Page
 
 @csrf_protect
 def page(request, url):
+    print 'views23', url
     if ENABLE_I18N and I18N_PREFIX_MAIN_LANGUAGE and url in ('', '/'):
+        print 'views24', settings.LANGUAGE_CODE
         return HttpResponsePermanentRedirect('%s/' % settings.LANGUAGE_CODE)
 
     if not url.endswith('/') and settings.APPEND_SLASH:

@@ -103,12 +103,16 @@ def language_selector(context):
         current_page = context['fiber_page']
         page_translations = current_page.get_translations()
         for lang in languages:
-            if lang['has_translation'] == False:
-                for page in page_translations:
-                    if lang['code'] == page.language:
-                        lang['url'] = page.get_absolute_url()
-                        lang['has_translation'] = True
-                        break
+            if not I18N_PREFIX_MAIN_LANGUAGE and lang['code'] == current_language:
+                lang['url'] = '/'
+            """
+            If the page has a a translation in lang, use the url of the translation in href.
+            """
+            for page in page_translations:
+                if lang['code'] == page.language:
+                    lang['url'] = page.get_absolute_url()
+                    lang['has_translation'] = True
+                    break
     context['current_language'] = current_language
     context['languages'] = languages
     return context
