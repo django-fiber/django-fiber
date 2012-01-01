@@ -175,12 +175,11 @@ class Page(MPTTModel):
         return qs.order_by(opts.left_attr)
 
     def get_translations(self):
-        if self.language == settings.LANGUAGE_CODE:
-            qs = self.translations.all()
-        elif self.translation_of != None:
+        if self.translation_of:
             qs = self.translation_of.translations.all()
+            qs |= Page.objects.filter(pk=self.translation_of.pk)
         else:
-            qs = self.objects.none()
+            qs = self.translations.all()
         return qs
 
     def move_page(self, parent_id, left_id=0):

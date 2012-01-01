@@ -5,7 +5,7 @@ from django.conf import settings
 
 from fiber.models import Page, ContentItem
 from fiber.utils.urls import get_admin_change_url
-from fiber.app_settings import ENABLE_I18N
+from fiber.app_settings import ENABLE_I18N, I18N_PREFIX_MAIN_LANGUAGE
 
 register = template.Library()
 

@@ -29,6 +29,7 @@ def page_info(request):
     """
     language = None
     if ENABLE_I18N:
+        context['ENABLE_I18N'] =  True
         try:
             first_url_part, remaining_url = url.lstrip('/').split('/', 1)
             for l in settings.LANGUAGES:

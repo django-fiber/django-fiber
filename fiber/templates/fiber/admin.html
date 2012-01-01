@@ -43,6 +43,12 @@
 				</ul>
 			</div>
 		</div>
+		{% if ENABLE_I18N %}
+		<div id="df-sidebar-language-section">
+			<h2>{% trans "Switch Language" %}</h2>
+			{% language_selector %}
+		</div>
+		{% endif %}
 	</div>
 	<div id="df-btn-toggle-sidebar"></div>
 </div>

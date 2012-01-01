@@ -56,11 +56,13 @@ class PageAdmin(MPTTModelAdmin):
     list_display = ['title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links',]
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page')
+    prepopulated_fields = {"url": ("title",)}
 
     def __init__(self, *args, **kwargs):
         if ENABLE_I18N:
             self.fieldsets.insert(1, (_('i18n'), {'fields': ('language', 'translation_of',)}))
-            self.list_display.append('language')
+            self.list_display.insert(3, 'language')
+            self.list_filter=('language',)
         super(PageAdmin, self).__init__(*args, **kwargs)
 
     def view_on_site(self, page):
