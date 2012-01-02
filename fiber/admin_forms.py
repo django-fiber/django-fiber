@@ -1,5 +1,7 @@
+from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language
 
 from mptt.forms import TreeNodeChoiceField
 
@@ -21,6 +23,17 @@ class PageForm(forms.ModelForm):
 
     class Meta:
         model = Page
+
+    def __init__(self, *args, **kw):
+        super(PageForm, self).__init__(*args, **kw)
+
+        translation_of_qs = Page.objects.filter(language__exact=settings.LANGUAGE_CODE)
+        if 'instance' in kw and kw['instance']:
+            translation_of_qs = translation_of_qs.exclude(pk__exact=kw['instance'].pk)
+
+
+        self.fields['translation_of'].choices = [(p.pk, unicode(p)) for p in translation_of_qs]
+        self.fields['translation_of'].choices.insert(0, ('', '--------'))
 
     def clean_title(self):
         """

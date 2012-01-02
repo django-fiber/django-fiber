@@ -29,7 +29,6 @@ def page_info(request):
     """
     language = None
     if ENABLE_I18N:
-        context['ENABLE_I18N'] =  True
         try:
             first_url_part, remaining_url = url.lstrip('/').split('/', 1)
             for l in settings.LANGUAGES:
@@ -43,6 +42,8 @@ def page_info(request):
                 language = settings.LANGUAGE_CODE
         if language != None:
             translation.activate(language)
+        context['enable_i18n'] =  True
+        context['languages'] = settings.LANGUAGES
 
     """
     Find Page that matches the requested URL.
