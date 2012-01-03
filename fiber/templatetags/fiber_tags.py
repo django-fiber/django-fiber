@@ -96,24 +96,26 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
 @register.inclusion_tag('fiber/language_selector.html', takes_context=True)
 def language_selector(context):
 
-    languages = [{'code': l[0], 'title': l[1], 'url': '/%s/' % l[0], 'has_translation': False} for l in settings.LANGUAGES]
+    languages = [{'code': l[0], 'title': l[1], 'url': '/%s/' % l[0], 'has_translation': False, 'current': False} for l in settings.LANGUAGES]
     current_language = get_language()
 
     if 'fiber_page' in context:
         current_page = context['fiber_page']
         page_translations = current_page.get_translations()
+
         for lang in languages:
             if not I18N_PREFIX_MAIN_LANGUAGE and lang['code'] == current_language:
                 lang['url'] = '/'
+            if lang['code'] == current_language:
+                lang['current'] = True
             """
-            If the page has a a translation in lang, use the url of the translation in href.
+            If the page has a a translation in lang, use the url of the translation as href.
             """
             for page in page_translations:
                 if lang['code'] == page.language:
                     lang['url'] = page.get_absolute_url()
                     lang['has_translation'] = True
                     break
-    context['current_language'] = current_language
     context['languages'] = languages
     return context
 

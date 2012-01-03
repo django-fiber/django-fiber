@@ -70,7 +70,7 @@ class Page(MPTTModel):
     title = models.CharField(_('title'), blank=True, max_length=255)
     url = FiberURLField(blank=True)
     language = models.CharField(_('language'),  max_length=5, choices=settings.LANGUAGES, blank=True, default=get_language, help_text=_('Default\'s to the currently active language of your session.'))
-    translation_of = models.ForeignKey('Page', verbose_name=_('translation of'), related_name='translations', blank=True, null=True, limit_choices_to={'language__exact': settings.LANGUAGE_CODE}, help_text=_('Is this page a translation of a page written in the site\'s main language?'))
+    translation_of = models.ForeignKey('Page', verbose_name=_('translation of'), related_name='translations', blank=True, null=True, help_text=_('Is this page a translation of a page written in the site\'s main language?'))
     redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'), on_delete=models.SET_NULL)
     mark_current_regexes = models.TextField(_('mark current regexes'), blank=True)
     # TODO: add `alias_page` field

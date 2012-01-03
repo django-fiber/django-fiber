@@ -20,20 +20,11 @@ class PageForm(forms.ModelForm):
 
     parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3*unichr(160), empty_label='---------', required=False)
     redirect_page = TreeNodeChoiceField(label=_('Redirect page'), queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160), empty_label='---------', required=False)
+    translation_of = TreeNodeChoiceField(label=_('Translation of'), queryset=Page.objects.filter(language__exact=settings.LANGUAGE_CODE), level_indicator=3*unichr(160), empty_label='---------', required=False, help_text=Page.translation_of.field.help_text)
+    template_name = forms.ChoiceField(choices=TEMPLATE_CHOICES, required=False, label=_('Template'))
 
     class Meta:
         model = Page
-
-    def __init__(self, *args, **kw):
-        super(PageForm, self).__init__(*args, **kw)
-
-        translation_of_qs = Page.objects.filter(language__exact=settings.LANGUAGE_CODE)
-        if 'instance' in kw and kw['instance']:
-            translation_of_qs = translation_of_qs.exclude(pk__exact=kw['instance'].pk)
-
-
-        self.fields['translation_of'].choices = [(p.pk, unicode(p)) for p in translation_of_qs]
-        self.fields['translation_of'].choices.insert(0, ('', '--------'))
 
     def clean_title(self):
         """
@@ -52,4 +43,4 @@ class PageForm(forms.ModelForm):
 
 
 class FiberAdminPageForm(PageForm):
-    template_name = forms.ChoiceField(choices=TEMPLATE_CHOICES, required=False, label=_('Template'))
+    translation_of = None
