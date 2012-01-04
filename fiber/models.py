@@ -106,7 +106,7 @@ class Page(MPTTModel):
         if self.url == '':
             return ''
         if self.url.startswith('/'):
-            return '%s/' % self.url.rstrip('/')
+            return self.url
         elif self.url.startswith('http://') or self.url.startswith('https://'):
             return self.url
         else:
