@@ -9,11 +9,7 @@ from app_settings import TEMPLATE_CHOICES
 from models import Page, ContentItem, PageContentItem, Image, File
 import admin_forms as forms
 
-
-class FiberAdminSite(admin.AdminSite):
-    pass
-
-fiber_admin_site = FiberAdminSite(name='fiber_admin')
+import fiber_admin
 
 
 class FileAdmin(admin.ModelAdmin):
@@ -94,7 +90,7 @@ class PageAdmin(MPTTModelAdmin):
     action_links.allow_tags = True
 
 
-class FiberAdminContentItemAdmin(admin.ModelAdmin):
+class FiberAdminContentItemAdmin(fiber_admin.ModelAdmin):
     list_display = ('__unicode__',)
     form = forms.ContentItemAdminForm
     fieldsets = (
@@ -102,7 +98,7 @@ class FiberAdminContentItemAdmin(admin.ModelAdmin):
     )
 
 
-class FiberAdminPageAdmin(MPTTModelAdmin):
+class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):
 
     form = forms.FiberAdminPageForm
 
@@ -137,5 +133,5 @@ admin.site.register(Image, ImageAdmin)
 admin.site.register(File, FileAdmin)
 admin.site.register(Page, PageAdmin)
 
-fiber_admin_site.register(ContentItem, FiberAdminContentItemAdmin)
-fiber_admin_site.register(Page, FiberAdminPageAdmin)
+fiber_admin.site.register(ContentItem, FiberAdminContentItemAdmin)
+fiber_admin.site.register(Page, FiberAdminPageAdmin)
