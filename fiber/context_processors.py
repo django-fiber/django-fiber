@@ -24,28 +24,6 @@ def page_info(request):
                 return context
 
     """
-    If i18n is enabled, extract the language code from the URL, and set current
-    language.
-    """
-    language = None
-    if ENABLE_I18N:
-        try:
-            first_url_part, remaining_url = url.lstrip('/').split('/', 1)
-            for l in settings.LANGUAGES:
-                if first_url_part == l[0]:
-                    language = first_url_part
-                    break
-            if language == None:
-                language = settings.LANGUAGE_CODE
-        except ValueError:
-            if not I18N_PREFIX_MAIN_LANGUAGE:
-                language = settings.LANGUAGE_CODE
-        if language != None:
-            translation.activate(language)
-        context['enable_i18n'] =  True
-        context['languages'] = settings.LANGUAGES
-
-    """
     Find Page that matches the requested URL.
 
     First check if there is a Page whose `url` matches the requested URL.
@@ -124,6 +102,10 @@ def page_info(request):
 
     if page:
         context['fiber_page'] = page
+        if ENABLE_I18N:
+            context['enable_i18n'] = True
+            if page.language:
+                translation.activate(page.language)
 
     if current_pages:
         context['fiber_current_pages'] = current_pages

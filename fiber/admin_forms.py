@@ -5,10 +5,9 @@ from django.utils.translation import get_language
 
 from mptt.forms import TreeNodeChoiceField
 
-from app_settings import TEMPLATE_CHOICES
+from app_settings import TEMPLATE_CHOICES, ENABLE_I18N
 from models import Page, ContentItem
 from utils.urls import is_quoted_url
-
 
 class ContentItemAdminForm(forms.ModelForm):
 
@@ -21,14 +20,20 @@ class PageForm(forms.ModelForm):
     parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3*unichr(160), empty_label='---------', required=False)
     redirect_page = TreeNodeChoiceField(label=_('Redirect page'), queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160), empty_label='---------', required=False)
     translation_of = TreeNodeChoiceField(label=_('Translation of'), queryset=Page.objects.filter(language__exact=settings.LANGUAGE_CODE), level_indicator=3*unichr(160), empty_label='---------', required=False, help_text=Page.translation_of.field.help_text)
-    template_name = forms.ChoiceField(choices=TEMPLATE_CHOICES, required=False, label=_('Template'))
 
     class Meta:
         model = Page
 
+    def __init__(self, *args, **kw):
+        # remove translation_of if i18n is disabled
+        if ENABLE_I18N == False:
+            self.translation_of = None
+
+        super(PageForm, self).__init__(*args, **kw)
+
     def clean_title(self):
         """
-        Strips extra whitespace
+        Strips extra whitespaces
         """
         return self.cleaned_data.get('title', '').strip()
 
@@ -43,4 +48,4 @@ class PageForm(forms.ModelForm):
 
 
 class FiberAdminPageForm(PageForm):
-    translation_of = None
+    template_name = forms.ChoiceField(choices=TEMPLATE_CHOICES, required=False, label=_('Template'))
