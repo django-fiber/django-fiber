@@ -250,3 +250,46 @@ def escape_json_for_html(value):
     Escapes valid JSON for use in HTML, e.g. convert single quote to HTML character entity
     """
     return value.replace("'", "&#39;")
+
+
+@register.filter(name='page')
+def get_page(page_title):
+    """
+    Returns a Page object if a page with the given title can be found.
+    Otherwise, return None.
+    """
+    try:
+        return Page.objects.get(title=value)
+    except Page.DoesNotExist:
+        return None
+    except Page.MultipleObjectsReturend:
+        return None
+
+
+@register.filter(name='translated_page')
+def get_translated_page(value, language=None):
+    """
+    Returns the translated version of a page as a Page object. If no translated
+    page can be found, return None.
+
+    If the value being filtered is a string, assume this string to be the
+    page's title. If language is not supplied, use the current active language.
+    """
+    if not language:
+        language = get_language()
+
+    if type(value) == Page:
+        page = value
+    else:
+        try:
+            page = Page.objects.get(title=value)
+        except Page.DoesNotExist:
+            return None
+        except Page.MultipleObjectsReturend:
+            return None
+
+    qs = page.get_translations().filter(language=language)
+    if qs.count() > 0:
+        return qs[0]
+    else:
+        return None
