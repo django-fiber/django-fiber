@@ -60,7 +60,7 @@ class PageAdmin(MPTTModelAdmin):
     prepopulated_fields = {"url": ("title",)}
 
     def __init__(self, *args, **kwargs):
-        # if i18n is enabked, add an i18n fieldset, and add modify list_display and list_filter
+        # if i18n is enabled, add an i18n fieldset, and add modify list_display and list_filter
         if ENABLE_I18N:
             self.fieldsets.insert(1, (_('i18n'), {'fields': ('language', 'translation_of',)}))
             self.list_display.insert(3, 'language')
