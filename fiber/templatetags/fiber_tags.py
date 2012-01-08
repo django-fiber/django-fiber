@@ -4,7 +4,7 @@ from django.utils.translation import get_language
 from django.conf import settings
 
 from fiber.models import Page, ContentItem
-from fiber.utils.urls import get_admin_change_url
+from fiber.utils.urls import get_admin_change_url, is_quoted_url, get_named_url_from_quoted_url
 from fiber.app_settings import ENABLE_I18N, I18N_PREFIX_MAIN_LANGUAGE
 
 register = template.Library()
@@ -253,17 +253,40 @@ def escape_json_for_html(value):
 
 
 @register.filter(name='page')
-def get_page(page_title):
+def get_page(url):
     """
-    Returns a Page object if a page with the given title can be found.
+    Returns a Page object if a page with the given url can be found.
     Otherwise, return None.
     """
+    page = None
+    # FIXME: The following coede is copied from context_processors.py It might
+    # be a better idea to write a new function get_page_from_url somewhere.
     try:
-        return Page.objects.get(title=value)
+        page = Page.objects.get(url__exact=url)
     except Page.DoesNotExist:
-        return None
-    except Page.MultipleObjectsReturend:
-        return None
+        pass
+
+    if not page:
+        last_url_part = url.rstrip('/').rsplit('/', 1)[-1]
+        if last_url_part:
+            page_candidates = Page.objects.exclude(url__exact='', ) \
+                .filter(url__icontains=last_url_part)
+            if page_candidates:
+                for page_candidate in page_candidates:
+                    if page_candidate.get_absolute_url() == url:
+                        page = page_candidate
+                        break
+
+    if not page:
+        page_candidates = Page.objects.exclude(url__exact='')
+        if page_candidates:
+            for page_candidate in page_candidates:
+                if is_quoted_url(page_candidate.url):
+                    if get_named_url_from_quoted_url(page_candidate.url) == url:
+                        page = page_candidate
+                        break
+    return page
+
 
 
 @register.filter(name='translated_page')
@@ -273,7 +296,7 @@ def get_translated_page(value, language=None):
     page can be found, return None.
 
     If the value being filtered is a string, assume this string to be the
-    page's title. If language is not supplied, use the current active language.
+    page's url. If language is not supplied, use the current active language.
     """
     if not language:
         language = get_language()
@@ -281,15 +304,11 @@ def get_translated_page(value, language=None):
     if type(value) == Page:
         page = value
     else:
-        try:
-            page = Page.objects.get(title=value)
-        except Page.DoesNotExist:
-            return None
-        except Page.MultipleObjectsReturend:
-            return None
+        page = get_page(value)
 
-    qs = page.get_translations().filter(language=language)
-    if qs.count() > 0:
-        return qs[0]
-    else:
-        return None
+    if page:
+        qs = page.get_translations().filter(language=language)
+        if qs.count() > 0:
+            return qs[0]
+
+    return None
