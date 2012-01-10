@@ -62,10 +62,9 @@ def page_info(request):
     """
     Block access to pages that the current user isn't supposed to see.
     """
-    if request.user.is_authenticated():
-        if page:
-            if page not in Page.objects.visible_pages_for_user(request.user):
-                page = None
+    if page:
+        if page not in Page.objects.public_for_user(request.user):
+            page = None
 
     """
     Find pages that should be marked as current in menus.

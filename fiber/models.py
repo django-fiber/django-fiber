@@ -74,6 +74,7 @@ class Page(MPTTModel):
     # TODO: add `alias_page` field
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
     show_in_menu = models.BooleanField(_('show in menu'), default=True)
+    is_public = models.BooleanField(_('is public'), default=True)
     protected = models.BooleanField(_('protected'), default=False)
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
