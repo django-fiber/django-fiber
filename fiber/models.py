@@ -26,6 +26,7 @@ class ContentItem(models.Model):
     protected = models.BooleanField(_('protected'), default=False)
     metadata = JSONField(_('metadata'), blank=True, null=True, schema=METADATA_CONTENT_SCHEMA, prefill_from='fiber.models.ContentItem')
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
+    used_on_pages_data = JSONField(_('used on pages'), blank=True, null=True)
 
     objects = managers.ContentItemManager()
 
@@ -51,15 +52,21 @@ class ContentItem(models.Model):
         named_url = 'fiber_admin:%s_%s_change' % (self._meta.app_label, self._meta.object_name.lower())
         return reverse(named_url, args=(self.id, ))
 
-    def get_used_on_pages_json(self):
-        page_content_items = self.page_content_items.all()
+    def set_used_on_pages_json(self):
         json_pages = []
-        for page_content_item in page_content_items:
+        for page_content_item in self.page_content_items.all():
             json_pages.append({
                 'title': page_content_item.page.title,
                 'url': page_content_item.page.get_absolute_url(),
             })
-        return simplejson.dumps(json_pages)
+        self.used_on_pages_data = json_pages
+        self.save()
+
+    def get_used_on_pages_json(self):
+        if not self.used_on_pages_data:
+            self.set_used_on_pages_json()
+
+        return simplejson.dumps(self.used_on_pages_data)
 
 
 class Page(MPTTModel):
@@ -205,6 +212,10 @@ class PageContentItem(models.Model):
     sort = models.IntegerField(_('sort'), blank=True, null=True)
 
     objects = managers.PageContentItemManager()
+
+    def save(self, *args, **kwargs):
+        super(PageContentItem, self).save(*args, **kwargs)
+        self.content_item.set_used_on_pages_json()
 
 
 class Image(models.Model):
