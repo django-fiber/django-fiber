@@ -56,10 +56,10 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
                 menu_pages.extend(Page.objects.filter(tree_id=root_page.tree_id).filter(level__range=(min_level, max_level)))
 
     """
-    Remove pages that the current user isn't supposed to see.
+    Remove pages that shouldn't be shown in the menu for the current user.
     """
-    visible_pages_for_user = Page.objects.visible_pages_for_user(context['user'])
-    menu_pages = list(set(menu_pages) & set(visible_pages_for_user))
+    shown_in_menu_for_user = Page.objects.shown_in_menu_for_user(context['user'])
+    menu_pages = list(set(menu_pages) & set(shown_in_menu_for_user))
 
     """
     Order menu_pages for use with tree_info template tag.

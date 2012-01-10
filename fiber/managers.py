@@ -84,12 +84,19 @@ class ContentItemManager(models.Manager):
 
 class PageManager(models.Manager):
 
-    def visible_pages_for_user(self, user):
-        visible_pages_qs = self.get_query_set()
+    def public_for_user(self, user):
+        public_pages_qs = self.get_query_set()
         if not user.is_staff:
-            visible_pages_qs = visible_pages_qs.filter(show_in_menu=True)
+            public_pages_qs = public_pages_qs.filter(is_public=True)
 
-        return visible_pages_qs
+        return public_pages_qs
+
+    def shown_in_menu_for_user(self, user):
+        shown_in_menu_pages_qs = self.get_query_set()
+        if not user.is_staff:
+            shown_in_menu_pages_qs = shown_in_menu_pages_qs.filter(show_in_menu=True, is_public=True)
+
+        return shown_in_menu_pages_qs
 
 
 class PageContentItemManager(models.Manager):
