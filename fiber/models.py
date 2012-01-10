@@ -196,28 +196,27 @@ class Page(MPTTModel):
 
         return qs.order_by(opts.left_attr)
 
-    def move_page(self, parent_id, left_id=0):
+    def move_page(self, target_id, position):
         """
-        Moves the page.
-
-        Parameters:
-          - parent_id: the new parent
-          - left_id: the page to the left (0 if it not applicable)
+        Moves the node. Parameters:
+        - page_id: the page to move
+        - target_id: target page
+        - position:
+            - before: move the page before the target page
+            - after: move the page after the target page
+            - inside: move the page inside the target page (as the first child)
         """
         old_url = self.get_absolute_url()
+        target_page = Page.tree.get(id=target_id)
 
-        if left_id:
-            # move the node to the right of the left node
-            self.move_to(
-                Page.objects.get(pk=left_id),
-                'right',
-            )
+        if position == 'before':
+            self.move_to(target_page, 'left')
+        elif position == 'after':
+            self.move_to(target_page, 'right')
+        elif position == 'inside':
+            self.move_to(target_page)
         else:
-            # move the node to the first child of the parent
-            self.move_to(
-                Page.objects.get(pk=parent_id),
-                'first-child',
-            )
+            raise Exception('Unknown position')
 
         # change url in content items
         if old_url:

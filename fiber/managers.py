@@ -2,7 +2,8 @@ import datetime
 import re
 
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
+
 from mptt.managers import TreeManager
 
 from fiber import editor
@@ -13,7 +14,9 @@ class ContentItemManager(models.Manager):
 
     def get_content_groups(self):
         """
-        Get content groups:
+        Get content groups data which is suitable for jqtree.
+
+        Groups:
          - recently changed
          - unused
          - used once
@@ -27,24 +30,45 @@ class ContentItemManager(models.Manager):
         today = datetime.date.today()
 
         for content_item in self.get_query_set().annotate(num_pages=models.Count('page')):
+            content_item.set_used_on_pages_json()
+
+            content_item_info = dict(
+                label=unicode(content_item),
+                id=content_item.id,
+                change_url=content_item.get_change_url(),
+                used_on_pages=content_item.used_on_pages_data
+            )
             count = content_item.num_pages
 
-            if count == 0:
-                unused.append(content_item)
+            if not count:
+                unused.append(content_item_info)
             elif count == 1:
-                once.append(content_item)
+                once.append(content_item_info)
             else:
-                multiple.append(content_item)
+                multiple.append(content_item_info)
 
             if content_item.updated.date() == today:
-                recently_changed.append(content_item)
+                recently_changed.append(content_item_info)
 
-        return [
-            dict(title=_('used more than once'), content_items=multiple),
-            dict(title=_('unused'), content_items=unused),
-            dict(title=_('used once'), content_items=once),
-            dict(title=_('recently changed'), content_items=recently_changed),
-        ]
+        result = []
+
+        def add_group(label, slug, children):
+            if children:
+                # Use ugettext instead of ugettext_lazy because result must be serializable.
+                result.append(
+                    dict(
+                        label=ugettext(label),
+                        children=children,
+                        id=slug
+                    )
+                )
+
+        add_group('used more than once', 'multiple', multiple)
+        add_group('unused', 'unused', unused)
+        add_group('used once', 'once', once)
+        add_group('recently changed', 'recently_changed', recently_changed)
+
+        return result
 
     def rename_url(self, old_url, new_url):
         """
@@ -182,3 +206,53 @@ class PageManager(TreeManager):
         for page in page_candidates:
             if get_named_url_from_quoted_url(page.url) == url:
                 return page
+
+    def create_jqtree_data(self):
+        """
+        Create a page tree suitable for the jqtree. The result is a recursive list of dicts.
+
+        Example:
+            [
+                {
+                    'label': 'menu1',
+                    'children': [
+                        { 'label': page1' }
+                    ]
+                },
+                {
+                    'label': 'menu2',
+                }
+            ]
+        """
+        data = []
+        page_dict = dict()  # maps page id to page info
+
+        # The queryset contains all pages in correct order
+        queryset = self.model.tree.get_query_set()
+
+        for page in queryset:
+            page_info = dict(
+                label=page.title,
+                id=page.id,
+            )
+
+            url=page.get_absolute_url()
+            if url:
+                page_info['url'] = url
+                page_info['change_url'] = page.get_change_url()
+                page_info['add_url'] = page.get_add_url()
+
+            if not page.parent:
+                # Root element
+                data.append(page_info)
+            else:
+                parent_info = page_dict.get(page.parent_id)
+                if not 'children' in parent_info:
+                    parent_info['children'] = []
+
+                parent_info['children'].append(page_info)
+
+            page_dict[page.id] = page_info
+
+        return data
+
