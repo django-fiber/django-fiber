@@ -56,23 +56,23 @@ class ContentItemTest(TestCase):
         content_groups = ContentItem.objects.get_content_groups()
 
         self.assertEquals(
-            format_list([g['title'] for g in content_groups], must_sort=False, separator=';'),
+            format_list([g['label'] for g in content_groups], must_sort=False, separator=';'),
             'used more than once;unused;used once;recently changed'
         )
         self.assertEquals(
-            format_list(content_groups[0]['content_items']),
+            format_list(n['label'] for n in content_groups[0]['children']),
             'a'
         )
         self.assertEquals(
-            format_list(content_groups[1]['content_items']),
+            format_list(n['label'] for n in content_groups[1]['children']),
             'c'
         )
         self.assertEquals(
-            format_list(content_groups[2]['content_items']),
+            format_list(n['label'] for n in content_groups[2]['children']),
             'b'
         )
         self.assertEquals(
-            format_list(content_groups[3]['content_items']),
+            format_list(n['label'] for n in content_groups[3]['children']),
             'a b c'
         )
 
@@ -154,7 +154,7 @@ class PageTest(TestCase):
         page_section2 = Page.objects.get(title='section2')
         page_abc = Page.objects.get(title='abc')
 
-        page_abc.move_page(page_section2.id)
+        page_abc.move_page(page_section2.id, 'inside')
 
         page_abc = Page.objects.get(title='abc')  # reload the page
         self.assertEquals(page_abc.parent.title, 'section2')
@@ -180,7 +180,7 @@ class PageTest(TestCase):
         page_def = Page.objects.get(title='def')
         page_section2 = Page.objects.get(title='section2')
 
-        page_xyz.move_page(page_section2.id, page_def.id)
+        page_xyz.move_page(page_def.id, 'after')
 
         page_xyz = Page.objects.get(title='xyz')  # reload the page
         self.assertEquals(page_xyz.parent.title, 'section2')
