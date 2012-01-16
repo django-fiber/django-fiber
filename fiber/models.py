@@ -86,7 +86,6 @@ class Page(MPTTModel):
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
 
-    objects = managers.PageManager()
     tree = TreeManager()
 
     class Meta:
@@ -203,6 +202,9 @@ class Page(MPTTModel):
             new_url = self.get_absolute_url()
             if old_url != new_url:
                 ContentItem.objects.rename_url(old_url, new_url)
+
+    def is_public_for_user(self, user):
+        return user.is_staff or self.is_public
 
 
 class PageContentItem(models.Model):

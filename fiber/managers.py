@@ -82,23 +82,6 @@ class ContentItemManager(models.Manager):
                     content_item.save()
 
 
-class PageManager(models.Manager):
-
-    def public_for_user(self, user):
-        public_pages_qs = self.get_query_set()
-        if not user.is_staff:
-            public_pages_qs = public_pages_qs.filter(is_public=True)
-
-        return public_pages_qs
-
-    def shown_in_menu_for_user(self, user):
-        shown_in_menu_pages_qs = self.get_query_set()
-        if not user.is_staff:
-            shown_in_menu_pages_qs = shown_in_menu_pages_qs.filter(show_in_menu=True, is_public=True)
-
-        return shown_in_menu_pages_qs
-
-
 class PageContentItemManager(models.Manager):
 
     def move(self, item, next_item=None, block_name=None):
