@@ -3,6 +3,7 @@ import re
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from mptt.managers import TreeManager
 
 from fiber import editor
 
@@ -112,3 +113,23 @@ class PageContentItemManager(models.Manager):
                 next_index = page_content_items.index(next_item)
                 page_content_items.insert(next_index, item)
                 resort()
+
+
+class PageManager(TreeManager):
+
+    def link_parent_objects(self, pages):
+        """
+        Given an iterable of page objects which includes all ancestors
+        of any contained pages, unifies the 'parent' objects
+        using items in the iterable.
+        """
+        pages = list(pages)
+        page_dict = {}
+        for p in pages:
+            page_dict[p.id] = p
+        for p in pages:
+            if p.parent_id is None:
+                p.parent = None
+            else:
+                p.parent = page_dict[p.parent_id]
+        return pages

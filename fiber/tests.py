@@ -327,29 +327,30 @@ class TestTemplateTags(TestCase):
             'user': self.get_non_staff_user(),
             'fiber_page': Page.objects.get(title='home'),
         })
-        self.assertEquals(
-            strip_whitespace(t.render(c)),
-            ('<ul>'
-               '<li class="home first last">'
-                 '<a href="/">home</a>'
-                 '<ul>'
-                   '<li class="section1 first">'
-                     '<a href="/section1/">section1</a>'
+        with self.assertNumQueries(2):
+            self.assertEquals(
+                strip_whitespace(t.render(c)),
+                ('<ul>'
+                   '<li class="home first last">'
+                     '<a href="/">home</a>'
                      '<ul>'
-                       '<li class="sub1 first">'
-                         '<a href="/section1/sub1/">sub1</a>'
+                       '<li class="section1 first">'
+                         '<a href="/section1/">section1</a>'
+                         '<ul>'
+                           '<li class="sub1 first">'
+                             '<a href="/section1/sub1/">sub1</a>'
+                           '</li>'
+                           '<li class="sub2 last">'
+                             '<a href="/section1/sub2/">sub2</a>'
+                           '</li>'
+                         '</ul>'
                        '</li>'
-                       '<li class="sub2 last">'
-                         '<a href="/section1/sub2/">sub2</a>'
+                       '<li class="section2 last">'
+                         '<a href="/section2/">section2</a>'
                        '</li>'
                      '</ul>'
                    '</li>'
-                   '<li class="section2 last">'
-                     '<a href="/section2/">section2</a>'
-                   '</li>'
-                 '</ul>'
-               '</li>'
-             '</ul>'))
+                 '</ul>'))
 
     def test_show_user_menu_all_descendants(self):
         """
@@ -464,13 +465,14 @@ class TestTemplateTags(TestCase):
             'user': self.get_non_staff_user(),
             'fiber_page': other_root,
         })
-        self.assertEquals(
-            strip_whitespace(t.render(c)),
-            ('<ul>'
-             '<li class="home first last">'
-             '<a href="/">home</a>'
-             '</li>'
-             '</ul>'))
+        with self.assertNumQueries(2):
+            self.assertEquals(
+                strip_whitespace(t.render(c)),
+                ('<ul>'
+                 '<li class="home first last">'
+                 '<a href="/">home</a>'
+                 '</li>'
+                 '</ul>'))
 
 
     def test_show_admin_menu_all(self):
