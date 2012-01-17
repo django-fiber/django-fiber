@@ -1,4 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
+from datetime import datetime
+
+try:
+    # For Django 1.4, django.utils.timezone exists, and we need to handle
+    # timezone aware datetimes being passed in to friendly_datetime
+    from django.utils import timezone
+    tz_now = timezone.now
+except ImportError:
+    tz_now = datetime.now
 
 
 def friendly_datetime(date_time):
@@ -6,9 +15,7 @@ def friendly_datetime(date_time):
     Given a datetime object or an int() Unix timestamp, return a friendly
     string like 'an hour ago', 'yesterday', '3 months ago', 'just now', etc.
     """
-    from datetime import datetime
-
-    now = datetime.now()
+    now = tz_now()
     if type(date_time) is datetime:
         diff = now - date_time
     elif type(date_time) is int:
