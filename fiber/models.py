@@ -62,7 +62,7 @@ class ContentItem(models.Model):
         self.save()
 
     def get_used_on_pages_json(self):
-        if not self.used_on_pages_data:
+        if self.used_on_pages_data is None:
             self.set_used_on_pages_json()
 
         return simplejson.dumps(self.used_on_pages_data)
