@@ -27,8 +27,8 @@ def page(request, url):
             return HttpResponsePermanentRedirect(page.redirect_page.get_absolute_url())
 
     t = loader.get_template(page.template_name or DEFAULT_TEMPLATE)
-    c = RequestContext(request, {'page': page,})
+    context['page'] = page
 
-    response = HttpResponse(t.render(c))
+    response = HttpResponse(t.render(context))
     populate_xheaders(request, response, Page, page.id)
     return response
