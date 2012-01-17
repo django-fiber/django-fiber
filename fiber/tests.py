@@ -447,6 +447,31 @@ class TestTemplateTags(TestCase):
                '</li>'
              '</ul>'))
 
+    def test_show_user_menu_different_root(self):
+        """
+        Test that show_menu only shows top level if current
+        page is in different root.
+        """
+        self.generate_data()
+        other_root = Page.objects.create(title='other')
+
+        t = Template("""
+            {% load fiber_tags %}
+            {% show_menu 'main' 1 999 %}
+            """
+        )
+        c = Context({
+            'user': self.get_non_staff_user(),
+            'fiber_page': other_root,
+        })
+        self.assertEquals(
+            strip_whitespace(t.render(c)),
+            ('<ul>'
+             '<li class="home first last">'
+             '<a href="/">home</a>'
+             '</li>'
+             '</ul>'))
+
 
     def test_show_admin_menu_all(self):
         self.generate_data()
