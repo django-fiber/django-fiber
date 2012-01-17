@@ -8,6 +8,12 @@ from models import Page, ContentItem
 from utils.urls import is_quoted_url
 
 
+if len(TEMPLATE_CHOICES) == 0:
+    template_choices = [('', _('Default template'))]
+else:
+    template_choices = TEMPLATE_CHOICES
+
+
 class ContentItemAdminForm(forms.ModelForm):
 
     class Meta:
@@ -17,6 +23,7 @@ class ContentItemAdminForm(forms.ModelForm):
 class PageForm(forms.ModelForm):
 
     parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3*unichr(160), empty_label='---------', required=False)
+    template_name = forms.ChoiceField(choices=template_choices, required=False, label=_('Template'))
     redirect_page = TreeNodeChoiceField(label=_('Redirect page'), queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160), empty_label='---------', required=False)
 
     class Meta:
