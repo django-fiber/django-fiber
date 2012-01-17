@@ -100,7 +100,7 @@ class FiberAdminContentItemAdmin(fiber_admin.ModelAdmin):
 
 class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):
 
-    form = forms.FiberAdminPageForm
+    form = forms.PageForm
 
     def __init__(self, *args, **kwargs):
         super(FiberAdminPageAdmin, self).__init__(*args, **kwargs)

@@ -22,6 +22,11 @@ class PageForm(forms.ModelForm):
     class Meta:
         model = Page
 
+    def __init__(self, *args, **kwargs):
+        super(PageForm, self).__init__(*args, **kwargs)
+        if len(TEMPLATE_CHOICES) > 0:
+            self.fields['template_name'] = forms.ChoiceField(choices=TEMPLATE_CHOICES, required=False, label=_('Template'))
+
     def clean_title(self):
         """
         Strips extra whitespace
@@ -36,7 +41,3 @@ class PageForm(forms.ModelForm):
             except KeyError:
                 pass
         return self.cleaned_data['redirect_page']
-
-
-class FiberAdminPageForm(PageForm):
-    template_name = forms.ChoiceField(choices=TEMPLATE_CHOICES, required=False, label=_('Template'))
