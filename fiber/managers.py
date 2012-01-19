@@ -133,6 +133,7 @@ class PageManager(TreeManager):
                 p.parent = None
             else:
                 p.parent = page_dict[p.parent_id]
+            p._ancestors_retrieved = True
         return pages
 
     def get_by_url(self, url):

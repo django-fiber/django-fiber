@@ -161,6 +161,19 @@ class Page(MPTTModel):
                 self.lft > node.lft and
                 self.rght < node.rght)
 
+    def get_ancestors(self):
+        if getattr(self, '_ancestors_retrieved', False):
+            # We have already retrieved the chain of parent objects, so can skip
+            # a DB query for this.
+            ancestors = []
+            node = self
+            while node.parent_id is not None:
+                ancestors.insert(0, node.parent)
+                node = node.parent
+            return ancestors
+        else:
+            return super(Page, self).get_ancestors()
+
     def get_ancestors_include_self(self):
         """
         This method is currently used because there is no include_self
