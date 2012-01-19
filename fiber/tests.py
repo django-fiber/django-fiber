@@ -292,14 +292,27 @@ class PageContentItemTest(TestCase):
 
 class TestTemplateTags(TestCase):
 
-    def test_show_user_menu(self):
+    def generate_data(self):
+        """
+        Generates test data
+        """
         # generate data
         main = Page.objects.create(title='main')
         home = Page.objects.create(title='home', parent=main, url='/')
         Page.objects.create(title='section1', parent=home, url='section1')
 
-        user = User.objects.create_user('user1', 'u@ser.nl')
+    def get_non_staff_user(self):
+        user = User.objects.create_user('user1', 'u@ser.nl', password="pass")
         user.is_staff = False
+        return user
+
+    def get_staff_user(self):
+        user = User.objects.create_user('user2', 'u2@ser.nl', password="secure")
+        user.is_staff = True
+        return user
+
+    def test_show_user_menu_all(self):
+        self.generate_data()
 
         # render menu with all pages
         t = Template("""
@@ -308,8 +321,8 @@ class TestTemplateTags(TestCase):
             """
         )
         c = Context({
-            'user': user,
-            'fiber_page': home
+            'user': self.get_non_staff_user(),
+            'fiber_page': Page.objects.get(title='home'),
         })
         self.assertEquals(
             strip_whitespace(t.render(c)),
@@ -321,14 +334,8 @@ class TestTemplateTags(TestCase):
             '</li></ul>'
         )
 
-    def test_show_admin_menu(self):
-        # generate data
-        main = Page.objects.create(title='main')
-        home = Page.objects.create(title='home', parent=main, url='/')
-        Page.objects.create(title='section1', parent=home, url='section1')
-
-        user = User.objects.create_user('username', 'p4ssw0rd')
-        user.is_staff = True
+    def test_show_admin_menu_all(self):
+        self.generate_data()
 
         # render menu with all pages
         t = Template("""
@@ -337,8 +344,8 @@ class TestTemplateTags(TestCase):
             """
         )
         c = Context({
-            'user': user,
-            'fiber_page': home
+            'user': self.get_staff_user(),
+            'fiber_page': Page.objects.get(title='home'),
         })
         self.assertEquals(
             strip_whitespace(t.render(c)),
