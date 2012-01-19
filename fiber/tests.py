@@ -404,6 +404,50 @@ class TestTemplateTags(TestCase):
                '</li>'
              '</ul>'))
 
+    def test_show_user_menu_min_max_level(self):
+        """
+        Test for minimum and maximum level
+        """
+        self.generate_data()
+
+        t = Template("""
+            {% load fiber_tags %}
+            {% show_menu 'main' 2 2 %}
+            """
+        )
+        c = Context({
+            'user': self.get_non_staff_user(),
+            'fiber_page': Page.objects.get(title='sub1'),
+        })
+        self.assertEquals(
+            strip_whitespace(t.render(c)),
+            ('<ul>'
+               '<li class="section1 first">'
+                 '<a href="/section1/">section1</a>'
+               '</li>'
+               '<li class="section2 last">'
+                 '<a href="/section2/">section2</a>'
+               '</li>'
+             '</ul>'))
+
+        t = Template("""
+            {% load fiber_tags %}
+            {% show_menu 'main' 3 3 %}
+            """
+        )
+
+        self.assertEquals(
+            strip_whitespace(t.render(c)),
+            ('<ul>'
+               '<li class="sub1 first">'
+                 '<a href="/section1/sub1/">sub1</a>'
+               '</li>'
+               '<li class="sub2 last">'
+                 '<a href="/section1/sub2/">sub2</a>'
+               '</li>'
+             '</ul>'))
+
+
     def test_show_admin_menu_all(self):
         self.generate_data()
 
