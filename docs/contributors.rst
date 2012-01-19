@@ -9,6 +9,7 @@ Contributors
 * Dennis Bunskoek
 * Diederik van der Boor
 * Dzjon Hessing
+* Luke Plant
 * Marco Braak
 * Michael van de Waeter
 * Nick Badoux
