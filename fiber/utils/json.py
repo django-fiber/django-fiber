@@ -54,7 +54,7 @@ class JSONField(models.TextField):
         return super(JSONField, self).formfield(form_class=JSONFormField, **kwargs)
 
     def to_python(self, value):
-        if not value:
+        if value is None:
             return None
         try:
             if isinstance(value, basestring):
@@ -64,7 +64,7 @@ class JSONField(models.TextField):
         return value
 
     def _get_json_value(self, value):
-        if not value:
+        if value is None:
             return ''
         elif isinstance(value, basestring):
             return value
@@ -75,7 +75,7 @@ class JSONField(models.TextField):
         return self._get_json_value(value)
 
     def get_db_prep_save(self, value, *args, **kwargs):
-        if not value:
+        if value is None:
             return None
         if isinstance(value, dict):
             value = json.dumps(value)

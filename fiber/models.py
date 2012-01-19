@@ -7,7 +7,6 @@ from django.utils import simplejson
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 
-from mptt.managers import TreeManager
 from mptt.models import MPTTModel
 
 from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA
@@ -63,7 +62,7 @@ class ContentItem(models.Model):
         self.save()
 
     def get_used_on_pages_json(self):
-        if not self.used_on_pages_data:
+        if self.used_on_pages_data is None:
             self.set_used_on_pages_json()
 
         return simplejson.dumps(self.used_on_pages_data)
@@ -87,7 +86,6 @@ class Page(MPTTModel):
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
 
     objects = managers.PageManager()
-    tree = TreeManager()
 
     class Meta:
         verbose_name = _('page')
@@ -153,6 +151,27 @@ class Page(MPTTModel):
             return True
         return self.parent and (self.rght + 1 == self.parent.rght)
 
+    def is_child_of(self, node):
+        """
+        Returns True if this is a child of the given node.
+        """
+        return (self.tree_id == node.tree_id and
+                self.lft > node.lft and
+                self.rght < node.rght)
+
+    def get_ancestors(self):
+        if getattr(self, '_ancestors_retrieved', False):
+            # We have already retrieved the chain of parent objects, so can skip
+            # a DB query for this.
+            ancestors = []
+            node = self
+            while node.parent_id is not None:
+                ancestors.insert(0, node.parent)
+                node = node.parent
+            return ancestors
+        else:
+            return super(Page, self).get_ancestors()
+
     def get_ancestors_include_self(self):
         """
         This method is currently used because there is no include_self
@@ -203,6 +222,9 @@ class Page(MPTTModel):
             new_url = self.get_absolute_url()
             if old_url != new_url:
                 ContentItem.objects.rename_url(old_url, new_url)
+
+    def is_public_for_user(self, user):
+        return user.is_staff or self.is_public
 
 
 class PageContentItem(models.Model):

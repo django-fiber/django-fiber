@@ -3,8 +3,10 @@ import re
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from mptt.managers import TreeManager
 
 from fiber import editor
+from fiber.utils.urls import get_named_url_from_quoted_url
 
 
 class ContentItemManager(models.Manager):
@@ -82,23 +84,6 @@ class ContentItemManager(models.Manager):
                     content_item.save()
 
 
-class PageManager(models.Manager):
-
-    def public_for_user(self, user):
-        public_pages_qs = self.get_query_set()
-        if not user.is_staff:
-            public_pages_qs = public_pages_qs.filter(is_public=True)
-
-        return public_pages_qs
-
-    def shown_in_menu_for_user(self, user):
-        shown_in_menu_pages_qs = self.get_query_set()
-        if not user.is_staff:
-            shown_in_menu_pages_qs = shown_in_menu_pages_qs.filter(show_in_menu=True, is_public=True)
-
-        return shown_in_menu_pages_qs
-
-
 class PageContentItemManager(models.Manager):
 
     def move(self, item, next_item=None, block_name=None):
@@ -129,3 +114,72 @@ class PageContentItemManager(models.Manager):
                 next_index = page_content_items.index(next_item)
                 page_content_items.insert(next_index, item)
                 resort()
+
+
+class PageManager(TreeManager):
+
+    def link_parent_objects(self, pages):
+        """
+        Given an iterable of page objects which includes all ancestors
+        of any contained pages, unifies the 'parent' objects
+        using items in the iterable.
+        """
+        pages = list(pages)
+        page_dict = {}
+        for p in pages:
+            page_dict[p.id] = p
+        for p in pages:
+            if p.parent_id is None:
+                p.parent = None
+            else:
+                p.parent = page_dict[p.parent_id]
+            p._ancestors_retrieved = True
+        return pages
+
+    def get_by_url(self, url):
+        """
+        Retrieve a page that matches the given URL.
+        """
+        # We need to check against get_absolute_url(). Typically this will
+        # recursively access .parent, so we retrieve the ancestors at the same time
+        # for efficiency.
+        qs = self.get_query_set()
+
+        # First check if there is a Page whose `url` matches the requested URL.
+        try:
+            return qs.get(url__exact=url)
+        except self.model.DoesNotExist:
+            pass
+
+        # If no Page has been found, check a subset of Pages (whose `url` or
+        # `relative_url` contain the rightmost part of the requested URL), to see
+        # if their `get_absolute_url()` matches the requested URL entirely.
+
+        # Since get_absolute_url() accesses .parent recursively, we
+        # load the ancestors efficiently in one query first
+
+        last_url_part = url.rstrip('/').rsplit('/', 1)[-1]
+        if last_url_part:
+            page_candidates = qs.exclude(url__exact='', ) \
+                .filter(url__icontains=last_url_part)
+
+            # We need all the ancestors of all the candidates. We can do this in
+            # two queries - one for candidates, one for ancestors:
+            route_pages = self.model.objects.none()
+            for p in page_candidates:
+                route_pages = route_pages | qs.filter(lft__lte=p.lft,
+                                                      rght__gte=p.rght)
+            route_pages = self.link_parent_objects(route_pages)
+            # Use page_candidates that have parent objects attached
+            page_candidates = [p for p in route_pages if last_url_part in p.url]
+
+            for page in page_candidates:
+                if page.get_absolute_url() == url:
+                    return page
+
+        # If no Page has been found, try to find a Page by matching the
+        # requested URL with reversed `named_url`s.
+        page_candidates = qs.filter(url__startswith='"', url__endswith='"')
+        for page in page_candidates:
+            if get_named_url_from_quoted_url(p.url) == url:
+                return page
