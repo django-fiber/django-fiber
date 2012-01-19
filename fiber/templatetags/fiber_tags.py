@@ -13,6 +13,7 @@ register = template.Library()
 def show_menu(context, menu_name, min_level, max_level, expand=None):
 
     menu_pages = []
+    needed_pages = []
 
     try:
         root_page = Page.objects.get(title=menu_name, parent=None)
