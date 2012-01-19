@@ -16,7 +16,7 @@ def page_info(request):
     """
     if EXCLUDE_URLS:
         for exclude_url in EXCLUDE_URLS:
-            if re.search(exclude_url, request.path.lstrip('/')):
+            if re.search(exclude_url, url.lstrip('/')):
                 return context
 
     page = Page.objects.get_by_url(url)

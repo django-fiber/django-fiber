@@ -160,8 +160,7 @@ class PageManager(TreeManager):
 
         last_url_part = url.rstrip('/').rsplit('/', 1)[-1]
         if last_url_part:
-            page_candidates = qs.exclude(url__exact='', ) \
-                .filter(url__icontains=last_url_part)
+            page_candidates = qs.exclude(url__exact='', ).filter(url__icontains=last_url_part)
 
             # We need all the ancestors of all the candidates. We can do this in
             # two queries - one for candidates, one for ancestors:
@@ -181,5 +180,5 @@ class PageManager(TreeManager):
         # requested URL with reversed `named_url`s.
         page_candidates = qs.filter(url__startswith='"', url__endswith='"')
         for page in page_candidates:
-            if get_named_url_from_quoted_url(p.url) == url:
+            if get_named_url_from_quoted_url(page.url) == url:
                 return page

@@ -40,7 +40,7 @@ class AdminPageMiddleware(object):
     def process_response(self, request, response):
         if self.set_login_session(request, response):
             request.session['show_fiber_admin'] = True
-            url_without_fiber = request.path.replace('@fiber', '')
+            url_without_fiber = request.path_info.replace('@fiber', '')
             querystring_without_fiber = ''
             if request.META['QUERY_STRING']:
                 querystring_without_fiber = request.META['QUERY_STRING'].replace('@fiber', '')
@@ -100,7 +100,7 @@ class AdminPageMiddleware(object):
         """
         if response['Content-Type'].split(';')[0] not in ('text/html', 'application/xhtml+xml'):
             return False
-        if not (request.path.endswith('@fiber') or (request.META['QUERY_STRING'] and request.META['QUERY_STRING'].endswith('@fiber'))):
+        if not (request.path_info.endswith('@fiber') or (request.META['QUERY_STRING'] and request.META['QUERY_STRING'].endswith('@fiber'))):
             return False
         else:
             return True
@@ -150,12 +150,12 @@ class AdminPageMiddleware(object):
             return False
         if EXCLUDE_URLS:
             for exclude_url in EXCLUDE_URLS:
-                if re.search(exclude_url, request.path.lstrip('/')):
+                if re.search(exclude_url, request.path_info.lstrip('/')):
                     return False
         return True
 
     def is_django_admin(self, request):
-        return re.search(r'^%s' % (reverse('admin:index').lstrip('/')), request.path.lstrip('/'))
+        return re.search(r'^%s' % (reverse('admin:index').lstrip('/')), request.path_info.lstrip('/'))
 
     def get_header_html(self, request):
         t = loader.get_template('fiber/header.html')
@@ -172,9 +172,9 @@ class AdminPageMiddleware(object):
 
     def get_logout_url(self, request):
         if request.META['QUERY_STRING']:
-            return '%s?next=%s?%s' % (reverse('admin:logout'), request.path, request.META['QUERY_STRING'])
+            return '%s?next=%s?%s' % (reverse('admin:logout'), request.path_info, request.META['QUERY_STRING'])
         else:
-            return '%s?next=%s' % (reverse('admin:logout'), request.path)
+            return '%s?next=%s' % (reverse('admin:logout'), request.path_info)
 
     def get_editor_settings(self):
         return import_element(EDITOR)
