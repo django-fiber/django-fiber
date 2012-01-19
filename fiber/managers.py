@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.managers import TreeManager
 
 from fiber import editor
+from fiber.utils.urls import get_named_url_from_quoted_url
 
 
 class ContentItemManager(models.Manager):
@@ -133,3 +134,51 @@ class PageManager(TreeManager):
             else:
                 p.parent = page_dict[p.parent_id]
         return pages
+
+    def get_by_url(self, url):
+        """
+        Retrieve a page that matches the given URL.
+        """
+        # We need to check against get_absolute_url(). Typically this will
+        # recursively access .parent, so we retrieve the ancestors at the same time
+        # for efficiency.
+        qs = self.get_query_set()
+
+        # First check if there is a Page whose `url` matches the requested URL.
+        try:
+            return qs.get(url__exact=url)
+        except self.model.DoesNotExist:
+            pass
+
+        # If no Page has been found, check a subset of Pages (whose `url` or
+        # `relative_url` contain the rightmost part of the requested URL), to see
+        # if their `get_absolute_url()` matches the requested URL entirely.
+
+        # Since get_absolute_url() accesses .parent recursively, we
+        # load the ancestors efficiently in one query first
+
+        last_url_part = url.rstrip('/').rsplit('/', 1)[-1]
+        if last_url_part:
+            page_candidates = qs.exclude(url__exact='', ) \
+                .filter(url__icontains=last_url_part)
+
+            # We need all the ancestors of all the candidates. We can do this in
+            # two queries - one for candidates, one for ancestors:
+            route_pages = self.model.objects.none()
+            for p in page_candidates:
+                route_pages = route_pages | qs.filter(lft__lte=p.lft,
+                                                      rght__gte=p.rght)
+            route_pages = self.link_parent_objects(route_pages)
+            # Use page_candidates that have parent objects attached
+            page_candidates = [p for p in route_pages if last_url_part in p.url]
+
+            for page in page_candidates:
+                if page.get_absolute_url() == url:
+                    return page
+
+        # If no Page has been found, try to find a Page by matching the
+        # requested URL with reversed `named_url`s.
+        page_candidates = qs.filter(url__startswith='"', url__endswith='"')
+        for page in page_candidates:
+            if get_named_url_from_quoted_url(p.url) == url:
+                return page
