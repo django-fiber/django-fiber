@@ -133,7 +133,7 @@ class ShowPageContentNode(template.Node):
     def render(self, context):
         try:
             page = self.page.resolve(context)
-            page_content_items = page.page_content_items.filter(block_name=self.block_name).order_by('sort')
+            page_content_items = page.page_content_items.filter(block_name=self.block_name).order_by('sort').select_related('content_item')
 
             content_items = []
             for page_content_item in page_content_items:
