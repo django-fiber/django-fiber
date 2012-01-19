@@ -351,6 +351,59 @@ class TestTemplateTags(TestCase):
                '</li>'
              '</ul>'))
 
+    def test_show_user_menu_all_descendants(self):
+        """
+        Tests for 'all_descendants' with a minimum level
+        """
+        self.generate_data()
+        user = self.get_non_staff_user()
+
+        t = Template("""
+            {% load fiber_tags %}
+            {% show_menu 'main' 2 999 "all_descendants" %}
+            """
+        )
+
+        c = Context({
+            'user': user,
+            'fiber_page': Page.objects.get(title='section1'),
+        })
+
+        self.assertEquals(
+            strip_whitespace(t.render(c)),
+            ('<ul>'
+               '<li class="section1 first">'
+                 '<a href="/section1/">section1</a>'
+                 '<ul>'
+                   '<li class="sub1 first">'
+                     '<a href="/section1/sub1/">sub1</a>'
+                   '</li>'
+                   '<li class="sub2 last">'
+                     '<a href="/section1/sub2/">sub2</a>'
+                   '</li>'
+                 '</ul>'
+               '</li>'
+               '<li class="section2 last">'
+                 '<a href="/section2/">section2</a>'
+               '</li>'
+             '</ul>'))
+
+        c = Context({
+            'user': user,
+            'fiber_page': Page.objects.get(title='section2'),
+        })
+
+        self.assertEquals(
+            strip_whitespace(t.render(c)),
+            ('<ul>'
+               '<li class="section1 first">'
+                 '<a href="/section1/">section1</a>'
+               '</li>'
+               '<li class="section2 last">'
+                 '<a href="/section2/">section2</a>'
+               '</li>'
+             '</ul>'))
+
     def test_show_admin_menu_all(self):
         self.generate_data()
 
