@@ -16,3 +16,11 @@ EDITOR = getattr(settings, 'FIBER_EDITOR', 'fiber.editor_definitions.ckeditor.ED
 
 METADATA_PAGE_SCHEMA = getattr(settings, 'FIBER_METADATA_PAGE_SCHEMA', {})
 METADATA_CONTENT_SCHEMA = getattr(settings, 'FIBER_METADATA_CONTENT_SCHEMA', {})
+
+if 'fiber.middleware.PageFallbackMiddleware' in settings.MIDDLEWARE_CLASSES:
+    raise DeprecationWarning( \
+        "fiber.middleware.PageFallbackMiddleware has been removed.\n"
+        "See README.rst for new implementation details.\n"
+        "It basically boils down to this:\n"
+        "remove 'fiber.middleware.PageFallbackMiddleware' from settings.MIDDLEWARE_CLASSES, and\n"
+        "add (r'', 'fiber.views.page') to the end of your urls.py")

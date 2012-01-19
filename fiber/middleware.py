@@ -1,7 +1,6 @@
 import re
 import random
 
-from django.core.exceptions import MiddlewareNotUsed
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
@@ -12,20 +11,6 @@ from utils.import_util import import_element
 
 from app_settings import EXCLUDE_URLS, EDITOR
 from models import Page, ContentItem
-
-
-class PageFallbackMiddleware(object):
-    """
-    This middleware has been removed; see the django-fiber 0.9.6 release notes
-    (README.rst) for details.
-    """
-
-    def __init__(self):
-        import warnings
-        warnings.warn("PageFallbackMiddleware has been removed. "
-                      "See the django-fiber 0.9.6 release notes (README.rst) for details.",
-                      category=DeprecationWarning)
-        raise MiddlewareNotUsed()
 
 
 class AdminPageMiddleware(object):
