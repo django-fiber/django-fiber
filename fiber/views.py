@@ -2,21 +2,16 @@ from django.conf import settings
 from django.core.xheaders import populate_xheaders
 from django.http import HttpResponse, HttpResponsePermanentRedirect, Http404
 from django.template import loader, RequestContext
-from django.views.decorators.csrf import csrf_protect
 
 from app_settings import DEFAULT_TEMPLATE
 from models import Page
 
 
-# This view is called from PageFallbackMiddleware.process_response
-# when a 404 is raised, which often means CsrfViewMiddleware.process_view
-# has not been called even if CsrfViewMiddleware is installed. So we need
-# to use @csrf_protect, in case the template needs {% csrf_token %}.
+def page(request):
+    url = request.path_info
 
-@csrf_protect
-def page(request, url):
     if not url.endswith('/') and settings.APPEND_SLASH:
-        return HttpResponsePermanentRedirect('%s/' % request.path)
+        return HttpResponsePermanentRedirect('%s/' % url)
 
     context = RequestContext(request)
     if 'fiber_page' not in context:

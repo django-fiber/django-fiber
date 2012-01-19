@@ -1,9 +1,9 @@
 import re
 import random
 
-from django.conf import settings
+from django.core.exceptions import MiddlewareNotUsed
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.utils.encoding import smart_unicode
 from django.utils import simplejson
@@ -12,24 +12,20 @@ from utils.import_util import import_element
 
 from app_settings import EXCLUDE_URLS, EDITOR
 from models import Page, ContentItem
-from views import page
 
 
 class PageFallbackMiddleware(object):
+    """
+    This middleware has been removed; see the django-fiber 0.9.6 release notes
+    (README.rst) for details.
+    """
 
-    def process_response(self, request, response):
-        if response.status_code != 404:
-            return response # No need to check for a page for non-404 responses.
-        try:
-            return page(request, request.path_info)
-        # Return the original response if any errors happened. Because this
-        # is a middleware, we can't assume the errors will be caught elsewhere.
-        except Http404:
-            return response
-        except:
-            if settings.DEBUG:
-                raise
-            return response
+    def __init__(self):
+        import warnings
+        warnings.warn("PageFallbackMiddleware has been removed. "
+                      "See the django-fiber 0.9.6 release notes (README.rst) for details.",
+                      category=DeprecationWarning)
+        raise MiddlewareNotUsed()
 
 
 class AdminPageMiddleware(object):
