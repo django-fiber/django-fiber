@@ -63,7 +63,7 @@ def page_info(request):
     Block access to pages that the current user isn't supposed to see.
     """
     if page:
-        if page not in Page.objects.public_for_user(request.user):
+        if not page.is_public_for_user(request.user):
             page = None
 
     """
