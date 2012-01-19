@@ -7,6 +7,7 @@ from django.utils import simplejson
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 
+from mptt.managers import TreeManager
 from mptt.models import MPTTModel
 
 from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA
@@ -85,6 +86,7 @@ class Page(MPTTModel):
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
 
+    tree = TreeManager()
     objects = managers.PageManager()
 
     class Meta:
