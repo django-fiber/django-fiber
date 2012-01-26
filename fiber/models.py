@@ -241,6 +241,10 @@ class PageContentItem(models.Model):
         super(PageContentItem, self).save(*args, **kwargs)
         self.content_item.set_used_on_pages_json()
 
+    def delete(self, *args, **kwargs):
+        super(PageContentItem, self).delete(*args, **kwargs)
+        self.content_item.set_used_on_pages_json()
+
 
 class Image(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
