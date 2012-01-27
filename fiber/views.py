@@ -10,12 +10,16 @@ from models import Page
 def page(request):
     url = request.path_info
 
-    if not url.endswith('/') and settings.APPEND_SLASH:
-        return HttpResponsePermanentRedirect('%s/' % url)
-
     context = RequestContext(request)
     if 'fiber_page' not in context:
-        raise Http404
+        """
+        Take care of Django's CommonMiddleware redirect if the request URL doesn't end in a slash, and APPEND_SLASH=True
+        https://docs.djangoproject.com/en/dev/ref/settings/#append-slash
+        """
+        if not url.endswith('/') and settings.APPEND_SLASH:
+            return HttpResponsePermanentRedirect('%s/' % url)
+        else:
+            raise Http404
     else:
         page = context['fiber_page']
         if page.redirect_page and page.redirect_page != page: #prevent redirecting to itself
