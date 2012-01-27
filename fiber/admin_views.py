@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
 
-from models import Page
+from models import Page, ContentItem
 
 
 def fiber_login(request):
@@ -55,3 +55,15 @@ def page_move_down(request, id):
             page.move_to(next_sibling_page, position='right')
 
     return HttpResponseRedirect('../../')
+
+
+@staff_member_required
+def pages_json(request):
+    """
+    Returns page tree as json. The data is suitable for jqtree.
+    """
+    return HttpResponse(
+        simplejson.dumps(
+            Page.objects.create_jqtree_data()
+        )
+    )
