@@ -24,13 +24,6 @@ class PageForm(forms.ModelForm):
     class Meta:
         model = Page
 
-    def __init__(self, *args, **kw):
-        # remove translation_of if i18n is disabled
-        if ENABLE_I18N == False:
-            self.translation_of = None
-
-        super(PageForm, self).__init__(*args, **kw)
-
     def clean_title(self):
         """
         Strips extra whitespaces
