@@ -88,12 +88,12 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
     # - If i18n is enabled, remove pages not in the current language.
     current_user = context['user']
     current_language = get_language()
-    menu pages = [p for p in needed_pages if (p.level >= min_level) and\
+    menu_pages = [p for p in needed_pages if (p.level >= min_level) and\
             p.show_in_menu and (p.is_public_for_user(current_user)) and\
-            (not ENABLE_I18N or page.language == current_language)]
+            (not ENABLE_I18N or p.language == current_language)]
 
     # Order menu_pages for use with tree_info template tag.
-    menu_pages = sorted(list(menu_pages_qs), key=lambda menu_page: menu_page.lft)
+    menu_pages = sorted(menu_pages, key=lambda menu_page: menu_page.lft)
 
     # Find parent page for this menu
     menu_parent_page = None
@@ -118,19 +118,19 @@ def language_selector(context):
     if 'fiber_page' in context:
         current_page = context['fiber_page']
         page_translations = current_page.get_translations()
+        print page_translations
 
         for lang in languages:
-            if not I18N_PREFIX_MAIN_LANGUAGE and lang['code'] == current_language:
-                lang['url'] = '/'
             if lang['code'] == current_language:
+                lang['url'] = current_page.get_absolute_url()
                 lang['current'] = True
-            """
-            If the page has a a translation in lang, use the url of the translation as href.
-            """
-            for page in page_translations:
-                if lang['code'] == page.language:
-                    lang['url'] = page.get_absolute_url()
-                    lang['has_translation'] = True
+            else:
+                # If the page has a a translation in lang, use the url of the
+                # translation as href.
+                for page in page_translations:
+                    if lang['code'] == page.language:
+                        lang['url'] = page.get_absolute_url()
+                        lang['has_translation'] = True
                     break
     context['languages'] = languages
     return context
@@ -299,6 +299,9 @@ def get_translated_page(value, language=None):
         page = get_page(value)
 
     if page:
+        if page.language == language:
+            return page
+
         qs = page.get_translations().filter(language=language)
         if qs.count() > 0:
             return qs[0]
