@@ -26,6 +26,7 @@ class ContentItem(models.Model):
     protected = models.BooleanField(_('protected'), default=False)
     metadata = JSONField(_('metadata'), blank=True, null=True, schema=METADATA_CONTENT_SCHEMA, prefill_from='fiber.models.ContentItem')
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
+    used_on_pages_data = JSONField(_('used on pages'), blank=True, null=True)
 
     objects = managers.ContentItemManager()
 
@@ -51,15 +52,21 @@ class ContentItem(models.Model):
         named_url = 'fiber_admin:%s_%s_change' % (self._meta.app_label, self._meta.object_name.lower())
         return reverse(named_url, args=(self.id, ))
 
-    def get_used_on_pages_json(self):
-        page_content_items = self.page_content_items.all()
+    def set_used_on_pages_json(self):
         json_pages = []
-        for page_content_item in page_content_items:
+        for page_content_item in self.page_content_items.all():
             json_pages.append({
                 'title': page_content_item.page.title,
                 'url': page_content_item.page.get_absolute_url(),
             })
-        return simplejson.dumps(json_pages)
+        self.used_on_pages_data = json_pages
+        self.save()
+
+    def get_used_on_pages_json(self):
+        if self.used_on_pages_data is None:
+            self.set_used_on_pages_json()
+
+        return simplejson.dumps(self.used_on_pages_data)
 
 
 class Page(MPTTModel):
@@ -76,12 +83,13 @@ class Page(MPTTModel):
     # TODO: add `alias_page` field
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
     show_in_menu = models.BooleanField(_('show in menu'), default=True)
+    is_public = models.BooleanField(_('is public'), default=True)
     protected = models.BooleanField(_('protected'), default=False)
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
 
-    objects = managers.PageManager()
     tree = TreeManager()
+    objects = managers.PageManager()
 
     class Meta:
         verbose_name = _('page')
@@ -111,7 +119,7 @@ class Page(MPTTModel):
         if self.url == '':
             return language_prefix
         if self.url.startswith('/'):
-            return '%s/' % self.url.rstrip('/')
+            return self.url
         elif self.url.startswith('http://') or self.url.startswith('https://'):
             return self.url
         else:
@@ -149,6 +157,27 @@ class Page(MPTTModel):
         if self.is_root_node():
             return True
         return self.parent and (self.rght + 1 == self.parent.rght)
+
+    def is_child_of(self, node):
+        """
+        Returns True if this is a child of the given node.
+        """
+        return (self.tree_id == node.tree_id and
+                self.lft > node.lft and
+                self.rght < node.rght)
+
+    def get_ancestors(self):
+        if getattr(self, '_ancestors_retrieved', False):
+            # We have already retrieved the chain of parent objects, so can skip
+            # a DB query for this.
+            ancestors = []
+            node = self
+            while node.parent_id is not None:
+                ancestors.insert(0, node.parent)
+                node = node.parent
+            return ancestors
+        else:
+            return super(Page, self).get_ancestors()
 
     def get_ancestors_include_self(self):
         """
@@ -209,6 +238,9 @@ class Page(MPTTModel):
             if old_url != new_url:
                 ContentItem.objects.rename_url(old_url, new_url)
 
+    def is_public_for_user(self, user):
+        return user.is_staff or self.is_public
+
 
 class PageContentItem(models.Model):
     content_item = models.ForeignKey(ContentItem, related_name='page_content_items', verbose_name=_('content item'))
@@ -217,6 +249,14 @@ class PageContentItem(models.Model):
     sort = models.IntegerField(_('sort'), blank=True, null=True)
 
     objects = managers.PageContentItemManager()
+
+    def save(self, *args, **kwargs):
+        super(PageContentItem, self).save(*args, **kwargs)
+        self.content_item.set_used_on_pages_json()
+
+    def delete(self, *args, **kwargs):
+        super(PageContentItem, self).delete(*args, **kwargs)
+        self.content_item.set_used_on_pages_json()
 
 
 class Image(models.Model):

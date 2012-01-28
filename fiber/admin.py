@@ -10,11 +10,7 @@ from app_settings import TEMPLATE_CHOICES, ENABLE_I18N
 from models import Page, ContentItem, PageContentItem, Image, File
 import admin_forms as forms
 
-
-class FiberAdminSite(admin.AdminSite):
-    pass
-
-fiber_admin_site = FiberAdminSite(name='fiber_admin')
+import fiber_admin
 
 
 class FileAdmin(admin.ModelAdmin):
@@ -50,9 +46,8 @@ class PageAdmin(MPTTModelAdmin):
     form = forms.PageForm
     fieldsets = [
         (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name',)}),
-        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'protected', 'metadata',)}),
+        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'is_public', 'protected', 'metadata',)}),
     ]
-
     inlines = (PageContentItemInline,)
     list_display = ['title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links',]
     list_per_page = 1000
@@ -104,7 +99,7 @@ class PageAdmin(MPTTModelAdmin):
     action_links.allow_tags = True
 
 
-class FiberAdminContentItemAdmin(admin.ModelAdmin):
+class FiberAdminContentItemAdmin(fiber_admin.ModelAdmin):
     list_display = ('__unicode__',)
     form = forms.ContentItemAdminForm
     fieldsets = (
@@ -112,9 +107,9 @@ class FiberAdminContentItemAdmin(admin.ModelAdmin):
     )
 
 
-class FiberAdminPageAdmin(MPTTModelAdmin):
+class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):
 
-    form = forms.FiberAdminPageForm
+    form = forms.PageForm
     fieldsets = (
         (None, {'fields': ['title', 'url', 'translation_of', 'template_name', 'redirect_page']}),
     )
@@ -148,5 +143,5 @@ admin.site.register(Image, ImageAdmin)
 admin.site.register(File, FileAdmin)
 admin.site.register(Page, PageAdmin)
 
-fiber_admin_site.register(ContentItem, FiberAdminContentItemAdmin)
-fiber_admin_site.register(Page, FiberAdminPageAdmin)
+fiber_admin.site.register(ContentItem, FiberAdminContentItemAdmin)
+fiber_admin.site.register(Page, FiberAdminPageAdmin)

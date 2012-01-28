@@ -5,7 +5,6 @@ from django.utils import translation
 
 from app_settings import EXCLUDE_URLS, ENABLE_I18N, I18N_PREFIX_MAIN_LANGUAGE
 from models import Page
-from utils.urls import get_named_url_from_quoted_url, is_quoted_url
 
 
 def page_info(request):
@@ -20,55 +19,17 @@ def page_info(request):
     """
     if EXCLUDE_URLS:
         for exclude_url in EXCLUDE_URLS:
-            if re.search(exclude_url, request.path.lstrip('/')):
+            if re.search(exclude_url, url.lstrip('/')):
                 return context
 
-    """
-    Find Page that matches the requested URL.
-
-    First check if there is a Page whose `url` matches the requested URL.
-    """
-    try:
-        page = Page.objects.get(url__exact=url)
-    except Page.DoesNotExist:
-        pass
-
-    """
-    If no Page has been found, check a subset of Pages (whose `url` or
-    `relative_url` contain the rightmost part of the requested URL), to see
-    if their `get_absolute_url()` matches the requested URL entirely.
-    """
-    if not page:
-        last_url_part = url.rstrip('/').rsplit('/', 1)[-1]
-        if last_url_part:
-            page_candidates = Page.objects.exclude(url__exact='', ) \
-                .filter(url__icontains=last_url_part)
-            if page_candidates:
-                for page_candidate in page_candidates:
-                    if page_candidate.get_absolute_url() == url:
-                        page = page_candidate
-                        break
-
-    """
-    If no Page has been found, try to find a Page by matching the
-    requested URL with reversed `named_url`s.
-    """
-    if not page:
-        page_candidates = Page.objects.exclude(url__exact='')
-        if page_candidates:
-            for page_candidate in page_candidates:
-                if is_quoted_url(page_candidate.url):
-                    if get_named_url_from_quoted_url(page_candidate.url) == url:
-                        page = page_candidate
-                        break
+    page = Page.objects.get_by_url(url)
 
     """
     Block access to pages that the current user isn't supposed to see.
     """
-    if request.user.is_authenticated():
-        if page:
-            if page not in Page.objects.visible_pages_for_user(request.user):
-                page = None
+    if page:
+        if not page.is_public_for_user(request.user):
+            page = None
 
     """
     Find pages that should be marked as current in menus.

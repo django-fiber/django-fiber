@@ -19,3 +19,11 @@ METADATA_CONTENT_SCHEMA = getattr(settings, 'FIBER_METADATA_CONTENT_SCHEMA', {})
 
 ENABLE_I18N = getattr(settings, 'FIBER_ENABLE_I18N', False)
 I18N_PREFIX_MAIN_LANGUAGE = getattr(settings, 'FIBER_I18N_PREFIX_MAIN_LANGUAGE', True)
+
+if 'fiber.middleware.PageFallbackMiddleware' in settings.MIDDLEWARE_CLASSES:
+    raise DeprecationWarning( \
+        "fiber.middleware.PageFallbackMiddleware has been removed.\n"
+        "See README.rst for new implementation details.\n"
+        "It basically boils down to this:\n"
+        "remove 'fiber.middleware.PageFallbackMiddleware' from settings.MIDDLEWARE_CLASSES, and\n"
+        "add (r'', 'fiber.views.page') to the end of your urls.py")

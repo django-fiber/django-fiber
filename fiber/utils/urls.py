@@ -9,6 +9,7 @@ def get_admin_change_url(instance):
     return reverse(named_url, args=(instance.pk,))
 
 
+# PageManager.get_by_url duplicates this logic for efficient DB use
 def is_quoted_url(quoted_url):
     return quoted_url.startswith('"') and quoted_url.endswith('"')
 

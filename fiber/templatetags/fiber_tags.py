@@ -1,3 +1,5 @@
+import operator
+
 from django import template
 from django.utils import simplejson
 from django.utils.translation import get_language
@@ -13,73 +15,87 @@ register = template.Library()
 @register.inclusion_tag('fiber/menu.html', takes_context=True)
 def show_menu(context, menu_name, min_level, max_level, expand=None):
 
-    menu_pages_qs = Page.objects.none()
+    menu_pages = []
+    needed_pages = []
 
     try:
         root_page = Page.objects.get(title=menu_name, parent=None)
     except Page.DoesNotExist:
         raise Page.DoesNotExist("Menu does not exist.\nNo top-level page found with the title '%s'." % menu_name)
 
+    # Page.get_absolute_url() accesses self.parent recursively to build URLs
+    # (assuming relative URLs).
+    # This means that to render any menu item, we need all the ancestors up to
+    # the root. Therefore it is more efficient to pull back this tree, without
+    # min_level applied, and apply it just to decide which items to render.
+
     current_page = None
     if 'fiber_page' in context:
         current_page = context['fiber_page']
 
-    if current_page and current_page.get_root() == root_page:
-        """
-        Get all siblings of the pages in the path from the root_node to the current page,
-        plus the pages one level below the current page,
-        but stay inside min_level and max_level
-        """
-        for page in current_page.get_ancestors_include_self():
-            if min_level <= page.level:
-                if page.level <= max_level:
-                    menu_pages_qs |= page.get_siblings(include_self=True)
-                else:
-                    break
-            elif min_level == page.level + 1:
-                if expand == 'all':
-                    menu_pages_qs |= page.get_descendants().filter(level__range=(min_level, max_level))
-                    break
+    if current_page and current_page.is_child_of(root_page):
+        tree = root_page.get_descendants(include_self=True).filter(level__lte=max_level)
+        if expand == 'all':
+            needed_pages = tree
+        else:
+            if current_page.level + 1 < min_level:
+                # Nothing to do
+                needed_pages = []
+            else:
+                # We need the 'route' nodes, the 'sibling' nodes and the children
+                route = tree.filter(lft__lt=current_page.lft,
+                                    rght__gt=current_page.rght)
 
-        if min_level <= (current_page.level + 1) <= max_level:
-            if not expand:
-                menu_pages_qs |= current_page.get_children()
-            elif expand == 'all_descendants':
-                menu_pages_qs |= current_page.get_descendants().filter(level__range=(min_level, max_level))
+                # We show any siblings of anything in the route to the current page.
+                # The logic here is that if the user drills down, menu items
+                # shown previously should not disappear.
+
+                # The following assumes that accessing .parent is cheap, which
+                # it can be if current_page was loaded correctly.
+                p = current_page
+                sibling_qs = []
+                while p.parent_id is not None:
+                    sibling_qs.append(tree.filter(level=p.level,
+                                                  lft__gt=p.parent.lft,
+                                                  rght__lt=p.parent.rght))
+                    p = p.parent
+                route_siblings = reduce(operator.or_, sibling_qs)
+
+                children = tree.filter(lft__gt=current_page.lft,
+                                       rght__lt=current_page.rght)
+                if expand != 'all_descendants':
+                    # only want immediate children:
+                    children = children.filter(level=current_page.level + 1)
+
+                needed_pages = route | route_siblings | children
 
     else:
-        """
-        Only show menus that start at the first level (min_level == 1)
-        when the current page is not in the menu tree.
-        """
+        # Only show menus that start at the first level (min_level == 1)
+        # when the current page is not in the menu tree.
         if min_level == 1:
             if not expand:
-                menu_pages_qs |= Page.objects.filter(tree_id=root_page.tree_id).filter(level=min_level)
+                needed_pages = Page.objects.filter(tree_id=root_page.tree_id).filter(level__lte=1)
             elif expand == 'all':
-                menu_pages_qs |= Page.objects.filter(tree_id=root_page.tree_id).filter(level__range=(min_level, max_level))
+                needed_pages = Page.objects.filter(tree_id=root_page.tree_id).filter(level__lte=max_level)
+            else:
+                needed_pages = []
 
-    """
-    Remove pages that the current user isn't supposed to see.
-    """
-    visible_pages_for_user = Page.objects.visible_pages_for_user(context['user'])
-    menu_pages_qs &= visible_pages_for_user
+    needed_pages = Page.objects.link_parent_objects(needed_pages)
 
-    """
-    If i18n is enabled, remove pages that is not in the current language.
-    """
+    # Now we need to:
+    # - Do min_level filtering
+    # - Remove pages that shouldn't be shown in the menu for the current user.
+    # - If i18n is enabled, remove pages not in the current language.
+    current_user = context['user']
+    current_language = get_language()
+    menu pages = [p for p in needed_pages if (p.level >= min_level) and\
+            p.show_in_menu and (p.is_public_for_user(current_user)) and\
+            (not ENABLE_I18N or page.language == current_language)]
 
-    if ENABLE_I18N:
-        pages_in_current_language = Page.objects.in_current_language()
-        menu_pages_qs &= pages_in_current_language
-
-    """
-    Order menu_pages for use with tree_info template tag.
-    """
+    # Order menu_pages for use with tree_info template tag.
     menu_pages = sorted(list(menu_pages_qs), key=lambda menu_page: menu_page.lft)
 
-    """
-    Find parent page for this menu
-    """
+    # Find parent page for this menu
     menu_parent_page = None
     if menu_pages:
         menu_parent_page = menu_pages[0].parent
@@ -168,7 +184,7 @@ class ShowPageContentNode(template.Node):
     def render(self, context):
         try:
             page = self.page.resolve(context)
-            page_content_items = page.page_content_items.filter(block_name=self.block_name).order_by('sort')
+            page_content_items = page.page_content_items.filter(block_name=self.block_name).order_by('sort').select_related('content_item')
 
             content_items = []
             for page_content_item in page_content_items:
@@ -261,31 +277,7 @@ def get_page(url):
     page = None
     # FIXME: The following coede is copied from context_processors.py It might
     # be a better idea to write a new function get_page_from_url somewhere.
-    try:
-        page = Page.objects.get(url__exact=url)
-    except Page.DoesNotExist:
-        pass
-
-    if not page:
-        last_url_part = url.rstrip('/').rsplit('/', 1)[-1]
-        if last_url_part:
-            page_candidates = Page.objects.exclude(url__exact='', ) \
-                .filter(url__icontains=last_url_part)
-            if page_candidates:
-                for page_candidate in page_candidates:
-                    if page_candidate.get_absolute_url() == url:
-                        page = page_candidate
-                        break
-
-    if not page:
-        page_candidates = Page.objects.exclude(url__exact='')
-        if page_candidates:
-            for page_candidate in page_candidates:
-                if is_quoted_url(page_candidate.url):
-                    if get_named_url_from_quoted_url(page_candidate.url) == url:
-                        page = page_candidate
-                        break
-    return page
+    return Page.objects,get
 
 
 

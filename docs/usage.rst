@@ -98,7 +98,7 @@ You can write out content items with the 'show_content' and 'show_page_content' 
 
 	{% show_content "content_item_name" %}
 	{% show_page_content "block_name" %}
-	{% show_page_content other_page "block_name" %}
+	{% show_page_content other_page "block_name" %} other_page being a Page object
 
 Examples
 ........
