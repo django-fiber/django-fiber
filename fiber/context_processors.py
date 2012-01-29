@@ -66,7 +66,7 @@ def page_info(request):
         if ENABLE_I18N:
             context['enable_i18n'] = True
             if page.language:
-                context['current_language'] = page.language
+                context['language'] = page.language
                 translation.activate(page.language)
 
     if current_pages:

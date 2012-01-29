@@ -119,7 +119,7 @@ class Page(MPTTModel):
         if self.url == '':
             return language_prefix
         if self.url.startswith('/'):
-            return self.url
+            return '%s/' % self.url.rstrip('/')
         elif self.url.startswith('http://') or self.url.startswith('https://'):
             return self.url
         else:
