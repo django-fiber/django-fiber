@@ -2,6 +2,7 @@ import operator
 
 from django import template
 from django.utils import simplejson
+from django.utils.translation import get_language
 from django.conf import settings
 
 from fiber.models import Page, ContentItem
@@ -274,7 +275,7 @@ def get_page(url):
     Otherwise, return None.
     """
     page = None
-    return Page.objects.by_url(url)
+    return Page.objects.get_by_url(url)
 
 
 
@@ -288,7 +289,7 @@ def get_translated_page(value, language=None):
     page's url. If language is not supplied, use the current active language.
     """
     if not language:
-        language = context['fiber_language']
+        language = get_language()
 
     if type(value) == Page:
         page = value
