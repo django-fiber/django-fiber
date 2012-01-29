@@ -113,7 +113,10 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
 def language_selector(context):
 
     languages = [{'code': l[0], 'title': l[1], 'url': '/%s/' % l[0], 'has_translation': False, 'current': False} for l in settings.LANGUAGES]
-    current_language = context['fiber_language']
+    if 'fiber_language' in context:
+        current_language = context['fiber_language']
+    else:
+        current_language = get_language()
 
     if 'fiber_page' in context:
         current_page = context['fiber_page']
