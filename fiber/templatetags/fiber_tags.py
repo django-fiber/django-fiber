@@ -1,6 +1,7 @@
 import operator
 
 from django import template
+from django.contrib.auth.models import AnonymousUser
 from django.utils import simplejson
 from django.utils.translation import get_language
 from django.conf import settings
@@ -86,7 +87,7 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
     # - Do min_level filtering
     # - Remove pages that shouldn't be shown in the menu for the current user.
     # - If i18n is enabled, remove pages not in the current language.
-    current_user = context.get('user', None)
+    current_user = context.get('user', AnonymousUser())
     current_language = context.get('fiber_language', get_language())
     menu_pages = [p for p in needed_pages if (p.level >= min_level) and\
             p.show_in_menu and (p.is_public_for_user(current_user)) and\
