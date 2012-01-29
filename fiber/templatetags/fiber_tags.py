@@ -275,9 +275,7 @@ def get_page(url):
     Otherwise, return None.
     """
     page = None
-    # FIXME: The following coede is copied from context_processors.py It might
-    # be a better idea to write a new function get_page_from_url somewhere.
-    return Page.objects,get
+    return Page.objects.by_url(url)
 
 
 
