@@ -6,6 +6,7 @@ from django.template import loader, RequestContext
 from app_settings import DEFAULT_TEMPLATE, ENABLE_I18N, I18N_PREFIX_MAIN_LANGUAGE
 from models import Page
 
+
 def page(request):
     url = request.path_info
 

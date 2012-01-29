@@ -2,7 +2,6 @@ import operator
 
 from django import template
 from django.utils import simplejson
-from django.utils.translation import get_language
 from django.conf import settings
 
 from fiber.models import Page, ContentItem
@@ -87,7 +86,7 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
     # - Remove pages that shouldn't be shown in the menu for the current user.
     # - If i18n is enabled, remove pages not in the current language.
     current_user = context['user']
-    current_language = get_language()
+    current_language = context['fiber_language']
     menu_pages = [p for p in needed_pages if (p.level >= min_level) and\
             p.show_in_menu and (p.is_public_for_user(current_user)) and\
             (not ENABLE_I18N or p.language == current_language)]
@@ -113,7 +112,7 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
 def language_selector(context):
 
     languages = [{'code': l[0], 'title': l[1], 'url': '/%s/' % l[0], 'has_translation': False, 'current': False} for l in settings.LANGUAGES]
-    current_language = get_language()
+    current_language = context['fiber_language']
 
     if 'fiber_page' in context:
         current_page = context['fiber_page']
@@ -289,7 +288,7 @@ def get_translated_page(value, language=None):
     page's url. If language is not supplied, use the current active language.
     """
     if not language:
-        language = get_language()
+        language = context['fiber_language']
 
     if type(value) == Page:
         page = value

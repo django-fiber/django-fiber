@@ -64,10 +64,17 @@ def page_info(request):
     if page:
         context['fiber_page'] = page
         if ENABLE_I18N:
-            context['enable_i18n'] = True
+            context['fiber_enable_i18n'] = True
+
+            # Activate the language of the current fiber page, or fallback to
+            # use the previously activated language:
             if page.language:
-                context['language'] = page.language
-                translation.activate(page.language)
+                language = page.language
+                translation.activate(language)
+            else:
+                language = get_language()
+
+            context['fiber_language'] = language
 
     if current_pages:
         context['fiber_current_pages'] = current_pages
