@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.xheaders import populate_xheaders
-from django.http import HttpResponse, HttpResponseRedirect, Http404 #, HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404  HttpResponsePermanentRedirect
 from django.template import loader, RequestContext
 
 from app_settings import DEFAULT_TEMPLATE, ENABLE_I18N, I18N_PREFIX_MAIN_LANGUAGE
