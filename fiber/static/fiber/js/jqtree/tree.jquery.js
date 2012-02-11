@@ -85,6 +85,35 @@ window.Tree = {};
             this.parent = null;
         },
 
+        /* Init Node from data without making it the root of the tree */
+        initFromData: function(data) {
+            var self = this;
+
+            function addNode(node_data) {
+                $.each(node_data, function(key, value) {
+                    if (key == 'children') {
+                        addChildren(value);
+                    }
+                    else if (key == 'label') {
+                        self['name'] = value;
+                    }
+                    else {
+                        self[key] = value;
+                    }
+                });
+
+                function addChildren(children_data) {
+                    $.each(children_data, function() {
+                        var node = new Node();
+                        node.initFromData(this);
+                        self.addChild(node);
+                    });
+                }
+            }
+
+            addNode(data);
+        },
+
         /* Create tree from data.
 
           Structure of data is:
@@ -122,7 +151,7 @@ window.Tree = {};
                 }
             });
         },
-
+        
         /*
         Add child.
 
@@ -239,6 +268,35 @@ window.Tree = {};
                 // move inside as first child
                 target_node.addChildAtPosition(moved_node, 0);
             }
+        },
+
+        /*
+        Get the tree as data.
+        */
+        getData: function() {
+            function getDataFromNodes(nodes) {
+                var data = [];
+
+                $.each(nodes, function () {
+                    var tmp_node = $.extend({}, this);
+                    delete tmp_node.parent;  // We remove the parent property to avoid JSON.stringify error with circular references.
+                    delete tmp_node.element;  // The element is not really needed in the json representation.
+
+                    if (this.hasChildren()) {
+                        tmp_node.children = getDataFromNodes(this.children);
+                    }
+                    else {
+                        // This element has no children.
+                        delete tmp_node.children;
+                    }
+
+                    data.push(tmp_node);
+                });
+
+                return data;
+            }
+
+            return getDataFromNodes(this.children);
         }
     };
 
@@ -257,8 +315,7 @@ window.Tree = {};
             saveState: false,  // true / false / string (cookie name)
             dragAndDrop: false,
             selectable: false,
-            onClick: null,  // todo: renamed to onClickNode?
-            onContextMenu: null,
+            onCanSelectNode: null,
             onMoveNode: null,
             onSetStateFromStorage: null,
             onGetStateFromStorage: null,
@@ -270,6 +327,20 @@ window.Tree = {};
 
         getTree: function() {
             return this.tree;
+        },
+
+        toJson: function() {
+            return toJson(
+                this.tree.getData()
+            );
+        },
+
+        addNode: function(data) {
+            var n = new Node();
+            n.initFromData(data);
+            this.getTree().addChild(n);
+            this.element.empty();
+            this._createDomElements(this.getTree());
         },
 
         // todo: is toggle really used?
@@ -523,24 +594,21 @@ window.Tree = {};
             else if ($target.is('div') || $target.is('span')) {
                 var node = this._getNode($target);
                 if (node) {
-                    var must_select = true;
-
-                    if (this.options.onClick) {
-                        must_select = this.options.onClick(node);
-                    }
-
-                    if (must_select) {
+                    if (
+                        (! this.options.onCanSelectNode) ||
+                        (this.options.onCanSelectNode(node))
+                    ) {
                         this.selectNode(node);
+
+                        var event = jQuery.Event('tree.click');
+                        event.node = node;
+                        this.element.trigger(event);
                     }
                 }
             }
         },
 
         _contextmenu: function(e) {
-            if (! this.options.onContextMenu) {
-                return;
-            }
-
             var $div = $(e.target).closest('ul.tree div');
             if ($div.length) {
                 var node = this._getNode($div);
@@ -548,7 +616,9 @@ window.Tree = {};
                     e.preventDefault();
                     e.stopPropagation();
 
-                    this.options.onContextMenu(e, node);
+                    var event = jQuery.Event('tree.contextmenu');
+                    event.node = node;
+                    this.element.trigger(event);
                     return false;
                 }
             }
@@ -646,7 +716,7 @@ window.Tree = {};
         },
 
         _updateDropHint: function() {
-            // stop open folder times
+            // stop open folder timer
             this._stopOpenFolderTimer();
 
             if (! this.hovered_area) {
@@ -802,6 +872,17 @@ window.Tree = {};
                 var top = getTop($element);
                 addPosition(node, Position.INSIDE, top);
                 addPosition(node, Position.AFTER, top);
+            }
+
+            // Before first node
+            if (this.tree.hasChildren()) {
+                var node = this.tree.children[0];
+
+                addPosition(
+                    node,
+                    Position.BEFORE,
+                    getTop($(node.element))
+                );
             }
 
             this._iterateVisibleNodes(

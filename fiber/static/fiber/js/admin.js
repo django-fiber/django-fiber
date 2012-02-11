@@ -919,12 +919,12 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 		var page_tree_div = $(document.createElement('div'));
 		this.uiDialog.append(page_tree_div);
 
-		function handleClick(node) {
-			if (! node.url) {
+		function handleClick(e) {
+			if (! e.node.url) {
 				return false;
 			}
 			else {
-				this.selected_url = node.url;
+				this.selected_url = e.node.url;
 
 				action_button.attr('disabled', '');
 				action_button.removeClass('ui-button-disabled ui-state-disabled');
@@ -945,9 +945,9 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 				data: data,
 				selectable: true,
 				autoOpen: 1,
-				onClick: $.proxy(handleClick, this),
 				onCreateLi: $.proxy(createLi, this)
 			});
+			page_tree_div.bind('tree.click',$.proxy(handleClick, this));
 		}
 
 		$.ajax({
@@ -1350,9 +1350,9 @@ var adminPage = {
 	},
 
 	init_page_tree: function() {
-		function handleClick(node) {
-			if (node.url) {
-				window.location = node.url;
+		function handleClick(e) {
+			if (e.node.url) {
+				window.location = e.node.url;
 				return true;
 			}
 			else {
@@ -1412,22 +1412,22 @@ var adminPage = {
 			data: window.fiber_page_data,
 			autoOpen: 0,
 			saveState: 'fiber_pages',
-			onClick: handleClick,
 			dragAndDrop: true,
 			onMoveNode: handleMoveNode,
 			selectable: true,
-			onContextMenu: $.proxy(this.handle_page_menu_context_menu, this),
 			onCreateLi: $.proxy(createLi, this),
 			onCanMove: $.proxy(canMove, this)
 		});
-},
+		this.admin_page_tree.bind('tree.click', handleClick);
+		this.admin_page_tree.bind('tree.contextmenu', $.proxy(this.handle_page_menu_context_menu, this));
+	},
 
 	init_content_tree: function() {
 		this.admin_content_tree.tree({
 			data: window.fiber_content_items_data,
-			saveState: 'fiber_content_items',
-			onContextMenu: $.proxy(this.handle_content_item_menu_context_menu, this)
+			saveState: 'fiber_content_items'
 		});
+		this.admin_content_tree.bind('tree.contextmenu', $.proxy(this.handle_content_item_menu_context_menu, this));
 
 		this.make_content_items_draggable();
 	},
@@ -1465,10 +1465,11 @@ var adminPage = {
 		});
 	},
 
-	handle_page_menu_context_menu: function(e, node) {
+	handle_page_menu_context_menu: function(e) {
 		// remove other visible context menus
 		$(document.body).find('.ui-context-menu').remove();
 
+		var node = e.node;
 		if (! node.url) {
 			return;
 		}
@@ -1560,9 +1561,10 @@ var adminPage = {
 		contextmenu.offset({ left: e.pageX, top: e.pageY });
 	},
 
-	handle_content_item_menu_context_menu: function(e, node) {
+	handle_content_item_menu_context_menu: function(e) {
 		$(document.body).find('.ui-context-menu').remove();
 
+		var node = e.node;
 		if (! node.change_url) {
 			return;
 		}
