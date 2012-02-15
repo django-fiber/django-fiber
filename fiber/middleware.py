@@ -10,7 +10,9 @@ from django.utils import simplejson
 from utils.import_util import import_element
 
 from app_settings import EXCLUDE_URLS, EDITOR
-from models import Page, ContentItem
+
+from models import ContentItem
+from models import Page
 
 
 class AdminPageMiddleware(object):
@@ -51,9 +53,13 @@ class AdminPageMiddleware(object):
                     else:
                         t = loader.get_template('fiber/admin.html')
                         c = RequestContext(request, {
-                            'menus': Page.tree.root_nodes(),
-                            'content_groups': ContentItem.objects.get_content_groups(),
                             'logout_url': self.get_logout_url(request),
+                            'pages_json': simplejson.dumps(
+                                Page.objects.create_jqtree_data()
+                            ),
+                            'content_items_json': simplejson.dumps(
+                                ContentItem.objects.get_content_groups()
+                            )
                         })
 
                         # Inject admin html in body.

@@ -36,20 +36,18 @@ Fiber.enhance_textarea = function(textarea) {
 
 		var page_select_dialog = new Fiber.PageSelectDialog();
 		page_select_dialog.action_click = function() {
-			var selected_page_path = this.uiDialog.find('a.ui-state-active').attr('href');
-
 			if (userSelectionIE.textRange) {
 				// Replace textarea selection for IE
 				userSelectionIE.markItUp({
 					openWith: '"',
-					closeWith: '":'+ selected_page_path,
+					closeWith: '":'+ page_select_dialog.selected_url,
 					placeHolder: 'page'
 				});
 			} else {
 				$.markItUp({
 					target: $textarea,
 					openWith: '"',
-					closeWith: '":'+ selected_page_path,
+					closeWith: '":'+ page_select_dialog.selected_url,
 					placeHolder: 'page'
 				});
 			}
