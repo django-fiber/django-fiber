@@ -29,6 +29,7 @@ Fiber.enhance_textarea = function(textarea) {
 		stylesSet: window.CKEDITOR_CONFIG_STYLES_SET || null,
 		toolbarCanCollapse: false,
 		resize_maxWidth: 610,
+		height: window.innerHeight - 240,
 		baseFloatZIndex: 1100
 	});
 };
