@@ -264,7 +264,7 @@ ins.jstree-icon {
 }
 
 li.hidden-in-menu,
-li.not-public, {
+li.not-public {
 	opacity: 0.5;
 	filter: alpha(opacity=50);
 }
@@ -478,7 +478,7 @@ div.ui-dialog form select,
 	margin: 0 0 5px 0;
 	border: 1px solid #666;
 	outline: none;
-	padding: 0 3px;
+	padding: 0;
 	height: 22px;
 	display: block;
 	text-align: left;
@@ -493,6 +493,11 @@ div.ui-dialog form select,
 	background: none;
 	float: none;
 	clear: none;
+}
+
+div.ui-dialog form select {
+	font-size: 13px;
+	padding: 3px;
 }
 
 div.ui-dialog form p.errornote,
@@ -564,11 +569,16 @@ div.ui-widget-overlay {
 }
 
 .ui-dialog-buttonset select#id_template_name {
-	padding: 0;
-	width: 200px;
+	margin: 0 0 5px 0;
+	border: 1px solid #666;
+	outline: none;
+	padding: 3px;
+	max-width: 200px;
 	position: absolute;
-	bottom: 20px;
-	left: 10px;
+	bottom: 10px;
+	left: 15px;
+	font-size: 13px;
+	background-color: #fff;
 }
 
 #df-layer .ui-droppable {
@@ -648,7 +658,6 @@ span.nobr {
 
 .df-admin #page_form select {
 	border: auto;
-	padding-right: 0;
 	width: 100%;
 }
 
