@@ -24,6 +24,21 @@ Fiber.enhance_combobox = function(select) {
 	$(select).combobox();
 };
 
+Fiber.enhance_content_template_select = function(select) {
+	var template_name = $(select);
+	var fieldset_of_template_name = $('select#id_template_name').parents('fieldset')[0];
+	var hidden_template_name = $('<input type="hidden" name="template_name" id="id_template_name_hidden">');
+
+	hidden_template_name.val(template_name.val());
+	$(fieldset_of_template_name).append(hidden_template_name);
+	$(fieldset_of_template_name).hide();
+	$('.ui-dialog-buttonset').append(template_name);
+
+	template_name.change(function() {
+		$('#id_template_name_hidden').val($(this).val());
+	});
+};
+
 Fiber.enhance_jsontextarea = function(textarea) {
 	// hide the textarea
 	$(textarea).hide();
@@ -53,7 +68,7 @@ Fiber.enhance_jsontextarea = function(textarea) {
 			add_field(key, current_json[key]);
 		}
 	}
-	
+
 	// add toggle bar
 	var toggle_div = $('<div/>').appendTo(wpr_all);
 	var toggle_textarea = $('<input type="checkbox"/>').attr('id', textarea.name+'-toggle').appendTo(toggle_div);
@@ -551,9 +566,9 @@ var ChangeFormDialog = AdminFormDialog.extend({
 	}
 });
 
-function enhance_textareas(container) {
+function enhance_textareas(container, auto_height) {
 	container.find('textarea.fiber-editor').each(function() {
-		Fiber.enhance_textarea(this);
+		Fiber.enhance_textarea(this, auto_height);
 	});
 }
 
@@ -566,6 +581,12 @@ function enhance_comboboxes(container) {
 function enhance_jsontextareas(container) {
 	container.find('textarea.fiber-jsonwidget').each(function() {
 		Fiber.enhance_jsontextarea(this);
+	});
+}
+
+function enhance_content_template_select(container) {
+	container.find('select#id_template_name').each(function() {
+		Fiber.enhance_content_template_select(this);
 	});
 }
 
@@ -585,9 +606,10 @@ var ChangeForm = AdminForm.extend({
 		// TODO: add Django-like behavior:
 		// - fieldsets should be split into tabs
 		// - collapsible areas should work, etc.
-		enhance_textareas(this.form);
+		enhance_textareas(this.form, true);
 		enhance_comboboxes(this.form);
 		enhance_jsontextareas(this.form);
+		enhance_content_template_select(this.form);
 	},
 
 	destroy: function() {
@@ -1801,9 +1823,10 @@ var adminPage = {
 	},
 
 	init_backend: function() {
-		enhance_textareas($(document.body));
+		enhance_textareas($(document.body), false);
 		enhance_comboboxes($(document.body));
 		enhance_jsontextareas($(document.body));
+
 		var backend_toolbar = $('<div id="fiber-backend-toolbar"></div>');
 		var frontend_button = $('<p class="frontend"></p>').appendTo(backend_toolbar);
 		var link = $(document.createElement('a')).text(gettext('Frontend')).attr('href', '/').attr('title', gettext('Frontend')).appendTo(frontend_button);

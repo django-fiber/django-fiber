@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from mptt.forms import TreeNodeChoiceField
 
-from app_settings import TEMPLATE_CHOICES
+from app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES
 from models import Page, ContentItem
 from utils.urls import is_quoted_url
 
@@ -12,6 +12,11 @@ class ContentItemAdminForm(forms.ModelForm):
 
     class Meta:
         model = ContentItem
+
+    def __init__(self, *args, **kwargs):
+        super(ContentItemAdminForm, self).__init__(*args, **kwargs)
+        if len(CONTENT_TEMPLATE_CHOICES) > 0:
+            self.fields['template_name'] = forms.ChoiceField(choices=CONTENT_TEMPLATE_CHOICES, required=False, label=_('Content template'))
 
 
 class PageForm(forms.ModelForm):

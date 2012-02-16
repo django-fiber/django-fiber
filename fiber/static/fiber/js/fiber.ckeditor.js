@@ -1,6 +1,6 @@
 (function($) {
 
-Fiber.enhance_textarea = function(textarea) {
+Fiber.enhance_textarea = function(textarea, auto_height) {
 
 	if (window.CKEDITOR_CONFIG_STYLES_SET) {
 		if (!CKEDITOR.stylesSet.get('config_styles_set')) {
@@ -20,6 +20,10 @@ Fiber.enhance_textarea = function(textarea) {
 		['Source']
 	];
 
+	if (auto_height) {
+		CKEDITOR.config.height = window.innerHeight - (($('.ui-dialog').height() - $(textarea).height()) + 140);
+	}
+
 	CKEDITOR.replace(textarea, {
 		language: LANGUAGE_CODE,
 		extraPlugins: 'fpagelink,ffilelink,fimagelink,fcustomlink,funlink,fimage,ftable,tabletools',
@@ -29,7 +33,6 @@ Fiber.enhance_textarea = function(textarea) {
 		stylesSet: window.CKEDITOR_CONFIG_STYLES_SET || null,
 		toolbarCanCollapse: false,
 		resize_maxWidth: 610,
-		height: window.innerHeight - 240,
 		baseFloatZIndex: 1100
 	});
 };

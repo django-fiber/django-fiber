@@ -563,6 +563,14 @@ div.ui-widget-overlay {
 	position: fixed;
 }
 
+.ui-dialog-buttonset select#id_template_name {
+	padding: 0;
+	width: 200px;
+	position: absolute;
+	bottom: 20px;
+	left: 10px;
+}
+
 #df-layer .ui-droppable {
 	position: absolute;
 	height: 16px;
