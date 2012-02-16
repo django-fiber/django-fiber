@@ -81,8 +81,8 @@ class PageHandler(BaseHandler):
         if data.get('action') == 'move':
             self._move(
                 int(id),
-                int(data['parent_id']),
-                int(data['left_id']),
+                int(data['target_node_id']),
+                data['position']
             )
         else:
             # TODO: check if this situation occurs
@@ -94,18 +94,9 @@ class PageHandler(BaseHandler):
 
         return rc.DELETED
 
-    def _move(self, page_id, parent_id, left_id):
-        """
-        Moves the node. Parameters:
-        - page_id: the page to move
-        - parent_id: the new parent
-        - left_id: the node to the left (0 if it does not exist)
-        """
+    def _move(self, page_id, target_id, position):
         page = Page.objects.get(pk=page_id)
-        page.move_page(
-            parent_id,
-            left_id,
-        )
+        page.move_page(target_id, position)
 
 
 class PageContentItemHandler(BaseHandler):
