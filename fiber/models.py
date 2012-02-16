@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
 from django.db import models
@@ -96,6 +97,20 @@ class Page(MPTTModel):
 
     def __unicode__(self):
         return self.title
+
+    def clean_fields(self, *args, **kwargs):
+        # check if the url is already taken by an absolute url
+        try:
+            super(Page, self).clean_fields(*args, **kwargs)
+            errors = {}
+        except ValidationError as e:
+            errors = e.message_dict
+        if Page.objects.exclude(id=self.id).filter(url__exact=self.get_absolute_url):
+            url_errors = errors.get('url', [])
+            url_errors.append(_('This url already exists'))
+            errors['url'] = url_errors
+        if errors:
+            raise ValidationError(errors)
 
     def save(self, *args, **kwargs):
         if self.id:
