@@ -57,14 +57,14 @@ class JSONWidget(forms.Textarea):
                 for key in all_keys:
                     if key not in schema:
                         schema[key] = {
-                                'widget': 'textfield',
+                            'widget': 'textfield',
                         }
             except AttributeError:
                 warn('The path for prefill_from field "%s" is incorrect!' % path)
         jquery = '''
         <script type="text/javascript">
         if (schema == null) {
-            var schema = [];
+            var schema = {};
         }
         schema['%(name)s'] = %(json)s;
         </script>
