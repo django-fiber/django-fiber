@@ -29,7 +29,8 @@ class ContentItemAdmin(admin.ModelAdmin):
     form = forms.ContentItemAdminForm
     fieldsets = (
         (None, {'fields': ('name', get_editor_field_name('content_html'),)}),
-        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('template_name', 'protected', 'metadata',)}),
+        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('template_name', 'protected',)}),
+        (_('Metadata'), {'classes': ('collapse',), 'fields': ('metadata',)}),
     )
     date_hierarchy = 'updated'
     search_fields = ('name', get_editor_field_name('content_html'))
