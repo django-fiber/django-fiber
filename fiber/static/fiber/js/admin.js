@@ -1155,12 +1155,9 @@ var DroppableArea = Class.extend({
 		var data = {
 			content_item_id: content_item_id,
 			page_id: this.options.page_id,
-			block_name: this.options.block_name
+			block_name: this.options.block_name,
+			before_page_content_item_id: this.fiber_item.element_data.page_content_item_id
 		};
-
-		if (this.options.before_page_content_item_id) {
-			data.before_page_content_item_id = this.options.before_page_content_item_id;
-		}
 
 		busyIndicator.show();
 
