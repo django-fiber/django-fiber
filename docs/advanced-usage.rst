@@ -77,6 +77,52 @@ In this example 2 content-templates will be available in the front- and backend-
 The first choice '' will load the default content-template, this is 'fiber/content_item.html'
 
 
+Metadata:
+=========
+
+In this example metadata (key-value pairs) for pages will be available in the backend-admin:
+
+::
+
+	FIBER_METADATA_PAGE_SCHEMA = {
+		'title': {
+			'widget': 'select',
+			'values': ['option1', 'option2', 'option3',],
+		},
+		'bgcolor': {
+			'widget': 'combobox',
+				'values': ['#ffffff', '#fff000', '#ff00cc'],
+				'prefill_from_db': True,
+		},
+		'description': {
+			'widget': 'textarea',
+		},
+	}
+
+The first key key is 'title'. Because it has widget 'select' you will have 3 fixed values to choose from.
+
+The second key is 'bgcolor'. Because it has widget 'combobox' you will have 3 fixed values to choose from and the choice to add your own 'bgcolor'.
+By setting prefill_from_db to True, the custom values you have chosen will also appear in the selectbox of fixed values.
+
+The third key is 'description'. Because it has widget 'textarea' you can enter the value in a big textarea field.
+
+Available widgets are:
+	select
+	combobox
+	textarea
+	textfield (default widget)
+
+Only the combobox can prefill from the database by setting prefill_from_db = True (default=False)
+
+
+The same metadata schema is available for metadata for content:
+
+::
+
+	FIBER_METADATA_CONTENT_SCHEMA
+
+
+
 CKEditor config settings
 ========================
 
