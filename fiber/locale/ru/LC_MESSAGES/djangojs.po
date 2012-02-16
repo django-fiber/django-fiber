@@ -1,4 +1,4 @@
-# Кгыышфт Translations for Django Fiber
+# Russian Translations for Django Fiber
 # Copyright (C) 2011 Ride The Pony
 # This file is distributed under the same license as the Django Fiber package.
 # Ride The Pony <info@ridethepony.org>, 2011.
