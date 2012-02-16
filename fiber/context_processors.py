@@ -1,6 +1,9 @@
 import re
 
-from app_settings import EXCLUDE_URLS
+from django.conf import settings
+from django.utils import translation
+
+from app_settings import EXCLUDE_URLS, ENABLE_I18N, I18N_PREFIX_MAIN_LANGUAGE
 from models import Page
 
 
@@ -60,6 +63,18 @@ def page_info(request):
 
     if page:
         context['fiber_page'] = page
+        if ENABLE_I18N:
+            context['fiber_enable_i18n'] = True
+
+            # Activate the language of the current fiber page, or fallback to
+            # use the previously activated language:
+            if page.language:
+                language = page.language
+                translation.activate(language)
+            else:
+                language = get_language()
+
+            context['fiber_language'] = language
 
     if current_pages:
         context['fiber_current_pages'] = current_pages

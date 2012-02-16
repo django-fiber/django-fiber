@@ -17,6 +17,9 @@ EDITOR = getattr(settings, 'FIBER_EDITOR', 'fiber.editor_definitions.ckeditor.ED
 METADATA_PAGE_SCHEMA = getattr(settings, 'FIBER_METADATA_PAGE_SCHEMA', {})
 METADATA_CONTENT_SCHEMA = getattr(settings, 'FIBER_METADATA_CONTENT_SCHEMA', {})
 
+ENABLE_I18N = getattr(settings, 'FIBER_ENABLE_I18N', False)
+I18N_PREFIX_MAIN_LANGUAGE = getattr(settings, 'FIBER_I18N_PREFIX_MAIN_LANGUAGE', True)
+
 if 'fiber.middleware.PageFallbackMiddleware' in settings.MIDDLEWARE_CLASSES:
     raise DeprecationWarning( \
         "fiber.middleware.PageFallbackMiddleware has been removed.\n"

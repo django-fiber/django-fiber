@@ -1,14 +1,17 @@
 from django.conf import settings
 from django.core.xheaders import populate_xheaders
-from django.http import HttpResponse, HttpResponsePermanentRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404  HttpResponsePermanentRedirect
 from django.template import loader, RequestContext
 
-from app_settings import DEFAULT_TEMPLATE
+from app_settings import DEFAULT_TEMPLATE, ENABLE_I18N, I18N_PREFIX_MAIN_LANGUAGE
 from models import Page
 
 
 def page(request):
     url = request.path_info
+
+    if ENABLE_I18N and I18N_PREFIX_MAIN_LANGUAGE and url in ('', '/'):
+        return HttpResponseRedirect('%s/' % settings.LANGUAGE_CODE)
 
     context = RequestContext(request)
     if 'fiber_page' not in context:

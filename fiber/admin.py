@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.conf import settings
+from django.utils.translation import get_language
 from django.utils.translation import ugettext_lazy as _
 
 from mptt.admin import MPTTModelAdmin
 
 from fiber.editor import get_editor_field_name
-from app_settings import TEMPLATE_CHOICES
+from app_settings import TEMPLATE_CHOICES, ENABLE_I18N
 from models import Page, ContentItem, PageContentItem, Image, File
 import admin_forms as forms
 
@@ -43,15 +44,23 @@ class PageContentItemInline(admin.TabularInline):
 class PageAdmin(MPTTModelAdmin):
 
     form = forms.PageForm
-    fieldsets = (
-        (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name')}),
+    fieldsets = [
+        (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name',)}),
         (_('Advanced options'), {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'is_public', 'protected', 'metadata',)}),
-    )
-
+    ]
     inlines = (PageContentItemInline,)
-    list_display = ('title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links',)
+    list_display = ['title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links',]
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page')
+    prepopulated_fields = {"url": ("title",)}
+
+    def __init__(self, *args, **kwargs):
+        # if i18n is enabled, add an i18n fieldset, and add modify list_display and list_filter
+        if ENABLE_I18N:
+            self.fieldsets.insert(1, (_('i18n'), {'fields': ('language', 'translation_of',)}))
+            self.list_display.insert(3, 'language')
+            self.list_filter=('language',)
+        super(PageAdmin, self).__init__(*args, **kwargs)
 
     def view_on_site(self, page):
         view_on_site = ''
@@ -101,19 +110,20 @@ class FiberAdminContentItemAdmin(fiber_admin.ModelAdmin):
 class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):
 
     form = forms.PageForm
+    fieldsets = (
+        (None, {'fields': ['title', 'url', 'translation_of', 'template_name', 'redirect_page']}),
+    )
 
     def __init__(self, *args, **kwargs):
         super(FiberAdminPageAdmin, self).__init__(*args, **kwargs)
 
+        # remove translation_of if i18n is disabled
+        if ENABLE_I18N == False:
+            self.fieldsets[0][1]['fields'].remove('translation_of')
+
         # remove template choices if there are no choices
         if len(TEMPLATE_CHOICES) == 0:
-            self.fieldsets = (
-                (None, {'fields': ('title', 'url', 'redirect_page')}),
-            )
-        else:
-            self.fieldsets = (
-                (None, {'fields': ('title', 'url', 'template_name', 'redirect_page')}),
-            )
+            self.fieldsets[0][1]['fields'].remove('template_name')
 
     def save_model(self, request, obj, form, change):
         if 'before_page_id' in request.POST:

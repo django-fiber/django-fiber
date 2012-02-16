@@ -1,15 +1,19 @@
 import operator
 
 from django import template
+from django.contrib.auth.models import AnonymousUser
 from django.utils import simplejson
+from django.utils.translation import get_language
+from django.conf import settings
 
 from fiber.models import Page, ContentItem
-
-from fiber.utils.urls import get_admin_change_url
+from fiber.utils.urls import get_admin_change_url, is_quoted_url, get_named_url_from_quoted_url
+from fiber.app_settings import ENABLE_I18N, I18N_PREFIX_MAIN_LANGUAGE
 
 register = template.Library()
 
 
+@register.inclusion_tag('fiber/menu.html', takes_context=True)
 def show_menu(context, menu_name, min_level, max_level, expand=None):
 
     menu_pages = []
@@ -79,24 +83,20 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
 
     needed_pages = Page.objects.link_parent_objects(needed_pages)
 
-    # Now we need to do min_level filtering
-    for p in needed_pages:
-        if p.level >= min_level:
-            menu_pages.append(p)
+    # Now we need to:
+    # - Do min_level filtering
+    # - Remove pages that shouldn't be shown in the menu for the current user.
+    # - If i18n is enabled, remove pages not in the current language.
+    current_user = context.get('user', AnonymousUser())
+    current_language = context.get('fiber_language', get_language())
+    menu_pages = [p for p in needed_pages if (p.level >= min_level) and\
+            p.show_in_menu and (p.is_public_for_user(current_user)) and\
+            (not ENABLE_I18N or p.language == current_language)]
 
-    # Remove pages that shouldn't be shown in the menu for the current user.
-    user = context['user']
-    menu_pages = [p for p in menu_pages if (p.is_public_for_user(user)
-                                            and p.show_in_menu)]
-
-    """
-    Order menu_pages for use with tree_info template tag.
-    """
+    # Order menu_pages for use with tree_info template tag.
     menu_pages = sorted(menu_pages, key=lambda menu_page: menu_page.lft)
 
-    """
-    Find parent page for this menu
-    """
+    # Find parent page for this menu
     menu_parent_page = None
     if menu_pages:
         menu_parent_page = menu_pages[0].parent
@@ -109,9 +109,35 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
     context['fiber_menu_args'] = {'menu_name': menu_name, 'min_level': min_level, 'max_level': max_level, 'expand': expand}
     return context
 
-register.inclusion_tag('fiber/menu.html', takes_context=True)(show_menu)
+
+@register.inclusion_tag('fiber/language_selector.html', takes_context=True)
+def language_selector(context):
+
+    languages = [{'code': l[0], 'title': l[1], 'url': '/%s/' % l[0], 'has_translation': False, 'current': False} for l in settings.LANGUAGES]
+    current_language = context.get('fiber_language', get_language())
+
+    if 'fiber_page' in context:
+        current_page = context['fiber_page']
+        page_translations = current_page.get_translations()
+        print page_translations
+
+        for lang in languages:
+            if lang['code'] == current_language:
+                lang['url'] = current_page.get_absolute_url()
+                lang['current'] = True
+            else:
+                # If the page has a a translation in lang, use the url of the
+                # translation as href.
+                for page in page_translations:
+                    if lang['code'] == page.language:
+                        lang['url'] = page.get_absolute_url()
+                        lang['has_translation'] = True
+                    break
+    context['languages'] = languages
+    return context
 
 
+@register.inclusion_tag('fiber/content_item.html', takes_context=True)
 def show_content(context, content_item_name):
     content_item = None
     try:
@@ -122,8 +148,6 @@ def show_content(context, content_item_name):
     context['content_item'] = content_item
 
     return context
-
-register.inclusion_tag('fiber/content_item.html', takes_context=True)(show_content)
 
 
 @register.tag(name='show_page_content')
@@ -243,3 +267,42 @@ def escape_json_for_html(value):
     Escapes valid JSON for use in HTML, e.g. convert single quote to HTML character entity
     """
     return value.replace("'", "&#39;")
+
+
+@register.filter(name='page')
+def get_page(url):
+    """
+    Returns a Page object if a page with the given url can be found.
+    Otherwise, return None.
+    """
+    page = None
+    return Page.objects.get_by_url(url)
+
+
+
+@register.filter(name='translated_page')
+def get_translated_page(value, language=None):
+    """
+    Returns the translated version of a page as a Page object. If no translated
+    page can be found, return None.
+
+    If the value being filtered is a string, assume this string to be the
+    page's url. If language is not supplied, use the current active language.
+    """
+    if not language:
+        language = get_language()
+
+    if type(value) == Page:
+        page = value
+    else:
+        page = get_page(value)
+
+    if page:
+        if page.language == language:
+            return page
+
+        qs = page.get_translations().filter(language=language)
+        if qs.count() > 0:
+            return qs[0]
+
+    return None

@@ -4,13 +4,13 @@ from django.core.files.images import get_image_dimensions
 from django.db import models
 from django.utils.html import strip_tags
 from django.utils import simplejson
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext, get_language
 from django.utils.translation import ugettext_lazy as _
 
 from mptt.managers import TreeManager
 from mptt.models import MPTTModel
 
-from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA
+from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA, ENABLE_I18N, I18N_PREFIX_MAIN_LANGUAGE
 import managers
 from utils.fields import FiberURLField, FiberMarkupField, FiberHTMLField
 from utils.json import JSONField
@@ -76,6 +76,8 @@ class Page(MPTTModel):
     # TODO: add keywords, description (as meta?)
     title = models.CharField(_('title'), blank=True, max_length=255)
     url = FiberURLField(blank=True)
+    language = models.CharField(_('language'),  max_length=5, choices=settings.LANGUAGES, blank=True, default=get_language, help_text=_('Default\'s to the currently active language of your session.'))
+    translation_of = models.ForeignKey('Page', verbose_name=_('translation of'), related_name='translations', blank=True, null=True, help_text=_('Is this page a translation of a page written in the site\'s main language?'))
     redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'), on_delete=models.SET_NULL)
     mark_current_regexes = models.TextField(_('mark current regexes'), blank=True)
     # TODO: add `alias_page` field
@@ -93,6 +95,7 @@ class Page(MPTTModel):
         verbose_name = _('page')
         verbose_name_plural = _('pages')
         ordering = ('tree_id', 'lft')
+        unique_together = (('language', 'translation_of'),)
 
     def __unicode__(self):
         return self.title
@@ -110,11 +113,13 @@ class Page(MPTTModel):
             if old_url != new_url:
                 ContentItem.objects.rename_url(old_url, new_url)
 
-    def get_absolute_url(self):
+    def get_absolute_url(self, language_prefix=''):
+        if language_prefix == '' and ENABLE_I18N and (I18N_PREFIX_MAIN_LANGUAGE or self.language != settings.LANGUAGE_CODE):
+            language_prefix = "/%s" % self.language
         if self.url == '':
-            return ''
+            return language_prefix
         if self.url.startswith('/'):
-            return self.url
+            return '%s/' % self.url.rstrip('/')
         elif self.url.startswith('http://') or self.url.startswith('https://'):
             return self.url
         else:
@@ -124,9 +129,9 @@ class Page(MPTTModel):
             else:
                 # relative url
                 if self.parent:
-                    return '%s/%s/' % (self.parent.get_absolute_url().rstrip('/'), self.url.strip('/'))
+                    return '%s/%s/' % (self.parent.get_absolute_url(language_prefix).rstrip('/'), self.url.strip('/'))
                 else:
-                    return '' # TODO: make sure this can never happen (in model.save()?)
+                    return language_prefix # TODO: make sure this can never happen (in model.save()?)
 
     @classmethod
     def get_add_url(cls):
@@ -195,6 +200,14 @@ class Page(MPTTModel):
         )
 
         return qs.order_by(opts.left_attr)
+
+    def get_translations(self):
+        if self.translation_of:
+            qs = self.translation_of.translations.all()
+            qs |= Page.objects.filter(pk=self.translation_of.pk)
+        else:
+            qs = self.translations.all()
+        return qs
 
     def move_page(self, parent_id, left_id=0):
         """
