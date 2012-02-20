@@ -54,8 +54,6 @@ function extend_CKEditor() {
 			var page_select_dialog = new Fiber.PageSelectDialog();
 
 			page_select_dialog.action_click = function() {
-				var selected_page_path = this.uiDialog.find('a.ui-state-active').attr('href');
-
 				// delete any existing links on the selected text
 				editor.document.$.execCommand('unlink', false, null);
 
@@ -65,7 +63,7 @@ function extend_CKEditor() {
 				var style = new CKEDITOR.style({
 					element: 'a',
 					attributes: {
-						'href': selected_page_path
+						'href': page_select_dialog.selected_url
 					}
 				});
 				style.type = CKEDITOR.STYLE_INLINE;
