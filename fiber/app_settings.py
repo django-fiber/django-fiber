@@ -3,6 +3,7 @@ from django.conf import settings
 
 DEFAULT_TEMPLATE = getattr(settings, 'FIBER_DEFAULT_TEMPLATE', 'base.html')
 TEMPLATE_CHOICES = getattr(settings, 'FIBER_TEMPLATE_CHOICES', [])
+CONTENT_TEMPLATE_CHOICES = getattr(settings, 'FIBER_CONTENT_TEMPLATE_CHOICES', [])
 EXCLUDE_URLS = getattr(settings, 'FIBER_EXCLUDE_URLS', [])
 
 FILES_DIR = getattr(settings, 'FIBER_FILES_DIR', 'uploads/files')

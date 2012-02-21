@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.admin import MPTTModelAdmin
 
 from fiber.editor import get_editor_field_name
-from app_settings import TEMPLATE_CHOICES
+from app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES
 from models import Page, ContentItem, PageContentItem, Image, File
 import admin_forms as forms
 
@@ -95,9 +95,20 @@ class PageAdmin(MPTTModelAdmin):
 class FiberAdminContentItemAdmin(fiber_admin.ModelAdmin):
     list_display = ('__unicode__',)
     form = forms.ContentItemAdminForm
-    fieldsets = (
-        (None, {'classes': ('hide-label',), 'fields': (get_editor_field_name('content_html'),)}),
-    )
+
+    def __init__(self, *args, **kwargs):
+        super(FiberAdminContentItemAdmin, self).__init__(*args, **kwargs)
+
+        # remove content template choices if there are no choices
+        if len(CONTENT_TEMPLATE_CHOICES) == 0:
+            self.fieldsets = (
+                (None, {'classes': ('hide-label',), 'fields': (get_editor_field_name('content_html'), )}),
+            )
+        else:
+            self.fieldsets = (
+                (None, {'classes': ('hide-label',), 'fields': (get_editor_field_name('content_html'), )}),
+                (None, {'classes': ('select-box',), 'fields': ('template_name', )}),
+            )
 
 
 class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):

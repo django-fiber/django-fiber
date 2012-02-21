@@ -1,6 +1,6 @@
 (function($) {
 
-Fiber.enhance_textarea = function(textarea) {
+Fiber.enhance_textarea = function(textarea, auto_height) {
 
 	if (window.CKEDITOR_CONFIG_STYLES_SET) {
 		if (!CKEDITOR.stylesSet.get('config_styles_set')) {
@@ -19,6 +19,10 @@ Fiber.enhance_textarea = function(textarea) {
 		['Maximize'],
 		['Source']
 	];
+
+	if (auto_height) {
+		CKEDITOR.config.height = window.innerHeight - (($('.ui-dialog').height() - $(textarea).height()) + 140);
+	}
 
 	CKEDITOR.replace(textarea, {
 		language: LANGUAGE_CODE,
