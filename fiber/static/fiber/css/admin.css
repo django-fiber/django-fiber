@@ -108,6 +108,7 @@ div.ui-dialog form label,
 
 #df-sidebar .sidebar-tree {
 	margin-bottom: 10px;
+	margin-left: 21px;
 }
 
 #df-sidebar #df-sidebar-top-section {
@@ -193,103 +194,9 @@ div.ui-dialog form label,
 	background: transparent url(../images/button-add.png) no-repeat;
 }
 
-/*---[ jsTree ]---*/
-
-ins.jstree-icon {
-	background-color: transparent;
-}
-
-#df-wpr-sidebar .jstree,
-.jstree {
-	border: 0;
-	background: transparent;
-	overflow-x: hidden;
-}
-
-#df-wpr-sidebar .jstree ul ul,
-.jstree ul ul {
-	margin-left: 17px;
-}
-
-#df-wpr-sidebar .jstree li a,
-.jstree li a {
-	width: 100%;
-	padding: 2px;
-}
-
-#df-wpr-sidebar .jstree li a ins,
-.jstree li a ins {
-	margin-right: 3px;
-}
-
-#df-wpr-sidebar .jstree li a.ui-state-default,
-.jstree li a.ui-state-default {
-	border: none;
-	background: none;
-	color: #333;
-	font-weight: normal;
-}
-
-#df-wpr-sidebar .jstree li a.ui-state-hover,
-.jstree li a.ui-state-hover {
-	background: #dfdfdf;
-	background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#d3d3d3));
-	background: -moz-linear-gradient(top, #eaeaea, #d3d3d3);
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#eaeaea', endColorstr='#d3d3d3');
-	color: #333;
-	text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
-}
-
-#df-wpr-sidebar .jstree li a.ui-state-active,
-.jstree li a.ui-state-active {
-	background: #97bdd6;
-	background: -webkit-gradient(linear, left top, left bottom, from(#bee0f5), to(#89afca));
-	background: -moz-linear-gradient(top, #bee0f5, #89afca);
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#bee0f5', endColorstr='#89afca');
-	color: #1c4257;
-	font-size: 100%;
-	font-weight: normal;
-	text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
-}
-
-#df-wpr-sidebar .jstree .ui-state-default .ui-icon,
-.jstree .ui-state-default .ui-icon {
-	background: url(../images/icon-page.png);
-	background-position: 0 0;
-}
-
-#df-wpr-sidebar .jstree li.menu-separator,
-.jstree li.menu-separator {
-	margin-top: 14px;
-}
-
-li.hidden-in-menu,
-li.not-public {
+li.hidden-in-menu {
 	opacity: 0.5;
 	filter: alpha(opacity=50);
-}
-
-#df-wpr-sidebar .jstree li.hidden-in-menu,
-#df-wpr-sidebar .jstree li.not-public {
-	opacity: 1;
-	filter: alpha(opacity=100);
-}
-
-#df-wpr-sidebar .jstree li.hidden-in-menu a,
-#df-wpr-sidebar .jstree li.not-public a {
-	color: #999;
-}
-
-#df-wpr-sidebar .jstree li.hidden-in-menu > .ui-state-default .ui-icon {
-	background: url(../images/icon-page-hidden.png);
-}
-
-#df-wpr-sidebar .jstree li.not-public > .ui-state-default .ui-icon {
-	background: url(../images/icon-page-not-public.png);
-}
-
-#df-wpr-sidebar .jstree li.redirect > .ui-state-default .ui-icon {
-	background: url(../images/icon-page-redirect.png);
 }
 
 #df-wpr-busy {
@@ -665,4 +572,213 @@ span.nobr {
 .df-admin #ui-image-select-filter-input {
 	margin-top: 5px;
 	width: 170px;
+}
+
+/* ---[ tree ] --- */
+/* This is a copy of jqtree.css because styles are reset */
+.ui-dialog-content ul.tree,
+.ui-dialog-content ul.tree ul,
+#df-wpr-sidebar ul.tree,
+#df-wpr-sidebar ul.tree ul {
+	list-style: none outside;
+	margin-bottom: 0;
+}
+
+.ui-dialog-content ul.tree ul,
+#df-wpr-sidebar ul.tree ul {
+	display: block;
+	margin-left: 12px;
+}
+
+.ui-dialog-content ul.tree li.closed > ul,
+#df-wpr-sidebar ul.tree li.closed > ul {
+	display: none;
+}
+
+.ui-dialog-content ul.tree li,
+#df-wpr-sidebar ul.tree li {
+	clear: both;
+}
+
+.ui-dialog-content ul.tree .toggler,
+#df-wpr-sidebar ul.tree .toggler {
+	background: url(../js/jqtree/treeDownTriangleBlack.png) no-repeat 0 50%;
+	width: 12px;
+	display: block;
+	position: absolute;
+	left: -12px;
+	text-indent: -9999px;
+}
+
+.ui-dialog-content ul.tree div,
+#df-wpr-sidebar ul.tree div {
+	cursor: pointer;
+}
+
+.ui-dialog-content ul.tree .title,
+#df-wpr-sidebar ul.tree .title {
+	color: #1C4257;
+	vertical-align: middle;
+}
+
+.ui-dialog-content ul.tree li.folder,
+#df-wpr-sidebar ul.tree li.folder {
+	margin-bottom: 4px;
+}
+
+.ui-dialog-content ul.tree li.folder.closed,
+#df-wpr-sidebar ul.tree li.folder.closed {
+	margin-bottom: 1px;
+}
+
+ul.tree li.folder .title,
+#df-wpr-sidebar ul.tree li.folder .title {
+	margin-left: 0;
+}
+
+ul.tree .toggler.closed,
+#df-wpr-sidebar ul.tree .toggler.closed {
+	background-image: url(../js/jqtree/treeRightTriangleBlack.png);
+}
+
+.ui-dialog-content span.tree-dragging,
+#df-wpr-sidebar span.tree-dragging {
+	color: #fff;
+	background: #000;
+	opacity: 0.6;
+	cursor: pointer;
+	padding: 2px 8px;
+}
+
+.ui-dialog-content ul.tree li.ghost,
+#df-wpr-sidebar ul.tree li.ghost {
+	position: relative;
+	z-index: 10;
+}
+
+.ui-dialog-content ul.tree li.ghost span,
+#df-wpr-sidebar ul.tree li.ghost span {
+	display: block;
+}
+
+.ui-dialog-content ul.tree li.ghost span.circle,
+#df-wpr-sidebar ul.tree li.ghost span.circle {
+	background: url(../js/jqtree/circle.png) no-repeat;
+	height: 8px;
+	width: 8px;
+	position: absolute;
+	top: -4px;
+	left: 2px;
+}
+
+.ui-dialog-content ul.tree li.ghost span.line,
+#df-wpr-sidebar ul.tree li.ghost span.line {
+	background-color: #0000ff;
+	height: 2px;
+	padding: 0;
+	position: absolute;
+	top: -1px;
+	left: 10px;
+	width: 100%;
+}
+
+.ui-dialog-content ul.tree li.ghost.inside,
+#df-wpr-sidebar ul.tree li.ghost.inside {
+	margin-left: 48px;
+}
+
+.ui-dialog-content span.tree-hit,
+#df-wpr-sidebar span.tree-hit {
+	position: absolute;
+	display: block;
+}
+
+.ui-dialog-content ul.tree span.border,
+#df-wpr-sidebar ul.tree span.border {
+	position: absolute;
+	display: block;
+	left: -2px;
+	top: 0;
+	border: solid 2px #0000ff;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	margin: 0;
+}
+
+.ui-dialog-content ul.tree .page .icon,
+#df-wpr-sidebar ul.tree .page .icon {
+	background-image: url(../images/icon-page.png);
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	margin: 0 4px 0 2px;
+	vertical-align: middle;
+}
+
+.ui-dialog-content ul.tree .page.redirect .icon,
+#df-wpr-sidebar ul.tree .page.redirect .icon {
+	background-image: url(../images/icon-page-redirect.png);
+}
+
+.ui-dialog-content ul.tree .page.hidden-in-menu .icon,
+#df-wpr-sidebar ul.tree .page.hidden-in-menu .icon {
+	background-image: url(../images/icon-page-hidden.png);
+}
+
+.ui-dialog-content ul.tree .page.not-public .icon,
+#df-wpr-sidebar ul.tree .page.not-public .icon {
+	background-image: url(../images/icon-page-not-public.png);
+}
+
+.ui-dialog-content ul.tree .page.hidden-in-menu .title,
+#df-wpr-sidebar ul.tree .page.hidden-in-menu .title,
+.ui-dialog-content ul.tree .page.not-public .title,
+#df-wpr-sidebar ul.tree .page.not-public .title {
+	color: #999;
+}
+
+.ui-dialog-content ul.tree div,
+#df-wpr-sidebar ul.tree div {
+	width: 100%;
+	position: relative;
+}
+
+.ui-dialog-content ul.tree li.selected > div.page,
+.ui-dialog-content ul.tree li.selected > div.page:hover,
+#df-wpr-sidebar ul.tree li.selected > div.page,
+#df-wpr-sidebar ul.tree li.selected > div.page:hover {
+	background-color: #97BDD6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#BEE0F5), to(#89AFCA));
+	background: -moz-linear-gradient(top, #BEE0F5, #89AFCA);
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.ui-dialog-content ul.tree div.page:hover,
+#df-wpr-sidebar ul.tree div.page:hover {
+	background: #dfdfdf;
+	background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#d3d3d3));
+	background: -moz-linear-gradient(top, #eaeaea, #d3d3d3);
+	color: #333;
+	text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+}
+
+#df-wpr-sidebar ul.tree .moving > div .title,
+ul.tree .moving > div .title {
+	border: dashed 1px #0000ff;
+}
+
+/* page selection tree in dialog */
+.ui-dialog-content ul.tree {
+	margin-left: 20px;
+	margin-top: 4px;
+}
+
+.ui-dialog-content ul.tree ul {
+	margin-bottom: 4px;
+}
+
+.ui-dialog-content ul.tree div {
+	padding: 2px 0;
 }
