@@ -575,7 +575,8 @@ span.nobr {
 }
 
 /* ---[ tree ] --- */
-/* This is a copy of jqtree.css because styles are reset */
+/* This is an (almost exact) copy of jqtree.css because styles are reset */
+
 .ui-dialog-content ul.tree,
 .ui-dialog-content ul.tree ul,
 #df-wpr-sidebar ul.tree,
@@ -598,6 +599,7 @@ span.nobr {
 .ui-dialog-content ul.tree li,
 #df-wpr-sidebar ul.tree li {
 	clear: both;
+	white-space: nowrap;
 }
 
 .ui-dialog-content ul.tree .toggler,
@@ -610,6 +612,14 @@ span.nobr {
 	text-indent: -9999px;
 }
 
+.ui-dialog-content ul.tree .toggler { 
+	background-position: 0 6px;
+}
+
+#df-wpr-sidebar ul.tree .toggler {
+	background-position: 0 8px;
+}
+
 .ui-dialog-content ul.tree div,
 #df-wpr-sidebar ul.tree div {
 	cursor: pointer;
@@ -617,8 +627,9 @@ span.nobr {
 
 .ui-dialog-content ul.tree .title,
 #df-wpr-sidebar ul.tree .title {
-	color: #1C4257;
-	vertical-align: middle;
+	color: #333;
+	line-height: 18px;
+	vertical-align: baseline;
 }
 
 .ui-dialog-content ul.tree li.folder,
@@ -641,6 +652,14 @@ ul.tree .toggler.closed,
 	background-image: url(../js/jqtree/treeRightTriangleBlack.png);
 }
 
+ul.tree .toggler.closed { 
+	background-position: 0 5px;
+}
+
+#df-wpr-sidebar ul.tree .toggler.closed {
+	background-position: 0 7px;
+}
+
 .ui-dialog-content span.tree-dragging,
 #df-wpr-sidebar span.tree-dragging {
 	color: #fff;
@@ -648,6 +667,7 @@ ul.tree .toggler.closed,
 	opacity: 0.6;
 	cursor: pointer;
 	padding: 2px 8px;
+	white-space: nowrap;
 }
 
 .ui-dialog-content ul.tree li.ghost,
@@ -713,7 +733,7 @@ ul.tree .toggler.closed,
 	width: 16px;
 	height: 16px;
 	display: inline-block;
-	margin: 0 4px 0 2px;
+	margin: -2px 4px 0 2px;
 	vertical-align: middle;
 }
 
@@ -766,7 +786,7 @@ ul.tree .toggler.closed,
 
 #df-wpr-sidebar ul.tree .moving > div .title,
 ul.tree .moving > div .title {
-	border: dashed 1px #0000ff;
+	outline: 1px dashed #666;
 }
 
 /* page selection tree in dialog */
@@ -780,5 +800,5 @@ ul.tree .moving > div .title {
 }
 
 .ui-dialog-content ul.tree div {
-	padding: 2px 0;
+	padding: 1px 0;
 }

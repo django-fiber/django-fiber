@@ -1406,11 +1406,11 @@ var adminPage = {
 				$li.find('.title').before('<span class="icon"></span>');
 				$div.addClass('page');
 
-				if (! node.show_in_menu) {
+				if (!node.show_in_menu) {
 					$div.addClass('hidden-in-menu');
 				}
 
-				if (! node.is_public) {
+				if (!node.is_public) {
 					$div.addClass('not-public');
 				}
 
@@ -1421,20 +1421,20 @@ var adminPage = {
 		}
 
 		function canMove(moved_node, target_node, position) {
-			if (! moved_node.url) {
-				// Cannot move menu
+			if (!moved_node.url) {
+				// cannot move menu
 				return false;
 			}
 
-			if (! target_node) {
+			if (!target_node) {
 				return true;
 			}
-			else if (! target_node.url) {
-				// Can move inside menu, not before or after
+			else if (!target_node.url) {
+				// can move inside menu, not before or after
 				return (position == 'inside');
 			}
 			else {
-				// Can move page node
+				// can move page node
 				return true;
 			}
 		}
@@ -1451,6 +1451,9 @@ var adminPage = {
 		});
 		this.admin_page_tree.bind('tree.click', handleClick);
 		this.admin_page_tree.bind('tree.contextmenu', $.proxy(this.handle_page_menu_context_menu, this));
+
+		// disable textual selection of tree elements
+		$('.sidebar-tree').disableSelection();
 	},
 
 	init_content_tree: function() {
@@ -1786,7 +1789,7 @@ var adminPage = {
 		});
 
 		// hide context menus when (right)clicking somewhere else
-		$(document.body).bind('click contextmenu', function() {
+		$('html, body').bind('click contextmenu', function() {
 			$(document.body).find('.ui-context-menu').remove();
 		});
 	}
