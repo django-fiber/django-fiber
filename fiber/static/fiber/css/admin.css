@@ -478,7 +478,7 @@ div.ui-dialog form select,
 	margin: 0 0 5px 0;
 	border: 1px solid #666;
 	outline: none;
-	padding: 0;
+	padding: 0 3px;
 	height: 22px;
 	display: block;
 	text-align: left;
