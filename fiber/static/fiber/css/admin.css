@@ -333,6 +333,10 @@ ins.ui-icon {
 	padding: 5px 12px 3px;
 }
 
+.ui-menu .ui-menu-item {
+	white-space: nowrap;
+}
+
 .ui-menu .ui-menu-item a.ui-state-hover,
 .ui-menu .ui-menu-item a.ui-state-active {
 	margin: 0;
