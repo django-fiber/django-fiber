@@ -2,7 +2,7 @@ import datetime
 import re
 
 from django.db import models
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 from mptt.managers import TreeManager
 
@@ -30,8 +30,6 @@ class ContentItemManager(models.Manager):
         today = datetime.date.today()
 
         for content_item in self.get_query_set().annotate(num_pages=models.Count('page')):
-            content_item.set_used_on_pages_json()
-
             content_item_info = dict(
                 label=unicode(content_item),
                 id=content_item.id,
@@ -63,10 +61,10 @@ class ContentItemManager(models.Manager):
                     )
                 )
 
-        add_group('used more than once', 'multiple', multiple)
-        add_group('unused', 'unused', unused)
-        add_group('used once', 'once', once)
-        add_group('recently changed', 'recently_changed', recently_changed)
+        add_group(_('used more than once'), 'multiple', multiple)
+        add_group(_('unused'), 'unused', unused)
+        add_group(_('used once'), 'once', once)
+        add_group(_('recently changed'), 'recently_changed', recently_changed)
 
         return result
 
