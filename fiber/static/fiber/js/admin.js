@@ -1415,16 +1415,18 @@ var adminPage = {
 			}
 		}
 
-		function canMove(moved_node, target_node, position) {
-			if (!moved_node.url) {
+		function canMove(node) {
+			if (node.url) {
+				return true;
+			}
+			else {
 				// cannot move menu
 				return false;
 			}
+		}
 
-			if (!target_node) {
-				return true;
-			}
-			else if (!target_node.url) {
+		function canMoveTo(moved_node, target_node, position) {
+			if (!target_node.url) {
 				// can move inside menu, not before or after
 				return (position == 'inside');
 			}
@@ -1442,7 +1444,8 @@ var adminPage = {
 			onMoveNode: handleMoveNode,
 			selectable: true,
 			onCreateLi: $.proxy(createLi, this),
-			onCanMove: $.proxy(canMove, this)
+			onCanMove: $.proxy(canMove, this),
+			onCanMoveTo: $.proxy(canMoveTo, this)
 		});
 		this.admin_page_tree.bind('tree.click', handleClick);
 		this.admin_page_tree.bind('tree.contextmenu', $.proxy(this.handle_page_menu_context_menu, this));
