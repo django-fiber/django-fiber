@@ -1332,8 +1332,6 @@ var adminPage = {
 	},
 
 	init_admin_elements: function() {
-		var fiber_elements = this.get_fiber_elements();
-
 		// create nested structure of Fiber items
 		$.each(this.get_fiber_elements(), $.proxy(function(i, fiber_element) {
 			this.create_fiber_item($(fiber_element));
@@ -1672,7 +1670,6 @@ var adminPage = {
 		var animation_duration = 200;
 
 		var wpr_admin_sidebar = this.wpr_admin_sidebar;
-		var toggle_button = this.toggle_button;
 
 		// define animation values
 		var animate_sidebar_left_to = wpr_admin_sidebar.hidden ? 0 : (10 - 240);
@@ -1987,7 +1984,7 @@ var FiberItem = Class.extend({
 	create_button: function() {
 		// TODO: split this into subclasses
 		if (this.element_data.type == 'page') {
-			params = {
+			var params = {
 				before_page_id: this.element_data.id
 			};
 
@@ -1999,7 +1996,7 @@ var FiberItem = Class.extend({
 				this.element_data.block_name &&
 				this.element_data.page_id
 			) {
-				params = {
+				var params = {
 					before_page_content_item_id: this.element_data.page_content_item_id
 				};
 
@@ -2011,7 +2008,7 @@ var FiberItem = Class.extend({
 	},
 
 	button_position: function() {
-		position_params = {
+		var position_params = {
 			my: 'center center',
 			at: 'left top',
 			of: this.$element
@@ -2072,7 +2069,7 @@ var FiberItem = Class.extend({
 	},
 
 	droppable_position: function() {
-		position_params = {
+		var position_params = {
 			my: 'left top',
 			at: 'left top',
 			of: this.$element,
@@ -2225,7 +2222,7 @@ $(window).ready(function() {
 
 	if (body_fiber_data.show_login) {
 		$('body').addClass('df-admin');
-		loginform = new LoginFormDialog();
+		new LoginFormDialog();
 	}
 });
 
