@@ -321,14 +321,6 @@ li.hidden-in-menu {
 
 /*---[ Aristo customizations ]---*/
 
-/* IE fix */
-ins.ui-icon {
-	display: none;
-	text-indent: 0;
-	overflow: none;
-	background-repeat: no-repeat;
-}
-
 .ui-button-text-only .ui-button-text {
 	padding: 5px 12px 3px;
 }
