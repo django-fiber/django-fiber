@@ -114,16 +114,15 @@ limitations under the License.
 
   Position = {
     getName: function(position) {
-      return this._getNames()[position];
-    },
-    _getNames: function() {
-      var names;
-      names = {};
-      names[Position.BEFORE] = 'before';
-      names[Position.AFTER] = 'after';
-      names[Position.INSIDE] = 'inside';
-      names[Position.NONE] = 'none';
-      return names;
+      if (position === Position.BEFORE) {
+        return 'before';
+      } else if (position === Position.AFTER) {
+        return 'after';
+      } else if (position === Position.INSIDE) {
+        return 'inside';
+      } else {
+        return 'none';
+      }
     }
   };
 
@@ -378,7 +377,6 @@ limitations under the License.
       dragAndDrop: false,
       selectable: false,
       onCanSelectNode: null,
-      onMoveNode: null,
       onSetStateFromStorage: null,
       onGetStateFromStorage: null,
       onCreateLi: null,
@@ -517,12 +515,13 @@ limitations under the License.
       var createFolderLi, createLi, createNodeLi, createUl, doCreateDomElements,
         _this = this;
       createUl = function(depth, is_open) {
-        var $element, classes;
-        classes = [];
-        if (!depth) classes.push('tree');
-        $element = $('<ul />');
-        $element.addClass(classes.join(' '));
-        return $element;
+        var class_string;
+        if (depth) {
+          class_string = '';
+        } else {
+          class_string = ' class="tree"';
+        }
+        return $("<ul" + class_string + "></ul>");
       };
       createLi = function(node) {
         var $li;
@@ -721,14 +720,19 @@ limitations under the License.
       return $.ui.mouse.prototype._mouseMove.call(this, event);
     },
     _moveItem: function() {
+      var event;
       if (this.hovered_area && this.hovered_area.position !== Position.NONE) {
         this.tree.moveNode(this.current_item.node, this.hovered_area.node, this.hovered_area.position);
         if (this.hovered_area.position === Position.INSIDE) {
           this.hovered_area.node.is_open = true;
         }
-        if (this.options.onMoveNode) {
-          this.options.onMoveNode(this.current_item.node, this.hovered_area.node, Position.getName(this.hovered_area.position));
-        }
+        event = jQuery.Event('tree.move');
+        event.move_info = {
+          moved_node: this.current_item.node,
+          target_node: this.hovered_area.node,
+          position: Position.getName(this.hovered_area.position)
+        };
+        this.element.trigger(event);
         this.element.empty();
         return this._createDomElements(this.tree);
       }
@@ -777,16 +781,14 @@ limitations under the License.
         top = getTop($element);
         if (node === _this.current_item.node) {
           addPosition(node, Position.NONE, top);
+        } else {
+          addPosition(node, Position.INSIDE, top);
         }
-        ({
-          "else": addPosition(node, Position.INSIDE, top)
-        });
-        if (next_node === _this.current_item.node) {
-          addPosition(node, Position.NONE, top);
+        if (next_node === _this.current_item.node || node === _this.current_item.node) {
+          return addPosition(node, Position.NONE, top);
+        } else {
+          return addPosition(node, Position.AFTER, top);
         }
-        return {
-          "else": addPosition(node, Position.AFTER, top)
-        };
       };
       handleOpenFolder = function(node, $element) {
         if (node === _this.current_item.node) return false;

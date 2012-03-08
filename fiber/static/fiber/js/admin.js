@@ -1377,17 +1377,18 @@ var adminPage = {
 			}
 		}
 
-		function handleMoveNode(moved_node, target_node, position) {
+		function handleMoveNode(event) {
 			busyIndicator.show();
 
+			var info = event.move_info;
 			$.ajax({
-				url: '/api/v1/page/' + moved_node.id + '/',
+				url: '/api/v1/page/' + info.moved_node.id + '/',
 				type: 'PUT',
 				dataType: 'json',
 				data: {
 					action: 'move',
-					target_node_id: target_node.id,
-					position: position
+					target_node_id: info.target_node.id,
+					position: info.position
 				},
 				success: function(data) {
 					reloadPage();
@@ -1441,7 +1442,6 @@ var adminPage = {
 			autoOpen: 0,
 			saveState: 'fiber_pages',
 			dragAndDrop: true,
-			onMoveNode: handleMoveNode,
 			selectable: true,
 			onCreateLi: $.proxy(createLi, this),
 			onCanMove: $.proxy(canMove, this),
@@ -1449,6 +1449,7 @@ var adminPage = {
 		});
 		this.admin_page_tree.bind('tree.click', handleClick);
 		this.admin_page_tree.bind('tree.contextmenu', $.proxy(this.handle_page_menu_context_menu, this));
+		this.admin_page_tree.bind('tree.move', handleMoveNode);
 
 		// disable textual selection of tree elements
 		$('.sidebar-tree').disableSelection();
