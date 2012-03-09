@@ -232,10 +232,8 @@ class FileHandler(BaseHandler):
     def read(self, request):
         rows = int(request.GET['rows'])
         page = int(request.GET['page'])
-        if 'filename' in request.GET:
-            filename = request.GET['filename']
-        else:
-            filename = ''
+        filename = request.GET.get('filename', '')
+
         limit = page*rows
         offset = (page-1)*rows
         order_by = request.GET['sidx']
