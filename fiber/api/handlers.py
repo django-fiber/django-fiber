@@ -187,27 +187,26 @@ class ImageHandler(BaseHandler):
         return friendly_datetime(image.updated)
 
     def read(self, request):
-        rows = int(request.GET['rows'])
-        page = int(request.GET['page'])
-        if 'filename' in request.GET:
-            filename = request.GET['filename']
-        else:
-            filename = ''
+        rows = 10
+        page = int(request.GET.get('page', 1))
+        search = request.GET.get('search', '')
         limit = page*rows
         offset = (page-1)*rows
-        order_by = request.GET['sidx']
-        order_reversed = (request.GET['sord'] == 'desc')  #desc or asc
+        order_by = request.GET.get('sortorder')
+        order_reversed = (request.GET.get('sortorder') == 'desc')
         if order_by == 'updated':
             order_clause = 'updated'
         elif order_by == 'filename':
             order_clause = 'image'
         elif order_by == 'size':
             order_clause = 'width'
+        else:
+            order_clause = 'updated'
 
         if order_reversed:
             order_clause = '-%s' % order_clause
 
-        images = Image.objects.filter(image__icontains=filename).order_by(order_clause)[offset:limit]
+        images = Image.objects.filter(image__icontains=search).order_by(order_clause)[offset:limit]
         return images
 
 
@@ -230,23 +229,24 @@ class FileHandler(BaseHandler):
         return friendly_datetime(file.updated)
 
     def read(self, request):
-        rows = int(request.GET['rows'])
-        page = int(request.GET['page'])
-        filename = request.GET.get('filename', '')
+        rows = 10
+        page = int(request.GET.get('page', 1))
+        search = request.GET.get('search', '')
 
         limit = page*rows
         offset = (page-1)*rows
-        order_by = request.GET['sidx']
-        order_reversed = (request.GET['sord'] == 'desc')  #desc or asc
+        order_by = request.GET.get('order_by')
+        print request.GET.get('sortorder')
+        order_reversed = (request.GET.get('sortorder') == 'desc')
         if order_by == 'updated':
             order_clause = 'updated'
-        elif order_by == 'filename':
+        else:
             order_clause = 'file'
 
         if order_reversed:
             order_clause = '-%s' % order_clause
 
-        files = File.objects.filter(file__icontains=filename).order_by(order_clause)[offset:limit]
+        files = File.objects.filter(file__icontains=search).order_by(order_clause)[offset:limit]
 
         return files
 

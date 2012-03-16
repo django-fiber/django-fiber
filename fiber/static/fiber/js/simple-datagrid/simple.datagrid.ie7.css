@@ -1,0 +1,13 @@
+/* Do not replace icons in paginator. Seems not to work in ie7.
+*/
+.simple-data-grid .paginator .first,
+.simple-data-grid .paginator .previous,
+.simple-data-grid .paginator .next,
+.simple-data-grid .paginator .last {
+	background-image: none;
+	text-indent: 0;
+	height: auto;
+	width: auto;
+	line-height: auto;
+	display: inline;
+}

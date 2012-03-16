@@ -63,7 +63,8 @@ Fiber.enhance_textarea = function(textarea) {
 
 		var file_select_dialog = new Fiber.FileSelectDialog();
 		file_select_dialog.action_click = function() {
-			var selected_file_path = $(this.uiDialog.find('tr.ui-state-highlight td')[0]).text();
+			var row = file_select_dialog.get_selected_row();
+			var selected_file_path = row.url;
 
 			if (userSelectionIE.textRange) {
 				// Replace textarea selection for IE
@@ -92,7 +93,8 @@ Fiber.enhance_textarea = function(textarea) {
 
 		var image_select_dialog = new Fiber.ImageSelectDialog();
 		image_select_dialog.action_click = function() {
-			var selected_image_path = $(this.uiDialog.find('tr.ui-state-highlight td')[0]).text();
+			var row = file_select_dialog.get_selected_row();
+			var selected_image_path = row.url;
 
 			if (userSelectionIE.textRange) {
 				// Replace textarea selection for IE
