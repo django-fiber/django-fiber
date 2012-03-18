@@ -4,7 +4,7 @@ http://django-rest-framework.readthedocs.org/.
 """
 
 from django.conf.urls.defaults import patterns, url
-
+from django.core.urlresolvers import reverse
 
 from djangorestframework.resources import ModelResource
 from djangorestframework.views import ListOrCreateModelView, InstanceModelView
@@ -14,8 +14,7 @@ from djangorestframework.permissions import IsAuthenticated
 from fiber.models import Page, PageContentItem, ContentItem, Image, File
 
 
-from views import ApiRoot
-from forms import PageForm
+from views import ApiRoot, MovePageView
 
 
 class AuthRequiredListOrCreateModelView(ListOrCreateModelView):
@@ -36,7 +35,16 @@ class AuthRequiredInstanceModelView(InstanceModelView):
 
 class PageResource(ModelResource):
     model = Page
-    form = PageForm
+
+    def move_url(self, instance):
+        """
+        Provide a url on this resourece that points to the 
+        `move_page` method on the Page model.
+        """
+        return reverse('page-resource-instance-move',
+                       kwargs={'pk': instance.id})
+
+    include = ('move_url', )
 
 class PageContentItemResource(ModelResource):
     model = PageContentItem
@@ -55,6 +63,7 @@ urlpatterns = patterns('',
     (r'^$', ApiRoot.as_view()),
     url(r'^pages/$', AuthRequiredListOrCreateModelView.as_view(resource=PageResource), name='page-resource-root'),
     url(r'^pages/(?P<pk>[^/]+)/$', AuthRequiredInstanceModelView.as_view(resource=PageResource), name='page-resource-instance'),
+    url(r'^pages/(?P<pk>[^/]+)/move_page/$', MovePageView.as_view(resource=PageResource), name='page-resource-instance-move'),
     url(r'^page_content_items/$', AuthRequiredListOrCreateModelView.as_view(resource=PageContentItemResource), name='page-content-item-resource-root'),
     url(r'^page_content_items/(?P<pk>[^/]+)/$', AuthRequiredInstanceModelView.as_view(resource=PageContentItemResource), name='page-content-item-resource-instance'),
     url(r'^content_items/$', AuthRequiredListOrCreateModelView.as_view(resource=ContentItemResource), name='content-item-resource-root'),

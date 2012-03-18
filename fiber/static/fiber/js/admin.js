@@ -1383,11 +1383,10 @@ var adminPage = {
 			busyIndicator.show();
 
 			$.ajax({
-				url: '/api/v1/page/' + moved_node.id + '/',
+				url: '/api/v2/pages/' + moved_node.id + '/move_page',
 				type: 'PUT',
 				dataType: 'json',
 				data: {
-					action: 'move',
 					target_node_id: target_node.id,
 					position: position
 				},
