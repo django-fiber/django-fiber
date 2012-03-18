@@ -30,7 +30,7 @@ class AuthRequiredInstanceModelView(InstanceModelView):
     Base class for InstanceModelViews. Only
     authenticated users are allowed to use the api.
     """
-    #permissions = (IsAuthenticated, )
+    permissions = (IsAuthenticated, )
 
 
 class PageResource(ModelResource):
