@@ -25,6 +25,9 @@ class AdminPageMiddleware(object):
         self.editor_settings = self.get_editor_settings()
 
     def process_response(self, request, response):
+        # only process html and xhtml responses
+        if response['Content-Type'].split(';')[0] not in ('text/html', 'application/xhtml+xml'):
+            return response
         if self.set_login_session(request, response):
             request.session['show_fiber_admin'] = True
             url_without_fiber = request.path_info.replace('@fiber', '')
