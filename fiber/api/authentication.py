@@ -33,24 +33,3 @@ class DjangoStaffAuthentication(object):
         response.status_code = 401
 
         return response
-
-
-def set_session(request, session_key):
-    """
-    Set the session from this session key. This is used for uploading, because Flash does not support cookies.
-    """
-    engine = import_module(settings.SESSION_ENGINE)
-    request.session = engine.SessionStore(session_key)
-
-
-class DjangoUploadAuthentication(DjangoStaffAuthentication):
-    """
-    Authentication for file uploads. Does the same as DjangoStaffAuthentication.
-
-    - Uses session id in POST for authentication instead of session cookie.
-    - The reason is that Flash uploads do not support cookies.
-    """
-    def is_authenticated(self, request):
-        set_session(request, request.GET.get('sessionid'))
-
-        return super(DjangoUploadAuthentication, self).is_authenticated(request)
