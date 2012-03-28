@@ -1,3 +1,19 @@
+###
+Copyright 2012 Marco Braak
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+###
+
 $ = @jQuery
 
 
@@ -5,19 +21,10 @@ slugify = (string) ->
     return string.replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-]/g,'').toLowerCase()
 
 buildUrl = (url, query_parameters) ->
-    result = url
-
-    is_first = true
-    for key, value of query_parameters
-        if is_first
-            result += '?'
-            is_first = false
-        else
-            result += '&'
-
-        result += "#{ key }=#{ value }"
-
-    return result
+    if query_parameters
+        return url + '?' + $.param(query_parameters)
+    else
+        return url
 
 @SimpleDataGrid =
     slugify: slugify
@@ -62,6 +69,9 @@ $.widget("ui.simple_datagrid", {
 
     reload: ->
         @_loadData()
+
+    loadData: (data) ->
+        @_fillGrid(data)
 
     setParameter: (key, value) ->
         @parameters[key] = value
@@ -219,6 +229,8 @@ $.widget("ui.simple_datagrid", {
             getDataFromUrl()
         else if @options.data
             getDataFromArray()
+        else
+            @_fillGrid([])
 
     _fillGrid: (data) ->
         addRowFromObject = (row) =>
@@ -273,18 +285,6 @@ $.widget("ui.simple_datagrid", {
                 $tr.data('row', row)
                 @$tbody.append($tr)
 
-        getUrl = (page) =>
-            if not @url
-                return '#'
-
-            if not page?
-                page = @page
-
-            if not page or page == 1
-                return @url
-            else
-                return @url + "?page=#{ page }"
-
         fillFooter = (total_pages) =>
             if not total_pages or total_pages == 1
                 html = ''
@@ -295,8 +295,8 @@ $.widget("ui.simple_datagrid", {
                     html += '<span class="sprite-icons-first-disabled">first</span>'
                     html += '<span class="sprite-icons-previous-disabled">previous</span>'
                 else
-                    html += "<a href=\"#{ getUrl(1) }\" class=\"sprite-icons-first first\">first</a>"
-                    html += "<a href=\"#{ getUrl(@current_page - 1) }\" class=\"sprite-icons-previous previous\">previous</a>"
+                    html += "<a href=\"#\" class=\"sprite-icons-first first\">first</a>"
+                    html += "<a href=\"#\" class=\"sprite-icons-previous previous\">previous</a>"
 
                 html += "<span>page #{ @current_page } of #{ total_pages }</span>"
 
@@ -304,8 +304,8 @@ $.widget("ui.simple_datagrid", {
                     html += '<span class="sprite-icons-next-disabled">next</span>'
                     html += '<span class="sprite-icons-last-disabled">last</span>'
                 else
-                    html += "<a href=\"#{ getUrl(@current_page + 1) }\" class=\"sprite-icons-next next\">next</a>"
-                    html += "<a href=\"#{ getUrl(total_pages) }\" class=\"sprite-icons-last last\">last</a>"
+                    html += "<a href=\"#\" class=\"sprite-icons-next next\">next</a>"
+                    html += "<a href=\"#\" class=\"sprite-icons-last last\">last</a>"
 
                 html += "</td></tr>"
 
@@ -323,7 +323,7 @@ $.widget("ui.simple_datagrid", {
 
                     if column.key == @order_by
                         class_html = "sort "
-                        if @sortorder == SortOrder.DESCENDING
+                        if @sort_order == SortOrder.DESCENDING
                             class_html += "asc sprite-icons-down"
                         else
                             class_html += "desc sprite-icons-up"

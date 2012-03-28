@@ -1,9 +1,13 @@
 /* Do not replace icons in paginator. Seems not to work in ie7.
 */
-.simple-data-grid .paginator .first,
-.simple-data-grid .paginator .previous,
-.simple-data-grid .paginator .next,
-.simple-data-grid .paginator .last {
+.sprite-icons-last,
+.sprite-icons-last-disabled,
+.sprite-icons-first,
+.sprite-icons-first-disabled,
+.sprite-icons-previous,
+.sprite-icons-previous-disabled,
+.sprite-icons-next,
+.sprite-icons-next-disabled {
 	background-image: none;
 	text-indent: 0;
 	height: auto;
