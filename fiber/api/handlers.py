@@ -236,7 +236,6 @@ class FileHandler(BaseHandler):
         limit = page*rows
         offset = (page-1)*rows
         order_by = request.GET.get('order_by')
-        print request.GET.get('sortorder')
         order_reversed = (request.GET.get('sortorder') == 'desc')
         if order_by == 'updated':
             order_clause = 'updated'
