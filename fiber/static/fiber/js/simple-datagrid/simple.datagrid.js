@@ -85,6 +85,9 @@ limitations under the License.
     getColumns: function() {
       return this.columns;
     },
+    setCurrentPage: function(page) {
+      return this.current_page = page;
+    },
     _generateColumnData: function() {
       var generateFromOptions, generateFromThElements,
         _this = this;

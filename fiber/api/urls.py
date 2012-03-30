@@ -4,8 +4,6 @@ from piston.resource import Resource
 
 from authentication import DjangoStaffAuthentication
 from handlers import PageHandler, PageContentItemHandler, ImageHandler, FileHandler, FileUploadHandler, ImageUploadHandler, ContentItemHandler
-#from emitters import jqGridJSONEmitter
-from emitters import DataGridJSONEmitter
 
 auth = DjangoStaffAuthentication()
 

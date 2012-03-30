@@ -690,7 +690,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
-		url: '/api/v1/images.datagrid-json',
+		url: '/api/v1/images.json',
 		width: 520,
 		height: 'auto',
 		start_width: 480,
@@ -754,6 +754,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 			if (filename != new_filename) {
 				filename = new_filename;
 				self.image_select_grid.simple_datagrid('setParameter', 'search', filename);
+				self.image_select_grid.simple_datagrid('setCurrentPage', 1);
 				self.refresh_grid();
 			}
 		});
@@ -776,7 +777,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
-		url: '/api/v1/files.datagrid-json',
+		url: '/api/v1/files.json',
 		width: 520,
 		height: 'auto',
 		start_width: 480,
@@ -832,6 +833,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 			if (filename != new_filename) {
 				filename = new_filename;
 				self.file_select_grid.simple_datagrid('setParameter', 'search', filename);
+				self.file_select_grid.simple_datagrid('setCurrentPage', 1);
 				self.refresh_grid();
 			}
 		});
