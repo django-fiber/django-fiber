@@ -9,7 +9,7 @@ from django.utils import simplejson
 
 from utils.import_util import import_element
 
-from app_settings import EXCLUDE_URLS, EDITOR
+from app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR
 
 from models import ContentItem
 from models import Page
@@ -30,10 +30,10 @@ class AdminPageMiddleware(object):
             return response
         if self.set_login_session(request, response):
             request.session['show_fiber_admin'] = True
-            url_without_fiber = request.path_info.replace('@fiber', '')
+            url_without_fiber = request.path_info.replace(LOGIN_STRING, '')
             querystring_without_fiber = ''
             if request.META['QUERY_STRING']:
-                querystring_without_fiber = request.META['QUERY_STRING'].replace('@fiber', '')
+                querystring_without_fiber = request.META['QUERY_STRING'].replace(LOGIN_STRING, '')
             if (querystring_without_fiber != ''):
                 querystring = '?%s' % querystring_without_fiber
             else:
@@ -90,11 +90,11 @@ class AdminPageMiddleware(object):
     def set_login_session(self, request, response):
         """
         Only set the fiber show_login session when the request
-        - has @fiber behind its request-url
+        - has LOGIN_STRING (defaults to @fiber) behind its request-url
         """
         if response['Content-Type'].split(';')[0] not in ('text/html', 'application/xhtml+xml'):
             return False
-        if not (request.path_info.endswith('@fiber') or (request.META['QUERY_STRING'] and request.META['QUERY_STRING'].endswith('@fiber'))):
+        if not (request.path_info.endswith(LOGIN_STRING) or (request.META['QUERY_STRING'] and request.META['QUERY_STRING'].endswith(LOGIN_STRING))):
             return False
         else:
             return True
