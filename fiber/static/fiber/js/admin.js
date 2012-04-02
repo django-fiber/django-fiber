@@ -48,79 +48,37 @@ Fiber.enhance_jsontextarea = function(textarea) {
 
 	// key-value will be put in a table
 	var table = $('<table/>').appendTo(wpr_all);
-	var thead = $('<thead><tr><th>'+gettext('Key')+'</th><th>'+gettext('Value')+'</th><th>'+gettext('Action')+'</th></tr></thead>').appendTo(table);
+	var thead = $('<thead><tr><th>' + gettext('Key') + '</th><th>' + gettext('Value') + '</th></tr></thead>').appendTo(table);
 	var tbody = $('<tbody/>').appendTo(table);
-
-	// latest row of table will become add-new key-value-pair action
-	var tr_add = $('<tr/>').attr('class', 'add-row').appendTo(tbody);
-	var td1_add = $('<td/>').appendTo(tr_add);
-	var td2_add = $('<td/>').attr('class', 'key').appendTo(tr_add);
-	var td3_add = $('<td/>').appendTo(tr_add);
-	$('<label/>').attr('for', textarea.name+'-adder').text(gettext('Add new')).appendTo(td1_add);
-	var adder = $('<select/>').attr('id', textarea.name+'-adder').appendTo(td2_add);
-	$('<a/>').text(gettext('Add')).attr('class', textarea.name+'-add-btn add-btn').appendTo(td3_add);
 
 	var current_json = $.parseJSON(textarea.value);
 	var used_keys = [];
 
-	for (var key in current_json) {
-		if (current_json[key]) {
+	for (var key in schema.metadata) {
+		if (current_json && current_json[key]) {
 			add_field(key, current_json[key]);
+		} else {
+			// TODO: allow nulls + default
+			add_field(key, '');
 		}
 	}
 
 	// add toggle bar
 	var toggle_div = $('<div/>').appendTo(wpr_all);
-	var toggle_textarea = $('<input type="checkbox"/>').attr('id', textarea.name+'-toggle').appendTo(toggle_div);
-	$('<label/>').attr('for', textarea.name+'-toggle').text(gettext('Show raw JSON')).appendTo(toggle_div);
-
-	// on click delete key-value-pair
-	$('a.'+textarea.name+'-delete-btn').live('click', function(){
-		old_key = $(this).parent('td').parent('tr').attr('key-data');
-		delete current_json[old_key];
-		removeByValue(used_keys,old_key);
-		$('<option/>').attr('value', old_key).text(old_key).appendTo($('#'+textarea.name+'-adder'));
-		$(this).parent('td').parent('tr').remove();
-		generate_json();
-	});
+	var toggle_textarea = $('<input type="checkbox"/>').attr('id', textarea.name + '-toggle').appendTo(toggle_div);
+	$('<label/>').attr('for', textarea.name + '-toggle').text(gettext('Show raw JSON')).appendTo(toggle_div);
 
 	// on blur update json-textarea
-	$('.'+textarea.name+'-key-value-pair select, .'+textarea.name+'-key-value-pair input, .'+textarea.name+'-key-value-pair textarea, .'+textarea.name+'-key-value-pair .ui-autocomplete-input').live('blur', function(){
+	$('.' + textarea.name + '-key-value-pair select, .' + textarea.name + '-key-value-pair input, .' + textarea.name + '-key-value-pair textarea, .' + textarea.name + '-key-value-pair .ui-autocomplete-input').live('blur', function() {
 		if (current_json === null) {
 			current_json = {};
 		}
-		current_json[$(this).parent('td').parent('tr').attr('key-data')] = $(this).val();
-		generate_json();
-	});
-
-	// update add-new-key-value-pair selectbox with choices not already used
-	for (key in schema[textarea.name]) {
-		if ($.inArray(key, used_keys) == -1) {
-			$('<option/>').attr('value', key).text(key).appendTo(adder);
-		}
-	}
-	// make it a combobox after all values are set
-	adder.combobox();
-
-	// on click add key-value-pair
-	$('a.'+textarea.name+'-add-btn').live('click', function(){
-		new_key = $(this).parent('td').siblings('td.key').children('input').val();
-		if (new_key === '') {
-			alert(gettext('Key can not be empty'));
+		if ($(this).val()) {
+	   		current_json[$(this).parent('td').parent('tr').attr('key-data')] = $(this).val();
 		} else {
-			if ($.inArray(new_key, used_keys) != -1) {
-				alert(gettext('Key already exists!'));
-			} else {
-				add_field(new_key, '');
-				$(this).parent('td').siblings('td.key').children('input').val('');
-				$('#'+textarea.name+'-adder option[value="'+new_key+'"]').remove();
-				if (current_json === null) {
-					current_json = {};
-				}
-				current_json[new_key] = $('#'+textarea.name+'-key-'+new_key).val();
-				generate_json();
-			}
+			delete current_json[$(this).parent('td').parent('tr').attr('key-data')];
 		}
+		generate_json();
 	});
 
 	// toggle textarea
@@ -130,10 +88,9 @@ Fiber.enhance_jsontextarea = function(textarea) {
 
 	function add_field(key, value) {
 		used_keys.push(key);
-		var row = $('<tr/>').attr('class', textarea.name+'-key-value-pair').attr('key-data', key).insertBefore(tr_add);
+		var row = $('<tr/>').attr('class', textarea.name+'-key-value-pair').attr('key-data', key).appendTo(tbody);
 		var td1 = $('<td/>').appendTo(row);
 		var td2 = $('<td/>').appendTo(row);
-		var td3 = $('<td/>').appendTo(row);
 		$('<label/>').attr('for', textarea.name+'-key-'+key).text(gettext(key)).appendTo(td1);
 
 		// check if this key has a special description
@@ -143,6 +100,9 @@ Fiber.enhance_jsontextarea = function(textarea) {
 					// add a select widget
 					var select_widget = $('<select/>').attr('id', textarea.name+'-key-'+key).appendTo(td2);
 					if ('values' in schema[textarea.name][key]) {
+						// add empty option
+						var option = $('<option/>').attr('value', '').text('').appendTo(select_widget);
+						// add options from schema
 						var select_values = schema[textarea.name][key].values;
 						for (var select_value in select_values) {
 							if (select_values[select_value]) {
@@ -161,8 +121,8 @@ Fiber.enhance_jsontextarea = function(textarea) {
 
 				} else if (schema[textarea.name][key].widget == 'textarea') {
 					// add a textarea widget
-					$('<textarea/>').attr('id', textarea.name+'-key-'+key).attr('value', value).appendTo(td2);
-
+					var added_textarea = $('<textarea/>').attr('id', textarea.name+'-key-'+key).appendTo(td2);
+					added_textarea.attr('value', value);
 				} else {
 					// unknown widget, or textfield, hence default field
 					add_default_field(key, value, td2);
@@ -176,8 +136,6 @@ Fiber.enhance_jsontextarea = function(textarea) {
 			// custom key, hence default field
 			add_default_field(key, value, td2);
 		}
-
-		$('<a/>').text(gettext('Delete')).attr('class', textarea.name+'-delete-btn deletelink').appendTo(td3);
 	}
 
 	function add_default_field(key, value, td2) {
@@ -186,15 +144,6 @@ Fiber.enhance_jsontextarea = function(textarea) {
 
 	function generate_json() {
 		$(textarea).val($.toJSON(current_json));
-	}
-
-	function removeByValue(arr, val) {
-		for(var i=0; i<arr.length; i++) {
-			if(arr[i] == val) {
-				arr.splice(i, 1);
-				break;
-			}
-		}
 	}
 
 };

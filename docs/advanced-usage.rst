@@ -91,8 +91,8 @@ In this example metadata (key-value pairs) for pages will be available in the ba
 		},
 		'bgcolor': {
 			'widget': 'combobox',
-				'values': ['#ffffff', '#fff000', '#ff00cc'],
-				'prefill_from_db': True,
+			'values': ['#ffffff', '#fff000', '#ff00cc'],
+			'prefill_from_db': True,
 		},
 		'description': {
 			'widget': 'textarea',
