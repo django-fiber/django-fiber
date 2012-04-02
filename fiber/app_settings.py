@@ -1,6 +1,8 @@
 from django.conf import settings
 
 
+LOGIN_STRING = getattr(settings, 'FIBER_LOGIN_STRING', '@fiber')
+
 DEFAULT_TEMPLATE = getattr(settings, 'FIBER_DEFAULT_TEMPLATE', 'base.html')
 TEMPLATE_CHOICES = getattr(settings, 'FIBER_TEMPLATE_CHOICES', [])
 CONTENT_TEMPLATE_CHOICES = getattr(settings, 'FIBER_CONTENT_TEMPLATE_CHOICES', [])
