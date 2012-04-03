@@ -32,8 +32,9 @@
 <script src="{{ STATIC_URL }}fiber/js/file-uploader/fileuploader.js" type="text/javascript"></script>
 
 <script src="{{ STATIC_URL }}fiber/js/admin-extra.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}fiber/js/admin.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}fiber/js/admin-extend.js" type="text/javascript"></script>
+{% block extra_js %}
+    <script src="{{ STATIC_URL }}fiber/js/admin.js" type="text/javascript"></script>
+{% endblock %}
 {% endcompress %}
 
 {% if editor_template_js %}
