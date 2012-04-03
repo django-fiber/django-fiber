@@ -151,3 +151,48 @@ You can also override the entire CKEditor toolbar, by setting the variable:
 
 To see how this works, check the fiber.ckeditor.js file in the Django Fiber source:
 https://github.com/ridethepony/django-fiber/blob/master/fiber/static/fiber/js/fiber.ckeditor.js
+
+
+Extending admin.js
+==================
+
+In this example we'll change the behavior of FiberItems. Note that extending Fiber in this way is not
+guranteed to stay functional upon an update of fiber since you're building on the internals of fiber.
+
+
+header.html
+-----------
+
+Create a header.html template inside your app, e.g. `/your_app/templates/fiber/header.html`.
+
+If you want to extend any Jquery classes inside `static/fiber/js/admin.js` you must make sure that your
+javascript is loaded after fiber's `admin.js`. So here's what your `header.html` might look like::
+
+	{% extend "fiber/header.html" %}
+
+	{% block extra_js %}
+	    {{ block.super }}
+	    <script src="{{ STATIC_URL }}fiber/js/admin_extend.js" type="text/javascript"></script>
+	{% endblock %}
+
+Now you can extend Fiber.FiberItem in your own javascript file `admin_extend.js`. Here's how you would extend
+the `button_podition` method::
+
+	Fiber.FiberItem.prototype.button_position = function() {
+	...
+	<your code here>
+	...
+	}
+
+
+Tips
+----
+
+* Make sure your apps are listed _before_ fiber in INSTALLED_APPS
+* Add the path to where fiber is installed to TEMPLATE_DIRS, e.g.:
+	
+	import os, fiber
+	TEMPLATE_DIRS = (os.path.dirname(os.path.dirname(fiber.__file__)),
+
+	)
+
