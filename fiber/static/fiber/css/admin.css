@@ -710,3 +710,7 @@ ul.tree .moving > div .title {
 .simple-data-grid tfoot {
 	background-color: #f6f6f6;
 }
+
+#ui-image-select-grid img {
+	width: 111px;
+}
