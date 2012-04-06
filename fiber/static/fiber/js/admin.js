@@ -1247,7 +1247,7 @@ var adminPage = {
 
 	create_fiber_item: function($fiber_element) {
 		// create new FiberItem
-		var fiber_item = new FiberItem($fiber_element);
+		var fiber_item = new Fiber.FiberItem($fiber_element);
 		this.all_fiber_items.push(fiber_item);
 
 		// find closest parent, and see if it is already a FiberItem
@@ -1804,7 +1804,7 @@ function reloadPage(params) {
 
 
 // TODO: subclass for specific uses (add / change) and types (page / content / other)
-var FiberItem = Class.extend({
+Fiber.FiberItem = Class.extend({
 	// TODO: add defaults?
 
 	init: function($element) {
