@@ -234,8 +234,9 @@ class PageManager(TreeManager):
                 id=page.id,
             )
 
-            url=page.get_absolute_url()
+            url = page.get_absolute_url()
             if url:
+                # normal pages
                 page_info['url'] = url
                 page_info['change_url'] = page.get_change_url()
                 page_info['add_url'] = page.get_add_url()
@@ -243,9 +244,12 @@ class PageManager(TreeManager):
                 page_info['show_in_menu'] = page.show_in_menu
                 page_info['is_public'] = page.is_public
                 page_info['is_redirect'] = bool(page.redirect_page)
+            else:
+                # root nodes / menu 'pages'
+                page_info['add_url'] = page.get_add_url()
 
             if not page.parent:
-                # Root element
+                # root node
                 data.append(page_info)
             else:
                 parent_info = page_dict.get(page.parent_id)
@@ -257,4 +261,3 @@ class PageManager(TreeManager):
             page_dict[page.id] = page_info
 
         return data
-
