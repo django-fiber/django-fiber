@@ -56,8 +56,11 @@
 	background: -ms-linear-gradient(top, #bee0f5, #89afca);
 }
 
-.simple-data-grid tfoot .paginator {
+.simple-data-grid tfoot td {
 	padding: 0.5em;
+}
+
+.simple-data-grid tfoot .paginator {
 	text-align: center;
 	background: #eaeaea;
 }

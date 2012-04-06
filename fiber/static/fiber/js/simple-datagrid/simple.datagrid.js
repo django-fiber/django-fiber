@@ -312,10 +312,14 @@ limitations under the License.
         }
         return _results;
       };
-      fillFooter = function(total_pages) {
+      fillFooter = function(total_pages, row_count) {
         var html;
         if (!total_pages || total_pages === 1) {
-          html = '';
+          if (row_count === 0) {
+            html = "<tr><td colspan=\"" + _this.columns.length + "\">No rows</td></tr>";
+          } else {
+            html = '';
+          }
         } else {
           html = "<tr><td class=\"paginator\" colspan=\"" + _this.columns.length + "\">";
           if (!_this.current_page || _this.current_page === 1) {
@@ -375,7 +379,7 @@ limitations under the License.
       }
       this.total_pages = total_pages;
       fillRows(rows);
-      fillFooter(total_pages);
+      fillFooter(total_pages, rows.length);
       return fillHeader();
     },
     _handleClickFirstPage: function(e) {
