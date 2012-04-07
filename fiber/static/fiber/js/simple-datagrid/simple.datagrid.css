@@ -95,13 +95,13 @@
 .sprite-icons-next-disabled,
 .sprite-icons-up,
 .sprite-icons-down{background-image:url(icons.png);background-repeat:no-repeat}
-.sprite-icons-last{background-position:0px 0px;width:15px;height:11px;}
-.sprite-icons-last-disabled{background-position:-15px 0px;width:15px;height:11px;}
-.sprite-icons-first{background-position:0px -11px;width:15px;height:11px;}
-.sprite-icons-first-disabled{background-position:-15px -11px;width:15px;height:11px;}
-.sprite-icons-previous{background-position:-30px 0px;width:8px;height:11px;}
-.sprite-icons-previous-disabled{background-position:-30px -11px;width:8px;height:11px;}
-.sprite-icons-next{background-position:0px -22px;width:8px;height:11px;}
-.sprite-icons-next-disabled{background-position:-8px -22px;width:8px;height:11px;}
-.sprite-icons-up{background-position:-16px -22px;width:9px;height:6px;}
-.sprite-icons-down{background-position:-25px -22px;width:9px;height:6px;}
+.sprite-icons-last{background-position:0px 0px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-last-disabled{background-position:-15px 0px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-first{background-position:0px -11px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-first-disabled{background-position:-15px -11px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-previous{background-position:-30px 0px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-previous-disabled{background-position:-30px -11px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-next{background-position:0px -22px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-next-disabled{background-position:-8px -22px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-up{background-position:-16px -22px;width:9px;height:6px;line-height:6px;}
+.sprite-icons-down{background-position:-25px -22px;width:9px;height:6px;line-height:6px;}
