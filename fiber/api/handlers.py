@@ -1,4 +1,5 @@
 import os
+import math
 from unicodedata import normalize
 
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -162,95 +163,89 @@ class PageContentItemHandler(BaseHandler):
 
 class ImageHandler(BaseHandler):
     allowed_methods = ('GET', )
-    fields = ('id', 'url', 'image', 'filename', 'size', 'updated')
-    exclude = () # un-exclude `id`
     model = Image
 
-    @classmethod
-    def url(cls, image):
-        return image.image.url
-
-    @classmethod
-    def image(cls, image):
-        return image.image.url
-
-    @classmethod
-    def filename(cls, image):
-        return os.path.basename(image.image.name)
-
-    @classmethod
-    def size(cls, image):
-        return '%s x %d' % (image.width, image.height)
-
-    @classmethod
-    def updated(cls, image):
-        return friendly_datetime(image.updated)
-
     def read(self, request):
-        rows = int(request.GET['rows'])
-        page = int(request.GET['page'])
-        if 'filename' in request.GET:
-            filename = request.GET['filename']
-        else:
-            filename = ''
+        rows = 5
+        page = int(request.GET.get('page', 1))
+        search = request.GET.get('search', '')
         limit = page*rows
         offset = (page-1)*rows
-        order_by = request.GET['sidx']
-        order_reversed = (request.GET['sord'] == 'desc')  #desc or asc
+        order_by = request.GET.get('sortorder')
+        order_reversed = (request.GET.get('sortorder') == 'desc')
         if order_by == 'updated':
             order_clause = 'updated'
         elif order_by == 'filename':
             order_clause = 'image'
         elif order_by == 'size':
             order_clause = 'width'
+        else:
+            order_clause = 'updated'
 
         if order_reversed:
             order_clause = '-%s' % order_clause
 
-        images = Image.objects.filter(image__icontains=filename).order_by(order_clause)[offset:limit]
-        return images
+        images = Image.objects.filter(image__icontains=search).order_by(order_clause)[offset:limit]
+
+        image_count = Image.objects.filter(image__icontains=search).count()
+        rows_per_page = 10
+        total_pages = int(math.ceil(image_count)/(rows_per_page * 1.0))
+
+        return dict(
+            total_pages=total_pages,
+            rows=[
+                dict(
+                    id=image.id,
+                    url=image.image.url,
+                    image=image.image.url,
+                    filename=os.path.basename(image.image.name),
+                    size='%s x %d' % (image.width, image.height),
+                    updated=friendly_datetime(image.updated)
+                )
+                for image in images
+            ]
+        )
 
 
 class FileHandler(BaseHandler):
     allowed_methods = ('GET', )
-    fields = ('id', 'url', 'filename', 'updated')
-    exclude = () # un-exclude `id`
     model = File
 
-    @classmethod
-    def url(cls, file):
-        return file.file.url
-
-    @classmethod
-    def filename(cls, file):
-        return os.path.basename(file.file.name)
-
-    @classmethod
-    def updated(cls, file):
-        return friendly_datetime(file.updated)
-
     def read(self, request):
-        rows = int(request.GET['rows'])
-        page = int(request.GET['page'])
-        if 'filename' in request.GET:
-            filename = request.GET['filename']
-        else:
-            filename = ''
+        rows = 10
+        page = int(request.GET.get('page', 1))
+        search = request.GET.get('search', '')
+
         limit = page*rows
         offset = (page-1)*rows
-        order_by = request.GET['sidx']
-        order_reversed = (request.GET['sord'] == 'desc')  #desc or asc
+        order_by = request.GET.get('order_by')
+        order_reversed = (request.GET.get('sortorder') == 'desc')
         if order_by == 'updated':
             order_clause = 'updated'
-        elif order_by == 'filename':
+        else:
             order_clause = 'file'
 
         if order_reversed:
             order_clause = '-%s' % order_clause
 
-        files = File.objects.filter(file__icontains=filename).order_by(order_clause)[offset:limit]
+        files = File.objects.filter(file__icontains=search).order_by(order_clause)[offset:limit]
 
-        return files
+        file_count = File.objects.filter(file__icontains=search).count()
+        rows_per_page = 10
+        total_pages = int(math.ceil(file_count)/(rows_per_page * 1.0))
+
+        return dict(
+            total_pages=total_pages,
+            rows=[
+                dict(
+                    id=file.id,
+                    url=file.file.url,
+                    filename=os.path.basename(file.file.name),
+                    updated=friendly_datetime(file.updated)
+                )
+                for file in files
+            ]
+        )
 
     def create(self, request):
         File.objects.create(
