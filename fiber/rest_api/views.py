@@ -1,16 +1,17 @@
-"""
-The root view for the rest api.
-"""
-
 from django.core.urlresolvers import reverse
+
 from djangorestframework.views import View
 from djangorestframework.permissions import IsAuthenticated
+from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 
 from forms import MovePageForm
 
 from fiber.models import Page
 
 class ApiRoot(View):
+    """
+    The root view for the rest api.
+    """
 
     permissions = (IsAuthenticated, )
     
@@ -22,7 +23,18 @@ class ApiRoot(View):
                 {'name': 'files', 'url': reverse('file-resource-root')},
                 ]
 
+
+class PageListView(ListOrCreateModelView):
+    permissions = (IsAuthenticated, )
+
+
+class PageInstanceView(InstanceModelView):
+    permissions = (IsAuthenticated, )
+
+
 class MovePageView(View):
+
+    permissions = (IsAuthenticated, )
 
     form = MovePageForm
 
