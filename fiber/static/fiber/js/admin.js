@@ -1170,6 +1170,7 @@ var DroppableArea = Class.extend({
 	},
 
 	add_content_item: function(content_item_id) { // TODO: move to utils? (DRY)
+		debugger;
 		// perform an AJAX call to add the added object to the current page,
 		// optionally placed before the beforePageContentItem
 		var data = {
@@ -1534,7 +1535,7 @@ var adminPage = {
 									busyIndicator.show();
 
 									$.ajax({
-										url: '/api/v1/page/' + node.id + '/',
+										url: '/api/v2/pages/' + node.id + '/',
 										type: 'DELETE',
 										data: {},
 										success: function(data) {
@@ -1617,7 +1618,7 @@ var adminPage = {
 								busyIndicator.show();
 
 								$.ajax({
-									url: '/api/v1/content_item/' + node.id + '/',
+									url: '/api/v2/content_items/' + node.id + '/',
 									type: 'DELETE',
 									data: {},
 									success: function(data) {
@@ -2178,7 +2179,7 @@ var FiberItem = Class.extend({
 		adminPage.hide_admin_elements();
 
 		$.ajax({
-			url: '/api/v1/page_content_item/' + this.element_data.page_content_item_id + '/',
+			url: '/api/v2/page_content_items/' + this.element_data.page_content_item_id + '/',
 			type: 'DELETE',
 			data: {},
 			success: function(data) {
