@@ -24,11 +24,11 @@ class ApiRoot(View):
                 ]
 
 
-class PageListView(ListOrCreateModelView):
+class ListView(ListOrCreateModelView):
     permissions = (IsAuthenticated, )
 
 
-class PageInstanceView(InstanceModelView):
+class InstanceView(InstanceModelView):
     permissions = (IsAuthenticated, )
 
 

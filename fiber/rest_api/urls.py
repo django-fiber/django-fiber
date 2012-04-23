@@ -11,7 +11,7 @@ from djangorestframework.resources import ModelResource
 from fiber.models import Page, PageContentItem, ContentItem, Image, File
 
 
-from views import ApiRoot, MovePageView, PageListView, PageInstanceView
+from views import ApiRoot, MovePageView, ListView, InstanceView
 
 
 class PageResource(ModelResource):
@@ -42,15 +42,15 @@ class FileResource(ModelResource):
 
 urlpatterns = patterns('',
     (r'^$', ApiRoot.as_view()),
-    url(r'^pages/$', PageListView.as_view(resource=PageResource), name='page-resource-root'),
-    url(r'^pages/(?P<pk>[^/]+)/$', PageInstanceView.as_view(resource=PageResource), name='page-resource-instance'),
+    url(r'^pages/$', ListView.as_view(resource=PageResource), name='page-resource-root'),
+    url(r'^pages/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=PageResource), name='page-resource-instance'),
     url(r'^pages/(?P<pk>[^/]+)/move_page/$', MovePageView.as_view(), name='page-resource-instance-move'),
-    url(r'^page_content_items/$', PageListView.as_view(resource=PageContentItemResource), name='page-content-item-resource-root'),
-    url(r'^page_content_items/(?P<pk>[^/]+)/$', PageInstanceView.as_view(resource=PageContentItemResource), name='page-content-item-resource-instance'),
-    url(r'^content_items/$', PageListView.as_view(resource=ContentItemResource), name='content-item-resource-root'),
-    url(r'^content_items/(?P<pk>[^/]+)/$', PageInstanceView.as_view(resource=ContentItemResource), name='content-item-resource-instance'),
-    url(r'^images/$', PageListView.as_view(resource=ImageResource), name='image-resource-root'),
-    url(r'^images/(?P<pk>[^/]+)/$', PageInstanceView.as_view(resource=ImageResource), name='image-resource-instance'),
-    url(r'^files/$', PageListView.as_view(resource=FileResource), name='file-resource-root'),
-    url(r'^files/(?P<pk>[^/]+)/$', PageInstanceView.as_view(resource=FileResource), name='file-resource-instance'),
+    url(r'^page_content_items/$', ListView.as_view(resource=PageContentItemResource), name='page-content-item-resource-root'),
+    url(r'^page_content_items/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=PageContentItemResource), name='page-content-item-resource-instance'),
+    url(r'^content_items/$', ListView.as_view(resource=ContentItemResource), name='content-item-resource-root'),
+    url(r'^content_items/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=ContentItemResource), name='content-item-resource-instance'),
+    url(r'^images/$', ListView.as_view(resource=ImageResource), name='image-resource-root'),
+    url(r'^images/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=ImageResource), name='image-resource-instance'),
+    url(r'^files/$', ListView.as_view(resource=FileResource), name='file-resource-root'),
+    url(r'^files/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=FileResource), name='file-resource-instance'),
 )
