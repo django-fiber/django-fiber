@@ -25,6 +25,10 @@ class PageResource(ModelResource):
         return reverse('page-resource-instance-move',
                        kwargs={'pk': instance.id})
 
+    def url(self, instance):
+        return instance.get_absolute_url()
+
+
     include = ('move_url', )
 
 class PageContentItemResource(ModelResource):

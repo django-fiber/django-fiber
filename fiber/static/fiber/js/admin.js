@@ -1828,10 +1828,10 @@ function reloadPage(params) {
 		busyIndicator.show();
 
 		$.ajax({
-			url: '/api/v1/page/' + page_id + '/',
+			url: '/api/v2/pages/' + page_id + '/',
 			type: 'GET',
 			success: function(data) {
-				window.location.replace(data.data.attr.href);
+				window.location.replace(data.url);
 			},
 			error: function() {
 				if (params && params.error) {
