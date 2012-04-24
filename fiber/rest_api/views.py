@@ -4,9 +4,9 @@ from djangorestframework.views import View
 from djangorestframework.permissions import IsAuthenticated
 from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 
-from forms import MovePageForm
+from forms import MovePageForm, MovePageContentItemForm
 
-from fiber.models import Page
+from fiber.models import Page, PageContentItem
 
 class ApiRoot(View):
     """
@@ -46,3 +46,19 @@ class MovePageView(View):
         target = self.CONTENT['target_node_id']
         page = Page.objects.get(id=pk)
         page.move_page(target, position)
+
+
+class MovePageContentItemView(View):
+
+    permissions = (IsAuthenticated, )
+
+    form = MovePageContentItemForm
+
+    def get(self, request, pk):
+        return 'Exposes the `ContentItem.move` method'
+
+    def put(self, request, pk):
+        page_content_item = PageContentItem.objects.get(id=pk)
+        before_page_content_item_id = self.CONTENT.get('before_page_content_item_id', None)
+        block_name = self.CONTENT['block_name']
+        page_content_item.move(before_page_content_item_id, block_name)

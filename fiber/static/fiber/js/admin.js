@@ -1170,7 +1170,6 @@ var DroppableArea = Class.extend({
 	},
 
 	add_content_item: function(content_item_id) { // TODO: move to utils? (DRY)
-		debugger;
 		// perform an AJAX call to add the added object to the current page,
 		// optionally placed before the beforePageContentItem
 		var data = {
@@ -1195,14 +1194,17 @@ var DroppableArea = Class.extend({
 
 	move_content_item: function(fiber_item_data) {
 		busyIndicator.show();
+		debugger;
 
 		$.ajax({
-			url: '/api/v1/page_content_item/' + fiber_item_data.page_content_item_id + '/',
-			type: 'PUT',
+			url: '/api/v2/page_content_items/' + fiber_item_data.page_content_item_id + '/move/',
+			type: 'POST',
+			dataType: 'json',
+			
 			data: {
 				before_page_content_item_id: this.fiber_item.element_data.page_content_item_id,
-				action: 'move',
-				block_name: this.fiber_item.element_data.block_name
+				block_name: this.fiber_item.element_data.block_name,
+				_method: 'PUT',
 			},
 			success: function() {
 				reloadPage();

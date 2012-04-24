@@ -234,8 +234,6 @@ class PageContentItem(models.Model):
     block_name = models.CharField(_('block name'), max_length=255)
     sort = models.IntegerField(_('sort'), blank=True, null=True)
 
-    objects = managers.PageContentItemManager()
-
     def save(self, *args, **kwargs):
         super(PageContentItem, self).save(*args, **kwargs)
         self.content_item.set_used_on_pages_json()
@@ -244,6 +242,34 @@ class PageContentItem(models.Model):
         super(PageContentItem, self).delete(*args, **kwargs)
         self.content_item.set_used_on_pages_json()
 
+    def move(self, next_item=None, block_name=None):
+        if not block_name:
+            if next_item:
+                block_name = next_item.block_name
+            else:
+                block_name = self.block_name
+
+        if self.block_name != block_name:
+            self.block_name = block_name
+            self.save()
+
+        page_content_items = list(
+            self.page.get_content_for_block(block_name).exclude(id=self.id),
+        )
+
+        def resort():
+            for i, item in enumerate(page_content_items):
+                item.sort = i
+                item.save()
+
+        if not next_item:
+            page_content_items.append(self)
+            resort()
+        else:
+            if next_item in page_content_items:
+                next_index = page_content_items.index(next_item)
+                page_content_items.insert(next_index, self)
+                resort()
 
 class Image(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)

@@ -106,38 +106,6 @@ class ContentItemManager(models.Manager):
                     content_item.save()
 
 
-class PageContentItemManager(models.Manager):
-
-    def move(self, item, next_item=None, block_name=None):
-        if not block_name:
-            if next_item:
-                block_name = next_item.block_name
-            else:
-                block_name = item.block_name
-
-        if item.block_name != block_name:
-            item.block_name = block_name
-            item.save()
-
-        page_content_items = list(
-            item.page.get_content_for_block(block_name).exclude(id=item.id),
-        )
-
-        def resort():
-            for i, item in enumerate(page_content_items):
-                item.sort = i
-                item.save()
-
-        if not next_item:
-            page_content_items.append(item)
-            resort()
-        else:
-            if next_item in page_content_items:
-                next_index = page_content_items.index(next_item)
-                page_content_items.insert(next_index, item)
-                resort()
-
-
 class PageManager(TreeManager):
 
     def link_parent_objects(self, pages):

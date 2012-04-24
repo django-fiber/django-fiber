@@ -10,8 +10,7 @@ from djangorestframework.resources import ModelResource
 
 from fiber.models import Page, PageContentItem, ContentItem, Image, File
 
-
-from views import ApiRoot, MovePageView, ListView, InstanceView
+from views import ApiRoot, MovePageView, MovePageContentItemView, ListView, InstanceView
 
 
 class PageResource(ModelResource):
@@ -51,6 +50,7 @@ urlpatterns = patterns('',
     url(r'^pages/(?P<pk>[^/]+)/move_page/$', MovePageView.as_view(), name='page-resource-instance-move'),
     url(r'^page_content_items/$', ListView.as_view(resource=PageContentItemResource), name='page-content-item-resource-root'),
     url(r'^page_content_items/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=PageContentItemResource), name='page-content-item-resource-instance'),
+    url(r'^page_content_items/(?P<pk>[^/]+)/move/$', MovePageContentItemView.as_view(), name='page-content-item-resource-instance-move'),
     url(r'^content_items/$', ListView.as_view(resource=ContentItemResource), name='content-item-resource-root'),
     url(r'^content_items/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=ContentItemResource), name='content-item-resource-instance'),
     url(r'^images/$', ListView.as_view(resource=ImageResource), name='image-resource-root'),
