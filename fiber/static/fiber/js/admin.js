@@ -1173,8 +1173,8 @@ var DroppableArea = Class.extend({
 		// perform an AJAX call to add the added object to the current page,
 		// optionally placed before the beforePageContentItem
 		var data = {
-			content_item_id: content_item_id,
-			page_id: this.options.page_id,
+			content_item: content_item_id,
+			page: this.options.page_id,
 			block_name: this.options.block_name,
 			before_page_content_item_id: this.fiber_item.element_data.page_content_item_id
 		};
@@ -1182,7 +1182,7 @@ var DroppableArea = Class.extend({
 		busyIndicator.show();
 
 		$.ajax({
-			url: '/api/v1/page_content_items/',
+			url: '/api/v2/page_content_items/',
 			type: 'POST',
 			data: data,
 			success: function(data) {
@@ -1194,7 +1194,6 @@ var DroppableArea = Class.extend({
 
 	move_content_item: function(fiber_item_data) {
 		busyIndicator.show();
-		debugger;
 
 		$.ajax({
 			url: '/api/v2/page_content_items/' + fiber_item_data.page_content_item_id + '/move/',
