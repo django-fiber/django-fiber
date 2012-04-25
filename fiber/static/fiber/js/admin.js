@@ -652,11 +652,13 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 		// Valums file uploader
 		var uploader = new qq.FileUploaderBasic({
+			multipart: true,
+			fieldName: 'image',
 			element: upload_button_pane[0],
 			button: upload_button_pane[0], // connecting directly to the jQUery UI upload_button doesn't work
 			action: this.get_upload_path(),
 			params: {
-				'sessionid': $.cookie('sessionid')
+				title: 'uploaded',
 			},
 			onComplete: $.proxy(function(id, fileName, responseJSON) {
 				this.refresh_grid();
@@ -748,7 +750,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 	},
 
 	get_upload_path: function() {
-		return '/api/v1/images/';
+		return '/api/v2/images/';
 	},
 
 	refresh_grid: function() {
