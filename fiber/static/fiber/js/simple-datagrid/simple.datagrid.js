@@ -371,9 +371,9 @@ limitations under the License.
       if ($.isArray(data)) {
         rows = data;
         total_pages = 0;
-      } else if (data.rows) {
-        rows = data.rows;
-        total_pages = data.total_pages || 0;
+      } else if (data.results) {
+        rows = data.results;
+        total_pages = data.pages || 0;
       } else {
         rows = [];
       }

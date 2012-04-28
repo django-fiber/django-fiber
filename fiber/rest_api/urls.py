@@ -13,7 +13,7 @@ from djangorestframework.resources import ModelResource
 from fiber.models import Page, PageContentItem, ContentItem, Image, File
 from fiber.utils.date import friendly_datetime
 
-from views import ApiRoot, MovePageView, MovePageContentItemView, ListView, InstanceView
+from views import ApiRoot, MovePageView, MovePageContentItemView, ListView, ImageListView, InstanceView
 
 
 class PageResource(ModelResource):
@@ -71,7 +71,7 @@ urlpatterns = patterns('',
     url(r'^page_content_items/(?P<pk>[^/]+)/move/$', MovePageContentItemView.as_view(), name='page-content-item-resource-instance-move'),
     url(r'^content_items/$', ListView.as_view(resource=ContentItemResource), name='content-item-resource-root'),
     url(r'^content_items/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=ContentItemResource), name='content-item-resource-instance'),
-    url(r'^images/$', ListView.as_view(resource=ImageResource), name='image-resource-root'),
+    url(r'^images/$', ImageListView.as_view(resource=ImageResource), name='image-resource-root'),
     url(r'^images/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=ImageResource), name='image-resource-instance'),
     url(r'^files/$', ListView.as_view(resource=FileResource), name='file-resource-root'),
     url(r'^files/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=FileResource), name='file-resource-instance'),

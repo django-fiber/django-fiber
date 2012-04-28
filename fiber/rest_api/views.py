@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from djangorestframework.views import View
 from djangorestframework.permissions import IsAuthenticated
 from djangorestframework.views import ListOrCreateModelView, InstanceModelView
+from djangorestframework.mixins import PaginatorMixin
 
 from forms import MovePageForm, MovePageContentItemForm
 
@@ -27,6 +28,9 @@ class ApiRoot(View):
 class ListView(ListOrCreateModelView):
     #permissions = (IsAuthenticated, )
     pass
+
+class ImageListView( PaginatorMixin, ListView):
+    limit = 5
 
 class InstanceView(InstanceModelView):
     #permissions = (IsAuthenticated, )
