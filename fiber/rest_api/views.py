@@ -4,7 +4,8 @@ from djangorestframework.views import View
 from djangorestframework.permissions import IsAuthenticated
 from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 from djangorestframework.mixins import PaginatorMixin
-
+from djangorestframework.status import HTTP_400_BAD_REQUEST
+from djangorestframework.response import ErrorResponse
 from forms import MovePageForm, MovePageContentItemForm
 
 from fiber.models import Page, PageContentItem
@@ -31,6 +32,22 @@ class ListView(ListOrCreateModelView):
 
 class ImageListView( PaginatorMixin, ListView):
     limit = 5
+
+    def get_queryset(self, **kwargs):
+        qs = super(ImageListView, self).get_queryset(**kwargs)
+
+        order_by = self.request.GET.get('order_by', 'updated')
+        if order_by not in ('filename', 'size', 'updated'):
+            raise ErrorResponse(status=HTTP_400_BAD_REQUEST, content="Can not order by the passed value.")
+        sort_order = self.request.GET.get('sortorder', 'asc')
+
+        if order_by == 'filename':
+            order_by = 'image'
+        elif order_by == 'size':
+            order_by = 'width'
+
+        qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
+        return qs
 
 class InstanceView(InstanceModelView):
     #permissions = (IsAuthenticated, )
