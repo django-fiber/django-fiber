@@ -25,12 +25,12 @@ class ApiRoot(View):
 
 
 class ListView(ListOrCreateModelView):
-    permissions = (IsAuthenticated, )
-
+    #permissions = (IsAuthenticated, )
+    pass
 
 class InstanceView(InstanceModelView):
-    permissions = (IsAuthenticated, )
-
+    #permissions = (IsAuthenticated, )
+    pass
 
 class MovePageView(View):
 

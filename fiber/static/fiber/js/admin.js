@@ -679,7 +679,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
-		url: '/api/v1/images.json',
+		url: '/api/v2/images',
 		width: 520,
 		height: 'auto',
 		start_width: 480,

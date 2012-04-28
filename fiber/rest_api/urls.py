@@ -3,12 +3,15 @@ The implementation of this module is based on the example from the Django Rest F
 http://django-rest-framework.readthedocs.org/.
 """
 
+import os
+
 from django.conf.urls.defaults import patterns, url
 from django.core.urlresolvers import reverse
 
 from djangorestframework.resources import ModelResource
 
 from fiber.models import Page, PageContentItem, ContentItem, Image, File
+from fiber.utils.date import friendly_datetime
 
 from views import ApiRoot, MovePageView, MovePageContentItemView, ListView, InstanceView
 
@@ -38,6 +41,21 @@ class ContentItemResource(ModelResource):
 
 class ImageResource(ModelResource):
     model = Image
+
+    def url(self, instance):
+        return instance.image.url
+
+    def filename(self, instance):
+        return os.path.basename(instance.image.name)
+
+    def size(self, instance):
+        return '%s x %d' % (instance.width, instance.height)
+
+    def updated(self, instance):
+        return friendly_datetime(instance.updated)
+
+    include = ('url', 'filename', 'size', 'updated')
+
 
 class FileResource(ModelResource):
     model = File
