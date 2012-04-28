@@ -719,7 +719,8 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		this.uiDialog.append(this.image_select_grid);
 
 		function thumbnail_formatter(value, row_data) {
-			return '<img src="' + row_data.url + '" title="' + row_data.title + '" />';
+			return '<span style="display:none">'+ row_data.url + '</span>'+ //insert the url that ckeditor looks for. Use HTML5 data attribute instead?
+					'<img src="' + row_data.url + '" title="' + row_data.title + '"/>';
 		}
 
 		this.image_select_grid.simple_datagrid({

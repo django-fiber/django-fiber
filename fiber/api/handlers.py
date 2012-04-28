@@ -196,6 +196,7 @@ class ImageHandler(BaseHandler):
             rows=[
                 dict(
                     id=image.id,
+                    title=image.title,
                     url=image.image.url,
                     image=image.image.url,
                     filename=os.path.basename(image.image.name),
