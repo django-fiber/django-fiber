@@ -26,19 +26,46 @@ class ApiRoot(View):
                 ]
 
 
-class ListView(ListOrCreateModelView):
-    #permissions = (IsAuthenticated, )
-    pass
+class ListView(PaginatorMixin, ListOrCreateModelView):
+    #permissions = (IsAuthenticated, ) #X-csrf request header set?
 
-class ImageListView( PaginatorMixin, ListView):
     limit = 5
+
+    def check_fields(self, order_by):
+        if order_by not in self.orderable_fields:
+            raise ErrorResponse(status=HTTP_400_BAD_REQUEST, content="Can not order by the passed value.")
+
+
+class FileListView(ListView):
+    
+    orderable_fields = ('filename', 'updated')
+
+    def get_queryset(self, **kwargs):
+        qs = super(FileListView, self).get_queryset(**kwargs)
+
+        order_by = self.request.GET.get('order_by', 'updated')
+        
+        self.check_fields(order_by)
+
+        sort_order = self.request.GET.get('sortorder', 'asc')
+
+        if order_by == 'filename':
+            order_by = 'file'
+
+        qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
+        return qs
+
+class ImageListView(ListView):
+
+    orderable_fields = ('filename', 'size', 'updated')
 
     def get_queryset(self, **kwargs):
         qs = super(ImageListView, self).get_queryset(**kwargs)
 
         order_by = self.request.GET.get('order_by', 'updated')
-        if order_by not in ('filename', 'size', 'updated'):
-            raise ErrorResponse(status=HTTP_400_BAD_REQUEST, content="Can not order by the passed value.")
+        
+        self.check_fields(order_by)
+
         sort_order = self.request.GET.get('sortorder', 'asc')
 
         if order_by == 'filename':

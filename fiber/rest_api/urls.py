@@ -13,7 +13,7 @@ from djangorestframework.resources import ModelResource
 from fiber.models import Page, PageContentItem, ContentItem, Image, File
 from fiber.utils.date import friendly_datetime
 
-from views import ApiRoot, MovePageView, MovePageContentItemView, ListView, ImageListView, InstanceView
+from views import ApiRoot, MovePageView, MovePageContentItemView, ListView, FileListView, ImageListView, InstanceView
 
 
 class PageResource(ModelResource):
@@ -39,7 +39,22 @@ class PageContentItemResource(ModelResource):
 class ContentItemResource(ModelResource):
     model = ContentItem
 
-class ImageResource(ModelResource):
+class FileResource(ModelResource):
+    model = File
+
+    def url(self, instance):
+        return instance.file.url
+
+    def filename(self, instance):
+        return os.path.basename(instance.file.name)
+
+    def updated(self, instance):
+        return friendly_datetime(instance.updated)
+
+    include = ('url', 'filename', 'updated')
+
+
+class ImageResource(FileResource):
     model = Image
 
     def url(self, instance):
@@ -51,14 +66,7 @@ class ImageResource(ModelResource):
     def size(self, instance):
         return '%s x %d' % (instance.width, instance.height)
 
-    def updated(self, instance):
-        return friendly_datetime(instance.updated)
-
     include = ('url', 'filename', 'size', 'updated')
-
-
-class FileResource(ModelResource):
-    model = File
 
 
 urlpatterns = patterns('',
@@ -73,6 +81,6 @@ urlpatterns = patterns('',
     url(r'^content_items/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=ContentItemResource), name='content-item-resource-instance'),
     url(r'^images/$', ImageListView.as_view(resource=ImageResource), name='image-resource-root'),
     url(r'^images/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=ImageResource), name='image-resource-instance'),
-    url(r'^files/$', ListView.as_view(resource=FileResource), name='file-resource-root'),
+    url(r'^files/$', FileListView.as_view(resource=FileResource), name='file-resource-root'),
     url(r'^files/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=FileResource), name='file-resource-instance'),
 )

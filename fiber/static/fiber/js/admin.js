@@ -625,6 +625,10 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 		// override this
 	},
 
+	get_upload_fieldname: function() {
+		return 'file';
+	},
+
 	create_upload_button: function() {
 		var button_pane = this.uiDialog.parent().find('.ui-dialog-buttonpane');
 
@@ -653,7 +657,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 		// Valums file uploader
 		var uploader = new qq.FileUploaderBasic({
 			multipart: true,
-			fieldName: 'image',
+			fieldName: this.get_upload_fieldname(),
 			element: upload_button_pane[0],
 			button: upload_button_pane[0], // connecting directly to the jQUery UI upload_button doesn't work
 			action: this.get_upload_path(),
@@ -683,8 +687,9 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		width: 520,
 		height: 'auto',
 		start_width: 480,
-		start_height: 'auto'
+		start_height: 'auto',
 	},
+
 
 	// override default dialog window
 	init_dialog: function() {
@@ -760,6 +765,10 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	get_selected_row: function() {
 		return this.image_select_grid.simple_datagrid('getSelectedRow');
+	},
+
+	get_upload_fieldname: function() {
+		return 'image';
 	}
 });
 
@@ -767,7 +776,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
-		url: '/api/v1/files.json',
+		url: '/api/v2/files/',
 		width: 520,
 		height: 'auto',
 		start_width: 480,
@@ -830,7 +839,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 	},
 
 	get_upload_path: function() {
-		return '/api/v1/files/';
+		return '/api/v2/files/';
 	},
 
 	refresh_grid: function() {
