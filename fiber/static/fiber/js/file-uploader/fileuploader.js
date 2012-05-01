@@ -1147,6 +1147,24 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
      * Adds file to the queue
      * Returns id to use with upload, cancel
      **/    
+
+    // helper for csrf (@YoavGivati https://github.com/valums/file-uploader/pull/240)
+    getCookie: function(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    },
+
     add: function(file){
         if (!(file instanceof File)){
             throw new Error('Passed obj in not a File (in qq.UploadHandlerXhr)');
@@ -1218,6 +1236,10 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
         xhr.setRequestHeader("X-File-Name", encodeURIComponent(name));
         if(!self._options.multipart) xhr.setRequestHeader("Content-Type", "application/octet-stream");
 
+        var csrf = this.getCookie('csrftoken');
+        if(csrf !== null) {
+            xhr.setRequestHeader("X-CSRFToken", csrf);   
+        }
         xhr.send(data);
     },
     _onComplete: function(id, xhr){

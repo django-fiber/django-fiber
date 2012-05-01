@@ -27,7 +27,8 @@ class ApiRoot(View):
 
 
 class ListView(PaginatorMixin, ListOrCreateModelView):
-    #permissions = (IsAuthenticated, ) #X-csrf request header set?
+    
+    permissions = (IsAuthenticated, ) #X-csrf request header set?
 
     limit = 5
 
@@ -55,6 +56,7 @@ class FileListView(ListView):
         qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
         return qs
 
+
 class ImageListView(ListView):
 
     orderable_fields = ('filename', 'size', 'updated')
@@ -76,9 +78,11 @@ class ImageListView(ListView):
         qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
         return qs
 
+
 class InstanceView(InstanceModelView):
-    #permissions = (IsAuthenticated, )
-    pass
+ 
+    permissions = (IsAuthenticated, )
+    
 
 class MovePageView(View):
 
