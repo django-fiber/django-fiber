@@ -112,5 +112,5 @@ class MovePageContentItemView(View):
     def put(self, request, pk):
         page_content_item = PageContentItem.objects.get(id=pk)
         before_page_content_item_id = self.CONTENT.get('before_page_content_item_id', None)
-        block_name = self.CONTENT['block_name']
+        block_name = self.CONTENT.get('block_name', None)
         page_content_item.move(before_page_content_item_id, block_name)

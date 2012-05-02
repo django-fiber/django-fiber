@@ -244,7 +244,8 @@ class PageContentItem(models.Model):
         super(PageContentItem, self).delete(*args, **kwargs)
         self.content_item.set_used_on_pages_json()
 
-    def move(self, next_item=None, block_name=None):
+    def move(self, next_item_id=None, block_name=None):
+        next_item = PageContentItem.objects.get(pk=next_item_id)
         if not block_name:
             if next_item:
                 block_name = next_item.block_name
