@@ -16,7 +16,7 @@ class ApiRoot(View):
     """
 
     permissions = (IsAuthenticated, )
-    
+
     def get(self, request):
         return [{'name': 'pages', 'url': reverse('page-resource-root')},
                 {'name': 'page content items', 'url': reverse('page-content-item-resource-root')},
@@ -27,8 +27,8 @@ class ApiRoot(View):
 
 
 class ListView(PaginatorMixin, ListOrCreateModelView):
-    
-    permissions = (IsAuthenticated, ) #X-csrf request header set?
+
+    permissions = (IsAuthenticated, )  # X-csrf request header set?
 
     limit = 5
 
@@ -38,14 +38,14 @@ class ListView(PaginatorMixin, ListOrCreateModelView):
 
 
 class FileListView(ListView):
-    
+
     orderable_fields = ('filename', 'updated')
 
     def get_queryset(self, **kwargs):
         qs = super(FileListView, self).get_queryset(**kwargs)
 
         order_by = self.request.GET.get('order_by', 'updated')
-        
+
         self.check_fields(order_by)
 
         sort_order = self.request.GET.get('sortorder', 'asc')
@@ -65,7 +65,7 @@ class ImageListView(ListView):
         qs = super(ImageListView, self).get_queryset(**kwargs)
 
         order_by = self.request.GET.get('order_by', 'updated')
-        
+
         self.check_fields(order_by)
 
         sort_order = self.request.GET.get('sortorder', 'asc')
@@ -80,9 +80,9 @@ class ImageListView(ListView):
 
 
 class InstanceView(InstanceModelView):
- 
+
     permissions = (IsAuthenticated, )
-    
+
 
 class MovePageView(View):
 

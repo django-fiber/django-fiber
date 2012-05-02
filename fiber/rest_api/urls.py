@@ -1,5 +1,5 @@
 """
-The implementation of this module is based on the example from the Django Rest Framework docs available at 
+The implementation of this module is based on the example from the Django Rest Framework docs available at
 http://django-rest-framework.readthedocs.org/.
 """
 
@@ -21,7 +21,7 @@ class PageResource(ModelResource):
 
     def move_url(self, instance):
         """
-        Provide a url on this resourece that points to the 
+        Provide a url on this resourece that points to the
         `move_page` method on the Page model.
         """
         return reverse('page-resource-instance-move',
@@ -30,19 +30,21 @@ class PageResource(ModelResource):
     def url(self, instance):
         return instance.get_absolute_url()
 
-
     include = ('move_url', )
+
 
 class PageContentItemResource(ModelResource):
     model = PageContentItem
 
+
 class ContentItemResource(ModelResource):
     model = ContentItem
+
 
 class FileResource(ModelResource):
     model = File
 
-    def url(self, instance):
+    def file_url(self, instance):
         return instance.file.url
 
     def filename(self, instance):
@@ -51,13 +53,13 @@ class FileResource(ModelResource):
     def updated(self, instance):
         return friendly_datetime(instance.updated)
 
-    include = ('url', 'filename', 'updated')
+    include = ('url', 'file_url', 'filename', 'updated')
 
 
 class ImageResource(FileResource):
     model = Image
 
-    def url(self, instance):
+    def image_url(self, instance):
         return instance.image.url
 
     def filename(self, instance):
@@ -66,7 +68,7 @@ class ImageResource(FileResource):
     def size(self, instance):
         return '%s x %d' % (instance.width, instance.height)
 
-    include = ('url', 'filename', 'size', 'updated')
+    include = ('url', 'image_url', 'filename', 'size', 'updated')
 
 
 urlpatterns = patterns('',

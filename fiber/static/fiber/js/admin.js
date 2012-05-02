@@ -615,6 +615,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 		this._super();
 		// Create the upload button after displaying the dialog
 		this.create_upload_button();
+		this.create_delete_button();
 	},
 
 	get_upload_path: function() {
@@ -622,7 +623,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 	},
 
 	refresh_grid: function() {
-		// override this
+		this.select_grid.simple_datagrid('reload');
 	},
 
 	get_upload_fieldname: function() {
@@ -662,7 +663,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 			button: upload_button_pane[0], // connecting directly to the jQUery UI upload_button doesn't work
 			action: this.get_upload_path(),
 			params: {
-				title: 'uploaded',
+				title: 'uploaded'
 			},
 			onComplete: $.proxy(function(id, fileName, responseJSON) {
 				this.refresh_grid();
@@ -672,9 +673,63 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 		// reset button behavior
 		upload_button_pane.css({
-			'position': 'absolute',
+			'float': 'left',
 			'margin-top': 8,
 			'margin-bottom': 8
+		});
+	},
+
+	create_delete_button: function() {
+		var button_pane = this.uiDialog.parent().find('.ui-dialog-buttonpane');
+
+		var delete_button_pane = $('<div/>').prependTo(button_pane)
+			.attr({
+				'id': 'delete-buttonpane'
+			});
+
+		var delete_button = $('<button type="button">' + gettext('Delete') + '</button>')
+			.appendTo(delete_button_pane)
+			.attr({
+				'class': 'delete',
+				'id': 'delete-file-button'
+			})
+			.button({
+			})
+			.css({
+				'margin-top': 0,
+				'margin-bottom': 0,
+				'margin-right': 0
+			});
+
+		// reset button behavior
+		delete_button_pane.css({
+			'float': 'left',
+			'margin-top': 8,
+			'margin-bottom': 8
+		});
+
+		delete_button.addClass('ui-button-disabled ui-state-disabled');
+
+		this.select_grid.bind('datagrid.select', function() {
+			delete_button.attr('disabled', '');
+			delete_button.removeClass('ui-button-disabled ui-state-disabled');
+		});
+
+		var self = this;
+
+		delete_button.bind('click', function() {
+			var url = self.select_grid.simple_datagrid('getSelectedRow').url;
+			
+			$.ajax({
+				url: url,
+				type: 'DELETE',
+				data: {},
+				statusCode: {
+					204: function() {
+						self.refresh_grid();
+					}
+				}
+			});
 		});
 	}
 });
@@ -687,7 +742,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		width: 520,
 		height: 'auto',
 		start_width: 480,
-		start_height: 'auto',
+		start_height: 'auto'
 	},
 
 
@@ -716,19 +771,19 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		var filename = '';
 		var self = this;
 
-		this.image_select_grid = $(document.createElement('table')).attr('id', 'ui-image-select-grid');
+		this.select_grid = $(document.createElement('table')).attr('id', 'ui-image-select-grid');
 		this.image_select_filter = $(document.createElement('div')).attr('id', 'ui-image-select-filter');
 		this.image_select_filter.append($(document.createElement('label')).attr({ id: 'ui-image-select-filter-label'}).text(gettext('Filter by filename')));
 		this.image_select_filter.append($(document.createElement('input')).attr({ id: 'ui-image-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.image_select_filter);
-		this.uiDialog.append(this.image_select_grid);
+		this.uiDialog.append(this.select_grid);
 
 		function thumbnail_formatter(value, row_data) {
-			return '<span style="display:none">'+ row_data.url + '</span>'+ //insert the url that ckeditor looks for. Use HTML5 data attribute instead?
-					'<img src="' + row_data.url + '" title="' + row_data.title + '"/>';
+			return '<span style="display:none">'+ row_data.image_url + '</span>'+ //insert the url that ckeditor looks for. Use HTML5 data attribute instead?
+					'<img src="' + row_data.image_url + '" title="' + row_data.title + '"/>';
 		}
 
-		this.image_select_grid.simple_datagrid({
+		this.select_grid.simple_datagrid({
 			columns: [
 				{title: gettext('Image'), key: 'image', on_generate: thumbnail_formatter},
 				{title: gettext('Filename'), key: 'filename'},
@@ -739,7 +794,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 			order_by: 'filename'
 		});
 
-		this.image_select_grid.bind('datagrid.select', function() {
+		this.select_grid.bind('datagrid.select', function() {
 			action_button.attr('disabled', '');
 			action_button.removeClass('ui-button-disabled ui-state-disabled');
 		});
@@ -748,8 +803,8 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 			var new_filename = $('#ui-image-select-filter-input').val();
 			if (filename != new_filename) {
 				filename = new_filename;
-				self.image_select_grid.simple_datagrid('setParameter', 'search', filename);
-				self.image_select_grid.simple_datagrid('setCurrentPage', 1);
+				self.select_grid.simple_datagrid('setParameter', 'search', filename);
+				self.select_grid.simple_datagrid('setCurrentPage', 1);
 				self.refresh_grid();
 			}
 		});
@@ -759,12 +814,8 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		return '/api/v2/images/';
 	},
 
-	refresh_grid: function() {
-		this.image_select_grid.simple_datagrid('reload');
-	},
-
 	get_selected_row: function() {
-		return this.image_select_grid.simple_datagrid('getSelectedRow');
+		return this.select_grid.simple_datagrid('getSelectedRow');
 	},
 
 	get_upload_fieldname: function() {
@@ -807,14 +858,14 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 		var filename = '';
 		var self = this;
 
-		this.file_select_grid = $(document.createElement('table')).attr('id', 'ui-file-select-grid');
+		this.select_grid = $(document.createElement('table')).attr('id', 'ui-file-select-grid');
 		this.file_select_filter = $(document.createElement('div')).attr('id', 'ui-file-select-filter');
 		this.file_select_filter.append($(document.createElement('label')).attr({ id: 'ui-file-select-filter-label'}).text(gettext('Filter by filename')));
 		this.file_select_filter.append($(document.createElement('input')).attr({ id: 'ui-file-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.file_select_filter);
-		this.uiDialog.append(this.file_select_grid);
+		this.uiDialog.append(this.select_grid);
 
-		this.file_select_grid.simple_datagrid({
+		this.select_grid.simple_datagrid({
 			columns: [
 				{title: gettext('Filename'), key: 'filename'},
 				{title: gettext('Updated'), key: 'updated'}
@@ -822,7 +873,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 			url: this.options.url,
 			order_by: 'filename'
 		});
-		this.file_select_grid.bind('datagrid.select', function() {
+		this.select_grid.bind('datagrid.select', function() {
 			action_button.attr('disabled', '');
 			action_button.removeClass('ui-button-disabled ui-state-disabled');
 		});
@@ -831,8 +882,8 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 			var new_filename = $('#ui-file-select-filter-input').val();
 			if (filename != new_filename) {
 				filename = new_filename;
-				self.file_select_grid.simple_datagrid('setParameter', 'search', filename);
-				self.file_select_grid.simple_datagrid('setCurrentPage', 1);
+				self.select_grid.simple_datagrid('setParameter', 'search', filename);
+				self.select_grid.simple_datagrid('setCurrentPage', 1);
 				self.refresh_grid();
 			}
 		});
@@ -840,10 +891,6 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	get_upload_path: function() {
 		return '/api/v2/files/';
-	},
-
-	refresh_grid: function() {
-		this.file_select_grid.simple_datagrid('reload');
 	},
 
 	action_click: function() {
@@ -855,7 +902,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 	},
 
 	get_selected_row: function() {
-		return this.file_select_grid.simple_datagrid('getSelectedRow');
+		return this.select_grid.simple_datagrid('getSelectedRow');
 	}
 });
 
