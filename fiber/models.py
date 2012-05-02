@@ -1,3 +1,5 @@
+import os
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
@@ -293,6 +295,10 @@ class Image(models.Model):
         self.get_image_information()
         super(Image, self).save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        os.remove(os.path.join(settings.MEDIA_ROOT, str(self.image)))
+        super(Image, self).delete(*args, **kwargs)
+
     def get_image_information(self):
         self.width, self.height = get_image_dimensions(self.image) or (0, 0)
 
@@ -312,3 +318,8 @@ class File(models.Model):
         if self.file.path.startswith(settings.MEDIA_ROOT):
             return self.file.path[len(settings.MEDIA_ROOT):]
         return self.file.path
+
+    def delete(self, *args, **kwargs):
+        os.remove(os.path.join(settings.MEDIA_ROOT, str(self.file)))
+        super(File, self).delete(*args, **kwargs)
+
