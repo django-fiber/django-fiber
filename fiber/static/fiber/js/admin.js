@@ -1137,6 +1137,21 @@ var AddButton = Class.extend({ // TODO: subclass to AddPageButton / AddContentIt
 });
 
 
+Fiber.move_page_content_item = function(page_content_item_url, before_page_content_item_id, block_name) {
+	$.ajax({
+		url: page_content_item_url,
+		type: 'POST',
+		dataType: 'json',
+		
+		data: {
+			before_page_content_item_id: before_page_content_item_id,
+			block_name: block_name,
+			_method: 'PUT',
+		},
+		success: reloadPage
+	});
+};
+
 var DroppableArea = Class.extend({
 
 	// default options
@@ -1187,23 +1202,27 @@ var DroppableArea = Class.extend({
 
 	add_content_item: function(content_item_id) { // TODO: move to utils? (DRY)
 		// perform an AJAX call to add the added object to the current page,
-		// optionally placed before the beforePageContentItem
+		// placed before the beforeElement
 		var data = {
 			content_item: content_item_id,
 			page: this.options.page_id,
-			block_name: this.options.block_name,
-			before_page_content_item_id: this.fiber_item.element_data.page_content_item_id
+			block_name: this.options.block_name
 		};
 
+		var before_page_content_item_id = this.options.before_page_content_item_id
 		busyIndicator.show();
 
 		$.ajax({
 			url: '/api/v2/page_content_items/',
 			type: 'POST',
 			data: data,
-			success: function(data) {
-				// when successful, reload the page
-				reloadPage();
+			success: function(response) {
+				if (before_page_content_item_id) {
+					Fiber.move_page_content_item(response.move_url, before_page_content_item_id, response.block_name);
+				}
+				else {
+					reloadPage();	
+				}
 			}
 		});
 	},
@@ -1211,20 +1230,10 @@ var DroppableArea = Class.extend({
 	move_content_item: function(fiber_item_data) {
 		busyIndicator.show();
 
-		$.ajax({
-			url: '/api/v2/page_content_items/' + fiber_item_data.page_content_item_id + '/move/',
-			type: 'POST',
-			dataType: 'json',
-			
-			data: {
-				before_page_content_item_id: this.fiber_item.element_data.page_content_item_id,
-				block_name: this.fiber_item.element_data.block_name,
-				_method: 'PUT',
-			},
-			success: function() {
-				reloadPage();
-			}
-		});
+		Fiber.move_page_content_item('/api/v2/page_content_items/' + fiber_item_data.page_content_item_id + '/move/',
+									 this.fiber_item.element_data.page_content_item_id,
+									 fiber_item_data.block_name
+									 )
 	},
 
 	set_position: function() {
@@ -1278,20 +1287,21 @@ var AddContentItemFormDialog = ChangeContentItemFormDialog.extend({
 			page: this.options.page_id,
 			block_name: this.options.block_name
 		};
-
-		if (this.options.before_page_content_item_id) {
-			data.before_page_content_item_id = this.options.before_page_content_item_id;
-		}
-
+		debugger;
+		var before_page_content_item_id = this.options.before_page_content_item_id
 		busyIndicator.show();
 
 		$.ajax({
 			url: '/api/v2/page_content_items/',
 			type: 'POST',
 			data: data,
-			success: function(data) {
-				// when successful, reload the page
-				reloadPage();
+			success: function(response) {
+				if (before_page_content_item_id) {
+					Fiber.move_page_content_item(response.move_url, before_page_content_item_id, response.block_name);
+				}
+				else {
+					reloadPage();	
+				}
 			}
 		});
 	}

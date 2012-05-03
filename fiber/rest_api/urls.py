@@ -36,6 +36,16 @@ class PageResource(ModelResource):
 class PageContentItemResource(ModelResource):
     model = PageContentItem
 
+    def move_url(self, instance):
+        """
+        Provide a url on this resourece that points to the 
+        `move_page_content_item` method on the PageContentItem model.
+        """
+        return reverse('page-content-item-resource-instance-move',
+                       kwargs={'pk': instance.id})
+
+    include = ('move_url', )
+
 
 class ContentItemResource(ModelResource):
     model = ContentItem
