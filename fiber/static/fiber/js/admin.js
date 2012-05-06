@@ -1209,7 +1209,7 @@ var DroppableArea = Class.extend({
 			block_name: this.options.block_name
 		};
 
-		var before_page_content_item_id = this.options.before_page_content_item_id
+		var before_page_content_item_id = this.fiber_item.element_data.page_content_item_id
 		busyIndicator.show();
 
 		$.ajax({

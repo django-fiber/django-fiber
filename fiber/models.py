@@ -245,7 +245,9 @@ class PageContentItem(models.Model):
         self.content_item.set_used_on_pages_json()
 
     def move(self, next_item_id=None, block_name=None):
-        next_item = PageContentItem.objects.get(pk=next_item_id)
+        next_item = None
+        if next_item_id:
+            next_item = PageContentItem.objects.get(pk=next_item_id)
         if not block_name:
             if next_item:
                 block_name = next_item.block_name
