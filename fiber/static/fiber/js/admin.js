@@ -1217,12 +1217,7 @@ var DroppableArea = Class.extend({
 			type: 'POST',
 			data: data,
 			success: function(response) {
-				if (before_page_content_item_id) {
-					Fiber.move_page_content_item(response.move_url, before_page_content_item_id, response.block_name);
-				}
-				else {
-					reloadPage();	
-				}
+				Fiber.move_page_content_item(response.move_url, before_page_content_item_id, response.block_name);
 			}
 		});
 	},
@@ -1287,7 +1282,6 @@ var AddContentItemFormDialog = ChangeContentItemFormDialog.extend({
 			page: this.options.page_id,
 			block_name: this.options.block_name
 		};
-		debugger;
 		var before_page_content_item_id = this.options.before_page_content_item_id
 		busyIndicator.show();
 
@@ -1296,12 +1290,7 @@ var AddContentItemFormDialog = ChangeContentItemFormDialog.extend({
 			type: 'POST',
 			data: data,
 			success: function(response) {
-				if (before_page_content_item_id) {
-					Fiber.move_page_content_item(response.move_url, before_page_content_item_id, response.block_name);
-				}
-				else {
-					reloadPage();	
-				}
+				Fiber.move_page_content_item(response.move_url, before_page_content_item_id, response.block_name);
 			}
 		});
 	}
