@@ -639,7 +639,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
-		url: '/api/v1/images.jqgrid-json',
+		url: '/api/v1/images.json',
 		width: 520,
 		height: 'auto',
 		start_width: 480,
@@ -669,57 +669,42 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 		var action_button = this.uiDialog.parent().find('#action-button');
 		var filename = '';
+		var self = this;
 
-		this.image_select_grid = $(document.createElement('table')).attr('id', 'ui-image-select-grid'); // the id attribute is necessary for jqGrid
-		this.image_select_grid_pager = $(document.createElement('div')).attr('id', 'ui-image-select-grid-pager');
+		this.image_select_grid = $(document.createElement('table')).attr('id', 'ui-image-select-grid');
 		this.image_select_filter = $(document.createElement('div')).attr('id', 'ui-image-select-filter');
 		this.image_select_filter.append($(document.createElement('label')).attr({ id: 'ui-image-select-filter-label'}).text(gettext('Filter by filename')));
 		this.image_select_filter.append($(document.createElement('input')).attr({ id: 'ui-image-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.image_select_filter);
 		this.uiDialog.append(this.image_select_grid);
-		this.uiDialog.append(this.image_select_grid_pager);
+
+		function thumbnail_formatter(value, row_data) {
+			return '<img src="' + row_data.url + '" title="' + row_data.title + '" />';
+		}
+
+		this.image_select_grid.simple_datagrid({
+			columns: [
+				{title: gettext('Image'), key: 'image', on_generate: thumbnail_formatter},
+				{title: gettext('Filename'), key: 'filename'},
+				{title: gettext('Size'), key: 'size'},
+				{title: gettext('Updated'), key: 'updated'}
+			],
+			url: this.options.url,
+			order_by: 'filename'
+		});
+
+		this.image_select_grid.bind('datagrid.select', function() {
+			action_button.attr('disabled', '');
+			action_button.removeClass('ui-button-disabled ui-state-disabled');
+		});
 
 		$('#ui-image-select-filter-input').keyup(function() {
 			var new_filename = $('#ui-image-select-filter-input').val();
 			if (filename != new_filename) {
 				filename = new_filename;
-				$("#ui-image-select-grid").jqGrid('setGridParam',{ postData:{ filename: $('#ui-image-select-filter-input').val() }, search: true }).trigger("reloadGrid");
-			}
-		});
-
-		var thumbnail_formatter = function(cellvalue, options, rowObject) {
-			return '<img src="' + cellvalue + '" title="' + rowObject[2] + '" />';
-		};
-
-		this.image_select_grid.jqGrid({
-			url: this.options.url,
-			datatype: 'json',
-			colNames: ['url', gettext('Image'), gettext('Filename'), gettext('Size'), gettext('Updated')],
-			colModel: [
-				{ name: 'url', index: 'url', hidden: true },
-				{ name: 'image', index: 'image', width: 120, resizable: false, sortable: false, formatter: thumbnail_formatter },
-				{ name: 'filename', index: 'filename', width: 160, resizable: false },
-				{ name: 'size', index: 'size', width: 80, resizable: false },
-				{ name: 'updated', index: 'updated', width: 160, resizable: false }
-			],
-			rowNum: 50,
-			pager: '#ui-image-select-grid-pager',
-			shrinkToFit: false,
-			width: 520,
-			height: 300,
-			sortname: 'updated',
-			sortorder: 'desc',
-			onSelectRow: function(id) {
-				action_button.attr('disabled', '');
-				action_button.removeClass('ui-button-disabled ui-state-disabled');
-			},
-			gridComplete: function() {
-				var num_pages = $("#ui-image-select-grid").getGridParam('lastpage');
-				if (num_pages > 1) {
-					$('#ui-image-select-grid-pager').show();
-				} else {
-					$("#ui-image-select-grid-pager").hide();
-				}
+				self.image_select_grid.simple_datagrid('setParameter', 'search', filename);
+				self.image_select_grid.simple_datagrid('setCurrentPage', 1);
+				self.refresh_grid();
 			}
 		});
 	},
@@ -729,17 +714,11 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 	},
 
 	refresh_grid: function() {
-		this.image_select_grid.trigger('reloadGrid');
+		this.image_select_grid.simple_datagrid('reload');
 	},
 
-	close: function() {
-		this.image_select_grid.GridDestroy();
-		this._super();
-	},
-
-	destroy: function() {
-		this.image_select_grid.GridDestroy();
-		this._super();
+	get_selected_row: function() {
+		return this.image_select_grid.simple_datagrid('getSelectedRow');
 	}
 });
 
@@ -747,7 +726,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
-		url: '/api/v1/files.jqgrid-json',
+		url: '/api/v1/files.json',
 		width: 520,
 		height: 'auto',
 		start_width: 480,
@@ -776,51 +755,35 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 	init_dialog_success: function(data) {
 		var action_button = this.uiDialog.parent().find('#action-button');
 		var filename = '';
+		var self = this;
 
-		this.file_select_grid = $(document.createElement('table')).attr('id', 'ui-file-select-grid'); // the id attribute is necessary for jqGrid
-		this.file_select_grid_pager = $(document.createElement('div')).attr('id', 'ui-file-select-grid-pager');
+		this.file_select_grid = $(document.createElement('table')).attr('id', 'ui-file-select-grid');
 		this.file_select_filter = $(document.createElement('div')).attr('id', 'ui-file-select-filter');
 		this.file_select_filter.append($(document.createElement('label')).attr({ id: 'ui-file-select-filter-label'}).text(gettext('Filter by filename')));
 		this.file_select_filter.append($(document.createElement('input')).attr({ id: 'ui-file-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.file_select_filter);
 		this.uiDialog.append(this.file_select_grid);
-		this.uiDialog.append(this.file_select_grid_pager);
+
+		this.file_select_grid.simple_datagrid({
+			columns: [
+				{title: gettext('Filename'), key: 'filename'},
+				{title: gettext('Updated'), key: 'updated'}
+			],
+			url: this.options.url,
+			order_by: 'filename'
+		});
+		this.file_select_grid.bind('datagrid.select', function() {
+			action_button.attr('disabled', '');
+			action_button.removeClass('ui-button-disabled ui-state-disabled');
+		});
 
 		$('#ui-file-select-filter-input').keyup(function() {
 			var new_filename = $('#ui-file-select-filter-input').val();
 			if (filename != new_filename) {
 				filename = new_filename;
-				$("#ui-file-select-grid").jqGrid('setGridParam',{ postData:{ filename: $('#ui-file-select-filter-input').val() }, search: true }).trigger('reloadGrid');
-			}
-		});
-		this.file_select_grid.jqGrid({
-			url: this.options.url,
-			datatype: 'json',
-			data: { 'filename': 'praxis'},
-			colNames: ['url', gettext('Filename'), gettext('Updated')],
-			colModel: [
-				{ name: 'url', index: 'url', hidden: true },
-				{ name: 'filename', index: 'filename', width: 360, resizable: false },
-				{ name: 'updated', index: 'updated', width: 160, resizable: false }
-			],
-			rowNum: 50,
-			pager: '#ui-file-select-grid-pager',
-			shrinkToFit: false,
-			width: 520,
-			height: 300,
-			sortname: 'updated',
-			sortorder: 'desc',
-			onSelectRow: function(id) {
-				action_button.attr('disabled', '');
-				action_button.removeClass('ui-button-disabled ui-state-disabled');
-			},
-			gridComplete: function() {
-				var num_pages = $("#ui-file-select-grid").getGridParam('lastpage');
-				if (num_pages > 1) {
-					$('#ui-file-select-grid-pager').show();
-				} else {
-					$("#ui-file-select-grid-pager").hide();
-				}
+				self.file_select_grid.simple_datagrid('setParameter', 'search', filename);
+				self.file_select_grid.simple_datagrid('setCurrentPage', 1);
+				self.refresh_grid();
 			}
 		});
 	},
@@ -830,7 +793,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 	},
 
 	refresh_grid: function() {
-		this.file_select_grid.trigger('reloadGrid');
+		this.file_select_grid.simple_datagrid('reload');
 	},
 
 	action_click: function() {
@@ -841,14 +804,8 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 		this.destroy();
 	},
 
-	close: function() {
-		this.file_select_grid.GridDestroy();
-		this._super();
-	},
-
-	destroy: function() {
-		this.file_select_grid.GridDestroy();
-		this._super();
+	get_selected_row: function() {
+		return this.file_select_grid.simple_datagrid('getSelectedRow');
 	}
 });
 
@@ -1281,8 +1238,6 @@ var adminPage = {
 	},
 
 	init_admin_elements: function() {
-		var fiber_elements = this.get_fiber_elements();
-
 		// create nested structure of Fiber items
 		$.each(this.get_fiber_elements(), $.proxy(function(i, fiber_element) {
 			this.create_fiber_item($(fiber_element));
@@ -1328,17 +1283,18 @@ var adminPage = {
 			}
 		}
 
-		function handleMoveNode(moved_node, target_node, position) {
+		function handleMoveNode(event) {
 			busyIndicator.show();
 
+			var info = event.move_info;
 			$.ajax({
-				url: '/api/v1/page/' + moved_node.id + '/',
+				url: '/api/v1/page/' + info.moved_node.id + '/',
 				type: 'PUT',
 				dataType: 'json',
 				data: {
 					action: 'move',
-					target_node_id: target_node.id,
-					position: position
+					target_node_id: info.target_node.id,
+					position: info.position
 				},
 				success: function(data) {
 					reloadPage();
@@ -1366,16 +1322,18 @@ var adminPage = {
 			}
 		}
 
-		function canMove(moved_node, target_node, position) {
-			if (!moved_node.url) {
+		function canMove(node) {
+			if (node.url) {
+				return true;
+			}
+			else {
 				// cannot move menu
 				return false;
 			}
+		}
 
-			if (!target_node) {
-				return true;
-			}
-			else if (!target_node.url) {
+		function canMoveTo(moved_node, target_node, position) {
+			if (!target_node.url) {
 				// can move inside menu, not before or after
 				return (position == 'inside');
 			}
@@ -1390,13 +1348,14 @@ var adminPage = {
 			autoOpen: 0,
 			saveState: 'fiber_pages',
 			dragAndDrop: true,
-			onMoveNode: handleMoveNode,
 			selectable: true,
 			onCreateLi: $.proxy(createLi, this),
-			onCanMove: $.proxy(canMove, this)
+			onCanMove: $.proxy(canMove, this),
+			onCanMoveTo: $.proxy(canMoveTo, this)
 		});
 		this.admin_page_tree.bind('tree.click', handleClick);
 		this.admin_page_tree.bind('tree.contextmenu', $.proxy(this.handle_page_menu_context_menu, this));
+		this.admin_page_tree.bind('tree.move', handleMoveNode);
 
 		// disable textual selection of tree elements
 		$('.sidebar-tree').disableSelection();
@@ -1624,7 +1583,6 @@ var adminPage = {
 		var animation_duration = 200;
 
 		var wpr_admin_sidebar = this.wpr_admin_sidebar;
-		var toggle_button = this.toggle_button;
 
 		// define animation values
 		var animate_sidebar_left_to = wpr_admin_sidebar.hidden ? 0 : (10 - 240);
@@ -1939,7 +1897,7 @@ Fiber.FiberItem = Class.extend({
 	create_button: function() {
 		// TODO: split this into subclasses
 		if (this.element_data.type == 'page') {
-			params = {
+			var params = {
 				before_page_id: this.element_data.id
 			};
 
@@ -1951,7 +1909,7 @@ Fiber.FiberItem = Class.extend({
 				this.element_data.block_name &&
 				this.element_data.page_id
 			) {
-				params = {
+				var params = {
 					before_page_content_item_id: this.element_data.page_content_item_id
 				};
 
@@ -1963,7 +1921,7 @@ Fiber.FiberItem = Class.extend({
 	},
 
 	button_position: function() {
-		position_params = {
+		var position_params = {
 			my: 'center center',
 			at: 'left top',
 			of: this.$element
@@ -2024,7 +1982,7 @@ Fiber.FiberItem = Class.extend({
 	},
 
 	droppable_position: function() {
-		position_params = {
+		var position_params = {
 			my: 'left top',
 			at: 'left top',
 			of: this.$element,
@@ -2177,7 +2135,7 @@ $(window).ready(function() {
 
 	if (body_fiber_data.show_login) {
 		$('body').addClass('df-admin');
-		loginform = new LoginFormDialog();
+		new LoginFormDialog();
 	}
 });
 
