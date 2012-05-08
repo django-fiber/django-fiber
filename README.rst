@@ -29,7 +29,7 @@ These dependencies are automatically installed:
 ::
 
 	PIL>=1.1.7
-	django-piston==0.2.3rc1
+    'djangorestframework==0.3.3'
 	django-mptt==0.5.1
 	django-compressor>=0.7.1
 
@@ -57,7 +57,7 @@ settings.py
 	INSTALLED_APPS = (
 	    ...
 	    'django.contrib.staticfiles',
-	    'piston',
+	    'djangorestframework',
 	    'mptt',
 	    'compressor',
 	    'fiber',
@@ -82,7 +82,7 @@ urls.py
 
 	urlpatterns = patterns('',
 	    ...
-	    (r'^api/v1/', include('fiber.api.urls')),
+	    (r'^api/v2/', include('fiber.rest_api.urls')),
 	    (r'^admin/fiber/', include('fiber.admin_urls')),
 	    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', {'packages': ('fiber',),}),
 	    ...

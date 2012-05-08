@@ -1,3 +1,5 @@
+import os
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
@@ -234,8 +236,6 @@ class PageContentItem(models.Model):
     block_name = models.CharField(_('block name'), max_length=255)
     sort = models.IntegerField(_('sort'), blank=True, null=True)
 
-    objects = managers.PageContentItemManager()
-
     def save(self, *args, **kwargs):
         super(PageContentItem, self).save(*args, **kwargs)
         self.content_item.set_used_on_pages_json()
@@ -244,6 +244,37 @@ class PageContentItem(models.Model):
         super(PageContentItem, self).delete(*args, **kwargs)
         self.content_item.set_used_on_pages_json()
 
+    def move(self, next_item_id=None, block_name=None):
+        next_item = None
+        if next_item_id:
+            next_item = PageContentItem.objects.get(pk=next_item_id)
+        if not block_name:
+            if next_item:
+                block_name = next_item.block_name
+            else:
+                block_name = self.block_name
+
+        if self.block_name != block_name:
+            self.block_name = block_name
+            self.save()
+
+        page_content_items = list(
+            self.page.get_content_for_block(block_name).exclude(id=self.id),
+        )
+
+        def resort():
+            for i, item in enumerate(page_content_items):
+                item.sort = i
+                item.save()
+
+        if not next_item:
+            page_content_items.append(self)
+            resort()
+        else:
+            if next_item in page_content_items:
+                next_index = page_content_items.index(next_item)
+                page_content_items.insert(next_index, self)
+                resort()
 
 class Image(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
@@ -267,6 +298,10 @@ class Image(models.Model):
         self.get_image_information()
         super(Image, self).save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        os.remove(os.path.join(settings.MEDIA_ROOT, str(self.image)))
+        super(Image, self).delete(*args, **kwargs)
+
     def get_image_information(self):
         self.width, self.height = get_image_dimensions(self.image) or (0, 0)
 
@@ -286,3 +321,8 @@ class File(models.Model):
         if self.file.path.startswith(settings.MEDIA_ROOT):
             return self.file.path[len(settings.MEDIA_ROOT):]
         return self.file.path
+
+    def delete(self, *args, **kwargs):
+        os.remove(os.path.join(settings.MEDIA_ROOT, str(self.file)))
+        super(File, self).delete(*args, **kwargs)
+

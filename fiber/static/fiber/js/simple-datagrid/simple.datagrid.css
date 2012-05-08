@@ -1,0 +1,107 @@
+.simple-data-grid {
+    border-collapse: collapse;
+}
+
+.simple-data-grid thead th,
+.simple-data-grid tbody tr:hover {
+	background: #dfdfdf;
+	background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#d3d3d3));
+	background: -moz-linear-gradient(top, #eaeaea, #d3d3d3);
+	background: -ms-linear-gradient(top, #eaeaea, #d3d3d3);
+}
+
+.simple-data-grid thead th {
+	font-weight: bold;
+	padding: 0.5em;
+	border-right: solid 1px #ccc;
+	text-align: left;
+}
+
+.simple-data-grid thead th a {
+	color: #000;
+	text-decoration: none;
+	display: block;
+	position: relative;
+}
+
+.simple-data-grid thead th a .sort {
+	position: absolute;
+	right: 0;
+	top: 6px;
+}
+
+.simple-data-grid thead th:last-child {
+	border-right: none;
+}
+
+.simple-data-grid thead th:hover {
+	background: #e4e4e4;
+	background: -webkit-gradient(linear, left top, left bottom, from(#d3d3d3), to(#eaeaea));
+	background: -moz-linear-gradient(top, #d3d3d3, #eaeaea);
+	background: -ms-linear-gradient(top, #d3d3d3, #eaeaea);
+}
+
+.simple-data-grid tbody td {
+	padding: 0.5em;
+}
+
+.simple-data-grid tbody tr {
+	border-bottom: solid 1px #ddd;
+}
+
+.simple-data-grid tbody .selected,
+.simple-data-grid tbody .selected:hover {
+	background: #97bdd6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#bee0f5), to(#89afca));
+	background: -moz-linear-gradient(top, #bee0f5, #89afca);
+	background: -ms-linear-gradient(top, #bee0f5, #89afca);
+}
+
+.simple-data-grid tfoot td {
+	padding: 0.5em;
+}
+
+.simple-data-grid tfoot .paginator {
+	text-align: center;
+	background: #eaeaea;
+}
+
+.simple-data-grid tfoot .paginator span,
+.simple-data-grid tfoot .paginator a {
+	margin: 0 0.5em;
+}
+
+.sprite-icons-last,
+.sprite-icons-last-disabled,
+.sprite-icons-first,
+.sprite-icons-first-disabled,
+.sprite-icons-previous,
+.sprite-icons-previous-disabled,
+.sprite-icons-next,
+.sprite-icons-next-disabled,
+.sprite-icons-up,
+.sprite-icons-down {
+	display: inline-block;
+	text-indent: -9999px;
+}
+
+.sprite-icons-last,
+.sprite-icons-last-disabled,
+.sprite-icons-first,
+.sprite-icons-first-disabled,
+.sprite-icons-previous,
+.sprite-icons-previous-disabled,
+.sprite-icons-next,
+.sprite-icons-next-disabled,
+.sprite-icons-up,
+.sprite-icons-down{background-image:url(icons.png);background-repeat:no-repeat}
+.sprite-icons-last{background-position:0px 0px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-last-disabled{background-position:-15px 0px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-first{background-position:0px -11px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-first-disabled{background-position:-15px -11px;width:15px;height:11px;line-height:11px;}
+.sprite-icons-previous{background-position:-30px 0px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-previous-disabled{background-position:-30px -11px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-next{background-position:0px -22px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-next-disabled{background-position:-8px -22px;width:8px;height:11px;line-height:11px;}
+.sprite-icons-up{background-position:-16px -22px;width:9px;height:6px;line-height:6px;}
+.sprite-icons-down{background-position:-25px -22px;width:9px;height:6px;line-height:6px;}
