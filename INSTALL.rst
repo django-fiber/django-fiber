@@ -1,12 +1,12 @@
-========================================
-Installation instructions for Django 1.3
-========================================
+===============================================
+Installation instructions for Django 1.3 or 1.4
+===============================================
 
 
 Installation:
 =============
 
-We're assuming you are using Django 1.3. If you need to install Django Fiber with an older Django version, you can find instructions in the docs folder.
+We're assuming you are using Django 1.3 or 1.4. If you need to install Django Fiber with an older Django version, you can find instructions in the docs folder.
 
 ::
 
