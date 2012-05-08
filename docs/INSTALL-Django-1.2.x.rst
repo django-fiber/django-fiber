@@ -21,8 +21,7 @@ These dependencies are automatically installed:
 ::
 
 	PIL>=1.1.7
-	django-piston==0.2.3rc1
-	django-mptt>=0.4.2
+	djangorestframework==0.3.3
 	django-compressor>=0.7.1
 
 You need to install one dependency by hand when you're using Django 1.2.x:
@@ -84,7 +83,7 @@ urls.py
 
 	urlpatterns = patterns('',
 	    ...
-	    (r'^api/v1/', include('fiber.api.urls')),
+	    (r'^api/v2/', include('fiber.rest_api.urls')),
 	    (r'^admin/fiber/', include('fiber.admin_urls')),
 	    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', {'packages': ('fiber',),}),
 	    ...
