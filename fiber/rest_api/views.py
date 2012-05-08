@@ -26,9 +26,12 @@ class ApiRoot(View):
                 ]
 
 
-class ListView(PaginatorMixin, ListOrCreateModelView):
+class ListView(ListOrCreateModelView):
 
-    permissions = (IsAuthenticated, )  # X-csrf request header set?
+    permissions = (IsAuthenticated, )  
+
+
+class PaginatedListView(PaginatorMixin, ListView):
 
     limit = 5
 
@@ -37,7 +40,7 @@ class ListView(PaginatorMixin, ListOrCreateModelView):
             raise ErrorResponse(status=HTTP_400_BAD_REQUEST, content="Can not order by the passed value.")
 
 
-class FileListView(ListView):
+class FileListView(PaginatedListView):
 
     orderable_fields = ('filename', 'updated')
 
@@ -57,7 +60,7 @@ class FileListView(ListView):
         return qs
 
 
-class ImageListView(ListView):
+class ImageListView(PaginatedListView):
 
     orderable_fields = ('filename', 'size', 'updated')
 
