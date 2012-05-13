@@ -18,7 +18,7 @@ setup(
 
     install_requires=[
         'PIL>=1.1.7',
-        'django-piston==0.2.3rc1',
+        'django-piston==0.2.3',
         'django-mptt==0.5.1',
         'django-compressor>=0.7.1',
     ],
