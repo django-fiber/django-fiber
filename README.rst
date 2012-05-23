@@ -1,3 +1,6 @@
+.. image:: https://secure.travis-ci.org/mbraak/django-fiber.png
+  :target: http://travis-ci.org/#!/mbraak/django-fiber
+
 ============
 Django Fiber
 ============
