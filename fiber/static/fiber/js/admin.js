@@ -681,7 +681,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 		delete_button.bind('click', function() {
 			var url = self.select_grid.simple_datagrid('getSelectedRow').url;
-			
+
 			$.ajax({
 				url: url,
 				type: 'DELETE',
@@ -1104,7 +1104,7 @@ Fiber.move_page_content_item = function(page_content_item_url, before_page_conte
 		url: page_content_item_url,
 		type: 'POST',
 		dataType: 'json',
-		
+
 		data: {
 			before_page_content_item_id: before_page_content_item_id,
 			block_name: block_name,
@@ -1619,7 +1619,7 @@ var adminPage = {
 				confirmationDialog.html(gettext('<p>Are you sure you want to delete this item?</p>'));
 			})
 		);
-		if (node.used_on_pages.length >= 1) {
+		if (node.used_on_pages && node.used_on_pages.length >= 1) {
 			var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
 
 			$(node.used_on_pages).each(function(index) {
