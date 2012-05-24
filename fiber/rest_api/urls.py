@@ -21,7 +21,7 @@ class PageResource(ModelResource):
 
     def move_url(self, instance):
         """
-        Provide a url on this resourece that points to the
+        Provide a url on this resource that points to the
         `move_page` method on the Page model.
         """
         return reverse('page-resource-instance-move',
@@ -38,7 +38,7 @@ class PageContentItemResource(ModelResource):
 
     def move_url(self, instance):
         """
-        Provide a url on this resourece that points to the 
+        Provide a url on this resource that points to the
         `move_page_content_item` method on the PageContentItem model.
         """
         return reverse('page-content-item-resource-instance-move',
