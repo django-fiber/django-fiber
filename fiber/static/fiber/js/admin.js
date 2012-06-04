@@ -74,7 +74,7 @@ Fiber.enhance_jsontextarea = function(textarea) {
 			current_json = {};
 		}
 		if ($(this).val()) {
-	   		current_json[$(this).parent('td').parent('tr').attr('key-data')] = $(this).val();
+			current_json[$(this).parent('td').parent('tr').attr('key-data')] = $(this).val();
 		} else {
 			delete current_json[$(this).parent('td').parent('tr').attr('key-data')];
 		}
@@ -206,6 +206,39 @@ var AdminDialog = Class.extend({
 		this.uiDialog.dialog('option', 'width', this.options.width);
 		this.uiDialog.dialog('option', 'height', this.options.height);
 		this.uiDialog.dialog('option', 'position', ['center', 40]);
+	},
+
+	advanced_fieldset_behaviour: function() {
+		var advancedFieldsets = this.admin_form.form.find('fieldset:not(fieldset:first-child)');
+		if (advancedFieldsets.length > 0) {
+
+			advancedFieldsets.each(function() {
+				var fieldset = $(this),
+					button   = $('<a>');
+
+				fieldset
+					.addClass('advanced-fieldset')
+					.hide();
+
+				button
+					.attr('href', '#')
+					.text(fieldset.find('h2').text())
+					.addClass('ui-dialog-buttonpane advanced-button closed')
+					.click(function(e) {
+						e.preventDefault();
+						$(this).toggleClass('closed')
+						fieldset.slideToggle('fast');
+					})
+					.insertBefore(fieldset);
+
+				$('<span>')
+					.text('»')
+					.addClass('toggler')
+					.prependTo(button);
+
+				fieldset.find('h2').remove();
+			});
+		}
 	},
 
 	cancel_click: function() {
@@ -466,6 +499,7 @@ var ChangeFormDialog = AdminFormDialog.extend({
 		});
 		this.admin_form.admin_form_load_success = $.proxy(function() {
 			this.append_form();
+			this.advanced_fieldset_behaviour();
 			this.redraw();
 		}, this);
 		this.admin_form.load();
