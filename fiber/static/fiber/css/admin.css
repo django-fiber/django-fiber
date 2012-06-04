@@ -408,6 +408,7 @@ div.ui-dialog form select,
 
 div.ui-dialog form input[type="checkbox"] {
 	float: left;
+	margin-top: 6px;
 	margin-left: 0;
 }
 
