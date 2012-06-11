@@ -1,11 +1,9 @@
 body div#wpr-body {
-	position: relative;
-	left: 10px;
+	margin-left: 10px;
 }
 
 body.df-sidebar div#wpr-body {
-	left: 240px;
-	margin-right: 240px;
+	margin-left: 240px;
 }
 
 #df-wpr-sidebar,

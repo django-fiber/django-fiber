@@ -1684,8 +1684,7 @@ var adminPage = {
 
 		$('#wpr-body').animate(
 			{
-				left: animate_body_left_to,
-				marginRight: animate_body_left_to
+				marginLeft: animate_body_left_to
 			},
 			animation_duration
 		);
