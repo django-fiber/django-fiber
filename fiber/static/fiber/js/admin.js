@@ -1187,10 +1187,11 @@ var DroppableArea = Class.extend({
 	move_content_item: function(fiber_item_data) {
 		busyIndicator.show();
 
-		Fiber.move_page_content_item('/api/v2/page_content_items/' + fiber_item_data.page_content_item_id + '/move/',
-									 this.fiber_item.element_data.page_content_item_id,
-									 fiber_item_data.block_name
-									 )
+		Fiber.move_page_content_item(
+			'/api/v2/page_content_items/' + fiber_item_data.page_content_item_id + '/move/',
+			this.fiber_item.element_data.page_content_item_id,
+			this.fiber_item.element_data.block_name
+		)
 	},
 
 	set_position: function() {
