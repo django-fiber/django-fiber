@@ -18,6 +18,7 @@ from views import ApiRoot, MovePageView, MovePageContentItemView, ListView, File
 
 class PageResource(ModelResource):
     model = Page
+    depth = 2
 
     def move_url(self, instance):
         """
@@ -35,6 +36,7 @@ class PageResource(ModelResource):
 
 class PageContentItemResource(ModelResource):
     model = PageContentItem
+    depth = 2
 
     def move_url(self, instance):
         """
@@ -49,6 +51,7 @@ class PageContentItemResource(ModelResource):
 
 class ContentItemResource(ModelResource):
     model = ContentItem
+    depth = 2
 
 
 class FileResource(ModelResource):
