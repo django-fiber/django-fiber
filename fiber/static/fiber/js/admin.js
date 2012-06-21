@@ -586,6 +586,11 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 	refresh_grid: function() {
 		this.select_grid.simple_datagrid('reload');
+
+		// very crude way of disabling the delete button when the grid (and thus the selection) changes
+		var delete_button = $('#delete-buttonpane button');
+		delete_button.attr('disabled', 'disabled');
+		delete_button.addClass('ui-button-disabled ui-state-disabled');
 	},
 
 	get_upload_fieldname: function() {
