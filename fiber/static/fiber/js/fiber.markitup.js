@@ -64,7 +64,7 @@ Fiber.enhance_textarea = function(textarea) {
 		var file_select_dialog = new Fiber.FileSelectDialog();
 		file_select_dialog.action_click = function() {
 			var row = file_select_dialog.get_selected_row();
-			var selected_file_path = row.url;
+			var selected_file_path = row.file_url;
 
 			if (userSelectionIE.textRange) {
 				// Replace textarea selection for IE
@@ -94,7 +94,7 @@ Fiber.enhance_textarea = function(textarea) {
 		var image_select_dialog = new Fiber.ImageSelectDialog();
 		image_select_dialog.action_click = function() {
 			var row = file_select_dialog.get_selected_row();
-			var selected_image_path = row.url;
+			var selected_image_path = row.image_url;
 
 			if (userSelectionIE.textRange) {
 				// Replace textarea selection for IE

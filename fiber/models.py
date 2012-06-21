@@ -43,7 +43,7 @@ class ContentItem(models.Model):
             contents = ' '.join(strip_tags(self.content_html).strip().split())
             if len(contents) > 50:
                 contents = contents[:50] + '...'
-            return contents or ugettext('[ EMPTY ]') # TODO: find out why ugettext_lazy doesn't work here
+            return contents or ugettext('[ EMPTY ]')  # TODO: find out why ugettext_lazy doesn't work here
 
     @classmethod
     def get_add_url(cls):
@@ -128,7 +128,7 @@ class Page(MPTTModel):
                 if self.parent:
                     return '%s/%s/' % (self.parent.get_absolute_url().rstrip('/'), self.url.strip('/'))
                 else:
-                    return '' # TODO: make sure this can never happen (in model.save()?)
+                    return ''  # TODO: make sure this can never happen (in model.save()?)
 
     @classmethod
     def get_add_url(cls):
@@ -276,6 +276,7 @@ class PageContentItem(models.Model):
                 page_content_items.insert(next_index, self)
                 resort()
 
+
 class Image(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -325,4 +326,3 @@ class File(models.Model):
     def delete(self, *args, **kwargs):
         os.remove(os.path.join(settings.MEDIA_ROOT, str(self.file)))
         super(File, self).delete(*args, **kwargs)
-

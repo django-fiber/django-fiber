@@ -96,7 +96,7 @@ function extend_CKEditor() {
 
 			file_select_dialog.action_click = function() {
 				var row = file_select_dialog.get_selected_row();
-				var selected_file_path = row.url;
+				var selected_file_path = row.file_url;
 
 				// delete any existing links on the selected text
 				editor.document.$.execCommand('unlink', false, null);
@@ -140,7 +140,7 @@ function extend_CKEditor() {
 
 			image_select_dialog.action_click = function() {
 				var row = image_select_dialog.get_selected_row();
-				var selected_image_path = row.url;
+				var selected_image_path = row.image_url;
 
 				// delete any existing links on the selected text
 				editor.document.$.execCommand('unlink', false, null);
