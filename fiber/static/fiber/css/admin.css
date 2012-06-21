@@ -263,7 +263,7 @@ div.ui-dialog form label {
 
 #ui-file-select-filter-label,
 #ui-image-select-filter-label {
-	margin-left: 200px;
+	width: 328px;
 }
 
 div.ui-dialog form input[type="text"],
@@ -501,7 +501,7 @@ span.nobr {
 	text-indent: -9999px;
 }
 
-.ui-dialog-content ul.tree .toggler { 
+.ui-dialog-content ul.tree .toggler {
 	background-position: 0 6px;
 }
 
@@ -541,7 +541,7 @@ ul.tree .toggler.closed,
 	background-image: url(../js/jqtree/treeRightTriangleBlack.png);
 }
 
-ul.tree .toggler.closed { 
+ul.tree .toggler.closed {
 	background-position: 0 5px;
 }
 

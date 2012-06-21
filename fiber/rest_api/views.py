@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.core.urlresolvers import reverse
 
 from djangorestframework.views import View
@@ -6,9 +7,11 @@ from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 from djangorestframework.mixins import PaginatorMixin
 from djangorestframework.status import HTTP_400_BAD_REQUEST
 from djangorestframework.response import ErrorResponse
+
 from forms import MovePageForm, MovePageContentItemForm
 
 from fiber.models import Page, PageContentItem
+
 
 class ApiRoot(View):
     """
@@ -18,17 +21,18 @@ class ApiRoot(View):
     permissions = (IsAuthenticated, )
 
     def get(self, request):
-        return [{'name': 'pages', 'url': reverse('page-resource-root')},
-                {'name': 'page content items', 'url': reverse('page-content-item-resource-root')},
-                {'name': 'content items', 'url': reverse('content-item-resource-root')},
-                {'name': 'images', 'url': reverse('image-resource-root')},
-                {'name': 'files', 'url': reverse('file-resource-root')},
-                ]
+        return [
+            {'name': 'pages', 'url': reverse('page-resource-root')},
+            {'name': 'page content items', 'url': reverse('page-content-item-resource-root')},
+            {'name': 'content items', 'url': reverse('content-item-resource-root')},
+            {'name': 'images', 'url': reverse('image-resource-root')},
+            {'name': 'files', 'url': reverse('file-resource-root')},
+        ]
 
 
 class ListView(ListOrCreateModelView):
 
-    permissions = (IsAuthenticated, )  
+    permissions = (IsAuthenticated, )
 
 
 class PaginatedListView(PaginatorMixin, ListView):
@@ -44,19 +48,23 @@ class FileListView(PaginatedListView):
 
     orderable_fields = ('filename', 'updated')
 
-    def get_queryset(self, **kwargs):
-        qs = super(FileListView, self).get_queryset(**kwargs)
+    def get_queryset(self, *args, **kwargs):
+        qs = super(FileListView, self).get_queryset(*args, **kwargs)
+
+        search = self.request.GET.get('search', None)
+        if search:
+            qs = qs.filter(file__icontains=search)
 
         order_by = self.request.GET.get('order_by', 'updated')
-
         self.check_fields(order_by)
-
-        sort_order = self.request.GET.get('sortorder', 'asc')
 
         if order_by == 'filename':
             order_by = 'file'
 
+        sort_order = self.request.GET.get('sortorder', 'asc')
+
         qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
+
         return qs
 
 
@@ -64,21 +72,26 @@ class ImageListView(PaginatedListView):
 
     orderable_fields = ('filename', 'size', 'updated')
 
-    def get_queryset(self, **kwargs):
-        qs = super(ImageListView, self).get_queryset(**kwargs)
+    def get_queryset(self, *args, **kwargs):
+        qs = super(ImageListView, self).get_queryset(*args, **kwargs)
+
+        search = self.request.GET.get('search', None)
+        if search:
+            # TODO: image_icontains searches in the entire path, it should only search in the filename (use iregex for this?)
+            qs = qs.filter(Q(image__icontains=search) | Q(title__icontains=search) | Q(width__icontains=search) | Q(height__icontains=search))
 
         order_by = self.request.GET.get('order_by', 'updated')
-
         self.check_fields(order_by)
-
-        sort_order = self.request.GET.get('sortorder', 'asc')
 
         if order_by == 'filename':
             order_by = 'image'
         elif order_by == 'size':
             order_by = 'width'
 
+        sort_order = self.request.GET.get('sortorder', 'asc')
+
         qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
+
         return qs
 
 

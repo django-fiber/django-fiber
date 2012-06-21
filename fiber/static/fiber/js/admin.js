@@ -730,12 +730,12 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 	init_dialog_success: function(data) {
 
 		var action_button = this.uiDialog.parent().find('#action-button');
-		var filename = '';
+		var search = '';
 		var self = this;
 
 		this.select_grid = $(document.createElement('table')).attr('id', 'ui-image-select-grid');
 		this.image_select_filter = $(document.createElement('div')).attr('id', 'ui-image-select-filter');
-		this.image_select_filter.append($(document.createElement('label')).attr({ id: 'ui-image-select-filter-label'}).text(gettext('Filter by filename')));
+		this.image_select_filter.append($(document.createElement('label')).attr({ id: 'ui-image-select-filter-label'}).text(gettext('Filter')));
 		this.image_select_filter.append($(document.createElement('input')).attr({ id: 'ui-image-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.image_select_filter);
 		this.uiDialog.append(this.select_grid);
@@ -762,10 +762,10 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		});
 
 		$('#ui-image-select-filter-input').keyup(function() {
-			var new_filename = $('#ui-image-select-filter-input').val();
-			if (filename != new_filename) {
-				filename = new_filename;
-				self.select_grid.simple_datagrid('setParameter', 'search', filename);
+			var new_search = $('#ui-image-select-filter-input').val();
+			if (search != new_search) {
+				search = new_search;
+				self.select_grid.simple_datagrid('setParameter', 'search', search);
 				self.select_grid.simple_datagrid('setCurrentPage', 1);
 				self.refresh_grid();
 			}
@@ -817,12 +817,12 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	init_dialog_success: function(data) {
 		var action_button = this.uiDialog.parent().find('#action-button');
-		var filename = '';
+		var search = '';
 		var self = this;
 
 		this.select_grid = $(document.createElement('table')).attr('id', 'ui-file-select-grid');
 		this.file_select_filter = $(document.createElement('div')).attr('id', 'ui-file-select-filter');
-		this.file_select_filter.append($(document.createElement('label')).attr({ id: 'ui-file-select-filter-label'}).text(gettext('Filter by filename')));
+		this.file_select_filter.append($(document.createElement('label')).attr({ id: 'ui-file-select-filter-label'}).text(gettext('Filter')));
 		this.file_select_filter.append($(document.createElement('input')).attr({ id: 'ui-file-select-filter-input', name: 'filter', value: '', type: 'text' }));
 		this.uiDialog.append(this.file_select_filter);
 		this.uiDialog.append(this.select_grid);
@@ -841,10 +841,10 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 		});
 
 		$('#ui-file-select-filter-input').keyup(function() {
-			var new_filename = $('#ui-file-select-filter-input').val();
-			if (filename != new_filename) {
-				filename = new_filename;
-				self.select_grid.simple_datagrid('setParameter', 'search', filename);
+			var new_search = $('#ui-file-select-filter-input').val();
+			if (search != new_search) {
+				search = new_search;
+				self.select_grid.simple_datagrid('setParameter', 'search', search);
 				self.select_grid.simple_datagrid('setCurrentPage', 1);
 				self.refresh_grid();
 			}
