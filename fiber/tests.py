@@ -264,20 +264,20 @@ class PageContentItemTest(TestCase):
         self.assertEquals(u'a b c', get_content(page.id))
 
         # 2. move 'a' before 'c'
-        PageContentItem.objects.move(item_a, item_c)
+        item_a.move(item_c.id)
 
         self.assertEquals(u'b a c', get_content(page.id))
 
         # 3. move 'c' before 'a'
-        PageContentItem.objects.move(item_c, item_a)
+        item_c.move(item_a.id)
         self.assertEquals(u'b c a', get_content(page.id))
 
         # 4. move 'b' last
-        PageContentItem.objects.move(item_b, None)
+        item_b.move()
         self.assertEquals(u'c a b', get_content(page.id))
 
         # 5. move 'a' to block 'side'
-        PageContentItem.objects.move(item_a, block_name='side')
+        item_a.move(block_name='side')
         self.assertEquals(u'c b', get_content(page.id, 'main'))
         self.assertEquals(u'a', get_content(page.id, 'side'))
 
@@ -285,7 +285,7 @@ class PageContentItemTest(TestCase):
         item_a = PageContentItem.objects.get(id=item_a.id)
         item_c = PageContentItem.objects.get(id=item_c.id)
 
-        PageContentItem.objects.move(item_c, item_a, block_name='side')
+        item_c.move(item_a.id, block_name='side')
         self.assertEquals(u'b', get_content(page.id, 'main'))
         self.assertEquals(u'c a', get_content(page.id, 'side'))
 
