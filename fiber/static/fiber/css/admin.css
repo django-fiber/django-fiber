@@ -433,6 +433,10 @@ span.nobr {
 	line-height: 150%;
 }
 
+.ui-dialog .ui-dialog-content.dialog p strong {
+	font-weight: bold;
+}
+
 /* ---[ Custom Forms ]--- */
 
 .df-admin #contentitem_form {

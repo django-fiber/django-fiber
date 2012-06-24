@@ -1590,7 +1590,7 @@ var adminPage = {
 
 		contextmenu.append(
 			$('<li><a href="#">'+gettext('Delete')+'</a></li>').click(function() {
-				var confirmationDialog = $('<div></div>').dialog({
+				var confirmation_dialog = $('<div class="dialog"></div>').dialog({
 					modal: true,
 					resizable: false,
 					width: 400,
@@ -1621,8 +1621,8 @@ var adminPage = {
 						}
 					}
 				});
-				confirmationDialog.dialog('option', 'title', gettext('Are you sure?'));
-				confirmationDialog.html(gettext('<p>Are you sure you want to delete this item?</p>'));
+				confirmation_dialog.dialog('option', 'title', gettext('Are you sure?'));
+				confirmation_dialog.html(gettext('<p>Are you sure you want to delete this item?</p>'));
 			})
 		);
 		if (node.used_on_pages && node.used_on_pages.length >= 1) {
