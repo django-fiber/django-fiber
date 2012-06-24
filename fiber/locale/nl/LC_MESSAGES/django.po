@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-16 10:42+0100\n"
-"PO-Revision-Date: 2012-02-16 10:45+0100\n"
-"Last-Translator: Michael <mvandewaeter@leukeleu.nl>\n"
+"POT-Creation-Date: 2012-06-24 23:54+0200\n"
+"PO-Revision-Date: 2012-06-24 23:57+0100\n"
+"Last-Translator: Dennis Bunskoek <dbunskoek@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,27 +18,32 @@ msgstr ""
 "X-Translated-Using: django-rosetta 0.6.0\n"
 
 #: admin.py:32
-#: admin.py:48
+#: admin.py:49
 msgid "Advanced options"
 msgstr "Uitgebreide opties"
 
-#: admin.py:62
+#: admin.py:33
+#: admin.py:50
+msgid "Metadata"
+msgstr "Metadata"
+
+#: admin.py:64
 msgid "View on site"
 msgstr "Toon op site"
 
-#: admin.py:74
+#: admin.py:76
 msgid "Move up"
 msgstr "Verplaats omhoog"
 
-#: admin.py:79
+#: admin.py:81
 msgid "Move down"
 msgstr "Verplaats omlaag"
 
-#: admin.py:85
+#: admin.py:87
 msgid "Add sub page"
 msgstr "Voeg een subpagina toe"
 
-#: admin.py:89
+#: admin.py:91
 msgid "Actions"
 msgstr "Acties"
 
@@ -66,144 +71,144 @@ msgstr "Dit account is inactief."
 msgid "Please enter a correct username and password. Note that both fields are case-sensitive."
 msgstr "Voer een correcte gebruikersnaam en wachtwoord in. Let op, de velden zijn hoofdlettergevoelig."
 
-#: managers.py:43
+#: managers.py:64
 msgid "used more than once"
 msgstr "meerdere keren gebruikt"
 
-#: managers.py:44
+#: managers.py:65
 msgid "unused"
 msgstr "ongebruikt"
 
-#: managers.py:45
+#: managers.py:66
 msgid "used once"
 msgstr "één keer gebruikt"
 
-#: managers.py:46
+#: managers.py:67
 msgid "recently changed"
 msgstr "recent gewijzigd"
 
-#: models.py:21
-#: models.py:73
-#: models.py:250
-#: models.py:276
+#: models.py:23
+#: models.py:75
+#: models.py:281
+#: models.py:311
 msgid "created"
 msgstr "aangemaakt"
 
-#: models.py:22
-#: models.py:74
-#: models.py:251
-#: models.py:277
+#: models.py:24
+#: models.py:76
+#: models.py:282
+#: models.py:312
 msgid "updated"
 msgstr "bijgewerkt"
 
-#: models.py:23
+#: models.py:25
 msgid "name"
 msgstr "naam"
 
-#: models.py:24
-#: models.py:25
-#: templates/fiber/admin.html:26
+#: models.py:26
+#: models.py:27
+#: templates/fiber/admin.html:21
 msgid "Content"
 msgstr "Content"
 
-#: models.py:26
-#: models.py:85
+#: models.py:28
+#: models.py:87
 msgid "protected"
 msgstr "beschermd"
 
-#: models.py:27
+#: models.py:29
 msgid "metadata"
 msgstr "metadata"
 
-#: models.py:28
-#: models.py:82
+#: models.py:30
+#: models.py:84
 msgid "template name"
 msgstr "sjabloonnaam"
 
-#: models.py:29
+#: models.py:31
 msgid "used on pages"
 msgstr "gebruikt op pagina's"
 
-#: models.py:34
-#: models.py:233
+#: models.py:36
+#: models.py:234
 msgid "content item"
 msgstr "content item"
 
-#: models.py:35
-#: models.py:86
+#: models.py:37
+#: models.py:88
 msgid "content items"
 msgstr "content items"
 
-#: models.py:44
+#: models.py:46
 msgid "[ EMPTY ]"
 msgstr "[ LEEG ]"
 
-#: models.py:75
+#: models.py:77
 msgid "parent"
 msgstr "parent"
 
-#: models.py:77
-#: models.py:253
-#: models.py:279
+#: models.py:79
+#: models.py:284
+#: models.py:314
 msgid "title"
 msgstr "titel"
 
-#: models.py:79
+#: models.py:81
 msgid "redirect page"
 msgstr "automatische doorverwijzing"
 
-#: models.py:80
+#: models.py:82
 msgid "mark current regexes"
-msgstr "reguliere expressies markeren als current"
+msgstr "reguliere expressies die markeren als current"
 
-#: models.py:83
+#: models.py:85
 msgid "show in menu"
 msgstr "toon in menu"
 
-#: models.py:84
+#: models.py:86
 msgid "is public"
 msgstr "is openbaar"
 
-#: models.py:93
-#: models.py:234
+#: models.py:95
+#: models.py:235
 msgid "page"
 msgstr "pagina"
 
-#: models.py:94
+#: models.py:96
 msgid "pages"
 msgstr "pagina’s"
 
-#: models.py:235
+#: models.py:236
 msgid "block name"
 msgstr "block naam"
 
-#: models.py:236
+#: models.py:237
 msgid "sort"
 msgstr "sortering"
 
-#: models.py:252
-#: models.py:258
+#: models.py:283
+#: models.py:289
 msgid "image"
 msgstr "afbeelding"
 
-#: models.py:254
+#: models.py:285
 msgid "width"
 msgstr "breedte"
 
-#: models.py:255
+#: models.py:286
 msgid "height"
 msgstr "hoogte"
 
-#: models.py:259
+#: models.py:290
 msgid "images"
 msgstr "afbeeldingen"
 
-#: models.py:278
-#: models.py:282
+#: models.py:313
+#: models.py:317
 msgid "file"
 msgstr "bestand"
 
-#: models.py:283
+#: models.py:318
 msgid "files"
 msgstr "bestanden"
 
