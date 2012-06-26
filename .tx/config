@@ -1,0 +1,14 @@
+[main]
+host = https://www.transifex.com
+
+[django-fiber.core]
+file_filter = fiber/locale/<lang>/LC_MESSAGES/django.po
+source_file = fiber/locale/en/LC_MESSAGES/django.po
+source_lang = en
+type = PO
+
+[django-fiber.javascript]
+file_filter = fiber/locale/<lang>/LC_MESSAGES/djangojs.po
+source_file = fiber/locale/en/LC_MESSAGES/djangojs.po
+source_lang = en
+type = PO
