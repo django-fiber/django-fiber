@@ -344,6 +344,9 @@ div.ui-dialog form h2 {
 	font-weight: bold;
 	line-height: 21px;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+	text-decoration: none;
+	background: none;
+	background-color: #eaeaea;
 }
 
 .ui-dialog form .advanced-button .toggler {
