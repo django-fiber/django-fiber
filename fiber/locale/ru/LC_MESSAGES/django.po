@@ -1,0 +1,293 @@
+# English base text for Django Fiber
+# Copyright (C) 2011 Ride The Pony
+# This file is distributed under the same license as the Django Fiber package.
+#
+# Translators:
+# Ride The Pony <info@ridethepony.org>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: django-fiber\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-06-27 01:24+0200\n"
+"PO-Revision-Date: 2012-06-27 01:26+0100\n"
+"Last-Translator: Dennis Bunskoek <dbunskoek@leukeleu.nl>\n"
+"Language-Team: Ride The Pony <info@ridethepony.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Poedit-Language: English\n"
+
+#: admin.py:32
+#: admin.py:49
+#: admin.py:125
+#: admin.py:130
+msgid "Advanced options"
+msgstr "Дополнительные параметры"
+
+#: admin.py:33
+#: admin.py:50
+msgid "Metadata"
+msgstr ""
+
+#: admin.py:64
+msgid "View on site"
+msgstr "Смотреть на сайте"
+
+#: admin.py:76
+msgid "Move up"
+msgstr "Вверх"
+
+#: admin.py:81
+msgid "Move down"
+msgstr "Вниз"
+
+#: admin.py:87
+msgid "Add sub page"
+msgstr "Добавить дочернюю страницу"
+
+#: admin.py:91
+msgid "Actions"
+msgstr "Действия"
+
+#: admin_forms.py:19
+msgid "Content template"
+msgstr "Шаблон содержания"
+
+#: admin_forms.py:25
+msgid "Redirect page"
+msgstr "Перенаправить на страницу"
+
+#: admin_forms.py:33
+msgid "Template"
+msgstr "Шаблон"
+
+#: admin_forms.py:45
+msgid "A named url can't be combined with a redirect page"
+msgstr "Имя ссылки не может быть объединено со страницей перенаправления"
+
+#: admin_views.py:25
+msgid "This account is inactive."
+msgstr "Аккаунт неактивен."
+
+#: admin_views.py:30
+msgid "Please enter a correct username and password. Note that both fields are case-sensitive."
+msgstr "Пожалуйста, введите имя пользователя и пароль. Обратите внимание, что оба поля чувствительны к регистру."
+
+#: managers.py:64
+msgid "used more than once"
+msgstr "используются более одного раза"
+
+#: managers.py:65
+msgid "unused"
+msgstr "не используются"
+
+#: managers.py:66
+msgid "used once"
+msgstr "используются однажды"
+
+#: managers.py:67
+msgid "recently changed"
+msgstr "недавно изменные"
+
+#: models.py:23
+#: models.py:75
+#: models.py:281
+#: models.py:311
+msgid "created"
+msgstr "создано"
+
+#: models.py:24
+#: models.py:76
+#: models.py:282
+#: models.py:312
+msgid "updated"
+msgstr "обновлено"
+
+#: models.py:25
+msgid "name"
+msgstr "имя"
+
+#: models.py:26
+#: models.py:27
+#: templates/fiber/admin.html:21
+msgid "Content"
+msgstr "Содержание"
+
+#: models.py:28
+#: models.py:87
+msgid "protected"
+msgstr "защищено"
+
+#: models.py:29
+msgid "metadata"
+msgstr "метаданные"
+
+#: models.py:30
+#: models.py:84
+msgid "template name"
+msgstr "имя шаблона"
+
+#: models.py:31
+msgid "used on pages"
+msgstr "используется на страницах"
+
+#: models.py:36
+#: models.py:234
+msgid "content item"
+msgstr "блок содержимого"
+
+#: models.py:37
+#: models.py:88
+msgid "content items"
+msgstr "блоки содержимого"
+
+#: models.py:46
+msgid "[ EMPTY ]"
+msgstr "[ ПУСТО ]"
+
+#: models.py:77
+msgid "parent"
+msgstr "родитель"
+
+#: models.py:79
+#: models.py:284
+#: models.py:314
+msgid "title"
+msgstr "заголовок"
+
+#: models.py:81
+msgid "redirect page"
+msgstr "страница перенаправления"
+
+#: models.py:82
+msgid "mark current regexes"
+msgstr "отметить текущие регулярные выражения"
+
+#: models.py:85
+msgid "show in menu"
+msgstr "показывать в меню"
+
+#: models.py:86
+msgid "is public"
+msgstr "опубликовано"
+
+#: models.py:95
+#: models.py:235
+msgid "page"
+msgstr "страница"
+
+#: models.py:96
+msgid "pages"
+msgstr "страницы"
+
+#: models.py:236
+msgid "block name"
+msgstr "имя блока"
+
+#: models.py:237
+msgid "sort"
+msgstr "сортировка"
+
+#: models.py:283
+#: models.py:289
+msgid "image"
+msgstr "изображение"
+
+#: models.py:285
+msgid "width"
+msgstr "ширина"
+
+#: models.py:286
+msgid "height"
+msgstr "высота"
+
+#: models.py:290
+msgid "images"
+msgstr "изображения"
+
+#: models.py:313
+#: models.py:317
+msgid "file"
+msgstr "файл"
+
+#: models.py:318
+msgid "files"
+msgstr "файлы"
+
+#: templates/fiber/admin.html:9
+msgid "Log out"
+msgstr "Выход"
+
+#: templates/fiber/admin.html:10
+msgid "Backend"
+msgstr "В админку"
+
+#: templates/fiber/admin.html:13
+msgid "Pages"
+msgstr "Страницы"
+
+#: utils/date.py:34
+msgid "just now"
+msgstr "только что"
+
+#: utils/date.py:36
+#, python-format
+msgid "%s seconds ago"
+msgstr "%s секунд назад"
+
+#: utils/date.py:40
+#, python-format
+msgid "%s minutes ago"
+msgstr "%s минут назад"
+
+#: utils/date.py:42
+msgid "an hour ago"
+msgstr "час назад"
+
+#: utils/date.py:44
+#, python-format
+msgid "%s hours ago"
+msgstr "%s часов назад"
+
+#: utils/date.py:46
+msgid "yesterday"
+msgstr "вчера"
+
+#: utils/date.py:48
+#, python-format
+msgid "%s days ago"
+msgstr "%s дней назад"
+
+#: utils/date.py:50
+msgid "a week ago"
+msgstr "неделю назад"
+
+#: utils/date.py:52
+#, python-format
+msgid "%s weeks ago"
+msgstr "%s недель назад"
+
+#: utils/date.py:54
+#, python-format
+msgid "%s months ago"
+msgstr "%s месяцев назад"
+
+#: utils/date.py:55
+#, python-format
+msgid "%s years ago"
+msgstr "%s лет назад"
+
+#: utils/fields.py:13
+msgid "URL"
+msgstr "URL"
+
+#: utils/form_fields.py:10
+msgid "Example: 'products' or '/section-1/products/' or '\"some_named_url\"'"
+msgstr ""
+
+#: utils/validators.py:27
+msgid "No reverse match found for the named url"
+msgstr "Нет совпадений с указанным url"
+
