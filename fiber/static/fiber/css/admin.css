@@ -1,11 +1,9 @@
 body div#wpr-body {
-	position: relative;
-	left: 10px;
+	margin-left: 10px;
 }
 
 body.df-sidebar div#wpr-body {
-	left: 240px;
-	margin-right: 240px;
+	margin-left: 240px;
 }
 
 #df-wpr-sidebar,
@@ -291,6 +289,12 @@ div.ui-dialog form select,
 	clear: none;
 }
 
+div.ui-dialog form input[type="checkbox"] {
+	float: left;
+	margin-top: 6px;
+	margin-left: 0;
+}
+
 div.ui-dialog form select {
 	font-size: 13px;
 	padding: 3px;
@@ -332,6 +336,30 @@ div.ui-dialog form span.cke_skin_kama {
 div.ui-dialog form h2 {
 	font-weight: bold;
 	font-size: 100%;
+}
+
+.ui-dialog form .advanced-button {
+	display: block;
+	margin: 0 -15px;
+	padding: 3px 15px;
+	font-weight: bold;
+	line-height: 21px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.ui-dialog form .advanced-button .toggler {
+	display: block;
+	float: left;
+	margin: 7px 4px;
+	width: 8px;
+	height: 8px;
+	background: transparent url(../images/arrow-down.png) no-repeat left top;
+	text-indent: -9000px;
+}
+
+.ui-dialog form .advanced-button.closed .toggler {
+	margin-top: 6px;
+	background-image: url(../images/arrow-right.png);
 }
 
 .ui-dialog .hide-label {
@@ -453,6 +481,21 @@ span.nobr {
 }
 
 .df-admin #page_form {
+	overflow: hidden;
+	padding: 0 15px;
+	width: 295px;
+}
+
+.df-admin #page_form fieldset {
+	margin: 0;
+	padding: 10px 0;
+}
+
+.df-admin #page_form fieldset p.help {
+	margin: 0;
+}
+
+.df-admin #page_form fieldset input[type="text"] {
 	width: 287px;
 }
 
