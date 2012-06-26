@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-24 23:54+0200\n"
-"PO-Revision-Date: 2012-06-24 23:57+0100\n"
+"POT-Creation-Date: 2012-06-26 22:58+0200\n"
+"PO-Revision-Date: 2012-06-26 22:58+0100\n"
 "Last-Translator: Dennis Bunskoek <dbunskoek@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,6 +19,8 @@ msgstr ""
 
 #: admin.py:32
 #: admin.py:49
+#: admin.py:125
+#: admin.py:130
 msgid "Advanced options"
 msgstr "Uitgebreide opties"
 
@@ -280,8 +282,8 @@ msgid "URL"
 msgstr "URL"
 
 #: utils/form_fields.py:10
-msgid "Example: '/section-1/products' or 'products' or '\"some_named_url\"'"
-msgstr "Voorbeeld: '/sectie-1/producten' of 'producten' of '\"een_named_url\"'"
+msgid "Example: 'products' or '/section-1/products/' or '\"some_named_url\"'"
+msgstr "Voorbeeld: 'producten' of '/sectie-1/producten/' of '\"een_named_url\"'"
 
 #: utils/validators.py:27
 msgid "No reverse match found for the named url"
