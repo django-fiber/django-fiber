@@ -8,6 +8,7 @@ Contributors
 * Chi Shang Cheng
 * Dennis Bunskoek
 * Diederik van der Boor
+* Douwe van der Meij
 * Dzjon Hessing
 * Luke Plant
 * Marco Braak

@@ -13,6 +13,8 @@ These settings are optional (default values are shown):
 
 ::
 
+    FIBER_LOGIN_STRING = '@fiber'
+
 	FIBER_DEFAULT_TEMPLATE = 'base.html'
 	FIBER_TEMPLATE_CHOICES = []
 	FIBER_CONTENT_TEMPLATE_CHOICES = []
@@ -21,6 +23,11 @@ These settings are optional (default values are shown):
 
 	FIBER_IMAGES_DIR = 'uploads/images'
 	FIBER_FILES_DIR = 'uploads/files'
+
+    FIBER_EDITOR = 'fiber.editor_definitions.ckeditor.EDITOR'
+
+    FIBER_PAGE_MANAGER = 'fiber.managers.PageManager'
+    FIBER_CONTENT_ITEM_MANAGER = 'fiber.managers.ContentItemManager'
 
 	FIBER_METADATA_PAGE_SCHEMA = {}
 	FIBER_METADATA_CONTENT_SCHEMA = {}
