@@ -12,8 +12,9 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.managers import TreeManager
 from mptt.models import MPTTModel
 
-from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA
-import managers
+from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA, \
+    PAGE_MANAGER, CONTENT_ITEM_MANAGER
+from fiber.utils.class_loader import load_class
 from utils.fields import FiberURLField, FiberMarkupField, FiberHTMLField
 from utils.json import JSONField
 from utils.urls import get_named_url_from_quoted_url, is_quoted_url
@@ -30,7 +31,7 @@ class ContentItem(models.Model):
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
     used_on_pages_data = JSONField(_('used on pages'), blank=True, null=True)
 
-    objects = managers.ContentItemManager()
+    objects = load_class(CONTENT_ITEM_MANAGER)
 
     class Meta:
         verbose_name = _('content item')
@@ -89,7 +90,7 @@ class Page(MPTTModel):
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
 
     tree = TreeManager()
-    objects = managers.PageManager()
+    objects =  load_class(PAGE_MANAGER)
 
     class Meta:
         verbose_name = _('page')
