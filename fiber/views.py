@@ -28,6 +28,9 @@ def page(request):
     t = loader.get_template(page.template_name or DEFAULT_TEMPLATE)
     context['page'] = page
 
+    # Let the page handle its own things too
+    page.handle(request, context)
+
     response = HttpResponse(t.render(context))
     populate_xheaders(request, response, Page, page.id)
     return response

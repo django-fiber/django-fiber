@@ -147,6 +147,8 @@ admin.site.register(ContentItem, ContentItemAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(File, FileAdmin)
 admin.site.register(Page, PageAdmin)
+for sub_page in Page.__subclasses__():
+    admin.site.register(sub_page, PageAdmin)
 
 fiber_admin.site.register(ContentItem, FiberAdminContentItemAdmin)
 fiber_admin.site.register(Page, FiberAdminPageAdmin)
