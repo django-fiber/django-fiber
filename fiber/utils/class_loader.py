@@ -8,11 +8,9 @@ def load_class(fqc, **kwds):
         mod_name, klass_name = fqc.rsplit('.', 1)
         mod = import_module(mod_name)
     except ImportError, e:
-        raise ImproperlyConfigured(('Error importing email backend module %s: "%s"'
-                                    % (mod_name, e)))
+        raise ImproperlyConfigured(('Error importing module {0}: "{1}"'.format(mod_name, e)))
     try:
         klass = getattr(mod, klass_name)
     except AttributeError:
-        raise ImproperlyConfigured(('Module "%s" does not define a '
-                                    '"%s" class' % (mod_name, klass_name)))
+        raise ImproperlyConfigured(('Module "{0}" does not define a "{1}" class'.format(mod_name, klass_name)))
     return klass(**kwds)
