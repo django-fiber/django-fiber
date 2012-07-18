@@ -48,6 +48,23 @@ In this example, the news_item_detail view looks up the Page of the news_item_li
 	    return HttpResponse(t.render(c))
 
 
+Set or override fiber_page in the classed based view:
+=====================================================
+
+In this example, the NewsItemDetailView's context is enriched with fiber_page and fiber_current_pages.
+
+::
+    from django.core.urlresolvers import reverse
+    from django.views.generic import DetailView
+    from fiber.views import FiberPageMixin
+
+
+    class NewsItemDetailView(FiberPageMixin, DetailView):
+
+        def get_fiber_page_url(self):
+            return reverse('news_item_list')
+
+
 Templates:
 ==========
 

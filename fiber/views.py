@@ -1,33 +1,44 @@
 from django.conf import settings
-from django.core.xheaders import populate_xheaders
-from django.http import HttpResponse, HttpResponsePermanentRedirect, Http404
-from django.template import loader, RequestContext
+from django.http import HttpResponsePermanentRedirect, Http404
+from django.views.generic.base import TemplateView
 
-from app_settings import DEFAULT_TEMPLATE
-from models import Page
+from .app_settings import DEFAULT_TEMPLATE
+from .mixins import FiberPageMixin
 
 
-def page(request):
-    url = request.path_info
+class FiberTemplateView(FiberPageMixin, TemplateView):
 
-    context = RequestContext(request)
-    if 'fiber_page' not in context:
-        """
-        Take care of Django's CommonMiddleware redirect if the request URL doesn't end in a slash, and APPEND_SLASH=True
-        https://docs.djangoproject.com/en/dev/ref/settings/#append-slash
-        """
-        if not url.endswith('/') and settings.APPEND_SLASH:
-            return HttpResponsePermanentRedirect('%s/' % url)
+    def get_fiber_page_url(self):
+        return self.request.path_info
+
+    def get_template_names(self):
+        if self.get_fiber_page() and self.get_fiber_page().template_name not in [None, '']:
+            return self.get_fiber_page().template_name
         else:
-            raise Http404
-    else:
-        page = context['fiber_page']
-        if page.redirect_page and page.redirect_page != page: #prevent redirecting to itself
-            return HttpResponsePermanentRedirect(page.redirect_page.get_absolute_url())
+            return DEFAULT_TEMPLATE
 
-    t = loader.get_template(page.template_name or DEFAULT_TEMPLATE)
-    context['page'] = page
+    def render_to_response(self, *args, **kwargs):
+        if self.get_fiber_page() == None:
+            """
+            Take care of Django's CommonMiddleware redirect if the request URL doesn't end in a slash, and APPEND_SLASH=True
+            https://docs.djangoproject.com/en/dev/ref/settings/#append-slash
+            """
+            url = self.get_fiber_page_url()
 
-    response = HttpResponse(t.render(context))
-    populate_xheaders(request, response, Page, page.id)
-    return response
+            if not url.endswith('/') and settings.APPEND_SLASH:
+                return HttpResponsePermanentRedirect('%s/' % url)
+            else:
+                raise Http404
+        else:
+            """
+            Block access to pages that the current user isn't supposed to see.
+            """
+            if not self.get_fiber_page().is_public_for_user(self.request.user):
+                raise Http404
+
+            if self.get_fiber_page().redirect_page and self.get_fiber_page().redirect_page != self.get_fiber_page():  # prevent redirecting to itself
+                return HttpResponsePermanentRedirect(self.get_fiber_page().redirect_page.get_absolute_url())
+
+        return super(FiberTemplateView, self).render_to_response(*args, **kwargs)
+
+page = FiberTemplateView.as_view()
