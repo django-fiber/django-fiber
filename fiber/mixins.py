@@ -11,7 +11,7 @@ class FiberPageMixin(object):
     """
     fiber_page_url = None
     fiber_page = None
-    fiber_current_pages = []
+    fiber_current_pages = None
 
     def get_context_data(self, **kwargs):
         context = super(FiberPageMixin, self).get_context_data(**kwargs)
@@ -32,6 +32,7 @@ class FiberPageMixin(object):
 
     def get_fiber_current_pages(self):
         if not self.fiber_current_pages:
+            self.fiber_current_pages = []
             """
             Find pages that should be marked as current in menus.
             """
