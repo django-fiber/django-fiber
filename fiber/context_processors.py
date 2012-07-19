@@ -1,3 +1,6 @@
+import warnings
+warnings.warn('NOTE: the page_info context processor is deprecated and will be removed in the near future.', DeprecationWarning)
+
 import re
 
 from app_settings import EXCLUDE_URLS
