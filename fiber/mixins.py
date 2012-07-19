@@ -11,7 +11,7 @@ class FiberPageMixin(object):
     """
     fiber_page_url = None
     fiber_page = None
-    fiber_current_pages = None
+    fiber_current_pages = []
 
     def get_context_data(self, **kwargs):
         context = super(FiberPageMixin, self).get_context_data(**kwargs)
@@ -20,7 +20,7 @@ class FiberPageMixin(object):
         return context
 
     def get_fiber_page_url(self):
-        if self.fiber_page_url == None:
+        if not self.fiber_page_url:
             raise ImproperlyConfigured(u"{cls} is missing a fiber_page_url. Define "
                 u"{cls}.fiber_page_url, or override "
                 u"{cls}.get_fiber_page_url().".format(cls=self.__class__.__name__)
@@ -28,17 +28,10 @@ class FiberPageMixin(object):
         return self.fiber_page_url
 
     def get_fiber_page(self):
-        if self.fiber_page == None:
-            self.fiber_page = Page.objects.get_by_url(self.get_fiber_page_url())
-        return self.fiber_page
+        return self.fiber_page or Page.objects.get_by_url(self.get_fiber_page_url())
 
     def get_fiber_current_pages(self):
-        if self.fiber_current_pages == None:
-            """
-            start with an empty list
-            """
-            self.fiber_current_pages = []
-
+        if not self.fiber_current_pages:
             """
             Find pages that should be marked as current in menus.
             """
