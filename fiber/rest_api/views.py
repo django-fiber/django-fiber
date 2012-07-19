@@ -35,6 +35,12 @@ class ListView(ListOrCreateModelView):
     permissions = (IsAuthenticated, )
 
 
+class TreeListView(View):
+
+    def get(self, request):
+        return  Page.objects.create_jqtree_data()
+
+
 class PaginatedListView(PaginatorMixin, ListView):
 
     limit = 5
