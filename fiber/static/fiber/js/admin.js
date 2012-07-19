@@ -977,7 +977,8 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 		}
 
 		$.ajax({
-			url: '/admin/fiber/pages.json',
+			url: '/api/v2/pagetree/',
+			type: 'GET',
 			success: $.proxy(handle_load_data, this),
 			cache: false,
 			dataType: 'json'
