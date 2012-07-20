@@ -39,7 +39,7 @@ Fiber.enhance_textarea = function(textarea, auto_height) {
 
 Fiber.remove_textarea = function(textarea) {
 	if (textarea.id in CKEDITOR.instances) {
-		CKEDITOR.remove(CKEDITOR.instances[textarea.id]);
+		CKEDITOR.instances[textarea.id].destroy(false);
 	}
 };
 
