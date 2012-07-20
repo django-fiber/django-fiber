@@ -20,8 +20,8 @@ These dependencies are automatically installed:
 
 ::
 
-	PIL>=1.1.7
-    'djangorestframework==0.3.3'
+	Pillow==1.7.7
+    djangorestframework==0.3.3
 	django-mptt>=0.4.2
 	django-compressor>=0.7.1
 
