@@ -31,7 +31,6 @@ Fiber.enhance_content_template_select = function(select) {
 
 	hidden_template_name.val(template_name.val());
 	$(fieldset_of_template_name).append(hidden_template_name);
-	$(fieldset_of_template_name).hide();
 	$('.ui-dialog-buttonset').append(template_name);
 
 	template_name.change(function() {
