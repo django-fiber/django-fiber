@@ -291,9 +291,7 @@ class Image(models.Model):
         ordering = ('image', )
 
     def __unicode__(self):
-        if self.image.path.startswith(settings.MEDIA_ROOT):
-            return self.image.path[len(settings.MEDIA_ROOT):]
-        return self.image.path
+        return self.image.name
 
     def save(self, *args, **kwargs):
         self.get_image_information()
@@ -319,9 +317,7 @@ class File(models.Model):
         ordering = ('file', )
 
     def __unicode__(self):
-        if self.file.path.startswith(settings.MEDIA_ROOT):
-            return self.file.path[len(settings.MEDIA_ROOT):]
-        return self.file.path
+        return self.file.name
 
     def delete(self, *args, **kwargs):
         os.remove(os.path.join(settings.MEDIA_ROOT, str(self.file)))
