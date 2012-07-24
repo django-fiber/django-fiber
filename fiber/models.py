@@ -121,7 +121,7 @@ class Page(MPTTModel):
 
     def as_leaf_object(self):
         model = self.content_type.model_class()
-        if model == Page:
+        if model == Page or not model:
             return self
         return getattr(self, model.__name__.lower())
 

@@ -46,14 +46,18 @@ class PageAdmin(MPTTModelAdmin):
     form = forms.PageForm
     fieldsets = (
         (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name')}),
-        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'is_public', 'protected',)}),
+        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu',
+                                                                      'is_public', 'protected', 'content_type_name',)}),
         (_('Metadata'), {'classes': ('collapse',), 'fields': ('metadata',)}),
     )
 
     inlines = (PageContentItemInline,)
-    list_display = ('title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links',)
+    list_display = ('title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links','content_type_name',)
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page')
+
+    def content_type_name(self, instance):
+        return instance.content_type.name
 
     def view_on_site(self, page):
         view_on_site = ''
@@ -147,8 +151,6 @@ admin.site.register(ContentItem, ContentItemAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(File, FileAdmin)
 admin.site.register(Page, PageAdmin)
-for sub_page in Page.__subclasses__():
-    admin.site.register(sub_page, PageAdmin)
 
 fiber_admin.site.register(ContentItem, FiberAdminContentItemAdmin)
 fiber_admin.site.register(Page, FiberAdminPageAdmin)

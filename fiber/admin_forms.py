@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
 from mptt.forms import TreeNodeChoiceField
@@ -23,6 +24,11 @@ class PageForm(forms.ModelForm):
 
     parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3*unichr(160), empty_label='---------', required=False)
     redirect_page = TreeNodeChoiceField(label=_('Redirect page'), queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160), empty_label='---------', required=False)
+    content_type_name = forms.ChoiceField(
+        choices=[(ct.id, ct.name) for ct in ContentType.objects.filter(
+            model__in=[p.__name__.lower() for p in Page.__subclasses__()]
+        )],
+        required=False, label=_('Content type'))
 
     class Meta:
         model = Page
