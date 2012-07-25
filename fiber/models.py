@@ -242,12 +242,6 @@ class Page(MPTTModel):
     def is_public_for_user(self, user):
         return user.is_staff or self.is_public
 
-    def handle(self, request, context):
-        """
-        This function can be used in overloading to add some behaviour/logic when handling the request for a page.
-        """
-        pass
-
 
 class PageContentItem(models.Model):
     content_item = models.ForeignKey(ContentItem, related_name='page_content_items', verbose_name=_('content item'))

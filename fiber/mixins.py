@@ -5,6 +5,29 @@ from django.core.exceptions import ImproperlyConfigured
 from .models import Page
 
 
+class PageSingleton(object):
+
+    _instance = None
+    def __new__(cls):
+        if not cls._instance:
+            cls._instance = super(PageSingleton, cls).__new__(cls)
+        return cls._instance
+
+    @property
+    def page(self):
+        return self._page
+    @page.setter
+    def page(self, value):
+        self._page = value
+
+    @property
+    def current_pages(self):
+        return self._current_pages
+    @current_pages.setter
+    def current_pages(self, value):
+        self._current_pages = value
+
+
 class FiberPageMixin(object):
     """
     Adds fiber_page and fiber_current_pages to the context
@@ -15,8 +38,10 @@ class FiberPageMixin(object):
 
     def get_context_data(self, **kwargs):
         context = super(FiberPageMixin, self).get_context_data(**kwargs)
-        context['fiber_page'] = self.get_fiber_page()
-        context['fiber_current_pages'] = self.get_fiber_current_pages()
+        PageSingleton.page = self.get_fiber_page()
+        PageSingleton.current_pages = self.get_fiber_current_pages()
+        context['fiber_page'] = PageSingleton.page
+        context['fiber_current_pages'] = PageSingleton.current_pages
         return context
 
     def get_fiber_page_url(self):
@@ -28,7 +53,9 @@ class FiberPageMixin(object):
         return self.fiber_page_url
 
     def get_fiber_page(self):
-        return self.fiber_page or Page.objects.get_by_url(self.get_fiber_page_url())
+        if not self.fiber_page:
+            self.fiber_page = Page.objects.get_by_url(self.get_fiber_page_url())
+        return self.fiber_page
 
     def get_fiber_current_pages(self):
         if not self.fiber_current_pages:

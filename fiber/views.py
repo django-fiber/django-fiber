@@ -39,9 +39,6 @@ class FiberTemplateView(FiberPageMixin, TemplateView):
             if self.get_fiber_page().redirect_page and self.get_fiber_page().redirect_page != self.get_fiber_page():  # prevent redirecting to itself
                 return HttpResponsePermanentRedirect(self.get_fiber_page().redirect_page.get_absolute_url())
 
-        # Let the page handle its own things too
-        self.get_fiber_page().handle(self.request, *args)
-
         return super(FiberTemplateView, self).render_to_response(*args, **kwargs)
 
 page = FiberTemplateView.as_view()
