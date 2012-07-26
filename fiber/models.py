@@ -90,7 +90,7 @@ class Page(MPTTModel):
     protected = models.BooleanField(_('protected'), default=False)
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
-    content_type = models.ForeignKey(ContentType, editable=False, null=True)
+    content_type = models.ForeignKey(ContentType, null=False, verbose_name=_('content type'))
 
     tree = TreeManager()
     objects = load_class(PAGE_MANAGER)

@@ -17,18 +17,17 @@ class ContentItemAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ContentItemAdminForm, self).__init__(*args, **kwargs)
         if len(CONTENT_TEMPLATE_CHOICES) > 0:
-            self.fields['template_name'] = forms.ChoiceField(choices=CONTENT_TEMPLATE_CHOICES, required=False, label=_('Content template'))
+            self.fields['template_name'] = forms.ChoiceField(choices=CONTENT_TEMPLATE_CHOICES, required=False,
+                label=_('Content template'))
 
 
 class PageForm(forms.ModelForm):
 
-    parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3*unichr(160), empty_label='---------', required=False)
-    redirect_page = TreeNodeChoiceField(label=_('Redirect page'), queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160), empty_label='---------', required=False)
-    content_type_name = forms.ChoiceField(
-        choices=[(ct.id, ct.name) for ct in ContentType.objects.filter(
-            model__in=[p.__name__.lower() for p in Page.__subclasses__()]
-        )],
-        required=False, label=_('Content type'))
+    parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3*unichr(160), empty_label='---------',
+        required=False)
+    redirect_page = TreeNodeChoiceField(label=_('Redirect page'),
+        queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3*unichr(160),
+        empty_label='---------', required=False)
 
     class Meta:
         model = Page
@@ -36,7 +35,14 @@ class PageForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PageForm, self).__init__(*args, **kwargs)
         if len(TEMPLATE_CHOICES) > 0:
-            self.fields['template_name'] = forms.ChoiceField(choices=TEMPLATE_CHOICES, required=False, label=_('Template'))
+            self.fields['template_name'] = forms.ChoiceField(choices=TEMPLATE_CHOICES, required=False,
+                label=_('Template'))
+        # content_type settings
+        self.fields['content_type'].queryset = ContentType.objects.filter(
+            model__in=[p.__name__.lower() for p in [Page] + Page.__subclasses__()]
+        )
+        self.fields['content_type'].initial = ContentType.objects.get(model=Page.__name__.lower())
+        self.fields['content_type'].required = True
 
     def clean_title(self):
         """

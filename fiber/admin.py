@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.conf import settings
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from mptt.admin import MPTTModelAdmin
@@ -47,17 +48,52 @@ class PageAdmin(MPTTModelAdmin):
     fieldsets = (
         (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name')}),
         (_('Advanced options'), {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu',
-                                                                      'is_public', 'protected', 'content_type_name',)}),
+                                                                      'is_public', 'protected', 'content_type',)}),
         (_('Metadata'), {'classes': ('collapse',), 'fields': ('metadata',)}),
     )
 
     inlines = (PageContentItemInline,)
-    list_display = ('title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links','content_type_name',)
+    list_display = ('title', 'view_on_site', 'url', 'redirect_page','get_absolute_url',  'action_links',
+                    'content_type_name',)
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page')
 
     def content_type_name(self, instance):
         return instance.content_type.name
+
+    def remove_old_reference(self, model_class, pk):
+        """
+        Remove the one-to-one reference of a subclass of Page without deleting the Page itself
+
+        :param model_class: A subclass of Page
+        :param pk:          The primary key of the reference to delete
+        """
+        class FakePageSubclass(models.Model):
+            page_ptr = models.PositiveIntegerField(db_column="page_ptr_id", primary_key=True)
+            class Meta:
+                app_label = model_class._meta.app_label
+                db_table = model_class._meta.db_table
+                managed = False
+        try:
+            fake_obj = FakePageSubclass.objects.get(pk=pk)
+            fake_obj.delete()
+        except Exception:
+            # It could be that there is no subclass since the page was already a Page object
+            pass
+
+    def save_model(self, request, obj, form, change):
+        # Check if the content_type of the object changed
+        if 'content_type' in form.changed_data:
+            # If so, we need to modify the one-to-one relationship through the Django ORM
+            # Remove the old reference (if exists), we must query the database to get the old value for content_type
+            self.remove_old_reference(Page.objects.get(pk=obj.pk).content_type.model_class(), obj.pk)
+            # Modify the __class__ of the object to be the new/right class
+            obj.__class__ = obj.content_type.model_class()
+            # Make the one-to-one relationship if the new class is a subclass of Page
+            if not obj.__class__ is Page:
+                obj.page_ptr = obj
+            # Note that other fields of the subclass need to have a default values
+        super(PageAdmin, self).save_model(request, obj, form, change)
 
     def view_on_site(self, page):
         view_on_site = ''
