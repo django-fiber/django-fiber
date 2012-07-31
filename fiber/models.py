@@ -1,6 +1,7 @@
 import os
 
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
 from django.db import models
@@ -12,8 +13,9 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.managers import TreeManager
 from mptt.models import MPTTModel
 
-from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA
-import managers
+from app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA, \
+    PAGE_MANAGER, CONTENT_ITEM_MANAGER
+from fiber.utils.class_loader import load_class
 from utils.fields import FiberURLField, FiberMarkupField, FiberHTMLField
 from utils.json import JSONField
 from utils.urls import get_named_url_from_quoted_url, is_quoted_url
@@ -30,7 +32,7 @@ class ContentItem(models.Model):
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
     used_on_pages_data = JSONField(_('used on pages'), blank=True, null=True)
 
-    objects = managers.ContentItemManager()
+    objects = load_class(CONTENT_ITEM_MANAGER)
 
     class Meta:
         verbose_name = _('content item')
@@ -78,7 +80,8 @@ class Page(MPTTModel):
     # TODO: add keywords, description (as meta?)
     title = models.CharField(_('title'), blank=True, max_length=255)
     url = FiberURLField(blank=True)
-    redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'), on_delete=models.SET_NULL)
+    redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages',
+        verbose_name=_('redirect page'), on_delete=models.SET_NULL)
     mark_current_regexes = models.TextField(_('mark current regexes'), blank=True)
     # TODO: add `alias_page` field
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
@@ -87,9 +90,10 @@ class Page(MPTTModel):
     protected = models.BooleanField(_('protected'), default=False)
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
+    content_type = models.ForeignKey(ContentType, null=False, verbose_name=_('content type'))
 
     tree = TreeManager()
-    objects = managers.PageManager()
+    objects = load_class(PAGE_MANAGER)
 
     class Meta:
         verbose_name = _('page')
@@ -100,6 +104,9 @@ class Page(MPTTModel):
         return self.title
 
     def save(self, *args, **kwargs):
+        if not self.content_type:
+            self.content_type = ContentType.objects.get_for_model(self.__class__)
+
         if self.id:
             old_url = Page.objects.get(id=self.id).get_absolute_url()
         else:
@@ -111,6 +118,12 @@ class Page(MPTTModel):
             new_url = self.get_absolute_url()
             if old_url != new_url:
                 ContentItem.objects.rename_url(old_url, new_url)
+
+    def as_leaf_object(self):
+        model = self.content_type.model_class()
+        if model == Page or not model:
+            return self
+        return getattr(self, model.__name__.lower())
 
     def get_absolute_url(self):
         if self.url == '':

@@ -1,4 +1,6 @@
 import warnings
+from fiber.mixins import PageSingleton
+
 warnings.warn('NOTE: the page_info context processor is deprecated and will be removed in the near future.', DeprecationWarning)
 
 import re
@@ -22,7 +24,7 @@ def page_info(request):
             if re.search(exclude_url, url.lstrip('/')):
                 return context
 
-    page = Page.objects.get_by_url(url)
+    page = PageSingleton.page
 
     """
     Block access to pages that the current user isn't supposed to see.

@@ -137,7 +137,7 @@ class PageManager(TreeManager):
 
         # First check if there is a Page whose `url` matches the requested URL.
         try:
-            return qs.get(url__exact=url)
+            return qs.get(url__exact=url).as_leaf_object()
         except self.model.DoesNotExist:
             pass
 
@@ -164,14 +164,14 @@ class PageManager(TreeManager):
 
             for page in page_candidates:
                 if page.get_absolute_url() == url:
-                    return page
+                    return page.as_leaf_object()
 
         # If no Page has been found, try to find a Page by matching the
         # requested URL with reversed `named_url`s.
         page_candidates = qs.filter(url__startswith='"', url__endswith='"')
         for page in page_candidates:
             if get_named_url_from_quoted_url(page.url) == url:
-                return page
+                return page.as_leaf_object()
 
     def create_jqtree_data(self):
         """
