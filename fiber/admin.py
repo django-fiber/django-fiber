@@ -4,12 +4,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from mptt.admin import MPTTModelAdmin
 
-from fiber.editor import get_editor_field_name
-from app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES
-from models import Page, ContentItem, PageContentItem, Image, File
-import admin_forms as forms
-
-import fiber_admin
+from . import admin_forms as forms
+from . import fiber_admin
+from .app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES
+from .editor import get_editor_field_name
+from .models import Page, ContentItem, PageContentItem, Image, File
 
 
 class FileAdmin(admin.ModelAdmin):
@@ -51,9 +50,9 @@ class PageAdmin(MPTTModelAdmin):
     )
 
     inlines = (PageContentItemInline,)
-    list_display = ('title', 'view_on_site', 'url', 'redirect_page','get_absolute_url', 'action_links',)
+    list_display = ('title', 'view_on_site', 'url', 'redirect_page', 'get_absolute_url', 'action_links')
     list_per_page = 1000
-    search_fields = ('title', 'url', 'redirect_page')
+    search_fields = ('title', 'url', 'redirect_page__title')
 
     def view_on_site(self, page):
         view_on_site = ''
