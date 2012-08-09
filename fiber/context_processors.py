@@ -3,8 +3,8 @@ warnings.warn('NOTE: the page_info context processor is deprecated and will be r
 
 import re
 
-from app_settings import EXCLUDE_URLS
-from models import Page
+from .app_settings import EXCLUDE_URLS
+from .models import Page
 
 
 def page_info(request):

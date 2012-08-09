@@ -1,5 +1,6 @@
 from django.contrib import admin
-from options import ModelAdmin, MPTTModelAdmin
+
+from options import ModelAdmin
 
 
 class FiberAdminSite(admin.AdminSite):

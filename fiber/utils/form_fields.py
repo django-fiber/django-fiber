@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-import validators
+from . import validators
 
 
 class FiberURLField(forms.CharField):

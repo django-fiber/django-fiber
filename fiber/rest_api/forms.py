@@ -1,5 +1,6 @@
 from django import forms
 
+
 POSITION_CHOICES = sorted((item, item) for item in ['before', 'after', 'inside'])
 
 

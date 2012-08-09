@@ -13,7 +13,7 @@ from djangorestframework.resources import ModelResource
 from fiber.models import Page, PageContentItem, ContentItem, Image, File
 from fiber.utils.date import friendly_datetime
 
-from views import ApiRoot, MovePageView, MovePageContentItemView, ListView, TreeListView, FileListView, ImageListView, InstanceView
+from .views import ApiRoot, MovePageView, MovePageContentItemView, ListView, TreeListView, FileListView, ImageListView, InstanceView
 
 
 class PageResource(ModelResource):

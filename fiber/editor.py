@@ -1,5 +1,5 @@
-from fiber.app_settings import EDITOR
-from fiber.utils.import_util import import_element
+from .app_settings import EDITOR
+from .utils.import_util import import_element
 
 
 editor = import_element(EDITOR)

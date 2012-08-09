@@ -6,8 +6,8 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 
 from mptt.managers import TreeManager
 
-from fiber import editor
-from fiber.utils.urls import get_named_url_from_quoted_url
+from . import editor
+from .utils.urls import get_named_url_from_quoted_url
 
 
 class ContentItemManager(models.Manager):

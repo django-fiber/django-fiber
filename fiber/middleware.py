@@ -1,5 +1,5 @@
-import re
 import random
+import re
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -7,12 +7,9 @@ from django.template import loader, RequestContext
 from django.utils.encoding import smart_unicode
 from django.utils import simplejson
 
-from utils.import_util import import_element
-
-from app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR
-
-from models import ContentItem
-from models import Page
+from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR
+from .models import ContentItem, Page
+from .utils.import_util import import_element
 
 
 class AdminPageMiddleware(object):

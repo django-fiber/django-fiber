@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.template import Template, Context
 from django.test import TestCase
 
-from models import ContentItem, Page, PageContentItem
+from .models import ContentItem, Page, PageContentItem
 
 
 def format_list(l, must_sort=True, separator=' '):
@@ -477,7 +477,6 @@ class TestTemplateTags(TestCase):
                  '<a href="/">home</a>'
                  '</li>'
                  '</ul>'))
-
 
     def test_show_admin_menu_all(self):
         self.generate_data()

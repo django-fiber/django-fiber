@@ -8,7 +8,7 @@ from djangorestframework.mixins import PaginatorMixin
 from djangorestframework.status import HTTP_400_BAD_REQUEST
 from djangorestframework.response import ErrorResponse
 
-from forms import MovePageForm, MovePageContentItemForm
+from .forms import MovePageForm, MovePageContentItemForm
 
 from fiber.models import Page, PageContentItem
 

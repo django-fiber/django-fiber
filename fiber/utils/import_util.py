@@ -1,5 +1,5 @@
-from django.utils.importlib import import_module
 from django.core import exceptions
+from django.utils.importlib import import_module
 
 
 def import_element(path):
@@ -14,7 +14,7 @@ def import_element(path):
     except ValueError:
         raise exceptions.ImproperlyConfigured('%s isn\'t a valid module' % path)
 
-    module_path, classname = path[:dot], path[dot+1:]
+    module_path, classname = path[:dot], path[dot + 1:]
 
     try:
         module = import_module(module_path)
