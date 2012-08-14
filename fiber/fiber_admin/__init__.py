@@ -1,6 +1,7 @@
+# MPTTModelAdmin is unused, but should stay since its import from here
+# has been referenced in documentation.
 from django.contrib import admin
-
-from options import ModelAdmin
+from .options import ModelAdmin, MPTTModelAdmin
 
 
 class FiberAdminSite(admin.AdminSite):
