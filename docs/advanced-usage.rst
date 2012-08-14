@@ -15,24 +15,24 @@ These settings are optional (default values are shown):
 
     FIBER_LOGIN_STRING = '@fiber'
 
-	FIBER_DEFAULT_TEMPLATE = 'base.html'
-	FIBER_TEMPLATE_CHOICES = []
-	FIBER_CONTENT_TEMPLATE_CHOICES = []
+    FIBER_DEFAULT_TEMPLATE = 'base.html'
+    FIBER_TEMPLATE_CHOICES = []
+    FIBER_CONTENT_TEMPLATE_CHOICES = []
 
-	FIBER_EXCLUDE_URLS = []
+    FIBER_EXCLUDE_URLS = []
 
-	FIBER_IMAGES_DIR = 'uploads/images'
-	FIBER_FILES_DIR = 'uploads/files'
+    FIBER_IMAGES_DIR = 'uploads/images'
+    FIBER_FILES_DIR = 'uploads/files'
 
     FIBER_EDITOR = 'fiber.editor_definitions.ckeditor.EDITOR'
 
     FIBER_PAGE_MANAGER = 'fiber.managers.PageManager'
     FIBER_CONTENT_ITEM_MANAGER = 'fiber.managers.ContentItemManager'
 
-	FIBER_METADATA_PAGE_SCHEMA = {}
-	FIBER_METADATA_CONTENT_SCHEMA = {}
+    FIBER_METADATA_PAGE_SCHEMA = {}
+    FIBER_METADATA_CONTENT_SCHEMA = {}
 
-	COMPRESS = [the opposite of DEBUG]
+    COMPRESS = [the opposite of DEBUG]
 
 
 Set or override fiber_page in the view:
@@ -42,17 +42,17 @@ In this example, the news_item_detail view looks up the Page of the news_item_li
 
 ::
 
-	def news_item_detail(request, news_item_slug):
-	    news_item = get_object_or_404(NewsItem, slug=news_item_slug)
+    def news_item_detail(request, news_item_slug):
+        news_item = get_object_or_404(NewsItem, slug=news_item_slug)
 
-	    fiber_page = Page.objects.get(url__exact='"news_item_list"')
+        fiber_page = Page.objects.get(url__exact='"news_item_list"')
 
-	    t = loader.get_template('news_item_detail.html')
-	    c = RequestContext(request, {
-	        'fiber_page': fiber_page,
-	        'news_item': news_item
-	    })
-	    return HttpResponse(t.render(c))
+        t = loader.get_template('news_item_detail.html')
+        c = RequestContext(request, {
+            'fiber_page': fiber_page,
+            'news_item': news_item
+        })
+        return HttpResponse(t.render(c))
 
 
 Set or override fiber_page in the classed based view:
@@ -61,6 +61,7 @@ Set or override fiber_page in the classed based view:
 In this example, the NewsItemDetailView's context is enriched with fiber_page and fiber_current_pages.
 
 ::
+
     from django.core.urlresolvers import reverse
     from django.views.generic import DetailView
     from fiber.views import FiberPageMixin
@@ -79,12 +80,12 @@ In this example 4 page-templates will be available in the front- and backend-adm
 
 ::
 
-	FIBER_TEMPLATE_CHOICES = (
-		('', 'Default template'),
-		('tpl-home.html', 'Home template'),
-		('tpl-intro.html', 'Intro template'),
-		('tpl-with-sidebar.html', 'With sidebar template'),
-	)
+    FIBER_TEMPLATE_CHOICES = (
+        ('', 'Default template'),
+        ('tpl-home.html', 'Home template'),
+        ('tpl-intro.html', 'Intro template'),
+        ('tpl-with-sidebar.html', 'With sidebar template'),
+    )
 
 The first choice '' will load the FIBER_DEFAULT_TEMPLATE, default this is 'base.html'
 
@@ -93,10 +94,10 @@ In this example 2 content-templates will be available in the front- and backend-
 
 ::
 
-	FIBER_CONTENT_TEMPLATE_CHOICES = (
-		('', 'Default template'),
-		('special-content-template.html', 'Special template'),
-	)
+    FIBER_CONTENT_TEMPLATE_CHOICES = (
+        ('', 'Default template'),
+        ('special-content-template.html', 'Special template'),
+    )
 
 The first choice '' will load the default content-template, this is 'fiber/content_item.html'
 
@@ -108,20 +109,20 @@ In this example metadata (key-value pairs) for pages will be available in the ba
 
 ::
 
-	FIBER_METADATA_PAGE_SCHEMA = {
-		'title': {
-			'widget': 'select',
-			'values': ['option1', 'option2', 'option3',],
-		},
-		'bgcolor': {
-			'widget': 'combobox',
-			'values': ['#ffffff', '#fff000', '#ff00cc'],
-			'prefill_from_db': True,
-		},
-		'description': {
-			'widget': 'textarea',
-		},
-	}
+    FIBER_METADATA_PAGE_SCHEMA = {
+        'title': {
+            'widget': 'select',
+            'values': ['option1', 'option2', 'option3',],
+        },
+        'bgcolor': {
+            'widget': 'combobox',
+            'values': ['#ffffff', '#fff000', '#ff00cc'],
+            'prefill_from_db': True,
+        },
+        'description': {
+            'widget': 'textarea',
+        },
+    }
 
 The first key key is 'title'. Because it has widget 'select' you will have 3 fixed values to choose from.
 
@@ -131,10 +132,10 @@ By setting prefill_from_db to True, the custom values you have chosen will also 
 The third key is 'description'. Because it has widget 'textarea' you can enter the value in a big textarea field.
 
 Available widgets are:
-	select
-	combobox
-	textarea
-	textfield (default widget)
+    select
+    combobox
+    textarea
+    textfield (default widget)
 
 Only the combobox can prefill from the database by setting prefill_from_db = True (default=False)
 
@@ -143,7 +144,7 @@ The same metadata schema is available for metadata for content:
 
 ::
 
-	FIBER_METADATA_CONTENT_SCHEMA
+    FIBER_METADATA_CONTENT_SCHEMA
 
 
 
@@ -154,7 +155,7 @@ Some default CKEditor config settings can be altered by creating a file called a
 
 ::
 
-	appname/static/fiber/js/admin-extra.js
+    appname/static/fiber/js/admin-extra.js
 
 Make sure 'appname' is placed _before_ 'fiber' in settings.INSTALLED_APPS, otherwise the admin-extra.js file won't override the default admin-extra.js provided by Django Fiber.
 
@@ -162,16 +163,16 @@ Something like this should be placed in admin-extra.js:
 
 ::
 
-	window.CKEDITOR_CONFIG_FORMAT_TAGS = 'p;h1;h2;h3;h4';
-	window.CKEDITOR_CONFIG_STYLES_SET = [
-		{ name: 'intro paragraph', element: 'p', attributes: { 'class': 'intro' } }
-	];
+    window.CKEDITOR_CONFIG_FORMAT_TAGS = 'p;h1;h2;h3;h4';
+    window.CKEDITOR_CONFIG_STYLES_SET = [
+        { name: 'intro paragraph', element: 'p', attributes: { 'class': 'intro' } }
+    ];
 
 You can also override the entire CKEditor toolbar, by setting the variable:
 
 ::
 
-	window.CKEDITOR_CONFIG_TOOLBAR
+    window.CKEDITOR_CONFIG_TOOLBAR
 
 To see how this works, check the fiber.ckeditor.js file in the Django Fiber source:
 https://github.com/ridethepony/django-fiber/blob/master/fiber/static/fiber/js/fiber.ckeditor.js
