@@ -23,6 +23,8 @@ CONTENT_ITEM_MANAGER = getattr(settings, 'FIBER_CONTENT_ITEM_MANAGER', 'fiber.ma
 METADATA_PAGE_SCHEMA = getattr(settings, 'FIBER_METADATA_PAGE_SCHEMA', {})
 METADATA_CONTENT_SCHEMA = getattr(settings, 'FIBER_METADATA_CONTENT_SCHEMA', {})
 
+API_RENDER_HTML = getattr(settings, 'API_RENDER_HTML', False)
+
 if 'fiber.middleware.PageFallbackMiddleware' in settings.MIDDLEWARE_CLASSES:
     raise DeprecationWarning( \
         "fiber.middleware.PageFallbackMiddleware has been removed.\n"
