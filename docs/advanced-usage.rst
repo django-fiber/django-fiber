@@ -34,7 +34,7 @@ These settings are optional (default values are shown):
 
     COMPRESS = [the opposite of DEBUG]
 
-    API_RENDER_HTML = False  # If set to true, you must include 'djangorestframework' in installded apps as well
+    API_RENDER_HTML = False  # If set to True, you must include 'djangorestframework' in INSTALLED_APPS as well
 
 
 Set or override fiber_page in the view:
