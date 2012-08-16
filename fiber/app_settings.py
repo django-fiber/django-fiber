@@ -25,6 +25,8 @@ METADATA_CONTENT_SCHEMA = getattr(settings, 'FIBER_METADATA_CONTENT_SCHEMA', {})
 
 API_RENDER_HTML = getattr(settings, 'API_RENDER_HTML', False)
 
+API_PERMISSION_CLASS = getattr(settings, 'API_PERMISSION_CLASS', 'fiber.permissions.PermissionClass')
+
 if 'fiber.middleware.PageFallbackMiddleware' in settings.MIDDLEWARE_CLASSES:
     raise DeprecationWarning( \
         "fiber.middleware.PageFallbackMiddleware has been removed.\n"
