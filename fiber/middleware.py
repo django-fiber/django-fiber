@@ -58,7 +58,7 @@ class AdminPageMiddleware(object):
                                 Page.objects.create_jqtree_data(request.user)
                             ),
                             'content_items_json': simplejson.dumps(
-                                ContentItem.objects.get_content_groups()
+                                ContentItem.objects.get_content_groups(request.user)
                             )
                         })
 

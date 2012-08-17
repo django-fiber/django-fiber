@@ -5,7 +5,7 @@ from djangorestframework.views import View
 from djangorestframework.permissions import IsAuthenticated
 from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 from djangorestframework.mixins import PaginatorMixin
-from djangorestframework.status import HTTP_400_BAD_REQUEST
+from djangorestframework.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
 from djangorestframework.response import ErrorResponse
 from djangorestframework.renderers import JSONRenderer, DocumentingHTMLRenderer
 
@@ -14,11 +14,16 @@ from .forms import MovePageForm, MovePageContentItemForm
 from fiber.app_settings import API_RENDER_HTML, API_PERMISSION_CLASS
 from fiber.utils import class_loader
 
-PERMISSION = class_loader.load_class(API_PERMISSION_CLASS)
+PERMISSIONS = class_loader.load_class(API_PERMISSION_CLASS)
 
 API_RENDERERS = (JSONRenderer, )
 if API_RENDER_HTML:
     API_RENDERERS = (JSONRenderer, DocumentingHTMLRenderer)
+
+_403_FORBIDDEN_RESPONSE = ErrorResponse(
+    HTTP_403_FORBIDDEN,
+    {'detail': 'You do not have permission to access this resource. ' +
+               'You may need to login or otherwise authenticate the request.'})
 
 
 class ApiRoot(View):
@@ -125,9 +130,13 @@ class MovePageView(View):
     form = MovePageForm
 
     def get(self, request, pk):
+        if not PERMISSIONS.can_move_page(self.request.user, Page.objects.get(id=pk)):
+            raise _403_FORBIDDEN_RESPONSE
         return 'Exposes the `Page.move_page` method'
 
     def put(self, request, pk):
+        if not PERMISSIONS.can_move_page(self.request.user, Page.objects.get(id=pk)):
+            raise _403_FORBIDDEN_RESPONSE
         position = self.CONTENT['position']
         target = self.CONTENT['target_node_id']
         page = Page.objects.get(id=pk)

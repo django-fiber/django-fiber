@@ -15,7 +15,7 @@ from .app_settings import API_PERMISSION_CLASS
 
 class ContentItemManager(models.Manager):
 
-    def get_content_groups(self):
+    def get_content_groups(self, user=None):
         """
         Get content groups data which is suitable for jqtree.
 
@@ -24,6 +24,9 @@ class ContentItemManager(models.Manager):
          - unused
          - used once
          - used more than once
+
+         If `user` is provided the tree is filtered and only contentitems that user is allowed to
+        edit are returned.
         """
         unused = []
         once = []
@@ -32,7 +35,13 @@ class ContentItemManager(models.Manager):
 
         today = datetime.date.today()
 
-        for content_item in self.get_query_set().annotate(num_pages=models.Count('page')):
+        queryset = self.get_query_set()
+
+        #  Filter queryset through the permissions class
+        if user:
+            queryset = load_class(API_PERMISSION_CLASS).filter_pages(user, queryset)
+
+        for content_item in queryset.annotate(num_pages=models.Count('page')):
             content_item_info = dict(
                 label=unicode(content_item),
                 id=content_item.id,
