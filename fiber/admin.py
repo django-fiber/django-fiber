@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.admin.util import model_ngettext
 from django.utils.translation import ugettext_lazy as _
 
 from mptt.admin import MPTTModelAdmin
@@ -15,12 +16,46 @@ class FileAdmin(admin.ModelAdmin):
     list_display = ('title', '__unicode__')
     date_hierarchy = 'updated'
     search_fields = ('title', )
+    actions = ['really_delete_selected']
+
+    def get_actions(self, request):
+        actions = super(FileAdmin, self).get_actions(request)
+        del actions['delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
+        return actions
+
+    def really_delete_selected(self, request, queryset):
+        for obj in queryset:
+            obj.delete()
+
+        n = queryset.count()
+        self.message_user(request, _("Successfully deleted %(count)d %(items)s.") % {
+            "count": n, "items": model_ngettext(self.opts, n)
+        })
+
+    really_delete_selected.short_description = _('Delete selected files')
 
 
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('title', '__unicode__')
     date_hierarchy = 'updated'
     search_fields = ('title', )
+    actions = ['really_delete_selected']
+
+    def get_actions(self, request):
+        actions = super(ImageAdmin, self).get_actions(request)
+        del actions['delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
+        return actions
+
+    def really_delete_selected(self, request, queryset):
+        for obj in queryset:
+            obj.delete()
+
+        n = queryset.count()
+        self.message_user(request, _("Successfully deleted %(count)d %(items)s.") % {
+            "count": n, "items": model_ngettext(self.opts, n)
+        })
+
+    really_delete_selected.short_description = _('Delete selected images')
 
 
 class ContentItemAdmin(admin.ModelAdmin):
