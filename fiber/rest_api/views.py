@@ -14,7 +14,7 @@ from .forms import MovePageForm, MovePageContentItemForm
 from fiber.app_settings import API_RENDER_HTML, API_PERMISSION_CLASS
 from fiber.utils import class_loader
 
-PERMISSION_CLASS = class_loader.load_class(API_PERMISSION_CLASS)
+PERMISSION = class_loader.load_class(API_PERMISSION_CLASS)
 
 API_RENDERERS = (JSONRenderer, )
 if API_RENDER_HTML:
@@ -48,7 +48,7 @@ class ListView(ListOrCreateModelView):
 class TreeListView(View):
 
     def get(self, request):
-        return  Page.objects.create_jqtree_data()
+        return  Page.objects.create_jqtree_data(request.user)
 
 
 class PaginatedListView(PaginatorMixin, ListView):

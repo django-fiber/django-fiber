@@ -3,7 +3,7 @@ Module that provides a base Permission class. This class may be overridden by ch
 """
 
 
-class PermissionClass(object):
+class Permissions(object):
     """
     This class defines the methods that a Permission class must implement.
 
@@ -12,7 +12,7 @@ class PermissionClass(object):
 
     def filter_pages(self, user, qs):
         """
-        Should only return those pages which user is allowed to edit.
+        Should only return those pages which `user` is allowed to edit.
         """
         return qs
 
@@ -45,5 +45,4 @@ class PermissionClass(object):
 
     def can_move_page_content_item(self, user, page_content_item):
         return True
-
 

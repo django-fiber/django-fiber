@@ -55,7 +55,7 @@ class AdminPageMiddleware(object):
                         c = RequestContext(request, {
                             'logout_url': self.get_logout_url(request),
                             'pages_json': simplejson.dumps(
-                                Page.objects.create_jqtree_data()
+                                Page.objects.create_jqtree_data(request.user)
                             ),
                             'content_items_json': simplejson.dumps(
                                 ContentItem.objects.get_content_groups()

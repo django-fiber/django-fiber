@@ -9,6 +9,9 @@ from mptt.managers import TreeManager
 from . import editor
 from .utils.urls import get_named_url_from_quoted_url
 
+from .utils.class_loader import load_class
+from .app_settings import API_PERMISSION_CLASS
+
 
 class ContentItemManager(models.Manager):
 
@@ -173,9 +176,12 @@ class PageManager(TreeManager):
             if get_named_url_from_quoted_url(page.url) == url:
                 return page
 
-    def create_jqtree_data(self):
+    def create_jqtree_data(self, user=None):
         """
         Create a page tree suitable for the jqtree. The result is a recursive list of dicts.
+
+        If `user` is provided the tree is filtered and only pages that user is allowed to
+        edit are returned.
 
         Example:
             [
@@ -195,6 +201,10 @@ class PageManager(TreeManager):
 
         # The queryset contains all pages in correct order
         queryset = self.model.tree.get_query_set()
+
+        #  Filter queryset through the permissions class
+        if user:
+            queryset = load_class(API_PERMISSION_CLASS).filter_pages(user, queryset)
 
         for page in queryset:
             page_info = dict(
@@ -227,5 +237,4 @@ class PageManager(TreeManager):
                 parent_info['children'].append(page_info)
 
             page_dict[page.id] = page_info
-
         return data
