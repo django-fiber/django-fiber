@@ -7,7 +7,7 @@ class Permissions(object):
     """
     This class defines the methods that a Permission class must implement.
 
-    By default all permissions are granted.
+    By default all permissions are granted to a superuser.
     """
 
     def filter_pages(self, user, qs):
