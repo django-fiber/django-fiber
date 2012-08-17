@@ -295,6 +295,11 @@ class Image(models.Model):
         return self.image.name
 
     def save(self, *args, **kwargs):
+        # delete existing Image(s) with the same image.name - TODO: warn about this?
+        existing_images = Image.objects.filter(image=os.path.join(IMAGES_DIR, self.image.name))
+        for existing_image in existing_images:
+            existing_image.delete()
+
         self.get_image_information()
         super(Image, self).save(*args, **kwargs)
 
@@ -319,6 +324,14 @@ class File(models.Model):
 
     def __unicode__(self):
         return self.file.name
+
+    def save(self, *args, **kwargs):
+        # delete existing File(s) with the same file.name - TODO: warn about this?
+        existing_files = File.objects.filter(file=os.path.join(FILES_DIR, self.file.name))
+        for existing_file in existing_files:
+            existing_file.delete()
+
+        super(File, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         os.remove(os.path.join(settings.MEDIA_ROOT, str(self.file)))
