@@ -239,7 +239,7 @@ class PageManager(TreeManager):
                 # root node
                 data.append(page_info)
             else:
-                parent_info = page_dict.get(page.parent_id)
+                parent_info = page_dict.get(page.parent_id, {})
                 if not 'children' in parent_info:
                     parent_info['children'] = []
 
