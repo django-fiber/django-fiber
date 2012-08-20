@@ -2146,6 +2146,10 @@ Fiber.FiberItem = Class.extend({
 	on_contextmenu: function(e) {
 		e.preventDefault();
 		e.stopPropagation();
+		console.log(this);
+		if (!this.element_data.can_edit) {
+			return;
+		}
 
 		// remove other visible context menus
 		$(document.body).find('.ui-context-menu').remove();

@@ -11,9 +11,7 @@
 			{% if not node.show_in_menu %} hidden-in-menu{% endif %}{% if not node.is_public %} not-public{% endif %}{% if node.redirect_page %} redirect{% endif %}
 		{% endif %}">
 			<a href="{{ node.get_absolute_url }}"
-			{% if node|can_edit:user %}
-			 	data-fiber-data='{"type": "page", "id": {{ node.id }}, "parent_id": {{ node.parent.id }}, "url": "{{ node.get_change_url }}", "add_url": "{{ Page.get_add_url }}"}'
-			 {% endif %}>{{ node.title }}</a>
+			 	data-fiber-data='{ {% if node|can_edit:user %}"can_edit":true, {% endif %}"type": "page", "id": {{ node.id }}, "parent_id": {{ node.parent.id }}, "url": "{{ node.get_change_url }}", "add_url": "{{ Page.get_add_url }}"}'>{{ node.title }}</a>
 			{% if children %}
 				<ul 
 				{% if node|can_edit:user %}data-fiber-data='{"type": "page", "add_url": "{{ Page.get_add_url }}", "parent_id": {{ node.id }}}'{% endif %}>
