@@ -10,6 +10,8 @@ from . import fiber_admin
 from .app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES
 from .editor import get_editor_field_name
 from .models import Page, ContentItem, PageContentItem, Image, File
+from .utils.class_loader import load_class
+from .app_settings import API_PERMISSION_CLASS
 
 
 class FileAdmin(admin.ModelAdmin):
@@ -143,6 +145,11 @@ class FiberAdminContentItemAdmin(fiber_admin.ModelAdmin):
                 (None, {'classes': ('hide-label',), 'fields': (get_editor_field_name('content_html'), 'template_name', )}),
             )
 
+    def save_model(self, request, obj, form, change):
+        # workaround because not all ajax calls go through the api yet
+        super(FiberAdminContentItemAdmin, self).save_model(request, obj, form, change)
+        load_class(API_PERMISSION_CLASS).object_created(request.user, obj)
+
 
 class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):
 
@@ -175,6 +182,8 @@ class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):
 
         super(FiberAdminPageAdmin, self).save_model(request, obj, form, change)
 
+        # workaround because not all ajax calls go through the api yet
+        load_class(API_PERMISSION_CLASS).object_created(request.user, obj)
 
 admin.site.register(ContentItem, ContentItemAdmin)
 admin.site.register(Image, ImageAdmin)
