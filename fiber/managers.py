@@ -212,13 +212,15 @@ class PageManager(TreeManager):
         queryset = self.model.tree.get_query_set()
 
         #  Filter queryset through the permissions class
+        editables_queryset = []
         if user:
-            queryset = load_class(API_PERMISSION_CLASS).filter_objects(user, queryset)
+            editables_queryset = load_class(API_PERMISSION_CLASS).filter_objects(user, queryset)
 
         for page in queryset:
             page_info = dict(
                 label=page.title,
                 id=page.id,
+                editable=page in editables_queryset
             )
 
             url = page.get_absolute_url()

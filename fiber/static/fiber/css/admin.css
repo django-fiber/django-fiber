@@ -727,6 +727,11 @@ ul.tree .moving > div .title {
 	outline: 1px dashed #666;
 }
 
+/* permissions-related styling */
+#df-wpr-sidebar .sidebar-tree .not-editable .title {
+	color: #f00;
+}
+
 /* page selection tree in dialog */
 .ui-dialog-content ul.tree {
 	margin-left: 20px;

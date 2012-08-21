@@ -1421,11 +1421,15 @@ var adminPage = {
 				if (node.is_redirect) {
 					$div.addClass('redirect');
 				}
+
+				if (!node.editable) {
+					$div.addClass('not-editable');
+				}
 			}
 		}
 
 		function canMove(node) {
-			if (node.url) {
+			if (node.url && node.editable) {
 				return true;
 			}
 			else {
@@ -1435,6 +1439,9 @@ var adminPage = {
 		}
 
 		function canMoveTo(moved_node, target_node, position) {
+			if (!target_node.editable) {
+				return false;
+			}
 			if (!target_node.url) {
 				// can move inside menu, not before or after
 				return (position == 'inside');
@@ -1511,6 +1518,9 @@ var adminPage = {
 		$(document.body).find('.ui-context-menu').remove();
 
 		var node = e.node;
+		if (!node.editable){
+			return;
+		}
 
 		var contextmenu = $('<ul class="ui-context-menu"></ul>');
 

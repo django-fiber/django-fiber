@@ -7,7 +7,7 @@ class Permissions(object):
     """
     This class defines the methods that a Permission class may implement.
 
-    By default all permissions are granted to a superuser.
+    By default all permissions are granted to a staffuser.
     """
 
     def filter_objects(self, user, qs):
@@ -16,12 +16,21 @@ class Permissions(object):
         """
         return qs
 
-    def can_edit_page(self, user, page):
+    def can_edit(self, user, obj):
         """
-        True if user is allowed to edit the Page instance.
+        True if user is allowed to edit `obj`.
         """
         return True
 
     def can_move_page(self, user, page):
+        """
+        True if user is allowed to move page.
+        """
         return True
+
+    def object_created(self, user, obj):
+        """
+        Called whenever a new instance has been created of one of Fiber's models.
+        """
+        pass
 
