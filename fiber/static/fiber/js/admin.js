@@ -1904,6 +1904,9 @@ Fiber.FiberItem = Class.extend({
 	},
 
 	show_admin_element: function() {
+		if (!this.element_data.can_edit) {
+			return;
+		}
 		if (!this.button) {
 			this.create_button();
 		}
@@ -2156,7 +2159,6 @@ Fiber.FiberItem = Class.extend({
 	on_contextmenu: function(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		console.log(this);
 		if (!this.element_data.can_edit) {
 			return;
 		}
