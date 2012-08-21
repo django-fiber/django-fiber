@@ -134,6 +134,11 @@ class InstanceView(InstanceModelView):
     permissions = (IsAuthenticated, )
     renderers = API_RENDERERS
 
+    def delete(self, request, pk):
+        if not PERMISSIONS.can_edit(self.request.user, self.resource.model.objects.get(id=pk)):
+            raise _403_FORBIDDEN_RESPONSE
+        super(InstanceView, self).delete(request, id=pk)
+
 
 class MovePageView(View):
 
@@ -164,12 +169,12 @@ class MovePageContentItemView(View):
     form = MovePageContentItemForm
 
     def get(self, request, pk):
-        if not PERMISSIONS.can_edit_page(self.request.user, Page.objects.get(page_content_items__id=pk)):
+        if not PERMISSIONS.can_edit(self.request.user, Page.objects.get(page_content_items__id=pk)):
             raise _403_FORBIDDEN_RESPONSE
         return 'Exposes the `PageContentItem.move` method'
 
     def put(self, request, pk):
-        if not PERMISSIONS.can_edit_page(self.request.user, Page.objects.get(page_content_items__id=pk)):
+        if not PERMISSIONS.can_edit(self.request.user, Page.objects.get(page_content_items__id=pk)):
             raise _403_FORBIDDEN_RESPONSE
         page_content_item = PageContentItem.objects.get(id=pk)
         before_page_content_item_id = self.CONTENT.get('before_page_content_item_id', None)
