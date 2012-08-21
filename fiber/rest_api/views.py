@@ -49,11 +49,20 @@ class ListView(ListOrCreateModelView):
     permissions = (IsAuthenticated, )
     renderers = API_RENDERERS
 
+    def post(self, request, *args, **kwargs):
+        response = super(ListView, self).post(request, *args, **kwargs)
+        PERMISSIONS.object_created(request.user, response.raw_content)  # raw_content is the Model instance
+        return response
+
 
 class TreeListView(View):
 
     def get(self, request):
         return  Page.objects.create_jqtree_data(request.user)
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(PaginatedListView, self).get_queryset(*args, **kwargs)
+        return PERMISSIONS.filter_objects(self.request.user, qs)
 
 
 class PaginatedListView(PaginatorMixin, ListView):
@@ -63,6 +72,10 @@ class PaginatedListView(PaginatorMixin, ListView):
     def check_fields(self, order_by):
         if order_by not in self.orderable_fields:
             raise ErrorResponse(status=HTTP_400_BAD_REQUEST, content="Can not order by the passed value.")
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(PaginatedListView, self).get_queryset(*args, **kwargs)
+        return PERMISSIONS.filter_objects(self.request.user, qs)
 
 
 class FileListView(PaginatedListView):
@@ -151,9 +164,13 @@ class MovePageContentItemView(View):
     form = MovePageContentItemForm
 
     def get(self, request, pk):
-        return 'Exposes the `ContentItem.move` method'
+        if not PERMISSIONS.can_edit_page(self.request.user, Page.objects.get(page_content_items__id=pk)):
+            raise _403_FORBIDDEN_RESPONSE
+        return 'Exposes the `PageContentItem.move` method'
 
     def put(self, request, pk):
+        if not PERMISSIONS.can_edit_page(self.request.user, Page.objects.get(page_content_items__id=pk)):
+            raise _403_FORBIDDEN_RESPONSE
         page_content_item = PageContentItem.objects.get(id=pk)
         before_page_content_item_id = self.CONTENT.get('before_page_content_item_id', None)
         block_name = self.CONTENT.get('block_name', None)

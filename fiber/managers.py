@@ -39,7 +39,7 @@ class ContentItemManager(models.Manager):
 
         #  Filter queryset through the permissions class
         if user:
-            queryset = load_class(API_PERMISSION_CLASS).filter_pages(user, queryset)
+            queryset = load_class(API_PERMISSION_CLASS).filter_objects(user, queryset)
 
         for content_item in queryset.annotate(num_pages=models.Count('page')):
             content_item_info = dict(
@@ -213,7 +213,7 @@ class PageManager(TreeManager):
 
         #  Filter queryset through the permissions class
         if user:
-            queryset = load_class(API_PERMISSION_CLASS).filter_pages(user, queryset)
+            queryset = load_class(API_PERMISSION_CLASS).filter_objects(user, queryset)
 
         for page in queryset:
             page_info = dict(

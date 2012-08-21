@@ -10,7 +10,7 @@ class Permissions(object):
     By default all permissions are granted to a superuser.
     """
 
-    def filter_pages(self, user, qs):
+    def filter_objects(self, user, qs):
         """
         Should only return those pages which `user` is allowed to edit.
         """
