@@ -728,6 +728,7 @@ ul.tree .moving > div .title {
 }
 
 /* permissions-related styling */
+.ui-dialog .not-editable,
 #df-wpr-sidebar .sidebar-tree .not-editable .title {
 	color: #f00;
 }

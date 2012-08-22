@@ -73,10 +73,6 @@ class PaginatedListView(PaginatorMixin, ListView):
         if order_by not in self.orderable_fields:
             raise ErrorResponse(status=HTTP_400_BAD_REQUEST, content="Can not order by the passed value.")
 
-    def get_queryset(self, *args, **kwargs):
-        qs = super(PaginatedListView, self).get_queryset(*args, **kwargs)
-        return PERMISSIONS.filter_objects(self.request.user, qs)
-
     def serialize_page_info(self, page):
         """
         Override Django REST Framework's method
@@ -98,7 +94,7 @@ class FileListView(PaginatedListView):
 
     def get_queryset(self, *args, **kwargs):
         qs = super(FileListView, self).get_queryset(*args, **kwargs)
-
+        qs = PERMISSIONS.filter_files(self.request.user, qs)
         search = self.request.GET.get('search', None)
         if search:
             qs = qs.filter(file__icontains=search)
@@ -122,7 +118,7 @@ class ImageListView(PaginatedListView):
 
     def get_queryset(self, *args, **kwargs):
         qs = super(ImageListView, self).get_queryset(*args, **kwargs)
-
+        qs = PERMISSIONS.filter_images(self.request.user, qs)
         search = self.request.GET.get('search', None)
         if search:
             # TODO: image_icontains searches in the entire path, it should only search in the filename (use iregex for this?)

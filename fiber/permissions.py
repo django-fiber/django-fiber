@@ -34,3 +34,8 @@ class Permissions(object):
         """
         pass
 
+    def filter_images(self, user, qs):
+        return qs
+
+    def filter_files(self, user, qs):
+        return qs

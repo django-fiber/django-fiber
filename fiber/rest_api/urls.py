@@ -12,8 +12,13 @@ from djangorestframework.resources import ModelResource
 
 from fiber.models import Page, PageContentItem, ContentItem, Image, File
 from fiber.utils.date import friendly_datetime
+from fiber.app_settings import API_PERMISSION_CLASS
+from fiber.utils import class_loader
+
 
 from .views import ApiRoot, MovePageView, MovePageContentItemView, ListView, TreeListView, FileListView, ImageListView, InstanceView
+
+PERMISSIONS = class_loader.load_class(API_PERMISSION_CLASS)
 
 
 class PageResource(ModelResource):
@@ -66,7 +71,10 @@ class FileResource(ModelResource):
     def updated(self, instance):
         return friendly_datetime(instance.updated)
 
-    include = ('url', 'file_url', 'filename', 'updated')
+    def can_edit(self, instance):
+        return PERMISSIONS.can_edit(self.view.user, instance)
+
+    include = ('url', 'file_url', 'filename', 'updated', 'can_edit')
 
 
 class ImageResource(FileResource):
@@ -81,7 +89,10 @@ class ImageResource(FileResource):
     def size(self, instance):
         return '%s x %d' % (instance.width, instance.height)
 
-    include = ('url', 'image_url', 'filename', 'size', 'updated')
+    def can_edit(self, instance):
+        return PERMISSIONS.can_edit(self.view.user, instance)
+
+    include = ('url', 'image_url', 'filename', 'size', 'updated', 'can_edit')
 
 
 urlpatterns = patterns('',
