@@ -180,6 +180,8 @@ To see how this works, check the fiber.ckeditor.js file in the Django Fiber sour
 https://github.com/ridethepony/django-fiber/blob/master/fiber/static/fiber/js/fiber.ckeditor.js
 
 
+.. _advanced_usage_custom_permissions:
+
 Custom permissions
 ==================
 

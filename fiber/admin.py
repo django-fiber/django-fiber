@@ -146,6 +146,9 @@ class FiberAdminContentItemAdmin(fiber_admin.ModelAdmin):
             )
 
     def save_model(self, request, obj, form, change):
+        """
+        Notifies the PERMIISSION_CLASS that a ContentItem was created by `user`.
+        """
         # workaround because not all ajax calls go through the api yet
         super(FiberAdminContentItemAdmin, self).save_model(request, obj, form, change)
         load_class(PERMISSION_CLASS).object_created(request.user, obj)
@@ -171,6 +174,10 @@ class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):
             )
 
     def save_model(self, request, obj, form, change):
+        """
+        - Optionally positions a Page `obj` before or beneath another page, based on POST data.
+        - Notifies the PERMIISSION_CLASS that a Page was created by `user`.
+        """
         if 'before_page_id' in request.POST:
             before_page = Page.objects.get(pk=int(request.POST['before_page_id']))
             obj.parent = before_page.parent

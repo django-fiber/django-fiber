@@ -17,6 +17,7 @@ Contents
    usage
    advanced-usage
    contributors
+   settings
 
    library
 
