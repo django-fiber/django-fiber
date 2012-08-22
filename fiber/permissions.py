@@ -1,5 +1,5 @@
 """
-Module that provides a base Permission class. This class may be overridden by changinng the `API_PERMISSION_CLASS` value in the settings module.
+Module that provides a base Permission class. This class may be overridden by changinng the `PERMISSION_CLASS` value in the settings module.
 """
 
 

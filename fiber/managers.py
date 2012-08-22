@@ -10,7 +10,7 @@ from . import editor
 from .utils.urls import get_named_url_from_quoted_url
 
 from .utils.class_loader import load_class
-from .app_settings import API_PERMISSION_CLASS
+from .app_settings import PERMISSION_CLASS
 
 
 class ContentItemManager(models.Manager):
@@ -39,7 +39,7 @@ class ContentItemManager(models.Manager):
 
         #  Filter queryset through the permissions class
         if user:
-            queryset = load_class(API_PERMISSION_CLASS).filter_objects(user, queryset)
+            queryset = load_class(PERMISSION_CLASS).filter_objects(user, queryset)
 
         for content_item in queryset.annotate(num_pages=models.Count('page')):
             content_item_info = dict(
@@ -214,7 +214,7 @@ class PageManager(TreeManager):
         #  Filter queryset through the permissions class
         editables_queryset = []
         if user:
-            editables_queryset = load_class(API_PERMISSION_CLASS).filter_objects(user, queryset)
+            editables_queryset = load_class(PERMISSION_CLASS).filter_objects(user, queryset)
 
         for page in queryset:
             page_info = dict(

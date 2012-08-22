@@ -12,13 +12,13 @@ from djangorestframework.resources import ModelResource
 
 from fiber.models import Page, PageContentItem, ContentItem, Image, File
 from fiber.utils.date import friendly_datetime
-from fiber.app_settings import API_PERMISSION_CLASS
+from fiber.app_settings import PERMISSION_CLASS
 from fiber.utils import class_loader
 
 
 from .views import ApiRoot, MovePageView, MovePageContentItemView, ListView, TreeListView, FileListView, ImageListView, InstanceView
 
-PERMISSIONS = class_loader.load_class(API_PERMISSION_CLASS)
+PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
 
 
 class PageResource(ModelResource):

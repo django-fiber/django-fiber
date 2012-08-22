@@ -10,11 +10,11 @@ from djangorestframework.response import ErrorResponse
 from djangorestframework.renderers import JSONRenderer, DocumentingHTMLRenderer
 
 from fiber.models import Page, PageContentItem
-from .forms import MovePageForm, MovePageContentItemForm
-from fiber.app_settings import API_RENDER_HTML, API_PERMISSION_CLASS
+from fiber.app_settings import API_RENDER_HTML, PERMISSION_CLASS
 from fiber.utils import class_loader
+from .forms import MovePageForm, MovePageContentItemForm
 
-PERMISSIONS = class_loader.load_class(API_PERMISSION_CLASS)
+PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
 
 API_RENDERERS = (JSONRenderer, )
 if API_RENDER_HTML:
