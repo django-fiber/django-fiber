@@ -88,8 +88,9 @@ class PaginatedListView(PaginatorMixin, ListView):
         Simpledatagrid expects rows instead of results, which is DRF default.
         """
         obj = super(PaginatedListView, self).filter_response(obj)
-        obj['rows'] = obj['results']
-        obj.pop('results')
+        if self.request.method.upper() == 'GET':
+            obj['rows'] = obj['results']
+            obj.pop('results')
         return obj
 
 
