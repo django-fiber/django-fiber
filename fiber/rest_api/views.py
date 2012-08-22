@@ -77,6 +77,20 @@ class PaginatedListView(PaginatorMixin, ListView):
         qs = super(PaginatedListView, self).get_queryset(*args, **kwargs)
         return PERMISSIONS.filter_objects(self.request.user, qs)
 
+    def serialize_page_info(self, page):
+        """
+        Override Django REST Framework's method
+        """
+        return {
+            'total_pages': page.paginator.num_pages,
+        }
+
+    def filter_response(self, obj):
+        obj = super(PaginatedListView, self).filter_response(obj)
+        obj['rows'] = obj['results']  # simpledatagrid expect rows
+        obj.pop('results')
+        return obj
+
 
 class FileListView(PaginatedListView):
 
