@@ -13,29 +13,37 @@ class Permissions(object):
     def filter_objects(self, user, qs):
         """
         Should only return those objects which `user` is allowed to edit.
+        `qs` can consist of type `Page` or `ContentItem`.
+        """
+        return qs
+
+    def filter_images(self, user, qs):
+        """
+        Called by api while listing images.
+        """
+        return qs
+
+    def filter_files(self, user, qs):
+        """
+        Called by api while listing files.
         """
         return qs
 
     def can_edit(self, user, obj):
         """
-        True if user is allowed to edit `obj`.
+        Should return :const:`True` if user is allowed to edit `obj`.
         """
         return True
 
     def can_move_page(self, user, page):
         """
-        True if user is allowed to move page.
+        Should return :const:`True` if user is allowed to move page.
         """
         return True
 
     def object_created(self, user, obj):
         """
-        Called whenever a new instance has been created of one of Fiber's models.
+        Called whenever a new instance has been created of one of Fiber's models by `user`.
         """
         pass
 
-    def filter_images(self, user, qs):
-        return qs
-
-    def filter_files(self, user, qs):
-        return qs
