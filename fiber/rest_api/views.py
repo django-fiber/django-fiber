@@ -50,6 +50,9 @@ class ListView(ListOrCreateModelView):
     renderers = API_RENDERERS
 
     def post(self, request, *args, **kwargs):
+        """
+        Notify the permissions class of a newly created object.
+        """
         response = super(ListView, self).post(request, *args, **kwargs)
         PERMISSIONS.object_created(request.user, response.raw_content)  # raw_content is the Model instance
         return response
@@ -58,11 +61,10 @@ class ListView(ListOrCreateModelView):
 class TreeListView(View):
 
     def get(self, request):
+        """
+        Provide JqTree data for the PageSelect dialog.
+        """
         return  Page.objects.create_jqtree_data(request.user)
-
-    def get_queryset(self, *args, **kwargs):
-        qs = super(PaginatedListView, self).get_queryset(*args, **kwargs)
-        return PERMISSIONS.filter_objects(self.request.user, qs)
 
 
 class PaginatedListView(PaginatorMixin, ListView):
@@ -75,15 +77,18 @@ class PaginatedListView(PaginatorMixin, ListView):
 
     def serialize_page_info(self, page):
         """
-        Override Django REST Framework's method
+        Simpledatagrid expects a total_pages key for a paginated view.
         """
         return {
             'total_pages': page.paginator.num_pages,
         }
 
     def filter_response(self, obj):
+        """
+        Simpledatagrid expects rows instead of results, which is DRF default.
+        """
         obj = super(PaginatedListView, self).filter_response(obj)
-        obj['rows'] = obj['results']  # simpledatagrid expect rows
+        obj['rows'] = obj['results']
         obj.pop('results')
         return obj
 
