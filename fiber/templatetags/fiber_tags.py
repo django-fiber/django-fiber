@@ -6,6 +6,10 @@ from django.utils import simplejson
 from fiber.models import Page, ContentItem
 
 from fiber.utils.urls import get_admin_change_url
+from fiber.app_settings import PERMISSION_CLASS
+from fiber.utils import class_loader
+
+PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
 
 register = template.Library()
 
@@ -243,3 +247,13 @@ def escape_json_for_html(value):
     Escapes valid JSON for use in HTML, e.g. convert single quote to HTML character entity
     """
     return value.replace("'", "&#39;")
+
+
+@register.filter
+def can_edit(obj, user):
+    if user.is_superuser:
+        return True
+    if isinstance(obj, ContentItem):
+        return PERMISSIONS.can_edit(user, obj)
+    elif isinstance(obj, Page):
+        return PERMISSIONS.can_edit(user, obj)

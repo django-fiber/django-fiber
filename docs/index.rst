@@ -16,8 +16,10 @@ Contents
    
    usage
    advanced-usage
-   INSTALL-Django-1.2.x 
    contributors
+   settings
+
+   library
 
 Indices and tables
 ==================

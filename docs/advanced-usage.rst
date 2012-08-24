@@ -178,3 +178,17 @@ You can also override the entire CKEditor toolbar, by setting the variable:
 
 To see how this works, check the fiber.ckeditor.js file in the Django Fiber source:
 https://github.com/ridethepony/django-fiber/blob/master/fiber/static/fiber/js/fiber.ckeditor.js
+
+
+.. _advanced_usage_custom_permissions:
+
+Custom permissions
+==================
+
+Fiber provides a :mod:`fiber.permissions` module. The Permission class defined here can be overridden by writing a custom 
+permission class and pointing `PERMISSION_CLASS` in your settings module to that class.
+
+Here's an example module that implements object level permissions:
+
+.. literalinclude:: code-examples/permission_class.py
+

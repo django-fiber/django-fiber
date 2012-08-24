@@ -9,10 +9,13 @@ from mptt.managers import TreeManager
 from . import editor
 from .utils.urls import get_named_url_from_quoted_url
 
+from .utils.class_loader import load_class
+from .app_settings import PERMISSION_CLASS
+
 
 class ContentItemManager(models.Manager):
 
-    def get_content_groups(self):
+    def get_content_groups(self, user=None):
         """
         Get content groups data which is suitable for jqtree.
 
@@ -21,6 +24,9 @@ class ContentItemManager(models.Manager):
          - unused
          - used once
          - used more than once
+
+         If `user` is provided the tree is filtered and only contentitems that user is allowed to
+        edit are returned.
         """
         unused = []
         once = []
@@ -29,7 +35,13 @@ class ContentItemManager(models.Manager):
 
         today = datetime.date.today()
 
-        for content_item in self.get_query_set().annotate(num_pages=models.Count('page')):
+        queryset = self.get_query_set()
+
+        #  Filter queryset through the permissions class
+        if user:
+            queryset = load_class(PERMISSION_CLASS).filter_objects(user, queryset)
+
+        for content_item in queryset.annotate(num_pages=models.Count('page')):
             content_item_info = dict(
                 label=unicode(content_item),
                 id=content_item.id,
@@ -173,9 +185,12 @@ class PageManager(TreeManager):
             if get_named_url_from_quoted_url(page.url) == url:
                 return page
 
-    def create_jqtree_data(self):
+    def create_jqtree_data(self, user=None):
         """
         Create a page tree suitable for the jqtree. The result is a recursive list of dicts.
+
+        If `user` is provided the tree is filtered and only pages that user is allowed to
+        edit are returned.
 
         Example:
             [
@@ -196,10 +211,16 @@ class PageManager(TreeManager):
         # The queryset contains all pages in correct order
         queryset = self.model.tree.get_query_set()
 
+        #  Filter queryset through the permissions class
+        editables_queryset = []
+        if user:
+            editables_queryset = load_class(PERMISSION_CLASS).filter_objects(user, queryset)
+
         for page in queryset:
             page_info = dict(
                 label=page.title,
                 id=page.id,
+                editable=page in editables_queryset
             )
 
             url = page.get_absolute_url()
@@ -220,12 +241,11 @@ class PageManager(TreeManager):
                 # root node
                 data.append(page_info)
             else:
-                parent_info = page_dict.get(page.parent_id)
+                parent_info = page_dict.get(page.parent_id, {})
                 if not 'children' in parent_info:
                     parent_info['children'] = []
 
                 parent_info['children'].append(page_info)
 
             page_dict[page.id] = page_info
-
         return data

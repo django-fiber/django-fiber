@@ -202,7 +202,6 @@ class Page(MPTTModel):
     def move_page(self, target_id, position):
         """
         Moves the node. Parameters:
-        - page_id: the page to move
         - target_id: target page
         - position:
             - before: move the page before the target page
