@@ -376,6 +376,18 @@ div.ui-dialog form h2 {
 	width: 734px;
 }
 
+/* .cke_chrome and .cke_inner selectors are for CKEditor 4.0 Beta */
+
+.ui-dialog .hide-label .cke_chrome {
+	float: none;
+	padding: 0;
+	border: none;
+}
+
+.ui-dialog .hide-label .cke_inner {
+	border-radius: 0;
+}
+
 .ui-dialog .ui-dialog-buttonpane {
 	margin-top: 0;
 	padding: 0;
