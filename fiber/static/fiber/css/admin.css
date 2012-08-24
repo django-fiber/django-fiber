@@ -725,7 +725,6 @@ ul.tree .toggler.closed {
 .ui-dialog-content ul.tree div.page.non-editable:hover,
 #df-wpr-sidebar ul.tree div.page.non-editable:hover {
 	background: none;
-	cursor:	default;
 }
 
 #df-wpr-sidebar ul.tree .moving > div .title,
