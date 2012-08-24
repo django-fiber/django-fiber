@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to django-fiber's documentation!
-========================================
+Welcome to django-fiber's documentation
+=======================================
 
 This is the documentation project for django-fiber.
 
@@ -13,7 +13,7 @@ Contents
 
 .. toctree::
    :maxdepth: 2
-   
+
    usage
    advanced-usage
    contributors

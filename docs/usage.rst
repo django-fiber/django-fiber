@@ -3,8 +3,8 @@ Usage
 =====
 
 
-Usage instructions:
-===================
+Usage instructions
+==================
 
 
 Page tree

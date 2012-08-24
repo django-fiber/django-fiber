@@ -2,4 +2,4 @@
 Contributors
 ============
 
-.. literalinclude:: authors
+.. literalinclude:: contributors.txt

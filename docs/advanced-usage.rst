@@ -6,8 +6,8 @@ Advanced usage
 This document is used to gather more advanced usage examples.
 
 
-Optional settings:
-==================
+Optional settings
+=================
 
 These settings are optional (default values are shown):
 
@@ -37,8 +37,8 @@ These settings are optional (default values are shown):
     API_RENDER_HTML = False  # If set to True, you must include 'djangorestframework' in INSTALLED_APPS as well
 
 
-Set or override fiber_page in the view:
-=======================================
+Set or override fiber_page in the view
+======================================
 
 In this example, the news_item_detail view looks up the Page of the news_item_list by looking up its named URL. This way, you can reuse the content you have placed on the news_item_list Page for each news_item_detail Page.
 
@@ -57,8 +57,8 @@ In this example, the news_item_detail view looks up the Page of the news_item_li
         return HttpResponse(t.render(c))
 
 
-Set or override fiber_page in the classed based view:
-=====================================================
+Set or override fiber_page in the classed based view
+====================================================
 
 In this example, the NewsItemDetailView's context is enriched with fiber_page and fiber_current_pages.
 
@@ -75,8 +75,8 @@ In this example, the NewsItemDetailView's context is enriched with fiber_page an
             return reverse('news_item_list')
 
 
-Templates:
-==========
+Templates
+=========
 
 In this example 4 page-templates will be available in the front- and backend-admin:
 
@@ -104,8 +104,8 @@ In this example 2 content-templates will be available in the front- and backend-
 The first choice '' will load the default content-template, this is 'fiber/content_item.html'
 
 
-Metadata:
-=========
+Metadata
+========
 
 In this example metadata (key-value pairs) for pages will be available in the backend-admin:
 
@@ -185,7 +185,7 @@ https://github.com/ridethepony/django-fiber/blob/master/fiber/static/fiber/js/fi
 Custom permissions
 ==================
 
-Fiber provides a :mod:`fiber.permissions` module. The Permission class defined here can be overridden by writing a custom 
+Fiber provides a :mod:`fiber.permissions` module. The Permission class defined here can be overridden by writing a custom
 permission class and pointing `PERMISSION_CLASS` in your settings module to that class.
 
 Here's an example module that implements object level permissions:
