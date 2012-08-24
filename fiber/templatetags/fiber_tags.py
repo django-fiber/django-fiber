@@ -251,9 +251,4 @@ def escape_json_for_html(value):
 
 @register.filter
 def can_edit(obj, user):
-    if user.is_superuser:
-        return True
-    if isinstance(obj, ContentItem):
-        return PERMISSIONS.can_edit(user, obj)
-    elif isinstance(obj, Page):
-        return PERMISSIONS.can_edit(user, obj)
+    return PERMISSIONS.can_edit(user, obj)

@@ -632,7 +632,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 	uneditables_formatter: function(value, row_data) {
 		if (!row_data.can_edit) {
-			return '<span class="not-editable">' + value + '</span>';
+			return '<span class="non-editable">' + value + '</span>';
 		}
 			return value;
 	},
@@ -795,7 +795,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 			// TODO: use image checksum for cache busting?
 			return '<span style="display: none;">' + row_data.image_url + '</span>' + '<img src="' + row_data.image_url + '?_c=' + encodeURIComponent(row_data.url) + '" title="' + row_data.title + '"/>';
 		}
-		
+
 		this.select_grid.simple_datagrid({
 			columns: [
 				{title: gettext('Image'), key: 'image', on_generate: thumbnail_formatter},
@@ -1427,7 +1427,7 @@ var adminPage = {
 				}
 
 				if (!node.is_public) {
-					$div.addClass('not-public');
+					$div.addClass('non-public');
 				}
 
 				if (node.is_redirect) {
@@ -1435,7 +1435,7 @@ var adminPage = {
 				}
 
 				if (!node.editable) {
-					$div.addClass('not-editable');
+					$div.addClass('non-editable');
 				}
 			}
 		}

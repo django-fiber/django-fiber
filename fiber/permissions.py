@@ -1,31 +1,31 @@
 """
-Module that provides a base Permission class. This class may be overridden by changinng the `PERMISSION_CLASS` value in the settings module.
+Module that provides a base Permission class. This class may be overridden by changing the `PERMISSION_CLASS` value in the settings module.
 """
 
 
 class Permissions(object):
     """
-    This class defines the methods that a Permission class may implement.
+    This class defines the methods that a Permission class should implement.
 
-    By default all permissions are granted to a staffuser.
+    By default all permissions are granted to a staff user.
     """
 
     def filter_objects(self, user, qs):
         """
-        Should only return those objects which `user` is allowed to edit.
+        Should only return those objects whose `user` is allowed to edit.
         `qs` can consist of type `Page` or `ContentItem`.
         """
         return qs
 
     def filter_images(self, user, qs):
         """
-        Called by api while listing images.
+        Called by API while listing images.
         """
         return qs
 
     def filter_files(self, user, qs):
         """
-        Called by api while listing files.
+        Called by API while listing files.
         """
         return qs
 
@@ -46,4 +46,3 @@ class Permissions(object):
         Called whenever a new instance has been created of one of Fiber's models by `user`.
         """
         pass
-

@@ -1,37 +1,87 @@
 {% load mptt_tags fiber_tags %}
 {% if user.is_staff %}
-	{% if fiber_menu_parent_page %}
-	<ul data-fiber-data='{"type": "page", "add_url": "{{ Page.get_add_url }}", "parent_id": {{ fiber_menu_parent_page.id }}}'>
-	{% else %}
-	<ul>
-	{% endif %}
-	{% recursetree fiber_menu_pages %}
-		<li class="{{ node.title|slugify }}{% if node in fiber_current_pages %} current{% endif %}{% if node.is_first_child %} first{% endif %}{% if node.is_last_child %} last{% endif %}
-		{% if node|can_edit:user %}
-			{% if not node.show_in_menu %} hidden-in-menu{% endif %}{% if not node.is_public %} not-public{% endif %}{% if node.redirect_page %} redirect{% endif %}
-		{% endif %}">
-			<a href="{{ node.get_absolute_url }}"
-			 	data-fiber-data='{ {% if node|can_edit:user %}"can_edit":true, {% endif %}"type": "page", "id": {{ node.id }}, "parent_id": {{ node.parent.id }}, "url": "{{ node.get_change_url }}", "add_url": "{{ Page.get_add_url }}"}'>{{ node.title }}</a>
-			{% if children %}
-				<ul 
-				{% if node|can_edit:user %}data-fiber-data='{"type": "page", "add_url": "{{ Page.get_add_url }}", "parent_id": {{ node.id }}}'{% endif %}>
-					{{ children }}
-				</ul>
-			{% endif %}
-		</li>
-	{% endrecursetree %}
-	</ul>
+    {% if fiber_menu_parent_page %}
+
+<ul data-fiber-data='{
+    "type": "page",
+    "add_url": "{{ Page.get_add_url }}",
+    "parent_id": {{ fiber_menu_parent_page.id }}
+}'>
+
+    {% else %}
+
+<ul>
+
+    {% endif %}
+    {% recursetree fiber_menu_pages %}
+
+        <li class="
+            {{ node.title|slugify }}
+            {% if node in fiber_current_pages %}current{% endif %}
+            {% if node.is_first_child %}first{% endif %}
+            {% if node.is_last_child %}last{% endif %}
+            {% if not node.show_in_menu %}hidden-in-menu{% endif %}
+            {% if not node.is_public %}non-public{% endif %}
+            {% if node.redirect_page %}redirect{% endif %}
+        ">
+            <a href="{{ node.get_absolute_url }}"
+                data-fiber-data='{
+                    {% if node|can_edit:user %}"can_edit":true,{% endif %}
+                    "type": "page",
+                    "id": {{ node.id }},
+                    "parent_id": {{ node.parent.id }},
+                    "url": "{{ node.get_change_url }}",
+                    "add_url": "{{ Page.get_add_url }}"
+                }'>{{ node.title }}</a>
+
+            {% if children %}
+
+                <ul{% if node|can_edit:user %} data-fiber-data='{
+                    "type": "page",
+                    "add_url": "{{ Page.get_add_url }}",
+                    "parent_id": {{ node.id }}
+                }'{% endif %}>
+
+                    {{ children }}
+
+                </ul>
+
+            {% endif %}
+
+        </li>
+
+    {% endrecursetree %}
+
+</ul>
+
 {% else %}
-	<ul>
-	{% recursetree fiber_menu_pages %}
-		<li class="{{ node.title|slugify }}{% if node in fiber_current_pages %} current{% endif %}{% if node.is_first_child %} first{% endif %}{% if node.is_last_child %} last{% endif %}">
-			<a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
-			{% if children %}
-				<ul>
-					{{ children }}
-				</ul>
-			{% endif %}
-		</li>
-	{% endrecursetree %}
-	</ul>
+
+<ul>
+
+    {% recursetree fiber_menu_pages %}
+
+        <li class="
+            {{ node.title|slugify }}
+            {% if node in fiber_current_pages %}current{% endif %}
+            {% if node.is_first_child %}first{% endif %}
+            {% if node.is_last_child %}last{% endif %}
+        ">
+            <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+
+            {% if children %}
+
+                <ul>
+
+                    {{ children }}
+
+                </ul>
+
+            {% endif %}
+
+        </li>
+
+    {% endrecursetree %}
+
+</ul>
+
 {% endif %}

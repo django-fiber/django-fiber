@@ -14,7 +14,16 @@ from .utils.class_loader import load_class
 from .app_settings import PERMISSION_CLASS
 
 
-class FileAdmin(admin.ModelAdmin):
+class UserPermissionMixin(object):
+    def save_model(self, request, obj, form, change):
+        """
+        Notifies the PERMISSION_CLASS that an `obj` was created by `user`.
+        """
+        super(UserPermissionMixin, self).save_model(request, obj, form, change)
+        load_class(PERMISSION_CLASS).object_created(request.user, obj)
+
+
+class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
     list_display = ('title', '__unicode__')
     date_hierarchy = 'updated'
     search_fields = ('title', )
@@ -37,7 +46,7 @@ class FileAdmin(admin.ModelAdmin):
     really_delete_selected.short_description = _('Delete selected files')
 
 
-class ImageAdmin(admin.ModelAdmin):
+class ImageAdmin(UserPermissionMixin, admin.ModelAdmin):
     list_display = ('title', '__unicode__')
     date_hierarchy = 'updated'
     search_fields = ('title', )
@@ -60,7 +69,7 @@ class ImageAdmin(admin.ModelAdmin):
     really_delete_selected.short_description = _('Delete selected images')
 
 
-class ContentItemAdmin(admin.ModelAdmin):
+class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
     list_display = ('__unicode__',)
     form = forms.ContentItemAdminForm
     fieldsets = (
@@ -72,12 +81,12 @@ class ContentItemAdmin(admin.ModelAdmin):
     search_fields = ('name', get_editor_field_name('content_html'))
 
 
-class PageContentItemInline(admin.TabularInline):
+class PageContentItemInline(UserPermissionMixin, admin.TabularInline):
     model = PageContentItem
     extra = 1
 
 
-class PageAdmin(MPTTModelAdmin):
+class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
     form = forms.PageForm
     fieldsets = (
@@ -128,7 +137,7 @@ class PageAdmin(MPTTModelAdmin):
     action_links.allow_tags = True
 
 
-class FiberAdminContentItemAdmin(fiber_admin.ModelAdmin):
+class FiberAdminContentItemAdmin(UserPermissionMixin, fiber_admin.ModelAdmin):
     list_display = ('__unicode__',)
     form = forms.ContentItemAdminForm
 
@@ -145,16 +154,8 @@ class FiberAdminContentItemAdmin(fiber_admin.ModelAdmin):
                 (None, {'classes': ('hide-label',), 'fields': (get_editor_field_name('content_html'), 'template_name', )}),
             )
 
-    def save_model(self, request, obj, form, change):
-        """
-        Notifies the PERMIISSION_CLASS that a ContentItem was created by `user`.
-        """
-        # workaround because not all ajax calls go through the api yet
-        super(FiberAdminContentItemAdmin, self).save_model(request, obj, form, change)
-        load_class(PERMISSION_CLASS).object_created(request.user, obj)
 
-
-class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):
+class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
 
     form = forms.PageForm
 
@@ -176,8 +177,10 @@ class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):
     def save_model(self, request, obj, form, change):
         """
         - Optionally positions a Page `obj` before or beneath another page, based on POST data.
-        - Notifies the PERMIISSION_CLASS that a Page was created by `user`.
+        - Notifies the PERMISSION_CLASS that a Page was created by `user`.
         """
+        super(FiberAdminPageAdmin, self).save_model(request, obj, form, change)
+
         if 'before_page_id' in request.POST:
             before_page = Page.objects.get(pk=int(request.POST['before_page_id']))
             obj.parent = before_page.parent
@@ -187,10 +190,6 @@ class FiberAdminPageAdmin(fiber_admin.MPTTModelAdmin):
             obj.parent = below_page
             obj.insert_at(below_page, position='last-child', save=False)
 
-        super(FiberAdminPageAdmin, self).save_model(request, obj, form, change)
-
-        # workaround because not all ajax calls go through the api yet
-        load_class(PERMISSION_CLASS).object_created(request.user, obj)
 
 admin.site.register(ContentItem, ContentItemAdmin)
 admin.site.register(Image, ImageAdmin)

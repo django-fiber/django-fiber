@@ -685,16 +685,16 @@ ul.tree .toggler.closed {
 	background-image: url(../images/icon-page-hidden.png);
 }
 
-.ui-dialog-content ul.tree .page.not-public .icon,
-#df-wpr-sidebar ul.tree .page.not-public .icon {
-	background-image: url(../images/icon-page-not-public.png);
+.ui-dialog-content ul.tree .page.non-public .icon,
+#df-wpr-sidebar ul.tree .page.non-public .icon {
+	background-image: url(../images/icon-page-non-public.png);
 }
 
-.ui-dialog-content ul.tree .page.hidden-in-menu .title,
-#df-wpr-sidebar ul.tree .page.hidden-in-menu .title,
-.ui-dialog-content ul.tree .page.not-public .title,
-#df-wpr-sidebar ul.tree .page.not-public .title {
+.ui-dialog-content ul.tree .page.non-editable .title,
+#df-wpr-sidebar ul.tree .page.non-editable .title {
 	color: #999;
+	text-shadow: 0 1px 0 #fff;
+	filter: dropshadow(color=#fff, offx=0, offy=1);
 }
 
 .ui-dialog-content ul.tree div,
@@ -722,14 +722,20 @@ ul.tree .toggler.closed {
 	text-shadow: 0 1px 0 rgba(255,255,255,0.7);
 }
 
+.ui-dialog-content ul.tree div.page.non-editable:hover,
+#df-wpr-sidebar ul.tree div.page.non-editable:hover {
+	background: none;
+	cursor:	default;
+}
+
 #df-wpr-sidebar ul.tree .moving > div .title,
 ul.tree .moving > div .title {
 	outline: 1px dashed #666;
 }
 
 /* permissions-related styling */
-.ui-dialog .not-editable,
-#df-wpr-sidebar .sidebar-tree .not-editable .title {
+.ui-dialog .non-editable,
+#df-wpr-sidebar .sidebar-tree .non-editable .title {
 	color: #f00;
 }
 

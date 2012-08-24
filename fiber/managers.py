@@ -25,8 +25,7 @@ class ContentItemManager(models.Manager):
          - used once
          - used more than once
 
-         If `user` is provided the tree is filtered and only contentitems that user is allowed to
-        edit are returned.
+        If `user` is provided the queryset is filtered so only the content items that `user` is allowed to edit are returned.
         """
         unused = []
         once = []
@@ -185,12 +184,11 @@ class PageManager(TreeManager):
             if get_named_url_from_quoted_url(page.url) == url:
                 return page
 
-    def create_jqtree_data(self, user=None):
+    def create_jqtree_data(self, user):
         """
         Create a page tree suitable for the jqtree. The result is a recursive list of dicts.
 
-        If `user` is provided the tree is filtered and only pages that user is allowed to
-        edit are returned.
+        If `user` is provided the tree is annotated to indicate editability of the pages.
 
         Example:
             [
@@ -211,10 +209,8 @@ class PageManager(TreeManager):
         # The queryset contains all pages in correct order
         queryset = self.model.tree.get_query_set()
 
-        #  Filter queryset through the permissions class
-        editables_queryset = []
-        if user:
-            editables_queryset = load_class(PERMISSION_CLASS).filter_objects(user, queryset)
+        # Filter queryset using the permissions class
+        editables_queryset = load_class(PERMISSION_CLASS).filter_objects(user, queryset)
 
         for page in queryset:
             page_info = dict(

@@ -64,6 +64,6 @@ def pages_json(request):
     """
     return HttpResponse(
         simplejson.dumps(
-            Page.objects.create_jqtree_data()
+            Page.objects.create_jqtree_data(request.user)
         )
     )
