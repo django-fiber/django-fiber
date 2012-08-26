@@ -26,7 +26,7 @@
         ">
             <a href="{{ node.get_absolute_url }}"
                 data-fiber-data='{
-                    {% if node|can_edit:user %}"can_edit":true,{% endif %}
+                    {% if node|can_edit:user %}"can_edit": true,{% endif %}
                     "type": "page",
                     "id": {{ node.id }},
                     "parent_id": {{ node.parent.id }},

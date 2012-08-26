@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template import Template, Context
@@ -20,12 +22,12 @@ def format_list(l, must_sort=True, separator=' '):
     return separator.join(titles)
 
 
-def strip_whitespace(text):
-    return text.replace(
-        '\n', ''
-    ).replace(
-        '\t', ''
-    ).strip()
+def condense_html_whitespace(s):
+    s = re.sub("\s\s*", " ", s)
+    s = re.sub(">\s*<", "><", s)
+    s = re.sub(" class=\"\s?(.*?)\s?\"", " class=\"\\1\"", s)
+    s = s.strip()
+    return s
 
 
 class ContentItemTest(TestCase):
@@ -80,7 +82,7 @@ class ContentItemTest(TestCase):
 
         def check_content(name, html):
             self.assertEquals(
-                strip_whitespace(
+                condense_html_whitespace(
                     ContentItem.objects.get(name=name).content_html
                 ),
                 html
@@ -163,13 +165,13 @@ class PageTest(TestCase):
 
         # references in content items are changed
         self.assertEquals(
-            strip_whitespace(
+            condense_html_whitespace(
                 ContentItem.objects.get(name='a').content_html
             ),
             '<p><a href="/section2/abc/">abc</a></p>'
         )
         self.assertEquals(
-            strip_whitespace(
+            condense_html_whitespace(
                 ContentItem.objects.get(name='b').content_html
             ),
             '<p><a href="/section2/abc/xyz/">xyz</a></p>'
@@ -226,13 +228,13 @@ class PageTest(TestCase):
 
         # references in content items are changed
         self.assertEquals(
-            strip_whitespace(
+            condense_html_whitespace(
                 ContentItem.objects.get(name='a').content_html
             ),
             '<p><a href="/section1/a_b_c/">abc</a></p>'
         )
         self.assertEquals(
-            strip_whitespace(
+            condense_html_whitespace(
                 ContentItem.objects.get(name='b').content_html
             ),
             '<p><a href="/section1/a_b_c/xyz/">xyz</a></p>'
@@ -329,7 +331,7 @@ class TestTemplateTags(TestCase):
         })
         with self.assertNumQueries(2):
             self.assertEquals(
-                strip_whitespace(t.render(c)),
+                condense_html_whitespace(t.render(c)),
                 ('<ul>'
                    '<li class="home first last">'
                      '<a href="/">home</a>'
@@ -372,7 +374,7 @@ class TestTemplateTags(TestCase):
 
         with self.assertNumQueries(2):
             self.assertEquals(
-                strip_whitespace(t.render(c)),
+                condense_html_whitespace(t.render(c)),
                 ('<ul>'
                    '<li class="section1 first">'
                      '<a href="/section1/">section1</a>'
@@ -397,7 +399,7 @@ class TestTemplateTags(TestCase):
 
         with self.assertNumQueries(2):
             self.assertEquals(
-                strip_whitespace(t.render(c)),
+                condense_html_whitespace(t.render(c)),
                 ('<ul>'
                    '<li class="section1 first">'
                      '<a href="/section1/">section1</a>'
@@ -424,7 +426,7 @@ class TestTemplateTags(TestCase):
         })
         with self.assertNumQueries(2):
             self.assertEquals(
-                strip_whitespace(t.render(c)),
+                condense_html_whitespace(t.render(c)),
                 ('<ul>'
                    '<li class="section1 first">'
                      '<a href="/section1/">section1</a>'
@@ -442,7 +444,7 @@ class TestTemplateTags(TestCase):
 
         with self.assertNumQueries(2):
             self.assertEquals(
-                strip_whitespace(t.render(c)),
+                condense_html_whitespace(t.render(c)),
                 ('<ul>'
                    '<li class="sub1 first">'
                      '<a href="/section1/sub1/">sub1</a>'
@@ -471,7 +473,7 @@ class TestTemplateTags(TestCase):
         })
         with self.assertNumQueries(2):
             self.assertEquals(
-                strip_whitespace(t.render(c)),
+                condense_html_whitespace(t.render(c)),
                 ('<ul>'
                  '<li class="home first last">'
                  '<a href="/">home</a>'
@@ -494,24 +496,24 @@ class TestTemplateTags(TestCase):
 
         with self.assertNumQueries(2):
             self.assertEquals(
-                strip_whitespace(t.render(c)),
-                ('<ul data-fiber-data=\'{"type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 1}\'>'
+                condense_html_whitespace(t.render(c)),
+                ('<ul data-fiber-data=\'{ "type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 1 }\'>'
                    '<li class="home first last">'
-                     '<a href="/" data-fiber-data=\'{"type": "page", "id": 2, "parent_id": 1, "url": "%(fiber_admin_page_edit_url_home)s", "add_url": "%(fiber_admin_page_add_url)s"}\'>home</a>'
-                     '<ul data-fiber-data=\'{"type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 2}\'>'
+                     '<a href="/" data-fiber-data=\'{ "can_edit": true, "type": "page", "id": 2, "parent_id": 1, "url": "%(fiber_admin_page_edit_url_home)s", "add_url": "%(fiber_admin_page_add_url)s" }\'>home</a>'
+                     '<ul data-fiber-data=\'{ "type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 2 }\'>'
                        '<li class="section1 first">'
-                         '<a href="/section1/" data-fiber-data=\'{"type": "page", "id": 3, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_section1)s", "add_url": "%(fiber_admin_page_add_url)s"}\'>section1</a>'
-                         '<ul data-fiber-data=\'{"type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 3}\'>'
+                         '<a href="/section1/" data-fiber-data=\'{ "can_edit": true, "type": "page", "id": 3, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_section1)s", "add_url": "%(fiber_admin_page_add_url)s" }\'>section1</a>'
+                         '<ul data-fiber-data=\'{ "type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 3 }\'>'
                            '<li class="sub1 first">'
-                             '<a href="/section1/sub1/" data-fiber-data=\'{"type": "page", "id": 5, "parent_id": 3, "url": "%(fiber_admin_page_edit_url_sub1)s", "add_url": "%(fiber_admin_page_add_url)s"}\'>sub1</a>'
+                             '<a href="/section1/sub1/" data-fiber-data=\'{ "can_edit": true, "type": "page", "id": 5, "parent_id": 3, "url": "%(fiber_admin_page_edit_url_sub1)s", "add_url": "%(fiber_admin_page_add_url)s" }\'>sub1</a>'
                            '</li>'
                            '<li class="sub2 last">'
-                             '<a href="/section1/sub2/" data-fiber-data=\'{"type": "page", "id": 6, "parent_id": 3, "url": "%(fiber_admin_page_edit_url_sub2)s", "add_url": "%(fiber_admin_page_add_url)s"}\'>sub2</a>'
+                             '<a href="/section1/sub2/" data-fiber-data=\'{ "can_edit": true, "type": "page", "id": 6, "parent_id": 3, "url": "%(fiber_admin_page_edit_url_sub2)s", "add_url": "%(fiber_admin_page_add_url)s" }\'>sub2</a>'
                            '</li>'
                          '</ul>'
                        '</li>'
                        '<li class="section2 last">'
-                         '<a href="/section2/" data-fiber-data=\'{"type": "page", "id": 4, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_section2)s", "add_url": "%(fiber_admin_page_add_url)s"}\'>section2</a>'
+                         '<a href="/section2/" data-fiber-data=\'{ "can_edit": true, "type": "page", "id": 4, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_section2)s", "add_url": "%(fiber_admin_page_add_url)s" }\'>section2</a>'
                        '</li>'
                      '</ul>'
                    '</li>'
