@@ -1,2 +1,3 @@
 #!/bin/bash
-sphinx-build -E . build
+
+sphinx-build -E . _build

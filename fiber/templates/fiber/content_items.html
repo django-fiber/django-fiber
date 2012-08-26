@@ -1,13 +1,22 @@
-{% if user.is_staff %}
-	<div data-fiber-data='{"type": "content_item", "add_url": "{{ ContentItem.get_add_url }}", "page_id": {{ fiber_page.id}}, "block_name": "{{ fiber_block_name }}"}'>
-	{% for content_item in fiber_content_items %}
-		{% include 'fiber/content_item.html' %}
-	{% endfor %}
-	</div>
+{% load fiber_tags %}
+{% if fiber_page|can_edit:user %}
+
+<div data-fiber-data='{
+    "can_edit":true,
+    "type": "content_item",
+    "add_url": "{{ ContentItem.get_add_url }}",
+    "page_id": {{ fiber_page.id}},
+    "block_name": "{{ fiber_block_name }}"
+}'>
+
 {% else %}
-	<div>
-	{% for content_item in fiber_content_items %}
-		{% include 'fiber/content_item.html' %}
-	{% endfor %}
-	</div>
+
+<div>
+
 {% endif %}
+
+    {% for content_item in fiber_content_items %}
+        {% include 'fiber/content_item.html' %}
+    {% endfor %}
+
+</div>

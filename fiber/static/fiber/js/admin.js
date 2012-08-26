@@ -630,6 +630,13 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 		return 'file';
 	},
 
+	uneditables_formatter: function(value, row_data) {
+		if (!row_data.can_edit) {
+			return '<span class="non-editable">' + value + '</span>';
+		}
+			return value;
+	},
+
 	create_upload_button: function() {
 		var button_pane = this.uiDialog.parent().find('.ui-dialog-buttonpane');
 
@@ -710,9 +717,14 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 
 		delete_button.addClass('ui-button-disabled ui-state-disabled');
 
-		this.select_grid.bind('datagrid.select', function() {
-			delete_button.attr('disabled', '');
-			delete_button.removeClass('ui-button-disabled ui-state-disabled');
+		this.select_grid.bind('datagrid.select', function(e) {
+			if (e.row.can_edit){
+				delete_button.attr('disabled', '');
+				delete_button.removeClass('ui-button-disabled ui-state-disabled');
+			}
+			else if (!delete_button.hasClass('ui-button-disabled ui-state-disabled')){
+					delete_button.addClass('ui-button-disabled ui-state-disabled');
+				}
 		});
 
 		var self = this;
@@ -787,7 +799,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 		this.select_grid.simple_datagrid({
 			columns: [
 				{title: gettext('Image'), key: 'image', on_generate: thumbnail_formatter},
-				{title: gettext('Filename'), key: 'filename'},
+				{title: gettext('Filename'), key: 'filename', on_generate: this.uneditables_formatter},
 				{title: gettext('Size'), key: 'size'},
 				{title: gettext('Updated'), key: 'updated'}
 			],
@@ -868,7 +880,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 		this.select_grid.simple_datagrid({
 			columns: [
-				{title: gettext('Filename'), key: 'filename'},
+				{title: gettext('Filename'), key: 'filename', on_generate: this.uneditables_formatter},
 				{title: gettext('Updated'), key: 'updated'}
 			],
 			url: this.options.url,
@@ -1415,17 +1427,21 @@ var adminPage = {
 				}
 
 				if (!node.is_public) {
-					$div.addClass('not-public');
+					$div.addClass('non-public');
 				}
 
 				if (node.is_redirect) {
 					$div.addClass('redirect');
 				}
+
+				if (!node.editable) {
+					$div.addClass('non-editable');
+				}
 			}
 		}
 
 		function canMove(node) {
-			if (node.url) {
+			if (node.url && node.editable) {
 				return true;
 			}
 			else {
@@ -1435,6 +1451,9 @@ var adminPage = {
 		}
 
 		function canMoveTo(moved_node, target_node, position) {
+			if (!target_node.editable) {
+				return false;
+			}
 			if (!target_node.url) {
 				// can move inside menu, not before or after
 				return (position == 'inside');
@@ -1511,6 +1530,9 @@ var adminPage = {
 		$(document.body).find('.ui-context-menu').remove();
 
 		var node = e.node;
+		if (!node.editable){
+			return;
+		}
 
 		var contextmenu = $('<ul class="ui-context-menu"></ul>');
 
@@ -1894,6 +1916,9 @@ Fiber.FiberItem = Class.extend({
 	},
 
 	show_admin_element: function() {
+		if (!this.element_data.can_edit) {
+			return;
+		}
 		if (!this.button) {
 			this.create_button();
 		}
@@ -2146,6 +2171,9 @@ Fiber.FiberItem = Class.extend({
 	on_contextmenu: function(e) {
 		e.preventDefault();
 		e.stopPropagation();
+		if (!this.element_data.can_edit) {
+			return;
+		}
 
 		// remove other visible context menus
 		$(document.body).find('.ui-context-menu').remove();

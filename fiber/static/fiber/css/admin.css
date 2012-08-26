@@ -376,6 +376,18 @@ div.ui-dialog form h2 {
 	width: 734px;
 }
 
+/* .cke_chrome and .cke_inner selectors are for CKEditor 4.0 Beta */
+
+.ui-dialog .hide-label .cke_chrome {
+	float: none;
+	padding: 0;
+	border: none;
+}
+
+.ui-dialog .hide-label .cke_inner {
+	border-radius: 0;
+}
+
 .ui-dialog .ui-dialog-buttonpane {
 	margin-top: 0;
 	padding: 0;
@@ -685,16 +697,16 @@ ul.tree .toggler.closed {
 	background-image: url(../images/icon-page-hidden.png);
 }
 
-.ui-dialog-content ul.tree .page.not-public .icon,
-#df-wpr-sidebar ul.tree .page.not-public .icon {
-	background-image: url(../images/icon-page-not-public.png);
+.ui-dialog-content ul.tree .page.non-public .icon,
+#df-wpr-sidebar ul.tree .page.non-public .icon {
+	background-image: url(../images/icon-page-non-public.png);
 }
 
-.ui-dialog-content ul.tree .page.hidden-in-menu .title,
-#df-wpr-sidebar ul.tree .page.hidden-in-menu .title,
-.ui-dialog-content ul.tree .page.not-public .title,
-#df-wpr-sidebar ul.tree .page.not-public .title {
+.ui-dialog-content ul.tree .page.non-editable .title,
+#df-wpr-sidebar ul.tree .page.non-editable .title {
 	color: #999;
+	text-shadow: 0 1px 0 #fff;
+	filter: dropshadow(color=#fff, offx=0, offy=1);
 }
 
 .ui-dialog-content ul.tree div,
@@ -722,9 +734,20 @@ ul.tree .toggler.closed {
 	text-shadow: 0 1px 0 rgba(255,255,255,0.7);
 }
 
+.ui-dialog-content ul.tree div.page.non-editable:hover,
+#df-wpr-sidebar ul.tree div.page.non-editable:hover {
+	background: none;
+}
+
 #df-wpr-sidebar ul.tree .moving > div .title,
 ul.tree .moving > div .title {
 	outline: 1px dashed #666;
+}
+
+/* permissions-related styling */
+.ui-dialog .non-editable,
+#df-wpr-sidebar .sidebar-tree .non-editable .title {
+	color: #f00;
 }
 
 /* page selection tree in dialog */

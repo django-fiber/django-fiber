@@ -1,26 +1,56 @@
 {% load fiber_tags %}
 {% if content_item %}
+    {% if content_item|can_edit:user %}
+        {% if fiber_page %}
+            {% if content_item.page_content_item %}
 
-	{% if user.is_staff %}
-		{% if fiber_page %}	
-			{% if content_item.page_content_item %}
-				<div data-fiber-data='{"type": "content_item", "id": {{ content_item.id }}, "url": "{{ content_item.get_change_url }}", "add_url": "{{ ContentItem.get_add_url }}", "page_id": {{ fiber_page.id }}, "block_name": "{{ fiber_block_name }}", "page_content_item_id": {{ content_item.page_content_item.id }}, "used_on_pages": {{ content_item.get_used_on_pages_json|safe|escape_json_for_html }}}' class="content">
-			{% else %}
-				<div data-fiber-data='{"type": "content_item", "id": {{ content_item.id }}, "url": "{{ content_item.get_change_url }}", "add_url": "{{ ContentItem.get_add_url }}", "page_id": {{ fiber_page.id }}, "block_name": "{{ fiber_block_name }}"}' class="content">
-			{% endif %}
-		{% else %}
-			<div data-fiber-data='{"type": "content_item", "id": {{ content_item.id }}, "url": "{{ content_item.get_change_url }}"}' class="content">
-		{% endif %}
-	{% else %}
-		<div class="content">
-	{% endif %}
+<div data-fiber-data='{
+    "can_edit": true,
+    "type": "content_item",
+    "id": {{ content_item.id }},
+    "url": "{{ content_item.get_change_url }}",
+    "add_url": "{{ ContentItem.get_add_url }}",
+    "page_id": {{ fiber_page.id }},
+    "block_name": "{{ fiber_block_name }}",
+    "page_content_item_id": {{ content_item.page_content_item.id }},
+    "used_on_pages": {{ content_item.get_used_on_pages_json|safe|escape_json_for_html }}
+}' class="content">
 
-	{% if content_item.template_name %}
-		{% include content_item.template_name %}
-	{% else %}
-		{{ content_item.content_html|safe }}
-	{% endif %}
+            {% else %}
 
-	</div>
+<div data-fiber-data='{
+    "can_edit": true,
+    "type": "content_item",
+    "id": {{ content_item.id }},
+    "url": "{{ content_item.get_change_url }}",
+    "add_url": "{{ ContentItem.get_add_url }}",
+    "page_id": {{ fiber_page.id }},
+    "block_name": "{{ fiber_block_name }}"
+}' class="content">
+
+            {% endif %}
+        {% else %}
+
+<div data-fiber-data='{
+    "can_edit": true,
+    "type": "content_item",
+    "id": {{ content_item.id }},
+    "url": "{{ content_item.get_change_url }}"
+}' class="content">
+
+        {% endif %}
+    {% else %}
+
+<div class="content">
+
+    {% endif %}
+
+    {% if content_item.template_name %}
+        {% include content_item.template_name %}
+    {% else %}
+        {{ content_item.content_html|safe }}
+    {% endif %}
+
+</div>
 
 {% endif %}
