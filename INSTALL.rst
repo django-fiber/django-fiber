@@ -39,7 +39,6 @@ settings.py
 	MIDDLEWARE_CLASSES = DEFAULT_SETTINGS.MIDDLEWARE_CLASSES + (
 	    'fiber.middleware.ObfuscateEmailAddressMiddleware',
 	    'fiber.middleware.AdminPageMiddleware',
-	    'fiber.middleware.PageFallbackMiddleware',
 	)
 
 	TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
