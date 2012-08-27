@@ -138,6 +138,20 @@ div.ui-dialog form label,
 	background: transparent url("Aristo-jQuery-UI-Theme/css/Aristo/images/ui-icons_222222_256x240.png") -2px -62px no-repeat;
 }
 
+#df-sidebar #df-sidebar-version {
+    position: absolute;
+    bottom: 0;
+    border-top: 1px solid #ddd;
+    padding: 0 0 0 21px;
+    width: 209px;
+}
+
+#df-sidebar #df-sidebar-version p {
+    margin: 0;
+    font-size: 10px;
+    color: #666;
+}
+
 /* prevent margin collapsing in admin */
 .content[data-fiber-data]:after {
 	content: ".";
