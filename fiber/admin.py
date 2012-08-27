@@ -106,7 +106,7 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
         absolute_url = page.get_absolute_url()
         if absolute_url:
             view_on_site += u'<a href="%s" title="%s" target="_blank"><img src="%sfiber/admin/images/world.gif" width="16" height="16" alt="%s" /></a>' % \
-                       (absolute_url, _('View on site'), settings.STATIC_URL, _('View on site'))
+                            (absolute_url, _('View on site'), settings.STATIC_URL, _('View on site'))
 
         return view_on_site
 
@@ -179,8 +179,6 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
         - Optionally positions a Page `obj` before or beneath another page, based on POST data.
         - Notifies the PERMISSION_CLASS that a Page was created by `user`.
         """
-        super(FiberAdminPageAdmin, self).save_model(request, obj, form, change)
-
         if 'before_page_id' in request.POST:
             before_page = Page.objects.get(pk=int(request.POST['before_page_id']))
             obj.parent = before_page.parent
@@ -189,6 +187,8 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
             below_page = Page.objects.get(pk=int(request.POST['below_page_id']))
             obj.parent = below_page
             obj.insert_at(below_page, position='last-child', save=False)
+
+        super(FiberAdminPageAdmin, self).save_model(request, obj, form, change)
 
 
 admin.site.register(ContentItem, ContentItemAdmin)
