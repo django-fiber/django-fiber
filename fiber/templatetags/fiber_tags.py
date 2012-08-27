@@ -3,6 +3,8 @@ import operator
 from django import template
 from django.utils import simplejson
 
+from fiber import __version__ as fiber_version
+
 from fiber.models import Page, ContentItem
 
 from fiber.utils.urls import get_admin_change_url
@@ -252,3 +254,8 @@ def escape_json_for_html(value):
 @register.filter
 def can_edit(obj, user):
     return PERMISSIONS.can_edit(user, obj)
+
+
+@register.simple_tag(name='fiber_version')
+def show_fiber_version():
+    return fiber_version
