@@ -256,6 +256,6 @@ def can_edit(obj, user):
     return PERMISSIONS.can_edit(user, obj)
 
 
-@register.simple_tag(name='fiber_version')
-def show_fiber_version():
+@register.simple_tag()
+def fiber_version():
     return fiber_version
