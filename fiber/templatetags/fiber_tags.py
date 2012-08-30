@@ -3,7 +3,7 @@ import operator
 from django import template
 from django.utils import simplejson
 
-from fiber import __version__ as fiber_version
+from fiber import __version__ as fiber_version_number
 
 from fiber.models import Page, ContentItem
 
@@ -258,4 +258,4 @@ def can_edit(obj, user):
 
 @register.simple_tag()
 def fiber_version():
-    return fiber_version
+    return fiber_version_number
