@@ -69,8 +69,10 @@ class AdminPageMiddleware(object):
                         ).replace('</body>', '</div>' + t.render(c) + '</body>')
 
                         fiber_data['frontend'] = True
-                        if 'fiber_page' in c:
-                            fiber_data['page_id'] = c['fiber_page'].id
+                        try:
+                            fiber_data['page_id'] = Page.objects.get_by_url(request.path_info).pk
+                        except AttributeError:
+                            pass
 
                 # Inject header html in head.
                 # Add fiber-data attribute to body tag.
