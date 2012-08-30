@@ -1872,7 +1872,7 @@ function reloadPage(params) {
 			url: '/api/v2/pages/' + page_id + '/',
 			type: 'GET',
 			success: function(data) {
-				window.location.replace(data.url);
+				window.location.replace(data.page_url);
 			},
 			error: function() {
 				if (params && params.error) {
