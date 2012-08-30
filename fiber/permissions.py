@@ -33,13 +33,13 @@ class Permissions(object):
         """
         Should return :const:`True` if user is allowed to edit `obj`.
         """
-        return True
+        return user.is_staff
 
     def can_move_page(self, user, page):
         """
         Should return :const:`True` if user is allowed to move page.
         """
-        return True
+        return user.is_staff
 
     def object_created(self, user, obj):
         """
