@@ -96,7 +96,7 @@ class ImageResource(FileResource):
 
 
 urlpatterns = patterns('',
-    (r'^$', ApiRoot.as_view()),
+    url(r'^$', ApiRoot.as_view(), name='fiber-api-root'),
     url(r'^pages/$', ListView.as_view(resource=PageResource), name='page-resource-root'),
     url(r'^pages/(?P<pk>[^/]+)/$', InstanceView.as_view(resource=PageResource), name='page-resource-instance'),
     url(r'^pages/(?P<pk>[^/]+)/move_page/$', MovePageView.as_view(), name='page-resource-instance-move'),
