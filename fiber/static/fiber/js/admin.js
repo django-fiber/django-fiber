@@ -23,9 +23,8 @@ var busyIndicator = {
 
 Fiber.get_api_url = function(suffix){ 
 	var output = $("body").data('api-url');
-	if (suffix){
-		output += suffix;
-	}
+	if(!output || output == undefined) output = "/api/v2/";
+	if (suffix) output += suffix;
 	return output
 }
 
