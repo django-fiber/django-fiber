@@ -20,6 +20,15 @@ var busyIndicator = {
 	}
 };
 
+
+Fiber.get_api_url = function(suffix){ 
+	var output = $("body").data('api-url');
+	if (suffix){
+		output += suffix;
+	}
+	return output
+}
+
 Fiber.enhance_combobox = function(select) {
 	$(select).combobox();
 };
@@ -750,7 +759,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
-		url: '/api/v2/images/',
+		url: function(){ return Fiber.get_api_url('images/'); },
 		width: 520,
 		height: 'auto',
 		start_width: 480,
@@ -840,7 +849,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
-		url: '/api/v2/files/',
+		url: function(){ return Fiber.get_api_url('files/'); },
 		width: 520,
 		height: 'auto',
 		start_width: 480,
@@ -903,7 +912,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 	},
 
 	get_upload_path: function() {
-		return '/api/v2/files/';
+		return Fiber.get_api_url('files/');
 	},
 
 	action_click: function() {
@@ -923,7 +932,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 Fiber.PageSelectDialog = AdminRESTDialog.extend({
 
 	defaults: {
-		url: '/api/v2/pages/',
+		url: function(){ return Fiber.get_api_url('pages/'); },
 		width: 480,
 		height: 320,
 		start_width: 480,
@@ -989,7 +998,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 		}
 
 		$.ajax({
-			url: '/api/v2/pagetree/',
+			url: Fiber.get_api_url('pagetree/'),
 			type: 'GET',
 			success: $.proxy(handle_load_data, this),
 			cache: false,
@@ -1227,7 +1236,7 @@ var DroppableArea = Class.extend({
 		busyIndicator.show();
 
 		$.ajax({
-			url: '/api/v2/page_content_items/',
+			url: Fiber.get_api_url('page_content_items/'),
 			type: 'POST',
 			data: data,
 			success: function(response) {
@@ -1240,7 +1249,7 @@ var DroppableArea = Class.extend({
 		busyIndicator.show();
 
 		Fiber.move_page_content_item(
-			'/api/v2/page_content_items/' + fiber_item_data.page_content_item_id + '/move/',
+			Fiber.get_api_url('page_content_items/') + fiber_item_data.page_content_item_id + '/move/',
 			this.fiber_item.element_data.page_content_item_id,
 			this.fiber_item.element_data.block_name
 		)
@@ -1301,7 +1310,7 @@ var AddContentItemFormDialog = ChangeContentItemFormDialog.extend({
 		busyIndicator.show();
 
 		$.ajax({
-			url: '/api/v2/page_content_items/',
+			url: Fiber.get_api_url('page_content_items/'),
 			type: 'POST',
 			data: data,
 			success: function(response) {
@@ -1401,7 +1410,7 @@ var adminPage = {
 
 			var info = event.move_info;
 			$.ajax({
-				url: '/api/v2/pages/' + info.moved_node.id + '/move_page/',
+				url: Fiber.get_api_url('pages/') + info.moved_node.id + '/move_page/',
 				type: 'POST',
 				dataType: 'json',
 
@@ -1578,7 +1587,7 @@ var adminPage = {
 									busyIndicator.show();
 
 									$.ajax({
-										url: '/api/v2/pages/' + node.id + '/',
+										url: Fiber.get_api_url('pages/') + node.id + '/',
 										type: 'DELETE',
 										data: {},
 										success: function(data) {
@@ -1661,7 +1670,7 @@ var adminPage = {
 								busyIndicator.show();
 
 								$.ajax({
-									url: '/api/v2/content_items/' + node.id + '/',
+									url: Fiber.get_api_url('content_items/') + node.id + '/',
 									type: 'DELETE',
 									data: {},
 									success: function(data) {
@@ -1869,7 +1878,7 @@ function reloadPage(params) {
 		busyIndicator.show();
 
 		$.ajax({
-			url: '/api/v2/pages/' + page_id + '/',
+			url: Fiber.get_api_url('pages/') + page_id + '/',
 			type: 'GET',
 			success: function(data) {
 				window.location.replace(data.page_url);
@@ -2226,7 +2235,7 @@ Fiber.FiberItem = Class.extend({
 		adminPage.hide_admin_elements();
 
 		$.ajax({
-			url: '/api/v2/page_content_items/' + this.element_data.page_content_item_id + '/',
+			url: Fiber.get_api_url('page_content_items/') + this.element_data.page_content_item_id + '/',
 			type: 'DELETE',
 			data: {},
 			success: function(data) {
