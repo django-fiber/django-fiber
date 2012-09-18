@@ -31,19 +31,19 @@ class FiberPageMixin(object):
         return self.fiber_page or Page.objects.get_by_url(self.get_fiber_page_url())
 
     def get_fiber_current_pages(self):
-        if not self.fiber_current_pages:
-            self.fiber_current_pages = []
+        if self.fiber_current_pages is None:
+            current_pages = []
             """
             Find pages that should be marked as current in menus.
             """
-            if self.get_fiber_page() != None:
+            current_page = self.get_fiber_page()
+            if current_page:
                 """
                 The current page should be marked as current, obviously,
                 as well as all its ancestors.
                 """
-
-                self.fiber_current_pages.append(self.get_fiber_page())
-                self.fiber_current_pages.extend(self.get_fiber_page().get_ancestors())
+                current_pages.append(current_page)
+                current_pages.extend(current_page.get_ancestors())
 
             """
             For all pages that are not already current_pages,
@@ -53,17 +53,17 @@ class FiberPageMixin(object):
             current_page_candidates = Page.objects.exclude(mark_current_regexes__exact='')
             url = self.get_fiber_page_url()
 
-            for current_page_candidate in list(set(current_page_candidates) - set(self.fiber_current_pages)):
-                for mark_current_regex in current_page_candidate.mark_current_regexes.strip().splitlines():
+            for candidate in list(set(current_page_candidates) - set(current_pages)):
+                for mark_current_regex in candidate.mark_current_regexes.strip().splitlines():
                     if re.match(mark_current_regex, url):
-                        self.fiber_current_pages.append(current_page_candidate)
-                        self.fiber_current_pages.extend(current_page_candidate.get_ancestors())
+                        current_pages.append(candidate)
+                        current_pages.extend(candidate.get_ancestors())
                         break
 
             """
             Order current_pages for use with tree_info template tag,
             and remove the root node in the process.
             """
-            self.fiber_current_pages = sorted(self.fiber_current_pages, key=lambda fiber_current_page: fiber_current_page.lft)[1:]
+            current_pages = sorted(current_pages, key=lambda fiber_current_page: fiber_current_page.lft)[1:]
 
-        return self.fiber_current_pages
+        return current_pages
