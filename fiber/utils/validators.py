@@ -9,8 +9,12 @@ from urls import get_named_url_from_quoted_url, is_quoted_url
 
 
 class FiberURLValidator(RegexValidator):
+    """
+    This class provides custom validation - required for Fiber's specific context.
+    Django's `URLValidator` only matches urls that are prefixed with a protocol.
+    """
     protocol_regex = re.compile(r'^(((http|ftp)s?)://).+$', re.IGNORECASE)
-    regex = re.compile(r'^[-\w/\.\:"]+$')
+    regex = re.compile(r'^[-\w/\.\:#\?&"=]+$')
 
     def __call__(self, value):
         """
@@ -18,11 +22,12 @@ class FiberURLValidator(RegexValidator):
         """
         url = smart_unicode(value)
         # check if it starts with http(s):// | ftp(s)://
+        # Django's validator only works with full urls that include a protocol.
         if self.protocol_regex.search(url):
             django_url_validator = URLValidator(verify_exists=False)
             django_url_validator(url)
         else:
-            # check if it's a named url, and if so, if its reversable
+            # check if it's a named url, and if so, if it's reversible
             if is_quoted_url(url) and not get_named_url_from_quoted_url(url):
                 raise ValidationError(_('No reverse match found for the named url'), 'no_reverse_match')
             # check if it's a fiber_url (more strict than absolute url)
