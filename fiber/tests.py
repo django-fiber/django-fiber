@@ -1,11 +1,15 @@
 import re
 
+from django.conf.urls import patterns, url
+from django.views.generic import View
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template import Template, Context
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 from .models import ContentItem, Page, PageContentItem
+from .utils.validators import FiberURLValidator
 
 
 def format_list(l, must_sort=True, separator=' '):
@@ -526,3 +530,35 @@ class TestTemplateTags(TestCase):
                         'fiber_admin_page_edit_url_sub2': reverse('fiber_admin:fiber_page_change', args=(6, )),
                         }
                  ))
+
+
+class TestView(View):
+    pass
+
+
+urlpatterns = patterns('',
+    url(r'^test_url/$', TestView.as_view(), name='another_named_url'),
+)
+
+
+class TestUtilsURLValidator(TestCase):
+    urls = 'fiber.tests'  # use this url conf for our tests
+    validator = FiberURLValidator()
+
+    def test_passes_normal(self):
+        self.assertEqual(self.validator('http://google.com'), None)
+
+    def test_passes_url_containts_anchor(self):
+        self.assertEqual(self.validator('/some_page#SomeAnchor'), None)
+
+    def test_named_url(self):
+        # Must raise if named url does not exist
+        with self.assertRaises(ValidationError):
+            self.validator('"some_named_url"')
+
+        # Named url does exist
+        self.assertEquals(self.validator('"another_named_url"'), None)
+
+        # A fiber page also uses that named_url
+        Page.objects.create(title='some_page', url='"another_named_url"').save()
+        self.assertEquals(self.validator('"another_named_url"'), None)
