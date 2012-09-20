@@ -546,10 +546,13 @@ class TestUtilsURLValidator(TestCase):
     validator = FiberURLValidator()
 
     def test_passes_normal(self):
-        self.assertEqual(self.validator('http://google.com'), None)
+        self.assertEqual(self.validator('http://www.google.com/'), None)
 
-    def test_passes_url_containts_anchor(self):
-        self.assertEqual(self.validator('/some_page#SomeAnchor'), None)
+    def test_passes_url_contains_anchor(self):
+        self.assertEqual(self.validator('/some/page/#SomeAnchor'), None)
+
+    def test_passes_url_contains_querystring_and_anchor(self):
+        self.assertEqual(self.validator('/some/page/?id=12&user_id=1#SomeAnchor'), None)
 
     def test_named_url(self):
         # Must raise if named url does not exist
