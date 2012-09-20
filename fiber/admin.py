@@ -2,25 +2,50 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.util import model_ngettext
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import PermissionDenied
 
 from mptt.admin import MPTTModelAdmin
 
 from . import admin_forms as forms
 from . import fiber_admin
-from .app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES
+from .app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES, PERMISSION_CLASS
 from .editor import get_editor_field_name
 from .models import Page, ContentItem, PageContentItem, Image, File
 from .utils.class_loader import load_class
-from .app_settings import PERMISSION_CLASS
+
+perms = load_class(PERMISSION_CLASS)
 
 
 class UserPermissionMixin(object):
+
+    def has_change_permission(self, request, obj=None):
+        """
+        Overrides Django's ModelAdmin method.
+        """
+        if obj:  # obj can be None for list views
+            return perms.can_edit(request.user, obj)
+        return super(UserPermissionMixin, self).has_change_permission(request)
+
+    def has_delete_permission(self, request, obj=None):
+        """
+        Override Django's ModelAdmin method.
+        Handles both instance-delete and bulk-delete views.
+        """
+        if obj:  # instance-delete action
+            return perms.can_edit(request.user, obj)
+        pks = request.POST.getlist('_selected_action')  # bulk delete action
+        qs = self.model.objects.filter(pk__in=pks)
+        editables_qs = perms.filter_objects(request.user, self.model.objects.all())
+        if len(set(qs) & set(editables_qs)) != len(qs):
+            return False
+        return True
+
     def save_model(self, request, obj, form, change):
         """
         Notifies the PERMISSION_CLASS that an `obj` was created by `user`.
         """
         super(UserPermissionMixin, self).save_model(request, obj, form, change)
-        load_class(PERMISSION_CLASS).object_created(request.user, obj)
+        perms.object_created(request.user, obj)
 
 
 class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
@@ -35,6 +60,10 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
         return actions
 
     def really_delete_selected(self, request, queryset):
+        # Check that the user has delete permission for the actual model
+        if not self.has_delete_permission(request):
+            raise PermissionDenied
+
         for obj in queryset:
             obj.delete()
 
@@ -46,27 +75,8 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
     really_delete_selected.short_description = _('Delete selected files')
 
 
-class ImageAdmin(UserPermissionMixin, admin.ModelAdmin):
-    list_display = ('title', '__unicode__')
-    date_hierarchy = 'updated'
-    search_fields = ('title', )
-    actions = ['really_delete_selected']
-
-    def get_actions(self, request):
-        actions = super(ImageAdmin, self).get_actions(request)
-        del actions['delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
-        return actions
-
-    def really_delete_selected(self, request, queryset):
-        for obj in queryset:
-            obj.delete()
-
-        n = queryset.count()
-        self.message_user(request, _("Successfully deleted %(count)d %(items)s.") % {
-            "count": n, "items": model_ngettext(self.opts, n)
-        })
-
-    really_delete_selected.short_description = _('Delete selected images')
+class ImageAdmin(FileAdmin):
+    pass
 
 
 class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):

@@ -33,8 +33,8 @@ class CustomPermissions(Permissions):
 
     def __init__(self):
         """
-        Since guardian does not delete permission objects, when the objects that
-        they pont to are deleted. We must take care of deleting them our selves.
+        Since guardian does not delete permission-objects, when the objects that
+        they point to are deleted, we must take care of deleting them our selves.
         See http://packages.python.org/django-guardian/userguide/caveats.html?highlight=caveat
         """
         pre_delete.connect(remove_obj_perms_connected_with_object, sender=Image)
@@ -60,7 +60,7 @@ class CustomPermissions(Permissions):
 
     def can_move_page(self, user, page):
         """
-        A user with chnange-permissions is allowed to move the page.
+        A user with change-permissions is allowed to move the page.
         A superuser always has all permissions as far as guardian is concerned.
         """
         return 'change_page' in get_perms(user, page)
