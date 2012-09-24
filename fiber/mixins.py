@@ -11,6 +11,8 @@ class PageSingleton(object):
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super(PageSingleton, cls).__new__(cls, *args, **kwargs)
+            cls._instance.page = None
+            cls._instance.current_pages = None
         return cls._instance
 
     @property

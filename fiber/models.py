@@ -2,9 +2,12 @@ import os
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
 from django.db import models
+from django.http import HttpRequest
+from django.utils.cache import get_cache_key
 from django.utils.html import strip_tags
 from django.utils import simplejson
 from django.utils.translation import ugettext
@@ -72,6 +75,10 @@ class ContentItem(models.Model):
 
         return simplejson.dumps(self.used_on_pages_data)
 
+    def cache_invalidator(self):
+        for page_content_item in self.page_content_items.all():
+            page_content_item.cache_invalidator()
+
 
 class Page(MPTTModel):
     created = models.DateTimeField(_('created'), auto_now_add=True)
@@ -102,6 +109,13 @@ class Page(MPTTModel):
 
     def __unicode__(self):
         return self.title
+
+    def cache_invalidator(self):
+        request = HttpRequest()
+        request.path = self.get_absolute_url()
+        key = get_cache_key(request)
+        if cache.has_key(key):
+            cache.delete(key)
 
     def save(self, *args, **kwargs):
         if not self.content_type:
@@ -289,6 +303,9 @@ class PageContentItem(models.Model):
                 page_content_items.insert(next_index, self)
                 resort()
 
+    def cache_invalidator(self):
+        self.page.cache_invalidator()
+
 
 class Image(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
@@ -335,3 +352,18 @@ class File(models.Model):
     def delete(self, *args, **kwargs):
         os.remove(os.path.join(settings.MEDIA_ROOT, str(self.file)))
         super(File, self).delete(*args, **kwargs)
+
+
+from django.db.models import signals
+
+def page_cache_invalidator(sender, **kwargs):
+    kwargs['instance'].cache_invalidator()
+
+signals.post_save.connect(page_cache_invalidator, sender=ContentItem)
+signals.pre_delete.connect(page_cache_invalidator, sender=ContentItem)
+signals.post_save.connect(page_cache_invalidator, sender=PageContentItem)
+signals.pre_delete.connect(page_cache_invalidator, sender=PageContentItem)
+signals.post_save.connect(page_cache_invalidator, sender=Page)
+signals.pre_delete.connect(page_cache_invalidator, sender=Page)
+
+#TODO: invalidate all references to pages with links etc. when url changes

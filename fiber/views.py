@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.http import HttpResponsePermanentRedirect, Http404
+from django.views.decorators.cache import cache_page
 from django.views.generic.base import TemplateView
 
-from .app_settings import DEFAULT_TEMPLATE
+from .app_settings import DEFAULT_TEMPLATE, CACHING, CACHE_MIDDLEWARE_SECONDS
 from .mixins import FiberPageMixin
 
 
@@ -42,3 +43,6 @@ class FiberTemplateView(FiberPageMixin, TemplateView):
         return super(FiberTemplateView, self).render_to_response(*args, **kwargs)
 
 page = FiberTemplateView.as_view()
+
+if CACHING:
+    page = cache_page(CACHE_MIDDLEWARE_SECONDS)(page)
