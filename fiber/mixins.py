@@ -8,9 +8,9 @@ from .models import Page
 class PageSingleton(object):
 
     _instance = None
-    def __new__(cls):
+    def __new__(cls, *args, **kwargs):
         if not cls._instance:
-            cls._instance = super(PageSingleton, cls).__new__(cls)
+            cls._instance = super(PageSingleton, cls).__new__(cls, *args, **kwargs)
         return cls._instance
 
     @property
@@ -38,10 +38,10 @@ class FiberPageMixin(object):
 
     def get_context_data(self, **kwargs):
         context = super(FiberPageMixin, self).get_context_data(**kwargs)
-        PageSingleton.page = self.get_fiber_page()
-        PageSingleton.current_pages = self.get_fiber_current_pages()
-        context['fiber_page'] = PageSingleton.page
-        context['fiber_current_pages'] = PageSingleton.current_pages
+        PageSingleton().page = self.get_fiber_page()
+        PageSingleton().current_pages = self.get_fiber_current_pages()
+        context['fiber_page'] = PageSingleton().page
+        context['fiber_current_pages'] = PageSingleton().current_pages
         return context
 
     def get_fiber_page_url(self):

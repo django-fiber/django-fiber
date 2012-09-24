@@ -24,7 +24,7 @@ def page_info(request):
             if re.search(exclude_url, url.lstrip('/')):
                 return context
 
-    page = PageSingleton.page
+    page = PageSingleton().page
 
     """
     Block access to pages that the current user isn't supposed to see.
