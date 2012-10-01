@@ -531,6 +531,32 @@ class TestTemplateTags(TestCase):
                         }
                  ))
 
+    def test_show_page_content(self):
+        # The show_page_content templatetag should support rendering content from multiple pages in one view.
+
+        p1 = Page.objects.create(title='p1')
+        c1 = ContentItem.objects.create(content_html='<p>c1</p>')
+        PageContentItem.objects.create(content_item=c1, page=p1, block_name='test_block')
+        p2 = Page.objects.create(title='p2')
+        c2 = ContentItem.objects.create(content_html='<p>c2</p>')
+        PageContentItem.objects.create(content_item=c2, page=p2, block_name='test_block')
+
+        t = Template("""
+            {% load fiber_tags %}
+            {% show_page_content second_page 'test_block' %}
+            {% show_page_content 'test_block' %}
+            """
+            )
+
+        c = Context({
+            'fiber_page': p1,
+            'second_page': p2
+        })
+
+        self.assertEquals(
+            condense_html_whitespace(t.render(c)),
+            ('<div><div class="content"><p>c2</p></div></div><div><div class="content"><p>c1</p></div></div>'))
+
 
 class TestView(View):
     pass

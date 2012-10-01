@@ -176,7 +176,6 @@ class ShowPageContentNode(template.Node):
                 content_items.append(content_item)
 
             context['ContentItem'] = ContentItem
-            context['fiber_page'] = page
             context['fiber_block_name'] = self.block_name
             context['fiber_content_items'] = content_items
             t = template.loader.get_template('fiber/content_items.html')
