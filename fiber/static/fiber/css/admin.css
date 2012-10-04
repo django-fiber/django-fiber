@@ -106,7 +106,7 @@ div.ui-dialog form label,
 
 #df-sidebar .sidebar-tree {
 	margin-bottom: 10px;
-	margin-left: 21px;
+	margin-left: 10px;
 }
 
 #df-sidebar #df-sidebar-top-section {
@@ -590,12 +590,12 @@ ul.jqtree-tree .jqtree-toggler:hover {
 }
 
 ul.jqtree-tree div {
+    height: 22px;
     cursor: pointer;
 }
 
 ul.jqtree-tree .jqtree-title {
     color: #1C4257;
-    vertical-align: middle;
 }
 
 ul.jqtree-tree li.jqtree-folder {
@@ -693,12 +693,9 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 	margin-left: 12px;
 }
 
-#df-wpr-sidebar .jqtree-tree .jqtree-folder {
-    margin-bottom: 4px;
-}
-
 #df-wpr-sidebar .jqtree-tree .jqtree-toggler {
 	color: #666;
+    font-size: 9px;
 }
 
 #df-wpr-sidebar ul.jqtree-tree ul {
