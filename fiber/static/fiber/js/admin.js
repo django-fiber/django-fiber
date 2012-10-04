@@ -973,7 +973,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 
 		function createLi(node, $li) {
 			if (node.change_url) {
-				$li.find('.title').before('<span class="icon"></span>');
+				$li.find('.jqtree-title').before('<span class="icon"></span>');
 				$li.find('div').addClass('page');
 			}
 		}
@@ -1419,7 +1419,7 @@ var adminPage = {
 		function createLi(node, $li) {
 			if (node.change_url) {
 				var $div = $li.find('div');
-				$li.find('.title').before('<span class="icon"></span>');
+				$li.find('.jqtree-title').before('<span class="icon"></span>');
 				$div.addClass('page');
 
 				if (!node.show_in_menu) {
