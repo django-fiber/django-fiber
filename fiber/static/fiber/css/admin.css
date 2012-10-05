@@ -735,8 +735,9 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
     filter: dropshadow(color=#fff, offx=0, offy=1);
 }
 
-.jqtree-tree .page {
-    white-space: nowrap;
+.jqtree-tree .page,
+#df-sidebar-content-tree .jqtree-title {
+   white-space: nowrap;
 }
 
 /* permissions-related styling */
