@@ -59,7 +59,8 @@ class ListView(ListOrCreateModelView):
 
 
 class TreeListView(View):
-
+    renderers = API_RENDERERS
+    
     def get(self, request):
         """
         Provide jqTree data for the PageSelect dialog.
@@ -97,7 +98,6 @@ class PaginatedListView(PaginatorMixin, ListView):
 class FileListView(PaginatedListView):
 
     orderable_fields = ('filename', 'updated')
-    limit = 20
 
     def get_queryset(self, *args, **kwargs):
         qs = super(FileListView, self).get_queryset(*args, **kwargs)
