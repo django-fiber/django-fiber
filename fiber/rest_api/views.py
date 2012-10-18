@@ -59,7 +59,8 @@ class ListView(ListOrCreateModelView):
 
 
 class TreeListView(View):
-
+    renderers = API_RENDERERS
+    
     def get(self, request):
         """
         Provide jqTree data for the PageSelect dialog.
