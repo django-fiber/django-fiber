@@ -925,7 +925,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 	defaults: {
 		url: '/api/v2/pages/',
 		width: 480,
-		height: 320,
+		height: 520,
 		start_width: 480,
 		start_height: 320
 	},
