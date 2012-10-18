@@ -97,6 +97,7 @@ class PaginatedListView(PaginatorMixin, ListView):
 class FileListView(PaginatedListView):
 
     orderable_fields = ('filename', 'updated')
+    limit = 20
 
     def get_queryset(self, *args, **kwargs):
         qs = super(FileListView, self).get_queryset(*args, **kwargs)
