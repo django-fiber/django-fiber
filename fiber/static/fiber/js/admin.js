@@ -804,7 +804,8 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 				{title: gettext('Updated'), key: 'updated'}
 			],
 			url: this.options.url,
-			order_by: 'filename'
+			order_by: 'updated',
+			sortorder: 'desc'
 		});
 
 		this.select_grid.bind('datagrid.select', function() {
@@ -884,7 +885,8 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 				{title: gettext('Updated'), key: 'updated'}
 			],
 			url: this.options.url,
-			order_by: 'filename'
+			order_by: 'updated',
+			sortorder: 'desc'
 		});
 		this.select_grid.bind('datagrid.select', function() {
 			action_button.attr('disabled', '');
