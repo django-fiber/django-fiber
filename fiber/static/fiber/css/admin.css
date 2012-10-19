@@ -560,6 +560,7 @@ ul.jqtree-tree ul {
 
 ul.jqtree-tree ul {
     display: block;
+    margin-top: 0;
     margin-left: 12px;
     margin-right: 0;
 }
@@ -753,11 +754,26 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 }
 
 .ui-dialog-content ul.jqtree-tree ul {
-	margin-bottom: 4px;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.ui-dialog-content ul.jqtree-tree li {
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 .ui-dialog-content ul.jqtree-tree div {
-	padding: 1px 0;
+	line-height: 22px;
+}
+
+.ui-dialog-content ul.jqtree-tree .jqtree-toggler {
+	font-size: 10px;
+	top: 25%;
+}
+
+.ui-dialog-content ul.jqtree-tree .jqtree-toggler:hover {
+	text-decoration: none;
 }
 
 /* file and image grid */
