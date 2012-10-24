@@ -118,10 +118,18 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
 register.inclusion_tag('fiber/menu.html', takes_context=True)(show_menu)
 
 
-def show_content(context, content_item_name):
+def show_content(context, content_item_name, allow_tags=False):
     content_item = None
     try:
         content_item = ContentItem.objects.get(name__exact=content_item_name)
+        if not isinstance(allow_tags, bool):
+            try:
+                tpl = template.Template(content_item.content_html)
+                content_item.content_html = tpl.render(context)
+            except:
+                # There are some things we might want to catch
+                # like URL reversing failures
+                pass
     except ContentItem.DoesNotExist:
         pass
 
