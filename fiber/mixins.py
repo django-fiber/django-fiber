@@ -28,7 +28,9 @@ class FiberPageMixin(object):
         return self.fiber_page_url
 
     def get_fiber_page(self):
-        return self.fiber_page or Page.objects.get_by_url(self.get_fiber_page_url())
+        if self.fiber_page is None:
+            self.fiber_page = Page.objects.get_by_url(self.get_fiber_page_url())
+        return self.fiber_page
 
     def get_fiber_current_pages(self):
         if self.fiber_current_pages is None:
