@@ -608,11 +608,11 @@ class TestFiberPageMixin(TestCase):
                 return self.url
 
         view = TestView()
-
         view.url = 'aa'
         # There should be no root node, but we do want a page; aa
         self.assertEqual([self.aa], view.get_fiber_current_pages())
 
+        view = TestView()
         view.url = 'aaa'
         # again no root node but we do want to pages; aa -> aaa
         self.assertEqual([self.aa, self.aaa], view.get_fiber_current_pages())
