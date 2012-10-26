@@ -9,7 +9,10 @@ class FiberPageMixin(object):
     """
     Adds fiber_page and fiber_current_pages to the context
     """
+    # This attribute must be set in the subclass
     fiber_page_url = None
+
+    # These attributes can be overridden in a subclass
     fiber_page = None
     fiber_current_pages = None
 
@@ -28,22 +31,24 @@ class FiberPageMixin(object):
         return self.fiber_page_url
 
     def get_fiber_page(self):
-        return self.fiber_page or Page.objects.get_by_url(self.get_fiber_page_url())
+        if self.fiber_page is None:
+            self.fiber_page = Page.objects.get_by_url(self.get_fiber_page_url())
+        return self.fiber_page
 
     def get_fiber_current_pages(self):
-        if not self.fiber_current_pages:
+        if not self.fiber_current_pages:  # None or empty list
             self.fiber_current_pages = []
             """
             Find pages that should be marked as current in menus.
             """
-            if self.get_fiber_page() != None:
+            current_page = self.get_fiber_page()
+            if current_page:
                 """
                 The current page should be marked as current, obviously,
                 as well as all its ancestors.
                 """
-
-                self.fiber_current_pages.append(self.get_fiber_page())
-                self.fiber_current_pages.extend(self.get_fiber_page().get_ancestors())
+                self.fiber_current_pages.append(current_page)
+                self.fiber_current_pages.extend(current_page.get_ancestors())
 
             """
             For all pages that are not already current_pages,
@@ -53,11 +58,11 @@ class FiberPageMixin(object):
             current_page_candidates = Page.objects.exclude(mark_current_regexes__exact='')
             url = self.get_fiber_page_url()
 
-            for current_page_candidate in list(set(current_page_candidates) - set(self.fiber_current_pages)):
-                for mark_current_regex in current_page_candidate.mark_current_regexes.strip().splitlines():
+            for candidate in list(set(current_page_candidates) - set(self.fiber_current_pages)):
+                for mark_current_regex in candidate.mark_current_regexes.strip().splitlines():
                     if re.match(mark_current_regex, url):
-                        self.fiber_current_pages.append(current_page_candidate)
-                        self.fiber_current_pages.extend(current_page_candidate.get_ancestors())
+                        self.fiber_current_pages.append(candidate)
+                        self.fiber_current_pages.extend(candidate.get_ancestors())
                         break
 
             """

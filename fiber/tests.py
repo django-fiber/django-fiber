@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 
 from .models import ContentItem, Page, PageContentItem
 from .utils.validators import FiberURLValidator
+from .mixins import FiberPageMixin
 
 
 def format_list(l, must_sort=True, separator=' '):
@@ -298,7 +299,7 @@ class PageContentItemTest(TestCase):
 
 class TestTemplateTags(TestCase):
 
-    def generate_data(self):
+    def setUp(self):
         """
         Generates test data
         """
@@ -321,8 +322,6 @@ class TestTemplateTags(TestCase):
         return user
 
     def test_show_user_menu_all(self):
-        self.generate_data()
-
         # render menu with all pages
         t = Template("""
             {% load fiber_tags %}
@@ -362,7 +361,6 @@ class TestTemplateTags(TestCase):
         """
         Tests for 'all_descendants' with a minimum level
         """
-        self.generate_data()
         user = self.get_non_staff_user()
 
         t = Template("""
@@ -417,8 +415,6 @@ class TestTemplateTags(TestCase):
         """
         Test for minimum and maximum level
         """
-        self.generate_data()
-
         t = Template("""
             {% load fiber_tags %}
             {% show_menu 'main' 2 2 %}
@@ -463,7 +459,6 @@ class TestTemplateTags(TestCase):
         Test that show_menu only shows top level if current
         page is in different root.
         """
-        self.generate_data()
         other_root = Page.objects.create(title='other')
 
         t = Template("""
@@ -485,8 +480,6 @@ class TestTemplateTags(TestCase):
                  '</ul>'))
 
     def test_show_admin_menu_all(self):
-        self.generate_data()
-
         # render menu with all pages
         t = Template("""
             {% load fiber_tags %}
@@ -591,3 +584,37 @@ class TestUtilsURLValidator(TestCase):
         # A fiber page also uses that named_url
         Page.objects.create(title='some_page', url='"another_named_url"').save()
         self.assertEquals(self.validator('"another_named_url"'), None)
+
+
+class TestFiberPageMixin(TestCase):
+
+    def setUp(self):
+        """
+        Generate test data
+        """
+        self.a = Page.objects.create(title='a')
+        self.aa = Page.objects.create(title='aa', parent=self.a, url='aa')
+        Page.objects.create(title='ab', parent=self.a, url='ab')
+        self.aaa = Page.objects.create(title='aaa', parent=self.aa, url='aaa')
+
+    def test_current_pages(self):
+        """
+        `get_fiber_current_pages` must return the correct list of pages that are marked as
+        current.
+        """
+        class TestView(FiberPageMixin, View):
+            def get_fiber_page_url(self):  # FiberPageMixin requires this method
+                # mock a request
+                return self.url
+
+        view = TestView()
+        view.url = 'aa'
+        # There should be no root node, but we do want a page; aa
+        self.assertEqual([self.aa], view.get_fiber_current_pages())
+
+        view = TestView()
+        view.url = 'aaa'
+        # again no root node but we do want to pages; aa -> aaa
+        self.assertEqual([self.aa, self.aaa], view.get_fiber_current_pages())
+
+    # TODO write tests for `mark_current_regexes` behavior
