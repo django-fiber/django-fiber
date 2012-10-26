@@ -9,7 +9,10 @@ class FiberPageMixin(object):
     """
     Adds fiber_page and fiber_current_pages to the context
     """
+    # This attribute must be set in the subclass
     fiber_page_url = None
+
+    # These attributes can be overridden in a subclass
     fiber_page = None
     fiber_current_pages = None
 
@@ -33,8 +36,8 @@ class FiberPageMixin(object):
         return self.fiber_page
 
     def get_fiber_current_pages(self):
-        if self.fiber_current_pages is None:
-            current_pages = []
+        if not self.fiber_current_pages:  # None or empty list
+            self.fiber_current_pages = []
             """
             Find pages that should be marked as current in menus.
             """
@@ -44,8 +47,8 @@ class FiberPageMixin(object):
                 The current page should be marked as current, obviously,
                 as well as all its ancestors.
                 """
-                current_pages.append(current_page)
-                current_pages.extend(current_page.get_ancestors())
+                self.fiber_current_pages.append(current_page)
+                self.fiber_current_pages.extend(current_page.get_ancestors())
 
             """
             For all pages that are not already current_pages,
@@ -55,17 +58,17 @@ class FiberPageMixin(object):
             current_page_candidates = Page.objects.exclude(mark_current_regexes__exact='')
             url = self.get_fiber_page_url()
 
-            for candidate in list(set(current_page_candidates) - set(current_pages)):
+            for candidate in list(set(current_page_candidates) - set(self.fiber_current_pages)):
                 for mark_current_regex in candidate.mark_current_regexes.strip().splitlines():
                     if re.match(mark_current_regex, url):
-                        current_pages.append(candidate)
-                        current_pages.extend(candidate.get_ancestors())
+                        self.fiber_current_pages.append(candidate)
+                        self.fiber_current_pages.extend(candidate.get_ancestors())
                         break
 
             """
             Order current_pages for use with tree_info template tag,
             and remove the root node in the process.
             """
-            current_pages = sorted(current_pages, key=lambda fiber_current_page: fiber_current_page.lft)[1:]
+            self.fiber_current_pages = sorted(self.fiber_current_pages, key=lambda fiber_current_page: fiber_current_page.lft)[1:]
 
-        return current_pages
+        return self.fiber_current_pages
