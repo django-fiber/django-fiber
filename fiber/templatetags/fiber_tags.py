@@ -8,7 +8,7 @@ from fiber import __version__ as fiber_version_number
 from fiber.models import Page, ContentItem
 
 from fiber.utils.urls import get_admin_change_url
-from fiber.app_settings import PERMISSION_CLASS
+from fiber.app_settings import PERMISSION_CLASS, AUTO_CREATE_CONTENT_ITEMS
 from fiber.utils import class_loader
 
 PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
@@ -131,7 +131,9 @@ def show_content(context, content_item_name, allow_tags=False):
                 # like URL reversing failures
                 pass
     except ContentItem.DoesNotExist:
-        pass
+        if AUTO_CREATE_CONTENT_ITEMS:
+            content_item = ContentItem.objects.create(name=content_item_name)
+            return show_content(context, content_item_name, allow_tags)
 
     context['content_item'] = content_item
 
