@@ -1,5 +1,5 @@
-.. image:: https://secure.travis-ci.org/mbraak/django-fiber.png
-  :target: http://travis-ci.org/#!/mbraak/django-fiber
+.. image:: https://secure.travis-ci.org/ridethepony/django-fiber.png
+  :target: http://travis-ci.org/#!/ridethepony/django-fiber
 
 ============
 Django Fiber
