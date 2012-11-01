@@ -5,6 +5,7 @@ install:
   - "pip install -r testproject/requirements.txt --use-mirrors"
 script:
   - cd testproject
+  - mkdir -p reports
   - python manage.py jenkins
 branches:
   only:

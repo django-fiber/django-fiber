@@ -166,3 +166,6 @@ JENKINS_TASKS = (
     'django_jenkins.tasks.with_coverage',
     'django_jenkins.tasks.django_tests',
 )
+
+# Only run tests for fiber app
+PROJECT_APPS = ['fiber']
