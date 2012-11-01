@@ -349,7 +349,7 @@ var AdminForm = Class.extend({
 
 	// get the form element from the HTML that is returned by the XHR
 	get_form_from_HTML: function(html) {
-		var forms = $(document.createElement('div')).html(this.strip_HTML(html)).find('#content-main form[id$=_form]');
+		var forms = $(document.createElement('div')).html(this.strip_HTML(html)).find('#content-main form[id$=_form], #grp-content-container form[id$=_form]');
 		if (forms.length == 1) {
 			this.form = $(forms[0]);
 
@@ -455,6 +455,7 @@ var LoginForm = AdminForm.extend({
 	set_styling: function() {
 		// remove submit button(s) and `delete` link
 		this.form.find('div.submit-row').remove();
+		this.form.find('footer.grp-submit-row').remove(); // remove grappelli footer
 
 		// strip ':' from the end of labels
 		this.form.find('label').each(function() {
