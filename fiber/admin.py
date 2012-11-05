@@ -49,7 +49,7 @@ class UserPermissionMixin(object):
 
 
 class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
-    list_display = ('title', '__unicode__')
+    list_display = ('__unicode__', 'title', )
     date_hierarchy = 'updated'
     search_fields = ('title', )
     actions = ['really_delete_selected']
