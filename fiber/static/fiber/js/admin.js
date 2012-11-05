@@ -669,9 +669,9 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 			element: upload_button_pane[0],
 			button: upload_button_pane[0], // connecting directly to the jQUery UI upload_button doesn't work
 			action: this.get_upload_path(),
-			params: {
-				title: 'uploaded'
-			},
+			onSubmit: $.proxy(function(id, fileName) {
+				uploader._options.params.title = fileName;
+			}, this),
 			onComplete: $.proxy(function(id, fileName, responseJSON) {
 				this.refresh_grid();
 			}, this),
