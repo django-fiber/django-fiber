@@ -26,6 +26,22 @@ _403_FORBIDDEN_RESPONSE = ErrorResponse(
                'You may need to login or otherwise authenticate the request.'})
 
 
+from rest_framework import generics, renderers
+from .serializers import PageSerializer
+
+
+class PageList(generics.ListCreateAPIView):
+    model = Page
+    serializer_class = PageSerializer
+    renderer_classes = (renderers.JSONRenderer, )
+
+
+class PageDetail(generics.RetrieveUpdateDestroyAPIView):
+    model = Page
+    serializer_class = PageSerializer
+    renderer_classes = (renderers.JSONRenderer, )
+
+
 class ApiRoot(View):
     """
     The root view for the rest api.
