@@ -309,6 +309,12 @@ class Image(models.Model):
     def get_image_information(self):
         self.width, self.height = get_image_dimensions(self.image) or (0, 0)
 
+    def get_filename(self):
+        return os.path.basename(self.image.name)
+
+    def get_size(self):
+        return '%s x %d' % (self.width, self.height)
+
 
 class File(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
