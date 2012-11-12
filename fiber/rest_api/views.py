@@ -81,6 +81,7 @@ class FileList(FiberListCreateAPIView):
     model = File
     serializer_class = FileSerializer
     renderer_classes = (renderers.JSONRenderer, )
+    pagination_serializer_class = FiberPaginationSerializer
     paginate_by = 5
 
 
