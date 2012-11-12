@@ -81,6 +81,7 @@ class FileList(FiberListCreateAPIView):
     model = File
     serializer_class = FileSerializer
     renderer_classes = (renderers.JSONRenderer, )
+    paginate_by = 5
 
 
 class FileDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -93,6 +94,7 @@ class ImageList(FiberListCreateAPIView):
     model = Image
     serializer_class = ImageSerializer
     renderer_classes = (renderers.JSONRenderer, )
+    paginate_by = 5
 
 
 class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
