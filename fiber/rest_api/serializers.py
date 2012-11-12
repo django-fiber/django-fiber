@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from fiber.models import Page, PageContentItem, ContentItem, Image
+from fiber.models import Page, PageContentItem, ContentItem, File, Image
 
 from .fields import CanEditField
 
@@ -24,6 +24,16 @@ class ContentItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContentItem
+
+
+class FileSerializer(serializers.ModelSerializer):
+    file_url = serializers.Field(source='file.url')
+    filename = serializers.Field(source='get_filename')
+    can_edit = CanEditField()
+
+    class Meta:
+        model = File
+        read_only_fields = ('created', 'updated')
 
 
 class ImageSerializer(serializers.ModelSerializer):

@@ -341,3 +341,6 @@ class File(models.Model):
     def delete(self, *args, **kwargs):
         os.remove(os.path.join(settings.MEDIA_ROOT, str(self.file)))
         super(File, self).delete(*args, **kwargs)
+
+    def get_filename(self):
+        return os.path.basename(self.file.name)

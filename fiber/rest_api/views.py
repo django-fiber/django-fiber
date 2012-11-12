@@ -9,7 +9,7 @@ from djangorestframework.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
 from djangorestframework.response import ErrorResponse
 from djangorestframework.renderers import JSONRenderer, DocumentingHTMLRenderer
 
-from fiber.models import Page, PageContentItem, ContentItem, Image
+from fiber.models import Page, PageContentItem, ContentItem, File, Image
 from fiber.app_settings import API_RENDER_HTML, PERMISSION_CLASS
 from fiber.utils import class_loader
 from .forms import MovePageForm, MovePageContentItemForm
@@ -26,8 +26,8 @@ _403_FORBIDDEN_RESPONSE = ErrorResponse(
                'You may need to login or otherwise authenticate the request.'})
 
 
-from rest_framework import generics, renderers, parsers
-from .serializers import PageSerializer, PageContentItemSerializer, ContentItemSerializer, ImageSerializer
+from rest_framework import generics, renderers
+from .serializers import PageSerializer, PageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer
 
 
 class PageList(generics.ListCreateAPIView):
@@ -66,11 +66,22 @@ class ContentItemDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (renderers.JSONRenderer, )
 
 
+class FileList(generics.ListCreateAPIView):
+    model = File
+    serializer_class = FileSerializer
+    renderer_classes = (renderers.JSONRenderer, )
+
+
+class FileDetail(generics.RetrieveUpdateDestroyAPIView):
+    model = File
+    serializer_class = FileSerializer
+    renderer_classes = (renderers.JSONRenderer, )
+
+
 class ImageList(generics.ListCreateAPIView):
     model = Image
     serializer_class = ImageSerializer
     renderer_classes = (renderers.JSONRenderer, )
-    #parser_classes = (parsers.MultiPartParser, )
 
 
 class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
