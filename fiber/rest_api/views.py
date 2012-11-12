@@ -1,8 +1,8 @@
 from django.db.models import Q
 
 from djangorestframework.views import View
-from djangorestframework.permissions import IsAdminUser
-from djangorestframework.views import ListOrCreateModelView, InstanceModelView
+from djangorestframework.permissions import IsAuthenticated
+from djangorestframework.views import ListOrCreateModelView
 from djangorestframework.mixins import PaginatorMixin
 from djangorestframework.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
 from djangorestframework.response import ErrorResponse
@@ -34,7 +34,14 @@ from rest_framework import views
 from .serializers import PageSerializer, PageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer
 
 
-class PageList(generics.ListCreateAPIView):
+class FiberListCreateAPIView(generics.ListCreateAPIView):
+    def create(self, request, *args, **kwargs):
+        response = super(FiberListCreateAPIView, self).created(request, *args, **kwargs)
+        PERMISSIONS.object_created(request.user, self.object)
+        return response
+
+
+class PageList(FiberListCreateAPIView):
     model = Page
     serializer_class = PageSerializer
     renderer_classes = (renderers.JSONRenderer, )
@@ -46,7 +53,7 @@ class PageDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (renderers.JSONRenderer, )
 
 
-class PageContentItemList(generics.ListCreateAPIView):
+class PageContentItemList(FiberListCreateAPIView):
     model = PageContentItem
     serializer_class = PageContentItemSerializer
     renderer_classes = (renderers.JSONRenderer, )
@@ -58,7 +65,7 @@ class PageContentItemDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (renderers.JSONRenderer, )
 
 
-class ContentItemList(generics.ListCreateAPIView):
+class ContentItemList(FiberListCreateAPIView):
     model = ContentItem
     serializer_class = ContentItemSerializer
     renderer_classes = (renderers.JSONRenderer, )
@@ -70,7 +77,7 @@ class ContentItemDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (renderers.JSONRenderer, )
 
 
-class FileList(generics.ListCreateAPIView):
+class FileList(FiberListCreateAPIView):
     model = File
     serializer_class = FileSerializer
     renderer_classes = (renderers.JSONRenderer, )
@@ -82,7 +89,7 @@ class FileDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (renderers.JSONRenderer, )
 
 
-class ImageList(generics.ListCreateAPIView):
+class ImageList(FiberListCreateAPIView):
     model = Image
     serializer_class = ImageSerializer
     renderer_classes = (renderers.JSONRenderer, )
@@ -113,14 +120,6 @@ class ListView(ListOrCreateModelView):
 
     permissions = (IsAdminUser, )
     renderers = API_RENDERERS
-
-    def post(self, request, *args, **kwargs):
-        """
-        Notify the Permissions class of a newly created object.
-        """
-        response = super(ListView, self).post(request, *args, **kwargs)
-        PERMISSIONS.object_created(request.user, response.raw_content)  # raw_content is the Model instance
-        return response
 
 
 class PageTree(views.APIView):
