@@ -5,6 +5,9 @@ from fiber.models import Page, PageContentItem, ContentItem, File, Image
 from .fields import CanEditField, UpdatedField
 
 
+POSITION_CHOICES = sorted((item, item) for item in ['before', 'after', 'inside'])
+
+
 class PageSerializer(serializers.ModelSerializer):
     move_url = serializers.HyperlinkedIdentityField(view_name='page-resource-instance-move')
     page_url = serializers.Field(source='get_absolute_url')
@@ -13,11 +16,21 @@ class PageSerializer(serializers.ModelSerializer):
         model = Page
 
 
+class MovePageSerializer(serializers.Serializer):
+    position = serializers.ChoiceField(choices=POSITION_CHOICES)
+    target_node_id = serializers.IntegerField()
+
+
 class PageContentItemSerializer(serializers.ModelSerializer):
     move_url = serializers.HyperlinkedIdentityField(view_name='page-content-item-resource-instance-move')
 
     class Meta:
         model = PageContentItem
+
+
+class MovePageContentItemSerializer(serializers.Serializer):
+    before_page_content_item_id = serializers.IntegerField(required=False)
+    block_name = serializers.CharField()
 
 
 class ContentItemSerializer(serializers.ModelSerializer):

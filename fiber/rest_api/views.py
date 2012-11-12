@@ -1,17 +1,15 @@
 from django.db.models import Q
 
-from djangorestframework.views import View
 from djangorestframework.permissions import IsAuthenticated
 from djangorestframework.views import ListOrCreateModelView
 from djangorestframework.mixins import PaginatorMixin
-from djangorestframework.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
+from djangorestframework.status import HTTP_400_BAD_REQUEST
 from djangorestframework.response import ErrorResponse
 from djangorestframework.renderers import JSONRenderer, DocumentingHTMLRenderer
 
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
 from fiber.app_settings import API_RENDER_HTML, PERMISSION_CLASS
 from fiber.utils import class_loader
-from .forms import MovePageForm, MovePageContentItemForm
 
 PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
 
@@ -19,19 +17,22 @@ API_RENDERERS = (JSONRenderer, )
 if API_RENDER_HTML:
     API_RENDERERS = (JSONRenderer, DocumentingHTMLRenderer)
 
-_403_FORBIDDEN_RESPONSE = ErrorResponse(
-    HTTP_403_FORBIDDEN,
-    {'detail': 'You do not have permission to access this resource. ' +
-               'You may need to login or otherwise authenticate the request.'})
-
-
 from rest_framework import generics, renderers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import views
+from rest_framework import status
 
-from .serializers import PageSerializer, PageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer, FiberPaginationSerializer
+from .serializers import PageSerializer, MovePageSerializer, PageContentItemSerializer, MovePageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer, FiberPaginationSerializer
+
+
+_403_FORBIDDEN_RESPONSE = Response(
+    {
+    'detail': 'You do not have permission to access this resource. ' +
+    'You may need to login or otherwise authenticate the request.'
+    },
+    status.HTTP_403_FORBIDDEN)
 
 
 class FiberListCreateAPIView(generics.ListCreateAPIView):
@@ -53,6 +54,25 @@ class PageDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (renderers.JSONRenderer, )
 
 
+class MovePageView(views.APIView):
+
+    serializer_class = MovePageSerializer
+
+    def get(self, request, pk, format=None):
+        if not PERMISSIONS.can_move_page(request.user, Page.objects.get(id=pk)):
+            return _403_FORBIDDEN_RESPONSE
+        return Response('Exposes the `Page.move_page` method')
+
+    def put(self, request, pk, format=None):
+        if not PERMISSIONS.can_move_page(request.user, Page.objects.get(id=pk)):
+            return _403_FORBIDDEN_RESPONSE
+        position = request.DATA.get('position')
+        target = request.DATA.get('target_node_id')
+        page = Page.objects.get(id=pk)
+        page.move_page(target, position)
+        return Response('Page moved successfully.')
+
+
 class PageContentItemList(FiberListCreateAPIView):
     model = PageContentItem
     serializer_class = PageContentItemSerializer
@@ -63,6 +83,25 @@ class PageContentItemDetail(generics.RetrieveUpdateDestroyAPIView):
     model = PageContentItem
     serializer_class = PageContentItemSerializer
     renderer_classes = (renderers.JSONRenderer, )
+
+
+class MovePageContentItemView(views.APIView):
+
+    serializer_class = MovePageContentItemSerializer
+
+    def get(self, request, pk, format=None):
+        if not PERMISSIONS.can_edit(request.user, Page.objects.get(page_content_items__id=pk)):
+            return _403_FORBIDDEN_RESPONSE
+        return Response('Exposes the `PageContentItem.move` method')
+
+    def put(self, request, pk, format=None):
+        if not PERMISSIONS.can_edit(request.user, Page.objects.get(page_content_items__id=pk)):
+            return _403_FORBIDDEN_RESPONSE
+        page_content_item = PageContentItem.objects.get(id=pk)
+        before_page_content_item_id = request.DATA.get('before_page_content_item_id')
+        block_name = request.DATA.get('block_name')
+        page_content_item.move(before_page_content_item_id, block_name)
+        return Response('PageContentItem moved successfully.')
 
 
 class ContentItemList(FiberListCreateAPIView):
@@ -194,44 +233,3 @@ class ImageListView(PaginatedListView):
 
         return qs
 
-
-class MovePageView(View):
-
-    permissions = (IsAdminUser, )
-    renderers = API_RENDERERS
-
-    form = MovePageForm
-
-    def get(self, request, pk):
-        if not PERMISSIONS.can_move_page(self.request.user, Page.objects.get(id=pk)):
-            raise _403_FORBIDDEN_RESPONSE
-        return 'Exposes the `Page.move_page` method'
-
-    def put(self, request, pk):
-        if not PERMISSIONS.can_move_page(self.request.user, Page.objects.get(id=pk)):
-            raise _403_FORBIDDEN_RESPONSE
-        position = self.CONTENT['position']
-        target = self.CONTENT['target_node_id']
-        page = Page.objects.get(id=pk)
-        page.move_page(target, position)
-
-
-class MovePageContentItemView(View):
-
-    permissions = (IsAdminUser, )
-    renderers = API_RENDERERS
-
-    form = MovePageContentItemForm
-
-    def get(self, request, pk):
-        if not PERMISSIONS.can_edit(self.request.user, Page.objects.get(page_content_items__id=pk)):
-            raise _403_FORBIDDEN_RESPONSE
-        return 'Exposes the `PageContentItem.move` method'
-
-    def put(self, request, pk):
-        if not PERMISSIONS.can_edit(self.request.user, Page.objects.get(page_content_items__id=pk)):
-            raise _403_FORBIDDEN_RESPONSE
-        page_content_item = PageContentItem.objects.get(id=pk)
-        before_page_content_item_id = self.CONTENT.get('before_page_content_item_id', None)
-        block_name = self.CONTENT.get('block_name', None)
-        page_content_item.move(before_page_content_item_id, block_name)
