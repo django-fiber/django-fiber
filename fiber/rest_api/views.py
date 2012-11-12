@@ -143,18 +143,7 @@ class PaginatedListView(PaginatorMixin, ListView):
         if order_by not in self.orderable_fields:
             raise ErrorResponse(status=HTTP_400_BAD_REQUEST, content="Can not order by the passed value.")
 
-    def serialize_page_info(self, page):
-        """
-        simple-data-grid expects a total_pages key for a paginated view.
-        """
-        return {
-            'total_pages': page.paginator.num_pages,
-        }
-
     def filter_response(self, obj):
-        """
-        simple-data-grid expects rows instead of results (the Django REST framework default)
-        """
         obj = super(PaginatedListView, self).filter_response(obj)
         if self.request.method.upper() == 'GET':
             obj['rows'] = obj['results']

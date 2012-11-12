@@ -48,5 +48,9 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class FiberPaginationSerializer(pagination.BasePaginationSerializer):
+    """
+    Simple-data-grid expects a total_pages key for a paginated view.
+    Simple-data-grid expects rows as the key for objects.
+    """
     total_pages = serializers.Field(source='paginator.num_pages')
     results_field = 'rows'
