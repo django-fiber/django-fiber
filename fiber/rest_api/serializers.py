@@ -2,7 +2,7 @@ from rest_framework import serializers, pagination
 
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
 
-from .fields import CanEditField
+from .fields import CanEditField, UpdatedField
 
 
 class PageSerializer(serializers.ModelSerializer):
@@ -30,6 +30,7 @@ class FileSerializer(serializers.ModelSerializer):
     file_url = serializers.Field(source='file.url')
     filename = serializers.Field(source='get_filename')
     can_edit = CanEditField()
+    updated = UpdatedField()
 
     class Meta:
         model = File
@@ -41,6 +42,7 @@ class ImageSerializer(serializers.ModelSerializer):
     filename = serializers.Field(source='get_filename')
     size = serializers.Field(source='get_size')
     can_edit = CanEditField()
+    updated = UpdatedField()
 
     class Meta:
         model = Image

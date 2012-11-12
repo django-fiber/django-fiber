@@ -143,13 +143,6 @@ class PaginatedListView(PaginatorMixin, ListView):
         if order_by not in self.orderable_fields:
             raise ErrorResponse(status=HTTP_400_BAD_REQUEST, content="Can not order by the passed value.")
 
-    def filter_response(self, obj):
-        obj = super(PaginatedListView, self).filter_response(obj)
-        if self.request.method.upper() == 'GET':
-            obj['rows'] = obj['results']
-            obj.pop('results')
-        return obj
-
 
 class FileListView(PaginatedListView):
 
