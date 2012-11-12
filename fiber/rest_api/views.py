@@ -29,6 +29,7 @@ from rest_framework import generics, renderers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework import views
 
 from .serializers import PageSerializer, PageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer
 
@@ -100,6 +101,7 @@ def api_root(request, format='None'):
     """
     return Response({
             'pages': reverse('page-list', request=request),
+            'pagetree': reverse('pagetree', request=request),
             'page content items': reverse('pagecontentitem-list', request=request),
             'content items': reverse('contentitem-list', request=request),
             'images': reverse('image-list', request=request),
@@ -121,16 +123,13 @@ class ListView(ListOrCreateModelView):
         return response
 
 
-class TreeListView(View):
+class PageTree(views.APIView):
 
-    permissions = (IsAdminUser, )
-    renderers = API_RENDERERS
-
-    def get(self, request):
+    def get(self, request, format=None):
         """
         Provide jqTree data for the PageSelect dialog.
         """
-        return Page.objects.create_jqtree_data(request.user)
+        return Response(Page.objects.create_jqtree_data(request.user))
 
 
 class PaginatedListView(PaginatorMixin, ListView):
@@ -209,17 +208,6 @@ class ImageListView(PaginatedListView):
         qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
 
         return qs
-
-
-class InstanceView(InstanceModelView):
-
-    permissions = (IsAdminUser, )
-    renderers = API_RENDERERS
-
-    def delete(self, request, pk):
-        if not PERMISSIONS.can_edit(self.request.user, self.resource.model.objects.get(id=pk)):
-            raise _403_FORBIDDEN_RESPONSE
-        super(InstanceView, self).delete(request, id=pk)
 
 
 class MovePageView(View):
