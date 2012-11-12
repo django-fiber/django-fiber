@@ -31,7 +31,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import views
 
-from .serializers import PageSerializer, PageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer
+from .serializers import PageSerializer, PageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer, FiberPaginationSerializer
 
 
 class FiberListCreateAPIView(generics.ListCreateAPIView):
@@ -94,6 +94,7 @@ class ImageList(FiberListCreateAPIView):
     model = Image
     serializer_class = ImageSerializer
     renderer_classes = (renderers.JSONRenderer, )
+    pagination_serializer_class = FiberPaginationSerializer
     paginate_by = 5
 
 
@@ -118,12 +119,6 @@ def api_root(request, format='None'):
     })
 
 
-class ListView(ListOrCreateModelView):
-
-    permissions = (IsAdminUser, )
-    renderers = API_RENDERERS
-
-
 class PageTree(views.APIView):
 
     def get(self, request, format=None):
@@ -131,6 +126,12 @@ class PageTree(views.APIView):
         Provide jqTree data for the PageSelect dialog.
         """
         return Response(Page.objects.create_jqtree_data(request.user))
+
+
+class ListView(ListOrCreateModelView):
+
+    permissions = (IsAuthenticated, )
+    renderers = API_RENDERERS
 
 
 class PaginatedListView(PaginatorMixin, ListView):

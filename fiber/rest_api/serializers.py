@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import serializers, pagination
 
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
 
@@ -45,3 +45,8 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         read_only_fields = ('created', 'updated')
+
+
+class FiberPaginationSerializer(pagination.BasePaginationSerializer):
+    total_pages = serializers.Field(source='paginator.num_pages')
+    results_field = 'rows'
