@@ -5,19 +5,13 @@ http://django-rest-framework.readthedocs.org/.
 
 from django.conf.urls.defaults import patterns, url
 
-from fiber.app_settings import PERMISSION_CLASS
-from fiber.utils import class_loader
+from .views import MovePageView, MovePageContentItemView, TreeListView
 
-
-from .views import ApiRoot, MovePageView, MovePageContentItemView, TreeListView
-
-PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
-
-from .views import PageList, PageDetail, PageContentItemList, PageContentItemDetail, ContentItemList, ContentItemDetail, ImageList, ImageDetail, FileList, FileDetail
+from .views import api_root, PageList, PageDetail, PageContentItemList, PageContentItemDetail, ContentItemList, ContentItemDetail, ImageList, ImageDetail, FileList, FileDetail
 
 
 urlpatterns = patterns('',
-    (r'^$', ApiRoot.as_view()),
+    (r'^$', api_root),
     url(r'^pages/$', PageList.as_view(), name='page-list'),
     url(r'^pages/(?P<pk>[^/]+)/$', PageDetail.as_view(), name='page-detail'),
     url(r'^pages/(?P<pk>[^/]+)/move_page/$', MovePageView.as_view(), name='page-resource-instance-move'),

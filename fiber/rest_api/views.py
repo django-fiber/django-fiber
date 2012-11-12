@@ -1,5 +1,4 @@
 from django.db.models import Q
-from django.core.urlresolvers import reverse
 
 from djangorestframework.views import View
 from djangorestframework.permissions import IsAdminUser
@@ -27,6 +26,10 @@ _403_FORBIDDEN_RESPONSE = ErrorResponse(
 
 
 from rest_framework import generics, renderers
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+
 from .serializers import PageSerializer, PageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer
 
 
@@ -90,22 +93,18 @@ class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (renderers.JSONRenderer, )
 
 
-class ApiRoot(View):
+@api_view(('GET',))
+def api_root(request, format='None'):
     """
-    The root view for the rest api.
+    This is the entry point for the API.
     """
-
-    permissions = (IsAdminUser, )
-    renderers = API_RENDERERS
-
-    def get(self, request):
-        return [
-            {'name': 'pages', 'url': reverse('page-resource-root')},
-            {'name': 'page content items', 'url': reverse('page-content-item-resource-root')},
-            {'name': 'content items', 'url': reverse('content-item-resource-root')},
-            {'name': 'images', 'url': reverse('image-resource-root')},
-            {'name': 'files', 'url': reverse('file-resource-root')},
-        ]
+    return Response({
+            'pages': reverse('page-list', request=request),
+            'page content items': reverse('pagecontentitem-list', request=request),
+            'content items': reverse('contentitem-list', request=request),
+            'images': reverse('image-list', request=request),
+            'files': reverse('file-list', request=request),
+    })
 
 
 class ListView(ListOrCreateModelView):
