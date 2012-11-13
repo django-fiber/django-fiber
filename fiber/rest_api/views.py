@@ -19,7 +19,7 @@ PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
 
 API_RENDERERS = (renderers.JSONRenderer, )
 if API_RENDER_HTML:
-    API_RENDERERS = (renderers.DocumentingHTMLRenderer, renderers.JSONRenderer)
+    API_RENDERERS = (renderers.BrowsableAPIRenderer, renderers.JSONRenderer)
 
 _403_FORBIDDEN_RESPONSE = Response(
     {
@@ -31,7 +31,7 @@ _403_FORBIDDEN_RESPONSE = Response(
 
 class FiberListCreateAPIView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
-        response = super(FiberListCreateAPIView, self).created(request, *args, **kwargs)
+        response = super(FiberListCreateAPIView, self).create(request, *args, **kwargs)
         PERMISSIONS.object_created(request.user, self.object)
         return response
 
