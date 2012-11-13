@@ -32,7 +32,8 @@ _403_FORBIDDEN_RESPONSE = Response(
 class FiberListCreateAPIView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         response = super(FiberListCreateAPIView, self).create(request, *args, **kwargs)
-        PERMISSIONS.object_created(request.user, self.object)
+        if hasattr(self, 'object'):
+            PERMISSIONS.object_created(request.user, self.object)
         return response
 
 
