@@ -1,11 +1,13 @@
 from django.db.models import Q
 
-from rest_framework import generics, renderers
+from rest_framework import generics
+from rest_framework import renderers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import views
 from rest_framework import status
+from rest_framework import permissions
 
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
 from fiber.app_settings import API_RENDER_HTML, PERMISSION_CLASS
@@ -38,6 +40,7 @@ class PageList(FiberListCreateAPIView):
     model = Page
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
+    permission_classes = (permissions.IsAuthenticated,)
 
 
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
