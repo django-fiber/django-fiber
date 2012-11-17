@@ -11,6 +11,7 @@ POSITION_CHOICES = sorted((item, item) for item in ['before', 'after', 'inside']
 class PageSerializer(serializers.ModelSerializer):
     move_url = serializers.HyperlinkedIdentityField(view_name='page-move')
     page_url = serializers.Field(source='get_absolute_url')
+    depth = 1
 
     class Meta:
         model = Page
@@ -27,6 +28,7 @@ class MovePageSerializer(serializers.Serializer):
 
 class PageContentItemSerializer(serializers.ModelSerializer):
     move_url = serializers.HyperlinkedIdentityField(view_name='pagecontentitem-move')
+    depth = 1
 
     class Meta:
         model = PageContentItem
@@ -38,6 +40,7 @@ class MovePageContentItemSerializer(serializers.Serializer):
 
 
 class ContentItemSerializer(serializers.ModelSerializer):
+    depth = 1
 
     class Meta:
         model = ContentItem
