@@ -15,6 +15,10 @@ class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
 
+    def get_field(self, model_field):
+        if model_field.name == 'url':
+            return serializers.URLField()
+
 
 class MovePageSerializer(serializers.Serializer):
     position = serializers.ChoiceField(choices=POSITION_CHOICES)
