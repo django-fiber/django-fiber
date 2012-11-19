@@ -1,28 +1,30 @@
 """
-Selenium / Webdriver plus tests. 
+Selenium / Webdriver plus tests.
 
 These tests will fire up your default browser and do some tests against a host and optionally
 a port provided by you.
 
-Webdriverplus must be installed: pip install webdriverplus
+Webdriverplus must be installed: pip install https://github.com/tomchristie/webdriverplus/zipball/master - supports the `wait` command.
 
 """
 
 import unittest
-
 import webdriverplus
 
+from selenium.common.exceptions import TimeoutException
+
 HOST = None
-PORT = '8000'
+PORT = None
+
 
 class FIberTests(unittest.TestCase):
     def setUp(self):
         super(FIberTests, self).setUp()
-        self.driver = webdriverplus.WebDriver(reuse_browser=True)
+        self.driver = webdriverplus.WebDriver(wait=10, reuse_browser=False)
 
     def tearDown(self):
-        #self.driver.quit()
-        pass
+        self.driver.quit()
+
 
 class LoginTests(FIberTests):
     def setUp(self):
@@ -30,15 +32,17 @@ class LoginTests(FIberTests):
         self.driver.get('http://%s:%s/@fiber' % (HOST, PORT))
 
     def test_login_succeeds(self):
+        """
+        Try to login with admin / admin.
+        """
         elem = self.driver.find('input', id='id_username')
         elem.send_keys('admin')
         elem = self.driver.find('input', id='id_password')
         elem.send_keys('admin')
         elem = self.driver.find(id='login_button')
         elem.click()
-        node = self.driver.find('.errornote')
-        self.assertFalse(node)
-
+        with self.assertRaises(TimeoutException):  # Not found
+            self.driver.find('.errornote')
 
     def test_login_fails(self):
         """
@@ -53,18 +57,25 @@ class LoginTests(FIberTests):
         node = self.driver.find('.errornote')
         self.assertTrue(node)
 
+
 if __name__ == '__main__':
+
+    def usage():
+        return 'Usage: %s hostname port' % __file__
+
     import sys
-    try: 
+    assert(len(sys.argv) == 3), usage()
+    try:
         HOST = sys.argv[1]
         sys.argv.pop(1)
     except IndexError:
-        print 'Usage: %s hostname [port]' % __file__
+        print usage()
         sys.exit(2)
     try:
         PORT = sys.argv[1]
         sys.argv.pop(1)
     except IndexError:
-        pass
-    
+        print usage()
+        sys.exit(2)
+
     unittest.main()
