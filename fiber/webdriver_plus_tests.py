@@ -27,6 +27,7 @@ class FIberTests(unittest.TestCase):
 
 
 class LoginTests(FIberTests):
+
     def setUp(self):
         super(LoginTests, self).setUp()
         self.driver.get('http://%s:%s/@fiber' % (HOST, PORT))
@@ -41,8 +42,7 @@ class LoginTests(FIberTests):
         elem.send_keys('admin')
         elem = self.driver.find(id='login_button')
         elem.click()
-        with self.assertRaises(TimeoutException):  # Not found
-            self.driver.find('.errornote')
+        self.assertRaises(TimeoutException, self.driver.find, '.errornote')  # Not found
 
     def test_login_fails(self):
         """
@@ -64,7 +64,7 @@ if __name__ == '__main__':
         return 'Usage: %s hostname port' % __file__
 
     import sys
-    assert(len(sys.argv) == 3), usage()
+    assert(len(sys.argv) >= 3), usage()
     try:
         HOST = sys.argv[1]
         sys.argv.pop(1)
