@@ -2,7 +2,7 @@ from django.db.models import Q
 
 from rest_framework import generics
 from rest_framework import renderers
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import views
@@ -194,6 +194,7 @@ class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 @api_view(('GET',))
+@renderer_classes(API_RENDERERS)
 def api_root(request, format='None'):
     """
     This is the entry point for the API.
