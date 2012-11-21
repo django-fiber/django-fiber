@@ -46,7 +46,7 @@ class ContentItemSerializer(serializers.ModelSerializer):
         model = ContentItem
 
 
-class FileSerializer(serializers.ModelSerializer):
+class FileSerializer(serializers.HyperlinkedModelSerializer):
     file_url = serializers.Field(source='file.url')
     filename = serializers.Field(source='get_filename')
     can_edit = CanEditField()
@@ -57,7 +57,7 @@ class FileSerializer(serializers.ModelSerializer):
         read_only_fields = ('created', 'updated')
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
     image_url = serializers.Field(source='image.url')
     filename = serializers.Field(source='get_filename')
     size = serializers.Field(source='get_size')
