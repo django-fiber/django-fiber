@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.core.urlresolvers import reverse
 
 from djangorestframework.views import View
-from djangorestframework.permissions import IsAuthenticated
+from djangorestframework.permissions import IsAdminUser
 from djangorestframework.views import ListOrCreateModelView, InstanceModelView
 from djangorestframework.mixins import PaginatorMixin
 from djangorestframework.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
@@ -31,7 +31,7 @@ class ApiRoot(View):
     The root view for the rest api.
     """
 
-    permissions = (IsAuthenticated, )
+    permissions = (IsAdminUser, )
     renderers = API_RENDERERS
 
     def get(self, request):
@@ -46,7 +46,7 @@ class ApiRoot(View):
 
 class ListView(ListOrCreateModelView):
 
-    permissions = (IsAuthenticated, )
+    permissions = (IsAdminUser, )
     renderers = API_RENDERERS
 
     def post(self, request, *args, **kwargs):
@@ -59,13 +59,15 @@ class ListView(ListOrCreateModelView):
 
 
 class TreeListView(View):
+
+    permissions = (IsAdminUser, )
     renderers = API_RENDERERS
-    
+
     def get(self, request):
         """
         Provide jqTree data for the PageSelect dialog.
         """
-        return  Page.objects.create_jqtree_data(request.user)
+        return Page.objects.create_jqtree_data(request.user)
 
 
 class PaginatedListView(PaginatorMixin, ListView):
@@ -148,7 +150,7 @@ class ImageListView(PaginatedListView):
 
 class InstanceView(InstanceModelView):
 
-    permissions = (IsAuthenticated, )
+    permissions = (IsAdminUser, )
     renderers = API_RENDERERS
 
     def delete(self, request, pk):
@@ -159,7 +161,7 @@ class InstanceView(InstanceModelView):
 
 class MovePageView(View):
 
-    permissions = (IsAuthenticated, )
+    permissions = (IsAdminUser, )
     renderers = API_RENDERERS
 
     form = MovePageForm
@@ -180,7 +182,7 @@ class MovePageView(View):
 
 class MovePageContentItemView(View):
 
-    permissions = (IsAuthenticated, )
+    permissions = (IsAdminUser, )
     renderers = API_RENDERERS
 
     form = MovePageContentItemForm
