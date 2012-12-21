@@ -309,6 +309,12 @@ class Image(models.Model):
     def get_image_information(self):
         self.width, self.height = get_image_dimensions(self.image) or (0, 0)
 
+    def get_filename(self):
+        return os.path.basename(self.image.name)
+
+    def get_size(self):
+        return '%s x %d' % (self.width, self.height)
+
 
 class File(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
@@ -335,3 +341,6 @@ class File(models.Model):
     def delete(self, *args, **kwargs):
         os.remove(os.path.join(settings.MEDIA_ROOT, str(self.file)))
         super(File, self).delete(*args, **kwargs)
+
+    def get_filename(self):
+        return os.path.basename(self.file.name)
