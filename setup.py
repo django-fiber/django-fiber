@@ -24,7 +24,7 @@ setup(
     ],
 
     description='Django Fiber - a simple, user-friendly CMS for all your Django projects',
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
 
     author='Dennis Bunskoek',
     author_email='dbunskoek@leukeleu.nl',

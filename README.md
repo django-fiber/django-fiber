@@ -3,7 +3,7 @@
 [travis]: http://travis-ci.org/#!/ridethepony/django-fiber
 [travis-build-image]: https://secure.travis-ci.org/ridethepony/django-fiber.png
 
-#Django Fiber
+# Django Fiber
 
 ---
 
@@ -21,14 +21,14 @@ https://github.com/ridethepony/django-fiber-example
 Convinced? Want to use Django Fiber in your own Django project? Then follow the instructions below:
 
 
-##Installation
+## Installation
 
 We're assuming you are using Django 1.3.x or 1.4.
 
 	$ pip install django-fiber
 
 
-##Requirements
+## Requirements
 
 These dependencies are automatically installed:
 
@@ -38,9 +38,9 @@ These dependencies are automatically installed:
 	django-compressor>=0.7.1
 
 
-##Settings
+## Settings
 
-###settings.py
+### settings.py
 
 	import django.conf.global_settings as DEFAULT_SETTINGS
 
@@ -59,6 +59,7 @@ These dependencies are automatically installed:
 	    'mptt',
 	    'compressor',
 	    'fiber',
+        ...
 	)
 
 	import os
@@ -70,7 +71,7 @@ These dependencies are automatically installed:
 	    'compressor.finders.CompressorFinder',
 	)
 
-###urls.py
+### urls.py
 
 	from django.conf import settings
 
@@ -84,7 +85,7 @@ These dependencies are automatically installed:
 	)
 
 
-##Post-installation
+## Post-installation
 
 Create database tables:
 
@@ -95,5 +96,10 @@ All static Fiber files need to be symlinked in (or copied to) your media folder:
 	$ python manage.py collectstatic --link
 
 
-##Further documentation
-For further usage and configuration details take a look at our documentation project at [readthedocs](https://django-fiber.readthedocs.org/en/latest/index.html).
+## Further documentation
+For further usage and configuration details take a look at our documentation project at [readthedocs](https://django-fiber.readthedocs.org/).
+
+## Changelog
+See CHANGELOG.md for the latest changes.
+
+[changelog]: CHANGELOG.md 
