@@ -20,11 +20,11 @@ setup(
         'Pillow==1.7.7',
         'django-mptt==0.5.1',
         'django-compressor>=0.7.1',
-        'djangorestframework==0.3.3'
+        'djangorestframework==2.1.11'
     ],
 
     description='Django Fiber - a simple, user-friendly CMS for all your Django projects',
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
 
     author='Dennis Bunskoek',
     author_email='dbunskoek@leukeleu.nl',
