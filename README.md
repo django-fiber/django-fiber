@@ -33,9 +33,9 @@ We're assuming you are using Django 1.3.x or 1.4.
 These dependencies are automatically installed:
 
     Pillow==1.7.7
-    djangorestframework==0.3.3
     django-mptt==0.5.1
     django-compressor>=0.7.1
+    djangorestframework==2.1.12
 
 
 ## Settings
