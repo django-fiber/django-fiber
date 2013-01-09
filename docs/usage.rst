@@ -97,6 +97,7 @@ Content items
 You can write out content items with the 'show_content' and 'show_page_content' template tags::
 
 	{% show_content "content_item_name" %}
+	{% show_content "content_item_name" allow_tags="yes" %}
 	{% show_page_content "block_name" %}
 	{% show_page_content other_page "block_name" %} other_page being a Page object
 
@@ -106,6 +107,11 @@ Examples
 This shows content item named 'address'::
 
 	{% show_content "address" %}
+
+This shows content item named 'something-with-a-tag', which will run the text
+through the template renderer with the current context::
+
+	{% show_content "something-with-a-tag" allow_tags="yes" %}
 
 This shows content items that are linked to the location named 'content' on the current page::
 
