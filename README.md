@@ -35,7 +35,7 @@ These dependencies are automatically installed:
     Pillow==1.7.7
     django-mptt==0.5.1
     django-compressor>=0.7.1
-    djangorestframework==2.1.12
+    djangorestframework==2.1.15
 
 
 ## Settings
