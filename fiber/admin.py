@@ -101,7 +101,7 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
     form = forms.PageForm
     fieldsets = (
         (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name')}),
-        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('mark_current_regexes', 'show_in_menu', 'is_public', 'protected',)}),
+        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('meta_description', 'mark_current_regexes', 'show_in_menu', 'is_public', 'protected',)}),
         (_('Metadata'), {'classes': ('collapse',), 'fields': ('metadata',)}),
     )
 
@@ -177,11 +177,13 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
             self.fieldsets = (
                 (None, {'fields': ('title', 'url', )}),
                 (_('Advanced options'), {'fields': ('redirect_page', 'show_in_menu', 'is_public', )}),
+                (_('SEO'), {'fields': ('meta_description', )}),
             )
         else:
             self.fieldsets = (
                 (None, {'fields': ('title', 'url', )}),
                 (_('Advanced options'), {'fields': ('template_name', 'redirect_page', 'show_in_menu', 'is_public', )}),
+                (_('SEO'), {'fields': ('meta_description', )}),
             )
 
     def save_model(self, request, obj, form, change):

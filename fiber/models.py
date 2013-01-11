@@ -76,7 +76,7 @@ class Page(MPTTModel):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='subpages', verbose_name=_('parent'))
-    # TODO: add keywords, description (as meta?)
+    meta_description = models.CharField(max_length=255, blank=True)
     title = models.CharField(_('title'), max_length=255)
     url = FiberURLField(blank=True)
     redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'), on_delete=models.SET_NULL)
