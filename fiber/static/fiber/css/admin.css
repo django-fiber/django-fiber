@@ -287,6 +287,7 @@ div.ui-dialog form label {
 div.ui-dialog form input[type="text"],
 div.ui-dialog form input[type="password"],
 div.ui-dialog form select,
+div.ui-dialog form textarea,
 #ui-file-select-filter-input,
 #ui-image-select-filter-input {
 	margin: 0 0 5px 0;
@@ -307,6 +308,11 @@ div.ui-dialog form select,
 	background: none;
 	float: none;
 	clear: none;
+}
+
+div.ui-dialog form textarea {
+    padding: 3px;
+    height: 80px;
 }
 
 div.ui-dialog form input[type="checkbox"] {
