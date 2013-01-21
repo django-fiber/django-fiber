@@ -17,16 +17,16 @@ HOST = None
 PORT = None
 
 
-class FIberTests(unittest.TestCase):
+class FiberTests(unittest.TestCase):
     def setUp(self):
-        super(FIberTests, self).setUp()
+        super(FiberTests, self).setUp()
         self.driver = webdriverplus.WebDriver(wait=10, reuse_browser=False)
 
     def tearDown(self):
         self.driver.quit()
 
 
-class LoginTests(FIberTests):
+class LoginTests(FiberTests):
 
     def setUp(self):
         super(LoginTests, self).setUp()
