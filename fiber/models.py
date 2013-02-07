@@ -310,7 +310,7 @@ class Image(models.Model):
         super(Image, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        os.remove(os.path.join(settings.MEDIA_ROOT, str(self.image)))
+        self.image.storage.delete(self.image.name)
         super(Image, self).delete(*args, **kwargs)
 
     def get_image_information(self):
@@ -346,7 +346,7 @@ class File(models.Model):
         super(File, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        os.remove(os.path.join(settings.MEDIA_ROOT, str(self.file)))
+        self.file.storage.delete(self.file.name)
         super(File, self).delete(*args, **kwargs)
 
     def get_filename(self):
