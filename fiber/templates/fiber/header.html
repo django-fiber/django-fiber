@@ -1,6 +1,7 @@
 {% load compress %}
+{% load url from future %}
 
-<script src="{% url django.views.i18n.javascript_catalog %}" type="text/javascript"></script>
+<script src="{% url 'django.views.i18n.javascript_catalog' %}" type="text/javascript"></script>
 
 {% compress js %}
 <script type="text/javascript">
