@@ -9,7 +9,7 @@ Luke Plant <L.Plant.98@cantab.net>
 Maarten Draijer <maarten@madra.nl>
 Marco Braak <mbraak@ridethepony.nl>
 Marko Tibold <mtibold@leukeleu.nl>
-mvdwaeter <mvandewaeter@leukeleu.nl>
+Michael van de Waeter <mvandewaeter@leukeleu.nl>
 Nick Badoux <nbadoux@leukeleu.nl>
 Niels van Dijk <nvandijk@leukeleu.nl>
 Ramon de Jezus <rdejezus@leukeleu.nl>
