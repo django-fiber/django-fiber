@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.utils.encoding import smart_unicode
 
 from rest_framework import generics
 from rest_framework import renderers
@@ -27,6 +28,31 @@ _403_FORBIDDEN_RESPONSE = Response(
     'You may need to login or otherwise authenticate the request.'
     },
     status.HTTP_403_FORBIDDEN)
+
+
+class PlainText(renderers.BaseRenderer):
+    media_type = 'text/plain'
+    format = 'txt'
+
+    def render(self, data, media_type=None, renderer_context=None):
+        if isinstance(data, basestring):
+            return data
+        return smart_unicode(data)
+
+
+class IEUploadFixMixin(object):
+    """
+    A Mixin that fixes issues with IE 8 and IE 9 file uploads.
+    Both user agents expect plain text responses when uploading files.
+
+    See https://github.com/valums/file-uploader/blob/master/readme.md#internet-explorer-limitations
+    """
+
+    def get_renderers(self):
+        user_agent = self.request._request.META['HTTP_USER_AGENT']
+        if self.request.method == 'POST' and ('MSIE 8' in user_agent or 'MSIE 9' in user_agent):
+            return [PlainText()]
+        return super(IEUploadFixMixin, self).get_renderers()
 
 
 class FiberListCreateAPIView(generics.ListCreateAPIView):
@@ -119,7 +145,7 @@ class ContentItemDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAdminUser,)
 
 
-class FileList(FiberListCreateAPIView):
+class FileList(IEUploadFixMixin, FiberListCreateAPIView):
     model = File
     serializer_class = FileSerializer
     renderer_classes = API_RENDERERS
@@ -162,7 +188,7 @@ class FileDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAdminUser,)
 
 
-class ImageList(FiberListCreateAPIView):
+class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
     model = Image
     serializer_class = ImageSerializer
     renderer_classes = API_RENDERERS
