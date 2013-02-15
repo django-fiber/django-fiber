@@ -1,6 +1,12 @@
 import re
 
-from django.conf.urls import patterns, url
+try:
+    # Django >= 1.4
+    from django.conf.urls import patterns, url
+except ImportError:
+    # Django 1.3
+    from django.conf.urls.defaults import patterns, url
+
 from django.views.generic import View
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
