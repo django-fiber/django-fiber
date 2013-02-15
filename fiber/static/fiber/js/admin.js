@@ -675,15 +675,10 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 				endpoint: this.get_upload_path(),
 				inputName: this.get_upload_fieldname(),
 				params: {
-					'title': this.get_upload_fieldname()
-				},
-				paramsInBody: true,
-				customHeaders: {
-					"X-CSRFToken": getCookie('csrftoken')
-				},
-				customFields: {
+					'title': this.get_upload_fieldname(),
 					"csrfmiddlewaretoken": getCookie('csrftoken')
-				}
+				},
+				paramsInBody: true
 			}
 		});
 

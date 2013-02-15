@@ -12,7 +12,6 @@ qq.FineUploaderBasic = function(o){
             params: {},
             paramsInBody: false,
             customHeaders: {},
-            customFields: {},
             forceMultipart: true,
             inputName: 'qqfile',
             uuidName: 'qquuid',
