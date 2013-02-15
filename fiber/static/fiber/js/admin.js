@@ -667,11 +667,10 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 			button: upload_button_pane[0], // connecting directly to the jQUery UI upload_button doesn't work
 			callbacks: {
 				onComplete: $.proxy(function(id, fileName, responseJSON) {
-					console.log(responseJSON);
 					this.refresh_grid();
 				}, this)
 			},
-			debug: true,
+			debug: false,
 			request: {
 				endpoint: this.get_upload_path(),
 				inputName: this.get_upload_fieldname(),
@@ -681,6 +680,9 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 				paramsInBody: true,
 				customHeaders: {
 					"X-CSRFToken": getCookie('csrftoken')
+				},
+				customFields: {
+					"csrfmiddlewaretoken": getCookie('csrftoken')
 				}
 			}
 		});

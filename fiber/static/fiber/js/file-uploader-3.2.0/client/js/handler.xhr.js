@@ -126,7 +126,6 @@ qq.UploadHandlerXhr = function(o, uploadCompleteCallback, logCallback) {
             //NOTE: return mime type in xhr works on chrome 16.0.9 firefox 11.0a2
             xhr.setRequestHeader("X-Mime-Type", file.type);
         }
-        console.log(extraHeaders);  
         qq.each(extraHeaders, function(name, val) {
             xhr.setRequestHeader(name, val);
         });
@@ -404,7 +403,7 @@ qq.UploadHandlerXhr = function(o, uploadCompleteCallback, logCallback) {
         toSend = setParamsAndGetEntityToSend(params, xhr, file, id);
         setHeaders(id, xhr);
 
-        log('YSending upload request for ' + id);
+        log('Sending upload request for ' + id);
         xhr.send(toSend);
     }
 
@@ -414,23 +413,6 @@ qq.UploadHandlerXhr = function(o, uploadCompleteCallback, logCallback) {
          * Adds file to the queue
          * Returns id to use with upload, cancel
          **/
-
-        // helper for csrf (@YoavGivati https://github.com/valums/file-uploader/pull/240)
-        getCookie: function(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie != '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        },
 
         add: function(file){
             if (!(file instanceof File)){
