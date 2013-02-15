@@ -24,7 +24,7 @@ class FiberURLValidator(RegexValidator):
         # check if it starts with http(s):// | ftp(s)://
         # Django's validator only works with full urls that include a protocol.
         if self.protocol_regex.search(url):
-            django_url_validator = URLValidator(verify_exists=False)
+            django_url_validator = URLValidator()
             django_url_validator(url)
         else:
             # check if it's a named url, and if so, if it's reversible
