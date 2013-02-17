@@ -682,10 +682,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 		// Valums file uploader
 		var uploader = new qq.FineUploaderBasic({
 			multipart: true,
-			//fieldName: ,
-			//element: upload_button_pane[0],
 			button: upload_button_pane[0], // connecting directly to the jQUery UI upload_button doesn't work
-			//action: ,
             callbacks: {
                 onSubmit: $.proxy(function(id, fileName) {
                     uploader._options.request.params.title = fileName;
