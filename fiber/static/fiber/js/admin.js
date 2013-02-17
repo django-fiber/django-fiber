@@ -9,7 +9,7 @@ Fiber.remove_textarea = function(textarea) {};
 (function($) { // start of jQuery noConflict mode
 
 // some plugins use jQuery() instead of $()
-jQuery = $;
+//jQuery = $;
 
 var busyIndicator = {
 	show: function() {
@@ -662,21 +662,46 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 				'margin-right': 0
 			});
 
+        function getCSRFtoken() {
+            var name = 'csrftoken';
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = $.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
 		// Valums file uploader
-		var uploader = new qq.FileUploaderBasic({
+		var uploader = new qq.FineUploaderBasic({
 			multipart: true,
-			fieldName: this.get_upload_fieldname(),
-			element: upload_button_pane[0],
 			button: upload_button_pane[0], // connecting directly to the jQUery UI upload_button doesn't work
-			action: this.get_upload_path(),
-			onSubmit: $.proxy(function(id, fileName) {
-				uploader._options.params.title = fileName;
-			}, this),
-			onComplete: $.proxy(function(id, fileName, responseJSON) {
-				this.refresh_grid();
-			}, this),
+            callbacks: {
+                onSubmit: $.proxy(function(id, fileName) {
+                    uploader._options.request.params.title = fileName;
+                }, this),
+                onComplete: $.proxy(function(id, fileName, responseJSON) {
+                    this.refresh_grid();
+                }, this)
+            },
+            request: {
+                paramsInBody: true,
+                inputName: this.get_upload_fieldname(),
+                endpoint: this.get_upload_path(),
+                customHeaders: {
+                    'X-CSRFToken': getCSRFtoken()
+                }
+            },
 			debug: false
 		});
+
 
 		// reset button behavior
 		upload_button_pane.css({
