@@ -1,59 +1,30 @@
-/* ---[ CKEditor ]--- */
+/* ---[ CKEditor 4 ]--- */
 
-.cke_skin_kama {
+.cke_chrome {
 	float: left;
 }
 
-.cke_button_bold .cke_icon,
-.cke_button_italic .cke_icon,
-.cke_button_indent .cke_icon,
-.cke_button_outdent .cke_icon,
-.cke_button_bulletedlist .cke_icon,
-.cke_button_numberedlist .cke_icon,
-.cke_button_unlink .cke_icon,
-.cke_button_source .cke_icon {
+.cke_ltr .cke_button .cke_button__bold_icon,
+.cke_ltr .cke_button .cke_button__italic_icon,
+.cke_ltr .cke_button .cke_button__indent_icon,
+.cke_ltr .cke_button .cke_button__outdent_icon,
+.cke_ltr .cke_button .cke_button__bulletedlist_icon,
+.cke_ltr .cke_button .cke_button__numberedlist_icon,
+.cke_ltr .cke_button .cke_button__unlink_icon,
+.cke_ltr .cke_button .cke_button__source_icon {
 	background-image: url(../images/ckeditor/bg-editor-toolbar-buttons.png) !important;
 }
 
-.cke_button_bold .cke_icon         { background-position: -22px  -2px !important; }
-.cke_button_italic .cke_icon       { background-position: -42px  -2px !important; }
-.cke_button_indent .cke_icon       { background-position: -202px -2px !important; }
-.cke_button_outdent .cke_icon      { background-position: -222px -2px !important; }
-.cke_button_bulletedlist .cke_icon { background-position: -322px -2px !important; }
-.cke_button_numberedlist .cke_icon { background-position: -342px -2px !important; }
-.cke_button_unlink .cke_icon       { background-position: -442px -2px !important; }
-.cke_button_source .cke_icon       { background-position: -542px -2px !important; }
+.cke_ltr .cke_button .cke_button__bold_icon         { background-position: -22px  -2px !important; }
+.cke_ltr .cke_button .cke_button__italic_icon       { background-position: -42px  -2px !important; }
+.cke_ltr .cke_button .cke_button__indent_icon       { background-position: -202px -2px !important; }
+.cke_ltr .cke_button .cke_button__outdent_icon      { background-position: -222px -2px !important; }
+.cke_ltr .cke_button .cke_button__bulletedlist_icon { background-position: -322px -2px !important; }
+.cke_ltr .cke_button .cke_button__numberedlist_icon { background-position: -342px -2px !important; }
+.cke_ltr .cke_button .cke_button__unlink_icon       { background-position: -442px -2px !important; }
+.cke_ltr .cke_button .cke_button__source_icon       { background-position: -542px -2px !important; }
 
-.cke_button_source .cke_label  { display: none !important; }
-
-
-/* ---[ CKEditor 4.0 Beta ]--- */
-
-.cke_chrome {
-	float: left;	
-}
-
-.cke_button .cke_button__bold_icon,
-.cke_button .cke_button__italic_icon,
-.cke_button .cke_button__indent_icon,
-.cke_button .cke_button__outdent_icon,
-.cke_button .cke_button__bulletedlist_icon,
-.cke_button .cke_button__numberedlist_icon,
-.cke_button .cke_button__unlink_icon,
-.cke_button .cke_button__source_icon {
-	background-image: url(../images/ckeditor/bg-editor-toolbar-buttons.png) !important;
-}
-
-.cke_button .cke_button__bold_icon         { background-position: -22px  -2px !important; }
-.cke_button .cke_button__italic_icon       { background-position: -42px  -2px !important; }
-.cke_button .cke_button__indent_icon       { background-position: -202px -2px !important; }
-.cke_button .cke_button__outdent_icon      { background-position: -222px -2px !important; }
-.cke_button .cke_button__bulletedlist_icon { background-position: -322px -2px !important; }
-.cke_button .cke_button__numberedlist_icon { background-position: -342px -2px !important; }
-.cke_button .cke_button__unlink_icon       { background-position: -442px -2px !important; }
-.cke_button .cke_button__source_icon       { background-position: -542px -2px !important; }
-
-.cke_button .cke_button_label  { display: none !important; }
+.cke_ltr .cke_button .cke_button_label  { display: none !important; }
 
 
 /* ---[ Combobox ]--- */
@@ -96,7 +67,7 @@
 	margin-left: 5px;
 	color: #5b80b2;
   background: url("../../admin/img/admin/icon_addlink.gif") no-repeat scroll 0 0.25em transparent;
-  padding-left: 12px;	
+  padding-left: 12px;
 }
 
 .fiber-json-widget tr.add-row {
