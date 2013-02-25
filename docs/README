@@ -1,0 +1,7 @@
+To create an HTML version of the docs:
+
+* Install Sphinx in your virtualenv
+
+* In this docs/ directory, type ``make html`` 
+
+The documentation in _build/html/index.html can then be viewed in a web browser.
