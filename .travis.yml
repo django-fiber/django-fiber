@@ -3,11 +3,11 @@ python:
   - 2.6
   - 2.7
 env:
-  - DJANGO_VERSION=1.3.5
-  - DJANGO_VERSION=1.4.3
-  - DJANGO_VERSION=1.5c1
+  - DJANGO_VERSION=1.3.7
+  - DJANGO_VERSION=1.4.5
+  - DJANGO_VERSION=1.5
 install:
-  - "if [[ $DJANGO_VERSION == '1.5c1' ]]; then pip install https://www.djangoproject.com/download/1.5c1/tarball/; else pip install Django==$DJANGO_VERSION; fi"
+  - pip install Django==$DJANGO_VERSION
   - "pip install . --use-mirrors"
   - "pip install -r testproject/requirements.txt --use-mirrors"
 script:
@@ -18,4 +18,3 @@ branches:
   only:
     - master
     - dev
-    - tox
