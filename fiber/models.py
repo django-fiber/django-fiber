@@ -1,5 +1,7 @@
 import os
 
+import warnings
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
@@ -164,7 +166,7 @@ class Page(MPTTModel):
                 self.lft > node.lft and
                 self.rght < node.rght)
 
-    def get_ancestors(self):
+    def get_ancestors(self, *args, **kwargs):
         if getattr(self, '_ancestors_retrieved', False):
             # We have already retrieved the chain of parent objects, so can skip
             # a DB query for this.
@@ -175,29 +177,13 @@ class Page(MPTTModel):
                 node = node.parent
             return ancestors
         else:
-            return super(Page, self).get_ancestors()
+            return super(Page, self).get_ancestors(*args, **kwargs)
 
     def get_ancestors_include_self(self):
-        """
-        This method is currently used because there is no include_self
-        parameter in MPTTModel's get_ancestors() method. This will probably
-        land in django-mptt 0.5
-        """
-        if self.is_root_node():
-            return self._tree_manager.filter(pk=self.pk)
+        warnings.warn("The `get_ancestors_include_self` method is deprecated,"
+        "use MPPT's `get_ancestors(include_self=True)` instead", DeprecationWarning)
 
-        opts = self._mptt_meta
-
-        left = getattr(self, opts.left_attr)
-        right = getattr(self, opts.right_attr)
-
-        qs = self._tree_manager._mptt_filter(
-            left__lte=left,
-            right__gte=right,
-            tree_id=self._mpttfield('tree_id'),
-        )
-
-        return qs.order_by(opts.left_attr)
+        return  self.get_ancestors(include_self=True)
 
     def move_page(self, target_id, position):
         """
