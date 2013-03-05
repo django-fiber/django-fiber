@@ -80,7 +80,7 @@ class ImageAdmin(FileAdmin):
 
 
 class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
-    list_display = ('__unicode__',)
+    list_display = ('__unicode__', 'unused')
     form = forms.ContentItemAdminForm
     fieldsets = (
         (None, {'fields': ('name', get_editor_field_name('content_html'),)}),
@@ -90,6 +90,12 @@ class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
     date_hierarchy = 'updated'
     search_fields = ('name', get_editor_field_name('content_html'))
 
+    def unused(self, obj):
+        if obj.used_on_pages_data is None:
+            return True
+        return False
+    unused.boolean = True
+        
 
 class PageContentItemInline(UserPermissionMixin, admin.TabularInline):
     model = PageContentItem
