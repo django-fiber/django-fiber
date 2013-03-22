@@ -23,7 +23,7 @@ Convinced? Want to use Django Fiber in your own Django project? Then follow the 
 
 ## Installation
 
-We're assuming you are using Django 1.3.x or 1.4.
+We're assuming you are using Django 1.3.x, 1.4 or 1.5.
 
     $ pip install django-fiber
 
