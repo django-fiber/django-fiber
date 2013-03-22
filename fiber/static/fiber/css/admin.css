@@ -352,12 +352,6 @@ div.ui-dialog form label.vCheckboxLabel {
 	width: auto;
 }
 
-div.ui-dialog form span.cke_skin_kama {
-	float: left;
-	border: none;
-	padding: 0;
-}
-
 div.ui-dialog form h2 {
 	font-weight: bold;
 	font-size: 100%;
@@ -398,19 +392,15 @@ div.ui-dialog form h2 {
 	display: none;
 }
 
-.ui-dialog .hide-label .cke_wrapper {
-	width: 734px;
-}
+/* .cke_chrome and .cke_inner selectors used for CKEditor 4 using the 'Kama' skin */
 
-/* .cke_chrome and .cke_inner selectors are for CKEditor 4.0 Beta */
-
-.ui-dialog .hide-label .cke_chrome {
+.ui-dialog .cke_chrome {
 	float: none;
 	padding: 0;
 	border: none;
 }
 
-.ui-dialog .hide-label .cke_inner {
+.ui-dialog .cke_inner {
 	border-radius: 0;
 }
 

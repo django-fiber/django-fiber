@@ -1,3 +1,2 @@
-coverage==3.5.3
-django-jenkins==0.13.0
-Django==1.4.2
+coverage==3.6
+django-jenkins==0.14.0

@@ -1,4 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.http import require_POST
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
@@ -7,6 +8,7 @@ from django.utils.translation import ugettext as _
 from .models import Page
 
 
+@require_POST
 def fiber_login(request):
     username = request.POST['username']
     password = request.POST['password']

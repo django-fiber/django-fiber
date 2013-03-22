@@ -12,6 +12,16 @@ from .models import ContentItem, Page
 from .utils.import_util import import_element
 
 
+def is_non_html(response):
+    """
+    Returns True if the response has no Content-type set or is not `text/html`
+    or not `application/xhtml+xml`.
+    """
+    content_type = response.get('Content-Type')
+    if content_type is None or content_type.split(';')[0] not in ('text/html', 'application/xhtml+xml'):
+        return True
+
+
 class AdminPageMiddleware(object):
     body_re = re.compile(
         r"<head>(?P<IN_HEAD>.*)</head>(?P<AFTER_HEAD>.*)<body(?P<IN_BODY_TAG>.*?)>(?P<BODY_CONTENTS>.*)</body>",
@@ -23,8 +33,9 @@ class AdminPageMiddleware(object):
 
     def process_response(self, request, response):
         # only process html and xhtml responses
-        if response['Content-Type'].split(';')[0] not in ('text/html', 'application/xhtml+xml'):
+        if is_non_html(response):
             return response
+
         if self.set_login_session(request, response):
             request.session['show_fiber_admin'] = True
             url_without_fiber = request.path_info.replace(LOGIN_STRING, '')
@@ -178,8 +189,9 @@ class ObfuscateEmailAddressMiddleware(object):
     def process_response(self, request, response):
         # http://www.lampdocs.com/blog/2008/10/regular-expression-to-extract-all-e-mail-addresses-from-a-file-with-php/
         email_pattern = re.compile(r'(mailto:)?[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))')
-        if response['Content-Type'].split(';')[0] in ('text/html', 'application/xhtml+xml'):
-            response.content = email_pattern.sub(self.encode_string_repl, response.content)
+        if is_non_html(response):
+            return response
+        response.content = email_pattern.sub(self.encode_string_repl, response.content)
         return response
 
     def encode_string_repl(self, email_pattern_match):
