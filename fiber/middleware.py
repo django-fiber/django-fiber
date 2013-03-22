@@ -33,7 +33,6 @@ class AdminPageMiddleware(object):
 
     def process_response(self, request, response):
         # only process html and xhtml responses
-
         if is_non_html(response):
             return response
 
