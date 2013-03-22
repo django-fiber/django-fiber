@@ -1,6 +1,6 @@
 # Changelog
 
-## dev
+## 0.10.2
 
 **Date**: 22nd Mar 2013
 
