@@ -23,6 +23,7 @@
             {% if not node.show_in_menu %}hidden-in-menu{% endif %}
             {% if not node.is_public %}non-public{% endif %}
             {% if node.redirect_page %}redirect{% endif %}
+            {% if not node.has_visible_children %}leaf{% endif %}
         ">
             <a href="{{ node.get_absolute_url }}"
                 data-fiber-data='{
@@ -65,6 +66,7 @@
             {% if node in fiber_current_pages %}current{% endif %}
             {% if node.is_first_child %}first{% endif %}
             {% if node.is_last_child %}last{% endif %}
+            {% if not node.has_visible_children %}leaf{% endif %}
         ">
             <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
 
