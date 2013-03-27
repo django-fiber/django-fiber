@@ -17,7 +17,8 @@ def is_non_html(response):
     Returns True if the response has no Content-type set or is not `text/html`
     or not `application/xhtml+xml`.
     """
-    content_type = response.get('Content-Type')
+
+    content_type = response.get('Content-Type', None)
     if content_type is None or content_type.split(';')[0] not in ('text/html', 'application/xhtml+xml'):
         return True
 
