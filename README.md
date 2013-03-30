@@ -1,11 +1,13 @@
 [![Travis build image][travis-build-image]][travis]
 [![PyPi download count image][pypi-image]][pypi]
+[![Coverage Status](https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=master)](https://coveralls.io/r/ridethepony/django-fiber)
 
 [travis]: http://travis-ci.org/#!/ridethepony/django-fiber
 [travis-build-image]: https://secure.travis-ci.org/ridethepony/django-fiber.png
 
 [pypi]: https://pypi.python.org/pypi/django-fiber/
 [pypi-image]: https://pypip.in/d/django-fiber/badge.png
+
 
 # Django Fiber
 
