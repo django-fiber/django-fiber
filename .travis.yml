@@ -10,11 +10,17 @@ install:
   - pip install Django==$DJANGO_VERSION
   - "pip install . --use-mirrors"
   - "pip install -r testproject/requirements.txt --use-mirrors"
+  - "pip install -r testproject/requirements_test.txt --use-mirrors"
 script:
   - cd testproject
-  - mkdir -p reports
-  - python manage.py jenkins
+  - python manage.py test fiber
+  - coverage run --source=fiber manage.py test fiber
+  - coverage report -m
+after_success:
+  - pip install -r requirements_coveralls.txt
+  - coveralls
 branches:
   only:
     - master
     - dev
+    - coveralls

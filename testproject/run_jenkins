@@ -1,2 +1,0 @@
-mkdir -p reports
-python manage.py jenkins --coverage-html-report=coverage
