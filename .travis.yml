@@ -13,8 +13,8 @@ install:
   - "pip install -r testproject/requirements_test.txt --use-mirrors"
 script:
   - cd testproject
-  - python manage.py test fiber
-  - coverage run --source=fiber manage.py test fiber
+  - python manage.py test fiber fiber_test
+  - coverage run --source=fiber manage.py test fiber fiber_test
   - coverage report -m
 after_success:
   - pip install -r requirements_coveralls.txt
