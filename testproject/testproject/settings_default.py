@@ -117,6 +117,7 @@ INSTALLED_APPS = (
     'compressor',
     'easy_thumbnails',
     'fiber',
+    'fiber_test',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -140,4 +141,4 @@ JENKINS_TASKS = (
 )
 
 # Only run tests for fiber app
-PROJECT_APPS = ['fiber']
+PROJECT_APPS = ['fiber', 'fiber_test']
