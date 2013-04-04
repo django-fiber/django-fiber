@@ -9,7 +9,6 @@ env:
 install:
   - pip install Django==$DJANGO_VERSION
   - "pip install . --use-mirrors"
-  - "pip install -r testproject/requirements.txt --use-mirrors"
   - "pip install -r testproject/requirements_test.txt --use-mirrors"
 script:
   - cd testproject
