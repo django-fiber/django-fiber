@@ -5,6 +5,7 @@ from mock import patch
 
 from django.test import TestCase
 from django.conf import settings
+from django.contrib.auth.models import User
 
 from fiber.models import Page, ContentItem, PageContentItem
 from fiber.utils import date
@@ -71,3 +72,49 @@ class FiberTests(TestCase):
             ),
             '40 seconds ago'
         )
+
+    def test_page_view(self):
+        # setup
+        p1 = Page.objects.create(title='p1', url='/p1/')
+        Page.objects.create(title='p2', url='/p2', template_name='template1.html')
+        Page.objects.create(title='p3', url='/p3', is_public=False)
+        Page.objects.create(title='p4', url='/p4', redirect_page=p1)
+
+        # page with default template
+        self.assertContains(self.client.get('/p1/'), '<title>p1</title>')
+
+        # page with custom template
+        self.assertContains(self.client.get('/p2'), 'This is tenmplate1.')
+
+        # url without trailing '/'
+        response = self.client.get('/p1')
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response['Location'], 'http://testserver/p1/')
+
+        # url does not exist
+        self.assertEqual(self.client.get('/xyz/').status_code, 404)
+
+        # private page
+        self.assertEqual(self.client.get('/p3').status_code, 404)
+
+        # redirect page
+        response = self.client.get('/p4')
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response['Location'], 'http://testserver/p1/')
+
+    def test_admin(self):
+        # setup
+        lorem_ipsum = ContentItem.objects.create(content_html='lorem ipsum')
+
+        User.objects.create_superuser('admin', 'admin@ridethepony.nl', 'admin')
+
+        self.client.login(username='admin', password='admin')
+
+        # get admin page for content item
+        response = self.client.get('/admin/fiber/contentitem/%d/' % lorem_ipsum.id)
+
+        # check FiberTextarea
+        self.assertContains(response, '<textarea class="fiber-editor" cols="40" id="id_content_html" name="content_html" rows="10">lorem ipsum</textarea>', html=True)
+
+        # check JSONWidget
+        self.assertContains(response, '<textarea class="fiber-jsonwidget" cols="40" id="id_metadata" name="metadata" rows="10"></textarea>', html=True)
