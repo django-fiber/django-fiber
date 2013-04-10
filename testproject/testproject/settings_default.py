@@ -116,6 +116,7 @@ INSTALLED_APPS = (
     'mptt',
     'compressor',
     'easy_thumbnails',
+    'south',
     'fiber',
     'fiber_test',
     'django.contrib.auth',
