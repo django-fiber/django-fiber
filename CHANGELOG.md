@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.10.X
+
+* Upgraded external packages to the latest stable releases:
+  * Django REST Framework 2.2.6
+  * Django Compressor 1.3
+  * Pillow 2.0.0
+* Bugfixes:
+ * Fixed a bug in the middleware which was introduced in 0.10.2 if using Django 1.3 (#171)
+
+
 ## 0.10.2
 
 **Date**: 22nd Mar 2013
@@ -24,7 +34,7 @@
   * Django MPTT 0.5.5
   * Django compressor 1.2
   * Django REST Framework 2.1.17
-* Django 1.5 compatiblity fixes
+* Django 1.5 compatibility fixes
 * added meta_description field to Page
 * added has_visible_children method to Page
 * improved file deletion for multiple storage backends

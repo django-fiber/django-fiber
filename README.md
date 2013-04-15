@@ -23,7 +23,7 @@ Convinced? Want to use Django Fiber in your own Django project? Then follow the 
 
 ## Installation
 
-We're assuming you are using Django 1.3.x, 1.4 or 1.5.
+We're assuming you are using Django 1.3.x, 1.4.x or 1.5.x.
 
     $ pip install django-fiber
 
@@ -32,10 +32,10 @@ We're assuming you are using Django 1.3.x, 1.4 or 1.5.
 
 These dependencies are automatically installed:
 
-    Pillow==1.7.8
+    Pillow==2.0.0
     django-mptt==0.5.5
-    django-compressor>=1.2
-    djangorestframework==2.1.17
+    django-compressor>=1.3
+    djangorestframework==2.2.6
 
 
 ## Settings
