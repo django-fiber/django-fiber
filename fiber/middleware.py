@@ -10,6 +10,8 @@ from django.utils import simplejson
 from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR
 from .models import ContentItem, Page
 from .utils.import_util import import_element
+from .utils.class_loader import load_class
+from .app_settings import PERMISSION_CLASS
 
 
 def is_non_html(response):
@@ -137,12 +139,15 @@ class AdminPageMiddleware(object):
     def show_admin(self, request, response):
         """
         Only show the Fiber admin interface when the request
+        - has a user with sufficient permissions based on the Permission Class
         - has a response status code of 200
         - is performed by an admin user
         - has a response which is either 'text/html' or 'application/xhtml+xml'
         - is not an AJAX request
         - does not match EXCLUDE_URLS (empty by default)
         """
+        if not load_class(PERMISSION_CLASS).is_fiber_editor(request.user):
+            return False
         if response.status_code != 200:
             return False
         if not hasattr(request, 'user'):
