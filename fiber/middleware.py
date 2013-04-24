@@ -139,18 +139,18 @@ class AdminPageMiddleware(object):
     def show_admin(self, request, response):
         """
         Only show the Fiber admin interface when the request
-        - has a user with sufficient permissions based on the Permission Class
         - has a response status code of 200
         - is performed by an admin user
+        - has a user with sufficient permissions based on the Permission Class
         - has a response which is either 'text/html' or 'application/xhtml+xml'
         - is not an AJAX request
         - does not match EXCLUDE_URLS (empty by default)
         """
-        if not load_class(PERMISSION_CLASS).is_fiber_editor(request.user):
-            return False
         if response.status_code != 200:
             return False
         if not hasattr(request, 'user'):
+            return False
+        if not load_class(PERMISSION_CLASS).is_fiber_editor(request.user):
             return False
         if not request.user.is_staff:
             return False
