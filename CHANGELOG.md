@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.10.X
+## 0.10.3
+
+**Date**: 25th Apr 2013
 
 * Upgraded external packages to the latest stable releases:
   * Django REST Framework 2.2.6
