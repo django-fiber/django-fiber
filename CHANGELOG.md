@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.10.3
+
+**Date**: 25th Apr 2013
+
+* Upgraded external packages to the latest stable releases:
+  * Django REST Framework 2.2.6
+  * Django Compressor 1.3
+  * Pillow 2.0.0
+* Extended the Permission Class with a method that allows a developer to control if
+  a user can see the Fiber admin interface
+* Bugfixes:
+  * Fixed a [bug][issue171] in the middleware which was introduced in 0.10.2 if using Django 1.3
+  * Thanks to the upgrade of Django REST Framework [this issue][issue] is also resolved.
+
+[issue171]: https://github.com/ridethepony/django-fiber/pull/171
+[issue]: https://gitub.com/tomchristie/django-rest-framework/issues/705 
+
+
 ## 0.10.2
 
 **Date**: 22nd Mar 2013
@@ -24,7 +42,7 @@
   * Django MPTT 0.5.5
   * Django compressor 1.2
   * Django REST Framework 2.1.17
-* Django 1.5 compatiblity fixes
+* Django 1.5 compatibility fixes
 * added meta_description field to Page
 * added has_visible_children method to Page
 * improved file deletion for multiple storage backends

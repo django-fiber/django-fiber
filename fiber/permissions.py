@@ -46,3 +46,10 @@ class Permissions(object):
         Called whenever a new instance has been created of one of Fiber's models by `user`.
         """
         pass
+
+    def is_fiber_editor(self, user):
+        """
+        Determines if the user is allowd to see the Fiber admin interface.
+        """
+        return True
+
