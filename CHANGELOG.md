@@ -6,8 +6,14 @@
   * Django REST Framework 2.2.6
   * Django Compressor 1.3
   * Pillow 2.0.0
+* Extended the Permission Class with a method that allows a developer to control if
+  a user can see the Fiber admin interface
 * Bugfixes:
- * Fixed a bug in the middleware which was introduced in 0.10.2 if using Django 1.3 (#171)
+  * Fixed a [bug][issue171] in the middleware which was introduced in 0.10.2 if using Django 1.3
+  * Thanks to the upgrade of Django REST Framework [this issue][issue] is also resolved.
+
+[issue171]: https://github.com/ridethepony/django-fiber/pull/171
+[issue]: https://gitub.com/tomchristie/django-rest-framework/issues/705 
 
 
 ## 0.10.2
