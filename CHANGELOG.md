@@ -1,6 +1,10 @@
 # Changelog
 
+## 0.10.5.dev
+
 ## 0.10.4
+
+**Date**: 3rd Jul 2013
 
 * Upgraded Django REST Framework to 2.3.6
 
