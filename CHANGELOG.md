@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.4.dev (dev branch)
+## 0.10.4
 
 * Upgraded Django REST Framework to 2.3.6
 
