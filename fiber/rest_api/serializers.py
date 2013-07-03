@@ -54,7 +54,7 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = File
-        read_only_fields = ('created', 'updated')
+        read_only_fields = ('created', )
 
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
@@ -66,7 +66,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Image
-        read_only_fields = ('created', 'updated')
+        read_only_fields = ('created', )
 
 
 class FiberPaginationSerializer(pagination.BasePaginationSerializer):
