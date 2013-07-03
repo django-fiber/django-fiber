@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.4.dev (dev branch)
+
+* Upgraded Django REST Framework to 2.3.6
+
 ## 0.10.3
 
 **Date**: 25th Apr 2013
@@ -15,7 +19,7 @@
   * Thanks to the upgrade of Django REST Framework [this issue][issue] is also resolved.
 
 [issue171]: https://github.com/ridethepony/django-fiber/pull/171
-[issue]: https://gitub.com/tomchristie/django-rest-framework/issues/705 
+[issue]: https://github.com/tomchristie/django-rest-framework/issues/705
 
 
 ## 0.10.2
