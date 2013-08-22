@@ -979,7 +979,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 
 		function createLi(node, $li) {
 			if (node.change_url) {
-				$li.find('.jqtree-title').before('<span class="icon"></span>');
+				$li.find('.jqtree-title').before('<span class="df-icon"></span>');
 				$li.find('div').addClass('df-page');
 			}
 		}
@@ -1425,23 +1425,23 @@ var adminPage = {
 		function createLi(node, $li) {
 			if (node.change_url) {
 				var $div = $li.find('div');
-				$li.find('.jqtree-title').before('<span class="icon"></span>');
+				$li.find('.jqtree-title').before('<span class="df-icon"></span>');
 				$div.addClass('df-page');
 
 				if (!node.show_in_menu) {
-					$div.addClass('hidden-in-menu');
+					$div.addClass('df-hidden-in-menu');
 				}
 
 				if (!node.is_public) {
-					$div.addClass('non-public');
+					$div.addClass('df-non-public');
 				}
 
 				if (node.is_redirect) {
-					$div.addClass('redirect');
+					$div.addClass('df-redirect');
 				}
 
 				if (!node.editable) {
-					$div.addClass('non-editable');
+					$div.addClass('df-non-editable');
 				}
 			}
 		}
