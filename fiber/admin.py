@@ -177,13 +177,13 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
             self.fieldsets = (
                 (None, {'fields': ('title', 'url', )}),
                 (_('Advanced options'), {'fields': ('redirect_page', 'show_in_menu', 'is_public', )}),
-                (_('SEO'), {'fields': ('meta_description', )}),
+                (_('SEO'), {'fields': ('doc_title', 'meta_description', 'meta_keywords', )}),
             )
         else:
             self.fieldsets = (
                 (None, {'fields': ('title', 'url', )}),
                 (_('Advanced options'), {'fields': ('template_name', 'redirect_page', 'show_in_menu', 'is_public', )}),
-                (_('SEO'), {'fields': ('meta_description', )}),
+                (_('SEO'), {'fields': ('doc_title', 'meta_description', 'meta_keywords', )}),
             )
 
     def save_model(self, request, obj, form, change):

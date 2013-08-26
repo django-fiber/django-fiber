@@ -525,8 +525,13 @@ span.nobr {
 	margin: 0;
 }
 
-.df-admin #page_form fieldset input[type="text"] {
+.df-admin #page_form fieldset input[type="text"],
+.df-admin #page_form fieldset textarea {
 	width: 287px;
+}
+
+.df-admin #page_form fieldset textarea {
+    height: 55px;
 }
 
 .df-admin #page_form select {
