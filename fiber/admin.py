@@ -80,7 +80,7 @@ class ImageAdmin(FileAdmin):
 
 
 class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
-    list_display = ('__unicode__',)
+    list_display = ('__unicode__', 'unused')
     form = forms.ContentItemAdminForm
     fieldsets = (
         (None, {'fields': ('name', get_editor_field_name('content_html'),)}),
@@ -89,6 +89,12 @@ class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
     )
     date_hierarchy = 'updated'
     search_fields = ('name', get_editor_field_name('content_html'))
+
+    def unused(self, obj):
+        if obj.used_on_pages_data is None:
+            return True
+        return False
+    unused.boolean = True
 
 
 class PageContentItemInline(UserPermissionMixin, admin.TabularInline):
@@ -177,13 +183,13 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
             self.fieldsets = (
                 (None, {'fields': ('title', 'url', )}),
                 (_('Advanced options'), {'fields': ('redirect_page', 'show_in_menu', 'is_public', )}),
-                (_('SEO'), {'fields': ('meta_description', )}),
+                (_('SEO'), {'fields': ('doc_title', 'meta_description', 'meta_keywords', )}),
             )
         else:
             self.fieldsets = (
                 (None, {'fields': ('title', 'url', )}),
                 (_('Advanced options'), {'fields': ('template_name', 'redirect_page', 'show_in_menu', 'is_public', )}),
-                (_('SEO'), {'fields': ('meta_description', )}),
+                (_('SEO'), {'fields': ('doc_title', 'meta_description', 'meta_keywords', )}),
             )
 
     def save_model(self, request, obj, form, change):

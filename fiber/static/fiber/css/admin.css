@@ -525,8 +525,13 @@ span.nobr {
 	margin: 0;
 }
 
-.df-admin #page_form fieldset input[type="text"] {
+.df-admin #page_form fieldset input[type="text"],
+.df-admin #page_form fieldset textarea {
 	width: 287px;
+}
+
+.df-admin #page_form fieldset textarea {
+    height: 55px;
 }
 
 .df-admin #page_form select {
@@ -699,8 +704,8 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
     margin-left: 12px;
 }
 
-.ui-dialog-content ul.jqtree-tree .page .icon,
-#df-wpr-sidebar ul.jqtree-tree .page .icon {
+.ui-dialog-content ul.jqtree-tree .df-page .df-icon,
+#df-wpr-sidebar ul.jqtree-tree .df-page .df-icon {
     background-image: url(../images/icon-page.png);
     background-repeat: no-repeat;
     width: 16px;
@@ -710,36 +715,36 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
     vertical-align: middle;
 }
 
-.ui-dialog-content ul.jqtree-tree .page.redirect .icon,
-#df-wpr-sidebar ul.jqtree-tree .page.redirect .icon {
+.ui-dialog-content ul.jqtree-tree .df-page.df-redirect .df-icon,
+#df-wpr-sidebar ul.jqtree-tree .df-page.df-redirect .df-icon {
     background-image: url(../images/icon-page-redirect.png);
 }
 
-.ui-dialog-content ul.jqtree-tree .page.hidden-in-menu .icon,
-#df-wpr-sidebar ul.jqtree-tree .page.hidden-in-menu .icon {
+.ui-dialog-content ul.jqtree-tree .df-page.df-hidden-in-menu .df-icon,
+#df-wpr-sidebar ul.jqtree-tree .df-page.df-hidden-in-menu .df-icon {
     background-image: url(../images/icon-page-hidden.png);
 }
 
-.ui-dialog-content ul.jqtree-tree .page.non-public .icon,
-#df-wpr-sidebar ul.jqtree-tree .page.non-public .icon {
+.ui-dialog-content ul.jqtree-tree .df-page.df-non-public .df-icon,
+#df-wpr-sidebar ul.jqtree-tree .df-page.df-non-public .df-icon {
     background-image: url(../images/icon-page-non-public.png);
 }
 
-.ui-dialog-content ul.jqtree-tree .page.non-editable .jqtree-title,
-#df-wpr-sidebar ul.jqtree-tree .page.non-editable .jqtree-title {
+.ui-dialog-content ul.jqtree-tree .df-page.df-non-editable .jqtree-title,
+#df-wpr-sidebar ul.jqtree-tree .df-page.df-non-editable .jqtree-title {
     color: #999;
     text-shadow: 0 1px 0 #fff;
     filter: dropshadow(color=#fff, offx=0, offy=1);
 }
 
-.jqtree-tree .page,
+.jqtree-tree .df-page,
 #df-sidebar-content-tree .jqtree-title {
    white-space: nowrap;
 }
 
 /* permissions-related styling */
-.ui-dialog .non-editable,
-#df-wpr-sidebar .sidebar-tree .non-editable .title {
+.ui-dialog .df-non-editable,
+#df-wpr-sidebar .sidebar-tree .df-non-editable .title {
 	color: #f00;
 }
 
