@@ -32,10 +32,10 @@ We're assuming you are using Django 1.3.x, 1.4.x or 1.5.x.
 
 These dependencies are automatically installed:
 
-    Pillow==2.0.0
-    django-mptt==0.5.5
+    Pillow==2.1.0
+    django-mptt==0.6
     django-compressor==1.3
-    djangorestframework==2.3.6
+    djangorestframework==2.3.7
 
 
 ## Settings
