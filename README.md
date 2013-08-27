@@ -3,6 +3,8 @@
 [travis]: http://travis-ci.org/#!/ridethepony/django-fiber
 [travis-build-image]: https://secure.travis-ci.org/ridethepony/django-fiber.png
 
+[![Coverage Status](https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=master)](https://coveralls.io/r/ridethepony/django-fiber)
+
 # Django Fiber
 
 ---
