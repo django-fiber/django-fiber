@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.10.5.dev
+## 0.10.6.dev
+
+
+## 0.10.5
+
+**Date**: 27th Aug 2013
 
 * Added meta_keywords field to Fiber Page model, so now you can add metatag keywords to your template. Ex:
 
