@@ -56,7 +56,8 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
 
     def get_actions(self, request):
         actions = super(FileAdmin, self).get_actions(request)
-        del actions['delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
+        if 'delete_selected' in actions:
+            del actions['delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
         return actions
 
     def really_delete_selected(self, request, queryset):
