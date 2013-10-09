@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.10.6.dev
+## 0.11.0
+
+**Date**: 9th Oct 2013
 
 * Image previews for Fiber Image in the Django admin
     * Using Easy Thumbnails 1.4

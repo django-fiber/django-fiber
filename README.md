@@ -9,6 +9,13 @@
 
 # Django Fiber
 
+---
+
+**Announcement**: We've dropped support for Django 1.3. This means that if you want to use the latest
+version of Fiber you will have to update to Django 1.4+.
+
+---
+
 Do you want to see a Django Fiber screencast, to get a feel for what it can do for you? Check it out here:
 http://vimeo.com/ridethepony/django-fiber
 
