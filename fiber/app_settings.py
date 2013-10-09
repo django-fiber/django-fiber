@@ -25,6 +25,10 @@ METADATA_CONTENT_SCHEMA = getattr(settings, 'FIBER_METADATA_CONTENT_SCHEMA', {})
 
 API_RENDER_HTML = getattr(settings, 'API_RENDER_HTML', False)
 
+IMAGE_PREVIEW = getattr(settings, 'FIBER_IMAGE_PREVIEW', True)
+LIST_THUMBNAIL_OPTIONS = getattr(settings, 'FIBER_LIST_THUMBNAIL_OPTIONS', {'size': (111, 111)})
+DETAIL_THUMBNAIL_OPTIONS = getattr(settings, 'FIBER_DETAIL_THUMBNAIL_OPTIONS', {'size': (228, 228)})
+
 """
 Point this class to your own Permission Class as declared in :mod:`fiber.permissions`.
 """

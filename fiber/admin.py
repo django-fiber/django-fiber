@@ -8,10 +8,11 @@ from mptt.admin import MPTTModelAdmin
 
 from . import admin_forms as forms
 from . import fiber_admin
-from .app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES, PERMISSION_CLASS
+from .app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES, PERMISSION_CLASS, IMAGE_PREVIEW
 from .editor import get_editor_field_name
 from .models import Page, ContentItem, PageContentItem, Image, File
 from .utils.class_loader import load_class
+from .utils.widgets import AdminImageWidgetWithPreview
 
 perms = load_class(PERMISSION_CLASS)
 
@@ -49,7 +50,7 @@ class UserPermissionMixin(object):
 
 
 class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
-    list_display = ('__unicode__', 'title', )
+    list_display = ('__unicode__', 'title', 'updated',)
     date_hierarchy = 'updated'
     search_fields = ('title', )
     actions = ['really_delete_selected']
@@ -77,7 +78,22 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
 
 
 class ImageAdmin(FileAdmin):
-    pass
+    list_display = ('__unicode__', 'title', 'get_size', 'updated',)
+    fieldsets = (
+        (None, {'fields': ('image', 'title',)}),
+        (_('Size'), {'classes': ('collapse',), 'fields': ('width', 'height',)}),
+    )
+
+
+class ImageAdminWithPreview(ImageAdmin):
+    list_display = ('preview', '__unicode__', 'title', 'get_size', 'updated',)
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == 'image':
+            request = kwargs.pop("request", None)
+            kwargs['widget'] = AdminImageWidgetWithPreview
+            return db_field.formfield(**kwargs)
+        return super(ImageAdminWithPreview, self).formfield_for_dbfield(db_field, **kwargs)
 
 
 class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
@@ -211,7 +227,11 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
 
 
 admin.site.register(ContentItem, ContentItemAdmin)
-admin.site.register(Image, ImageAdmin)
+
+if IMAGE_PREVIEW:
+    admin.site.register(Image, ImageAdminWithPreview)
+else:
+    admin.site.register(Image, ImageAdmin)
 admin.site.register(File, FileAdmin)
 admin.site.register(Page, PageAdmin)
 
