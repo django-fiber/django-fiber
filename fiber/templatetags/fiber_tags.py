@@ -1,15 +1,13 @@
-import operator
+import operator, json
 
 from django import template
-from django.utils import simplejson
 
 from fiber import __version__ as fiber_version_number
-
 from fiber.models import Page, ContentItem
-
 from fiber.utils.urls import get_admin_change_url
 from fiber.app_settings import PERMISSION_CLASS
 from fiber.utils import class_loader
+
 
 PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
 
@@ -220,7 +218,7 @@ def get_editable_attrs(instance):
         "url": get_admin_change_url(instance),
     }
 
-    return "data-fiber-data='%s'" % simplejson.dumps(data)
+    return "data-fiber-data='%s'" % json.dumps(data)
 
 
 class EditableAttrsNode(template.Node):

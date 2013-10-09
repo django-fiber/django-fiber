@@ -1,13 +1,11 @@
 import os
-
+import json
 import warnings
 
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
 from django.db import models
 from django.utils.html import strip_tags
-from django.utils import simplejson
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 
@@ -71,7 +69,7 @@ class ContentItem(models.Model):
         if self.used_on_pages_data is None:
             self.set_used_on_pages_json()
 
-        return simplejson.dumps(self.used_on_pages_data)
+        return json.dumps(self.used_on_pages_data)
 
 
 class Page(MPTTModel):

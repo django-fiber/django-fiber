@@ -1,7 +1,9 @@
+from __future__ import absolute_import
+import json
+
 from warnings import warn
 
 from django import forms
-from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
 
 
