@@ -29,6 +29,7 @@ These dependencies are automatically installed:
     django-mptt==0.6
     django_compressor==1.3
     djangorestframework==2.3.8
+    easy-thumbnails==1.4
 
 
 ## Settings
@@ -51,6 +52,7 @@ These dependencies are automatically installed:
         'django.contrib.staticfiles',
         'mptt',
         'compressor',
+        'easy_thumbnails',
         'fiber',
         ...
     )
