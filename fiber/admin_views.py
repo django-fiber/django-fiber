@@ -32,8 +32,8 @@ def fiber_login(request):
                 'status': 'failed',
                 'message': _('Please enter a correct username and password. Note that both fields are case-sensitive.'),
             }
-    json = json.dumps(result)
-    return HttpResponse(json, mimetype='application/json')
+    json_reponse = json.dumps(result)
+    return HttpResponse(json_reponse, mimetype='application/json')
 
 
 @staff_member_required
