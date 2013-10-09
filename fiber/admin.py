@@ -12,6 +12,7 @@ from .app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES, PERMISSION
 from .editor import get_editor_field_name
 from .models import Page, ContentItem, PageContentItem, Image, File
 from .utils.class_loader import load_class
+from .utils.widgets import AdminImageWidget
 
 perms = load_class(PERMISSION_CLASS)
 
@@ -77,7 +78,14 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
 
 
 class ImageAdmin(FileAdmin):
-    pass
+    list_display = ('image_preview', '__unicode__', 'title', )
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == 'image':
+            request = kwargs.pop("request", None)
+            kwargs['widget'] = AdminImageWidget
+            return db_field.formfield(**kwargs)
+        return super(ImageAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
 
 class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):

@@ -3,6 +3,10 @@ from warnings import warn
 from django import forms
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
+from django.conf import settings
+from django.contrib.admin.widgets import AdminFileWidget
+
+from easy_thumbnails.files import get_thumbnailer
 
 
 class FiberTextarea(forms.Textarea):
@@ -75,3 +79,19 @@ class JSONWidget(forms.Textarea):
         }
         output = super(JSONWidget, self).render(name, value, attrs)
         return output + mark_safe(jquery)
+
+
+class AdminImageWidget(AdminFileWidget):
+    """
+    A Widget for an ImageField with a preview of the current image.
+    """
+    def render(self, name, value, attrs=None):
+        output = []
+        if value:
+            file_name = str(value)
+            thumbnailer = get_thumbnailer(file_name)
+            thumbnail_options = {'size': (128, 128)}
+            thumbnail = thumbnailer.get_thumbnail(thumbnail_options)
+            output.append('<img src="{0}{1}" width="128" />'.format(settings.MEDIA_URL, thumbnail))
+        output.append(super(AdminFileWidget, self).render(name, value, attrs))
+        return mark_safe(u''.join(output))

@@ -14,6 +14,8 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.managers import TreeManager
 from mptt.models import MPTTModel
 
+from easy_thumbnails.files import get_thumbnailer
+
 from .app_settings import IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA, \
     PAGE_MANAGER, CONTENT_ITEM_MANAGER
 from .utils.class_loader import load_class
@@ -309,6 +311,14 @@ class Image(models.Model):
 
     def get_size(self):
         return '%s x %d' % (self.width, self.height)
+
+    def image_preview(self):
+        thumbnailer = get_thumbnailer(self.image)
+        thumbnail_options = {'size': (128, 128)}
+        thumbnail = thumbnailer.get_thumbnail(thumbnail_options)
+        return u'<img src="{0}{1}" width="128" />'.format(settings.MEDIA_URL, thumbnail)
+    image_preview.short_description = _('Preview')
+    image_preview.allow_tags = True
 
 
 class File(models.Model):
