@@ -1,11 +1,7 @@
-try:
-    # Django >= 1.4
-    from django.conf.urls import patterns, url
-except ImportError:
-    # Django 1.3
-    from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 from . import views
+
 
 urlpatterns = patterns('',
     (r'^$', views.api_root),

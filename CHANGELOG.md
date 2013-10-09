@@ -1,7 +1,19 @@
 # Changelog
 
-## 0.10.6.dev
+## 0.11.0
 
+**Date**: 9th Oct 2013
+
+* Image previews for Fiber Image in the Django admin
+    * Using Easy Thumbnails 1.4
+    * Optional with new setting `FIBER_IMAGE_PREVIEW`
+    * Configurable thumbnail_options for both change_list and change_form
+    * The thumbnail in the front-end imageselect pop-up also profits from easy_thumbnails when installed
+* Dropped support for Django 1.3.x
+* Upgraded external packages to the latest stable releases:
+    * Pillow to 2.2.1
+    * Django REST Framework to 2.3.8
+* Fixed a bug when change_list for Fiber Image was rendered in a popup, for instance called from a raw_id widget
 
 ## 0.10.5
 

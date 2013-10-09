@@ -1,8 +1,10 @@
+from __future__ import absolute_import
+import json
+
 from django import forms
 from django.db import models
-from django.utils import simplejson as json
 
-from fiber.utils.widgets import JSONWidget
+from .widgets import JSONWidget
 
 
 class JSONFormField(forms.CharField):

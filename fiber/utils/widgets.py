@@ -1,8 +1,14 @@
+from __future__ import absolute_import
+import json
+
 from warnings import warn
 
 from django import forms
-from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
+from django.contrib.admin.widgets import AdminFileWidget
+
+from fiber.app_settings import DETAIL_THUMBNAIL_OPTIONS
+from fiber.utils.images import get_thumbnail
 
 
 class FiberTextarea(forms.Textarea):
@@ -75,3 +81,18 @@ class JSONWidget(forms.Textarea):
         }
         output = super(JSONWidget, self).render(name, value, attrs)
         return output + mark_safe(jquery)
+
+
+class AdminImageWidgetWithPreview(AdminFileWidget):
+    """
+    A Widget for an ImageField with a preview of the current image.
+    """
+    def render(self, name, value, attrs=None):
+        output = []
+        if value:
+            file_name = str(value)
+            thumbnail = get_thumbnail(file_name, thumbnail_options=DETAIL_THUMBNAIL_OPTIONS)
+            if thumbnail:
+                output.append('<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width, thumbnail.height))
+        output.append(super(AdminImageWidgetWithPreview, self).render(name, value, attrs))
+        return mark_safe(u''.join(output))

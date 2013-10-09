@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-26 09:10-0500\n"
+"POT-Creation-Date: 2013-10-09 10:04-0500\n"
 "PO-Revision-Date: 2012-06-27 01:05+0100\n"
 "Last-Translator: Dennis Bunskoek <dbunskoek@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
@@ -18,44 +18,48 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.6.0\n"
 
-#: admin.py:71
+#: admin.py:73
 #, python-format
 msgid "Successfully deleted %(count)d %(items)s."
 msgstr "Succesvol %(count)d %(items)s verwijderd."
 
-#: admin.py:75
+#: admin.py:77
 msgid "Delete selected files"
 msgstr "Geselecteerde bestanden verwijderen"
 
-#: admin.py:87 admin.py:104 admin.py:179 admin.py:185
+#: admin.py:84 models.py:313
+msgid "Size"
+msgstr "Afmetingen"
+
+#: admin.py:104 admin.py:127 admin.py:202 admin.py:208
 msgid "Advanced options"
 msgstr "Uitgebreide opties"
 
-#: admin.py:88 admin.py:105
+#: admin.py:105 admin.py:128
 msgid "Metadata"
 msgstr "Metadata"
 
-#: admin.py:119
+#: admin.py:142
 msgid "View on site"
 msgstr "Toon op site"
 
-#: admin.py:131
+#: admin.py:154
 msgid "Move up"
 msgstr "Verplaats omhoog"
 
-#: admin.py:136
+#: admin.py:159
 msgid "Move down"
 msgstr "Verplaats omlaag"
 
-#: admin.py:142
+#: admin.py:165
 msgid "Add sub page"
 msgstr "Voeg een subpagina toe"
 
-#: admin.py:146
+#: admin.py:169
 msgid "Actions"
 msgstr "Acties"
 
-#: admin.py:180 admin.py:186
+#: admin.py:203 admin.py:209
 msgid "SEO"
 msgstr ""
 
@@ -73,15 +77,21 @@ msgstr "Sjabloon"
 
 #: admin_forms.py:47
 msgid "A named url can't be combined with a redirect page"
-msgstr "Een 'named url' kan niet worden gecombineerd met een automatische doorverwijzing"
+msgstr ""
+"Een 'named url' kan niet worden gecombineerd met een automatische "
+"doorverwijzing"
 
-#: admin_views.py:27
+#: admin_views.py:28
 msgid "This account is inactive."
 msgstr "Dit account is inactief."
 
-#: admin_views.py:32
-msgid "Please enter a correct username and password. Note that both fields are case-sensitive."
-msgstr "Voer een correcte gebruikersnaam en wachtwoord in. Let op, de velden zijn hoofdlettergevoelig."
+#: admin_views.py:33
+msgid ""
+"Please enter a correct username and password. Note that both fields are case-"
+"sensitive."
+msgstr ""
+"Voer een correcte gebruikersnaam en wachtwoord in. Let op, de velden zijn "
+"hoofdlettergevoelig."
 
 #: managers.py:75
 msgid "used more than once"
@@ -99,115 +109,123 @@ msgstr "één keer gebruikt"
 msgid "recently changed"
 msgstr "recent gewijzigd"
 
-#: models.py:26 models.py:78 models.py:276 models.py:315
+#: models.py:27 models.py:79 models.py:277 models.py:332
 msgid "created"
 msgstr "aangemaakt"
 
-#: models.py:27 models.py:79 models.py:277 models.py:316
+#: models.py:28 models.py:80 models.py:278 models.py:333
 msgid "updated"
 msgstr "bijgewerkt"
 
-#: models.py:28
+#: models.py:29
 msgid "name"
 msgstr "naam"
 
-#: models.py:29 models.py:30 templates/fiber/admin.html:22
+#: models.py:30 models.py:31 templates/fiber/admin.html:22
 msgid "Content"
 msgstr "Content"
 
-#: models.py:31 models.py:92
+#: models.py:32 models.py:93
 msgid "protected"
 msgstr "beschermd"
 
-#: models.py:32
+#: models.py:33
 msgid "metadata"
 msgstr "metadata"
 
-#: models.py:33 models.py:89
+#: models.py:34 models.py:90
 msgid "template name"
 msgstr "sjabloonnaam"
 
-#: models.py:34
+#: models.py:35
 msgid "used on pages"
 msgstr "gebruikt op pagina's"
 
-#: models.py:39 models.py:229
+#: models.py:40 models.py:230
 msgid "content item"
 msgstr "content item"
 
-#: models.py:40 models.py:93
+#: models.py:41 models.py:94
 msgid "content items"
 msgstr "content items"
 
-#: models.py:49
+#: models.py:50
 msgid "[ EMPTY ]"
 msgstr "[ LEEG ]"
 
-#: models.py:80
+#: models.py:81
 msgid "parent"
 msgstr "parent"
 
-#: models.py:83 models.py:279 models.py:318
+#: models.py:84 models.py:280 models.py:335
 msgid "title"
 msgstr "titel"
 
-#: models.py:84
+#: models.py:85
 msgid "document title"
 msgstr "document titel"
 
-#: models.py:86
+#: models.py:87
 msgid "redirect page"
 msgstr "automatische doorverwijzing"
 
-#: models.py:87
+#: models.py:88
 msgid "mark current regexes"
 msgstr "reguliere expressies die markeren als current"
 
-#: models.py:90
+#: models.py:91
 msgid "show in menu"
 msgstr "toon in menu"
 
-#: models.py:91
+#: models.py:92
 msgid "is public"
 msgstr "is openbaar"
 
-#: models.py:100 models.py:230
+#: models.py:101 models.py:231
 msgid "page"
 msgstr "pagina"
 
-#: models.py:101
+#: models.py:102
 msgid "pages"
 msgstr "pagina’s"
 
-#: models.py:231
+#: models.py:232
 msgid "block name"
 msgstr "block naam"
 
-#: models.py:232
+#: models.py:233
 msgid "sort"
 msgstr "sortering"
 
-#: models.py:278 models.py:284
+#: models.py:279 models.py:285
 msgid "image"
 msgstr "afbeelding"
 
-#: models.py:280
+#: models.py:281
 msgid "width"
 msgstr "breedte"
 
-#: models.py:281
+#: models.py:282
 msgid "height"
 msgstr "hoogte"
 
-#: models.py:285
+#: models.py:286
 msgid "images"
 msgstr "afbeeldingen"
 
-#: models.py:317 models.py:321
+#: models.py:326
+msgid "Not available"
+msgstr "Niet beschikbaar"
+
+#: models.py:327
+msgid "Preview"
+msgstr "Voorvertoning"
+
+#: models.py:334 models.py:338
 msgid "file"
 msgstr "bestand"
 
-#: models.py:322
+#: models.py:339
 msgid "files"
 msgstr "bestanden"
 
@@ -223,53 +241,53 @@ msgstr "Backend"
 msgid "Pages"
 msgstr "Pagina’s"
 
-#: utils/date.py:36
+#: utils/date.py:30
 msgid "just now"
 msgstr "zojuist"
 
-#: utils/date.py:38
+#: utils/date.py:32
 #, python-format
 msgid "%s seconds ago"
 msgstr "%s seconden geleden"
 
-#: utils/date.py:42
+#: utils/date.py:36
 #, python-format
 msgid "%s minutes ago"
 msgstr "%s minuten geleden"
 
-#: utils/date.py:44
+#: utils/date.py:38
 msgid "an hour ago"
 msgstr "1 uur geleden"
 
-#: utils/date.py:46
+#: utils/date.py:40
 #, python-format
 msgid "%s hours ago"
 msgstr "%s uur geleden"
 
-#: utils/date.py:48
+#: utils/date.py:42
 msgid "yesterday"
 msgstr "gisteren"
 
-#: utils/date.py:50
+#: utils/date.py:44
 #, python-format
 msgid "%s days ago"
 msgstr "%s dagen geleden"
 
-#: utils/date.py:52
+#: utils/date.py:46
 msgid "a week ago"
 msgstr "1 week geleden"
 
-#: utils/date.py:54
+#: utils/date.py:48
 #, python-format
 msgid "%s weeks ago"
 msgstr "%s weken geleden"
 
-#: utils/date.py:56
+#: utils/date.py:50
 #, python-format
 msgid "%s months ago"
 msgstr "%s maanden geleden"
 
-#: utils/date.py:57
+#: utils/date.py:51
 #, python-format
 msgid "%s years ago"
 msgstr "%s jaar geleden"
@@ -280,7 +298,8 @@ msgstr "URL"
 
 #: utils/form_fields.py:10
 msgid "Example: 'products' or '/section-1/products/' or '\"some_named_url\"'"
-msgstr "Voorbeeld: 'producten' of '/sectie-1/producten/' of '\"een_named_url\"'"
+msgstr ""
+"Voorbeeld: 'producten' of '/sectie-1/producten/' of '\"een_named_url\"'"
 
 #: utils/validators.py:32
 msgid "No reverse match found for the named url"

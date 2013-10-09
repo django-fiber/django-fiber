@@ -1,11 +1,11 @@
 import random
 import re
+import json
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.utils.encoding import smart_unicode
-from django.utils import simplejson
 
 from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR
 from .models import ContentItem, Page
@@ -68,10 +68,10 @@ class AdminPageMiddleware(object):
                         t = loader.get_template('fiber/admin.html')
                         c = RequestContext(request, {
                             'logout_url': self.get_logout_url(request),
-                            'pages_json': simplejson.dumps(
+                            'pages_json': json.dumps(
                                 Page.objects.create_jqtree_data(request.user)
                             ),
-                            'content_items_json': simplejson.dumps(
+                            'content_items_json': json.dumps(
                                 ContentItem.objects.get_content_groups(request.user)
                             )
                         })
@@ -93,7 +93,7 @@ class AdminPageMiddleware(object):
                 response.content = self.body_re.sub(
                     r"<head>\g<IN_HEAD>%s</head>\g<AFTER_HEAD><body data-fiber-data='%s'\g<IN_BODY_TAG>>\g<BODY_CONTENTS></body>" % (
                         self.get_header_html(request),
-                        simplejson.dumps(fiber_data),
+                        json.dumps(fiber_data),
                     ),
                     smart_unicode(response.content)
                 )

@@ -1,14 +1,18 @@
 [![Travis build image][travis-build-image]][travis]
+[![PyPi download count image][pypi-image]][pypi]
 
 [travis]: http://travis-ci.org/#!/ridethepony/django-fiber
 [travis-build-image]: https://secure.travis-ci.org/ridethepony/django-fiber.png
+
+[pypi]: https://pypi.python.org/pypi/django-fiber/
+[pypi-image]: https://pypip.in/d/django-fiber/badge.png
 
 # Django Fiber
 
 ---
 
-**Announcement**: We've upgraded to Django REST Framework 2. This means that if you want to use the latest
-Fiber and you use Django REST Framework 0.3.X or 0.4.X for your own project, you'll have to bite the bullet and upgrade your local REST Framework code.
+**Announcement**: We've dropped support for Django 1.3. This means that if you want to use the latest
+version of Fiber you will have to update to Django 1.4+.
 
 ---
 
@@ -23,7 +27,7 @@ Convinced? Want to use Django Fiber in your own Django project? Then follow the 
 
 ## Installation
 
-We're assuming you are using Django 1.3.x, 1.4.x or 1.5.x.
+We're assuming you are using Django 1.4.x or 1.5.x.
 
     $ pip install django-fiber
 
@@ -32,10 +36,11 @@ We're assuming you are using Django 1.3.x, 1.4.x or 1.5.x.
 
 These dependencies are automatically installed:
 
-    Pillow==2.1.0
+    Pillow==2.2.1
     django-mptt==0.6
-    django-compressor==1.3
-    djangorestframework==2.3.7
+    django_compressor==1.3
+    djangorestframework==2.3.8
+    easy-thumbnails==1.4
 
 
 ## Settings
@@ -58,6 +63,7 @@ These dependencies are automatically installed:
         'django.contrib.staticfiles',
         'mptt',
         'compressor',
+        'easy_thumbnails',
         'fiber',
         ...
     )
