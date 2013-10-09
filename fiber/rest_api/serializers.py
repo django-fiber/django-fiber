@@ -59,6 +59,7 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
     image_url = serializers.Field(source='image.url')
+    thumbnail_url = serializers.Field(source='thumbnail_url')
     filename = serializers.Field(source='get_filename')
     size = serializers.Field(source='get_size')
     can_edit = CanEditField()
