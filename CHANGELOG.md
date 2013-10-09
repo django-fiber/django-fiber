@@ -2,6 +2,10 @@
 
 ## 0.10.6.dev
 
+* Dropped support for Django 1.3.x
+* Upgraded external packages to the latest stable releases:
+    * Pillow to 2.2.1
+    * Django REST Framework to 2.3.8
 
 ## 0.10.5
 

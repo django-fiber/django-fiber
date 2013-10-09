@@ -5,13 +5,6 @@
 
 # Django Fiber
 
----
-
-**Announcement**: We've upgraded to Django REST Framework 2. This means that if you want to use the latest
-Fiber and you use Django REST Framework 0.3.X or 0.4.X for your own project, you'll have to bite the bullet and upgrade your local REST Framework code.
-
----
-
 Do you want to see a Django Fiber screencast, to get a feel for what it can do for you? Check it out here:
 http://vimeo.com/ridethepony/django-fiber
 
@@ -23,7 +16,7 @@ Convinced? Want to use Django Fiber in your own Django project? Then follow the 
 
 ## Installation
 
-We're assuming you are using Django 1.3.x, 1.4.x or 1.5.x.
+We're assuming you are using Django 1.4.x or 1.5.x.
 
     $ pip install django-fiber
 
@@ -32,10 +25,10 @@ We're assuming you are using Django 1.3.x, 1.4.x or 1.5.x.
 
 These dependencies are automatically installed:
 
-    Pillow==2.1.0
+    Pillow==2.2.1
     django-mptt==0.6
-    django-compressor==1.3
-    djangorestframework==2.3.7
+    django_compressor==1.3
+    djangorestframework==2.3.8
 
 
 ## Settings
