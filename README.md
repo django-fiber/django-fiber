@@ -1,7 +1,11 @@
 [![Travis build image][travis-build-image]][travis]
+[![PyPi download count image][pypi-image]][pypi]
 
 [travis]: http://travis-ci.org/#!/ridethepony/django-fiber
 [travis-build-image]: https://secure.travis-ci.org/ridethepony/django-fiber.png
+
+[pypi]: https://pypi.python.org/pypi/django-fiber/
+[pypi-image]: https://pypip.in/d/django-fiber/badge.png
 
 # Django Fiber
 
