@@ -8,7 +8,7 @@ from mptt.admin import MPTTModelAdmin
 
 from . import admin_forms as forms
 from . import fiber_admin
-from .app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES, PERMISSION_CLASS
+from .app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES, PERMISSION_CLASS, IMAGE_PREVIEW
 from .editor import get_editor_field_name
 from .models import Page, ContentItem, PageContentItem, Image, File
 from .utils.class_loader import load_class
@@ -78,10 +78,10 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
 
 
 class ImageAdmin(FileAdmin):
-    list_display = ('image_preview', '__unicode__', 'title', )
+    list_display = ('preview', '__unicode__', 'title', )
 
     def formfield_for_dbfield(self, db_field, **kwargs):
-        if db_field.name == 'image':
+        if IMAGE_PREVIEW and db_field.name == 'image':
             request = kwargs.pop("request", None)
             kwargs['widget'] = AdminImageWidget
             return db_field.formfield(**kwargs)

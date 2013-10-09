@@ -3,10 +3,9 @@ from warnings import warn
 from django import forms
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
-from django.conf import settings
 from django.contrib.admin.widgets import AdminFileWidget
 
-from easy_thumbnails.files import get_thumbnailer
+from fiber.utils.images import get_thumbnail_url
 
 
 class FiberTextarea(forms.Textarea):
@@ -89,9 +88,7 @@ class AdminImageWidget(AdminFileWidget):
         output = []
         if value:
             file_name = str(value)
-            thumbnailer = get_thumbnailer(file_name)
-            thumbnail_options = {'size': (128, 128)}
-            thumbnail = thumbnailer.get_thumbnail(thumbnail_options)
-            output.append('<img src="{0}{1}" width="128" />'.format(settings.MEDIA_URL, thumbnail))
+            thumbnail_url = get_thumbnail_url(file_name)
+            output.append('<img src="{0}" width="128" />'.format(thumbnail_url))
         output.append(super(AdminFileWidget, self).render(name, value, attrs))
         return mark_safe(u''.join(output))
