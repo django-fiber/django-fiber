@@ -113,12 +113,16 @@ TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
 )
 
 INSTALLED_APPS = (
+    'fiber',
+    'fiber_test',
+
+    # third party
     'mptt',
     'compressor',
     'easy_thumbnails',
     'south',
-    'fiber',
-    'fiber_test',
+
+    # django
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -127,19 +131,3 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 )
-
-try:
-    import django_jenkins
-    installed_apps = list(INSTALLED_APPS)
-    installed_apps.append('django_jenkins')
-    INSTALLED_APPS = tuple(installed_apps)
-except ImportError:
-    pass
-
-JENKINS_TASKS = (
-    'django_jenkins.tasks.with_coverage',
-    'django_jenkins.tasks.django_tests',
-)
-
-# Only run tests for fiber app
-PROJECT_APPS = ['fiber', 'fiber_test']

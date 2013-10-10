@@ -1,1 +1,1 @@
-python manage.py test fiber
+python manage.py test fiber fiber_test
