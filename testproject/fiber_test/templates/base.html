@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{% load fiber_tags %}
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}{{ fiber_page.title }}{% endblock %}</title>
+</head>
+<body>
+    {% block body %}
+        {% show_page_content "main" %}
+    {% endblock %}
+</body>
+</html>
