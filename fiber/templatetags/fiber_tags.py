@@ -123,7 +123,6 @@ def show_content(context, content_item_name):
     except ContentItem.DoesNotExist:
         if AUTO_CREATE_CONTENT_ITEMS:
             content_item = ContentItem.objects.create(name=content_item_name)
-            return show_content(context, content_item_name)
 
     context['content_item'] = content_item
 
