@@ -29,6 +29,8 @@ These settings are optional (default values are shown):
     FIBER_PAGE_MANAGER = 'fiber.managers.PageManager'
     FIBER_CONTENT_ITEM_MANAGER = 'fiber.managers.ContentItemManager'
 
+    FIBER_AUTO_CREATE_CONTENT_ITEMS = False
+
     FIBER_METADATA_PAGE_SCHEMA = {}
     FIBER_METADATA_CONTENT_SCHEMA = {}
 

@@ -5,7 +5,7 @@ from django import template
 from fiber import __version__ as fiber_version_number
 from fiber.models import Page, ContentItem
 from fiber.utils.urls import get_admin_change_url
-from fiber.app_settings import PERMISSION_CLASS
+from fiber.app_settings import PERMISSION_CLASS, AUTO_CREATE_CONTENT_ITEMS
 from fiber.utils import class_loader
 
 
@@ -116,12 +116,22 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
 register.inclusion_tag('fiber/menu.html', takes_context=True)(show_menu)
 
 
-def show_content(context, content_item_name):
+def show_content(context, content_item_name, allow_tags=False):
     content_item = None
     try:
         content_item = ContentItem.objects.get(name__exact=content_item_name)
+        if not isinstance(allow_tags, bool):
+            try:
+                tpl = template.Template(content_item.content_html)
+                content_item.content_html = tpl.render(context)
+            except:
+                # There are some things we might want to catch
+                # like URL reversing failures
+                pass
     except ContentItem.DoesNotExist:
-        pass
+        if AUTO_CREATE_CONTENT_ITEMS:
+            content_item = ContentItem.objects.create(name=content_item_name)
+            return show_content(context, content_item_name, allow_tags)
 
     context['content_item'] = content_item
 

@@ -20,6 +20,8 @@ EDITOR = getattr(settings, 'FIBER_EDITOR', 'fiber.editor_definitions.ckeditor.ED
 PAGE_MANAGER = getattr(settings, 'FIBER_PAGE_MANAGER', 'fiber.managers.PageManager')
 CONTENT_ITEM_MANAGER = getattr(settings, 'FIBER_CONTENT_ITEM_MANAGER', 'fiber.managers.ContentItemManager')
 
+AUTO_CREATE_CONTENT_ITEMS = getattr(settings, 'FIBER_AUTO_CREATE_CONTENT_ITEMS', False)
+
 METADATA_PAGE_SCHEMA = getattr(settings, 'FIBER_METADATA_PAGE_SCHEMA', {})
 METADATA_CONTENT_SCHEMA = getattr(settings, 'FIBER_METADATA_CONTENT_SCHEMA', {})
 
