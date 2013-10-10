@@ -2,6 +2,7 @@
 
 ## 0.11.1.dev
 
+* Added coveralls.io support
 
 ## 0.11.0
 
