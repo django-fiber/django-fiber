@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.11.1
+
+**Date** 14th Oct 2013
+
+* New feature: Auto add content items, pull request [pull182]
+
+    When you use the fiber tag {% show_content "content_name" %} the content item will be automatically created if it not already exists.
+
+        # settings.py
+        FIBER_AUTO_CREATE_CONTENT_ITEMS = True
+
+        # template.html
+        {% show_content "content_name" %}
+
+* Added [coveralls.io] support, pull request [pull176]
+
+[pull182]: https://github.com/ridethepony/django-fiber/pull/182
+[pull176]: https://github.com/ridethepony/django-fiber/pull/176
+[coveralls.io]: https://coveralls.io/r/ridethepony/django-fiber
+
 ## 0.11.0
 
 **Date**: 9th Oct 2013

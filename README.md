@@ -1,11 +1,15 @@
-[![Travis build image][travis-build-image]][travis]
-[![PyPi download count image][pypi-image]][pypi]
-
-[travis]: http://travis-ci.org/#!/ridethepony/django-fiber
+[travis-url]: http://travis-ci.org/#!/ridethepony/django-fiber
 [travis-build-image]: https://secure.travis-ci.org/ridethepony/django-fiber.png
 
-[pypi]: https://pypi.python.org/pypi/django-fiber/
+[pypi-url]: https://pypi.python.org/pypi/django-fiber/
 [pypi-image]: https://pypip.in/d/django-fiber/badge.png
+
+[coveralls-url]: https://coveralls.io/r/ridethepony/django-fiber
+[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=master
+
+[![Travis build image][travis-build-image]][travis-url]
+[![PyPi download count image][pypi-image]][pypi-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
 
 # Django Fiber
 
@@ -37,7 +41,7 @@ We're assuming you are using Django 1.4.x or 1.5.x.
 These dependencies are automatically installed:
 
     Pillow==2.2.1
-    django-mptt==0.6
+    django-mptt==0.6.0
     django_compressor==1.3
     djangorestframework==2.3.8
     easy-thumbnails==1.4
