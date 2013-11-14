@@ -198,3 +198,7 @@ Here's an example module that implements object level permissions:
 
 .. literalinclude:: code-examples/permission_class.py
 
+Sitemap
+=======
+
+.. automodule:: fiber.sitemaps
