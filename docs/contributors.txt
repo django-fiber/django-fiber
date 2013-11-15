@@ -13,5 +13,6 @@ Michael van de Waeter <mvandewaeter@leukeleu.nl>
 Nick Badoux <nbadoux@leukeleu.nl>
 Niels van Dijk <nvandijk@leukeleu.nl>
 Ramon de Jezus <rdejezus@leukeleu.nl>
+Richard Barran
 Selwin Ong <selwin@ui.co.id>
 Zenobius Jiricek <zenobius.jiricek@gmail.com>
