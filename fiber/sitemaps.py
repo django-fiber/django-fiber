@@ -6,7 +6,9 @@ Django comes with a high-level framework that makes generating sitemap XML files
 Install the sitemap application as per the `instructions in the django documentation 
 <https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/>`_, then edit your 
 project's ``urls.py`` and add a reference to Fiber's Sitemap class in order to 
-included all the publicly-viewable Fiber pages::
+included all the publicly-viewable Fiber pages:
+
+.. code-block:: python
 
     ...
     from fiber.sitemaps import FiberSitemap
