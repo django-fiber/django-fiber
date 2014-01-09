@@ -113,3 +113,5 @@ For further usage and configuration details take a look at our documentation pro
 See CHANGELOG.md for the latest changes.
 
 [changelog]: CHANGELOG.md
+
+[![Analytics](https://ga-beacon.appspot.com/UA-24341330-5/django-fiber/readme)](https://https://github.com/ridethepony/django-fiber)
