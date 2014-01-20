@@ -372,7 +372,7 @@
  * http://docs.jquery.com/UI/Autocomplete#theming
  */
 .ui-autocomplete { position: absolute; z-index: 2 !important; cursor: default; background: #FFFFFF; border: 0px none !important; padding: 0px !important; -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px; -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); }	
-.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16x.gif') right center no-repeat; }
+.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
 /* workarounds */
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
 
