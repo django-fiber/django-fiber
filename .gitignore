@@ -1,5 +1,3 @@
 *.pyc
 /testproject/reports/
 /testproject/static/
-/.idea/
-/django_fiber.egg-info/
