@@ -1,6 +1,7 @@
 Bart Heesink <bheesink@leukeleu.nl>
 Bram Simons <bsimons@leukeleu.nl>
 Chi Shang Cheng <cscheng@leukeleu.nl>
+Chris Clark <chris@untrod.com>
 Dennis Bunskoek <dbunskoek@leukeleu.nl>
 Diederik van der Boor <vdboor@edoburu.nl>
 Douwe van der Meij <vandermeij@gw20e.com>
