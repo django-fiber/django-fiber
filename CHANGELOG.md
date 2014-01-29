@@ -1,7 +1,12 @@
 # Changelog
 
-## 0.11.2.dev
+## 0.11.2
 
+**Date** 29th Jan 2014
+
+* Added fix for issue with protected ForeignKey relations
+* Added sitemap.xml support
+* Added missing image and fixed image paths
 
 
 ## 0.11.1

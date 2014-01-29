@@ -299,8 +299,8 @@ class Image(models.Model):
         super(Image, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        self.image.storage.delete(self.image.name)
         super(Image, self).delete(*args, **kwargs)
+        self.image.storage.delete(self.image.name)
 
     def get_image_information(self):
         self.width, self.height = get_image_dimensions(self.image) or (0, 0)
@@ -351,8 +351,8 @@ class File(models.Model):
         super(File, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        self.file.storage.delete(self.file.name)
         super(File, self).delete(*args, **kwargs)
+        self.file.storage.delete(self.file.name)
 
     def get_filename(self):
         return os.path.basename(self.file.name)

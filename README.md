@@ -5,20 +5,13 @@
 [pypi-image]: https://pypip.in/d/django-fiber/badge.png
 
 [coveralls-url]: https://coveralls.io/r/ridethepony/django-fiber
-[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=dev
+[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=master
 
 [![Travis build image][travis-build-image]][travis-url]
 [![PyPi download count image][pypi-image]][pypi-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
 
 # Django Fiber
-
----
-
-**Announcement**: We've dropped support for Django 1.3. This means that if you want to use the latest
-version of Fiber you will have to update to Django 1.4+.
-
----
 
 Do you want to see a Django Fiber screencast, to get a feel for what it can do for you? Check it out here:
 http://vimeo.com/ridethepony/django-fiber
@@ -31,7 +24,7 @@ Convinced? Want to use Django Fiber in your own Django project? Then follow the 
 
 ## Installation
 
-We're assuming you are using Django 1.4.x or 1.5.x.
+We're assuming you are using Django 1.4, 1.5 or 1.6.
 
     $ pip install django-fiber
 
@@ -113,3 +106,5 @@ For further usage and configuration details take a look at our documentation pro
 See CHANGELOG.md for the latest changes.
 
 [changelog]: CHANGELOG.md
+
+[![Analytics](https://ga-beacon.appspot.com/UA-24341330-5/django-fiber/readme)](https://github.com/ridethepony/django-fiber)

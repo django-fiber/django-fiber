@@ -1,6 +1,7 @@
 Bart Heesink <bheesink@leukeleu.nl>
 Bram Simons <bsimons@leukeleu.nl>
 Chi Shang Cheng <cscheng@leukeleu.nl>
+Chris Clark <chris@untrod.com>
 Dennis Bunskoek <dbunskoek@leukeleu.nl>
 Diederik van der Boor <vdboor@edoburu.nl>
 Douwe van der Meij <vandermeij@gw20e.com>
@@ -13,5 +14,6 @@ Michael van de Waeter <mvandewaeter@leukeleu.nl>
 Nick Badoux <nbadoux@leukeleu.nl>
 Niels van Dijk <nvandijk@leukeleu.nl>
 Ramon de Jezus <rdejezus@leukeleu.nl>
+Richard Barran
 Selwin Ong <selwin@ui.co.id>
 Zenobius Jiricek <zenobius.jiricek@gmail.com>
