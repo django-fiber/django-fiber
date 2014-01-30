@@ -4,6 +4,10 @@
 	float: left;
 }
 
+.cke_chrome .cke_top {
+	padding-right: 0;
+}
+
 .cke_ltr .cke_button .cke_button__bold_icon,
 .cke_ltr .cke_button .cke_button__italic_icon,
 .cke_ltr .cke_button .cke_button__indent_icon,

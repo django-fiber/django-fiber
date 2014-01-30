@@ -392,7 +392,7 @@ div.ui-dialog form h2 {
 	display: none;
 }
 
-/* .cke_chrome and .cke_inner selectors used for CKEditor 4 using the 'Kama' skin */
+/* .cke_chrome and .cke_inner selectors used for CKEditor 4 */
 
 .ui-dialog .cke_chrome {
 	float: none;
