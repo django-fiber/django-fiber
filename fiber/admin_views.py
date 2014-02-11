@@ -46,7 +46,7 @@ def page_move_up(request, id):
         if previous_sibling_page:
             page.move_to(previous_sibling_page, position='left')
 
-    return HttpResponseRedirect('admin:fiber_page_changelist')
+    return HttpResponseRedirect(reverse('admin:fiber_page_changelist'))
 
 
 @staff_member_required
@@ -58,7 +58,7 @@ def page_move_down(request, id):
         if next_sibling_page:
             page.move_to(next_sibling_page, position='right')
 
-    return HttpResponseRedirect('admin:fiber_page_changelist')
+    return HttpResponseRedirect(reverse('admin:fiber_page_changelist'))
 
 
 @staff_member_required
