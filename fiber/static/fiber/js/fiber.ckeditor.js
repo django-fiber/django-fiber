@@ -10,7 +10,7 @@ Fiber.enhance_textarea = function(textarea, auto_height) {
 
 	window.CKEDITOR_CONFIG_TOOLBAR = window.CKEDITOR_CONFIG_TOOLBAR || [
 		['Format'],
-		window.CKEDITOR_CONFIG_STYLES_SET ? ['Styles'] : null,
+		window.CKEDITOR_CONFIG_STYLES_SET ? ['Styles'] : '-',
 		['Bold','Italic'],
 		['NumberedList','BulletedList','Outdent','Indent'],
 		['fPageLink','fFileLink','fImageLink','fCustomLink','fUnlink'],
