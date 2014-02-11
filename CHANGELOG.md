@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.11.4
+
+**Date** 11th Feb 2014
+
+* Fixed issue with non-workinbg CKEditor when no stylesSet is defined
+
+
 ## 0.11.3
 
 **Date** 11th Feb 2014
