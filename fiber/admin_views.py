@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_POST
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
@@ -45,7 +46,7 @@ def page_move_up(request, id):
         if previous_sibling_page:
             page.move_to(previous_sibling_page, position='left')
 
-    return HttpResponseRedirect('../../')
+    return HttpResponseRedirect('admin:fiber_page_changelist')
 
 
 @staff_member_required
@@ -57,7 +58,7 @@ def page_move_down(request, id):
         if next_sibling_page:
             page.move_to(next_sibling_page, position='right')
 
-    return HttpResponseRedirect('../../')
+    return HttpResponseRedirect('admin:fiber_page_changelist')
 
 
 @staff_member_required
