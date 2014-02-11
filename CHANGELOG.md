@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.3
+
+**Date** 11th Feb 2014
+
+* Upgraded CKEditor to 4.3.2
+* Correctly reverse admin urls instead of relying on relative paths
+
+
 ## 0.11.2
 
 **Date** 29th Jan 2014
