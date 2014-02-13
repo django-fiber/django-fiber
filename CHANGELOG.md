@@ -1,5 +1,10 @@
 # Changelog
 
+## dev
+
+* Fixed 500 error that occurred when adding a Fiber Image without providing a Title
+
+
 ## 0.11.4
 
 **Date** 11th Feb 2014
