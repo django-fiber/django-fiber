@@ -7,6 +7,7 @@ from django import forms
 from django.contrib.admin.widgets import AdminFileWidget
 from django.db.models.fields.files import ImageFieldFile
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 from fiber.app_settings import DETAIL_THUMBNAIL_OPTIONS
 from fiber.utils.images import get_thumbnail
@@ -94,6 +95,10 @@ class AdminImageWidgetWithPreview(AdminFileWidget):
             file_name = str(value)
             thumbnail = get_thumbnail(file_name, thumbnail_options=DETAIL_THUMBNAIL_OPTIONS)
             if thumbnail:
-                output.append('<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width, thumbnail.height))
+                try:
+                    output.append('<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width, thumbnail.height))
+                except IOError:
+                    # original image file is missing
+                    output.append(_('<p>{0}</p>').format('Image file is missing'))
         output.append(super(AdminImageWidgetWithPreview, self).render(name, value, attrs))
         return mark_safe(u''.join(output))

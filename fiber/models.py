@@ -321,9 +321,11 @@ class Image(models.Model):
     def preview(self):
         thumbnail = get_thumbnail(self.image, thumbnail_options=LIST_THUMBNAIL_OPTIONS)
         if thumbnail:
-            return u'<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width, thumbnail.height)
-        else:
-            return _('Not available')
+            try:
+                return u'<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width, thumbnail.height)
+            except IOError:
+                # original image file is missing
+                return _('Image file is missing')
     preview.short_description = _('Preview')
     preview.allow_tags = True
 
