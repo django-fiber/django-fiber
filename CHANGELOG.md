@@ -1,5 +1,11 @@
 # Changelog
 
+## dev
+
+* Fixed 500 error that occurred when adding a Fiber Image without providing a Title
+* Return an informative text instead of raising 500 errors when image files are missing
+
+
 ## 0.11.4
 
 **Date** 11th Feb 2014
