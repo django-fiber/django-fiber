@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.1
+
+**Date** 13th Feb 2014
+
+* Quick fix - don’t let the new CKEditor strip out a and img tags
+
+
 ## 0.12
 
 **Date** 13th Feb 2014
