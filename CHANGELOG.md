@@ -1,8 +1,11 @@
 # Changelog
 
-## dev
+## 0.12
 
-* Fixed 500 error that occurred when adding a Fiber Image without providing a Title
+**Date** 13th Feb 2014
+
+* (re)allow embedding of media using iframes, objects (with params and embed)
+* Fixed 500 error that occurred when adding a Fiber Image without providing a title
 * Return an informative text instead of raising 500 errors when image files are missing
 
 
