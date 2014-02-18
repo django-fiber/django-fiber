@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.12.2
+
+**Date** 18th Feb 2014
+
+* Fixed object style selection in new CKEditor
+* Allow classes and styles on a and img elements
+
+
 ## 0.12.1
 
 **Date** 13th Feb 2014
