@@ -29,7 +29,7 @@ Fiber.enhance_textarea = function(textarea, auto_height) {
 		language: LANGUAGE_CODE,
 		extraPlugins: 'fpagelink,ffilelink,fimagelink,fcustomlink,funlink,fimage,table,tabletools',
 		removePlugins: 'scayt,language,menubutton,forms,image,link',
-		extraAllowedContent: 'a[*];img[*];iframe[*];object[*];param[*];embed[*]',
+		extraAllowedContent: 'a[*]{*}(*);img[*]{*}(*);iframe[*];object[*];param[*];embed[*]',
 		toolbar: window.CKEDITOR_CONFIG_TOOLBAR,
 		format_tags: window.CKEDITOR_CONFIG_FORMAT_TAGS || 'p;h2;h3;h4',
 		stylesSet: window.CKEDITOR_CONFIG_STYLES_SET || null,
