@@ -39,6 +39,15 @@ class AdminPageMiddleware(object):
         if is_non_html(response):
             return response
 
+        url = request.path_info
+        """
+        Avoid further processing or database queries if page is in EXCLUDE_URLS.
+        """
+        if EXCLUDE_URLS:
+            for exclude_url in EXCLUDE_URLS:
+                if re.search(exclude_url, url.lstrip('/')):
+                    return response
+
         if self.set_login_session(request, response):
             request.session['show_fiber_admin'] = True
             url_without_fiber = request.path_info.replace(LOGIN_STRING, '')
