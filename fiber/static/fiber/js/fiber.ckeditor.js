@@ -23,6 +23,12 @@ Fiber.enhance_textarea = function(textarea, auto_height) {
 	if (auto_height) {
 		CKEDITOR.config.height = window.innerHeight - (($('.ui-dialog').height() - $(textarea).height()) + 140);
 	}
+	
+	if (window.CKEDITOR_DISABLE_ALLOWED_CONTENT_FILTER) {
+		// if CKEDITOR.config.allowedContent is set to true, it disables filtering of HTML elements
+		// see http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter
+		CKEDITOR.config.allowedContent = true;
+	}	
 
 	CKEDITOR.replace(textarea, {
 		skin: 'moono',
