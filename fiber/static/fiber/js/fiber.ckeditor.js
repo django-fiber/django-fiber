@@ -24,25 +24,20 @@ Fiber.enhance_textarea = function(textarea, auto_height) {
 		CKEDITOR.config.height = window.innerHeight - (($('.ui-dialog').height() - $(textarea).height()) + 140);
 	}
 	
-	if (window.CKEDITOR_DISABLE_ALLOWED_CONTENT_FILTER) {
-		// if CKEDITOR.config.allowedContent is set to true, it disables filtering of HTML elements
-		// see http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter
-		CKEDITOR.config.allowedContent = true;
-	}	
-
 	CKEDITOR.replace(textarea, {
 		skin: 'moono',
 		language: LANGUAGE_CODE,
-		extraPlugins: 'fpagelink,ffilelink,fimagelink,fcustomlink,funlink,fimage,table,tabletools',
-		removePlugins: 'scayt,language,menubutton,forms,image,link',
-		extraAllowedContent: 'a[*]{*}(*);img[*]{*}(*);iframe[*];object[*];param[*];embed[*]',
+		extraPlugins: window.CKEDITOR_CONFIG_EXTRA_PLUGINS || 'fpagelink,ffilelink,fimagelink,fcustomlink,funlink,fimage,table,tabletools',
+		removePlugins: window.CKEDITOR_CONFIG_REMOVE_PLUGINS || 'scayt,language,menubutton,forms,image,link',
+		allowedContent: window.CKEDITOR_CONFIG_ALLOWED_CONTENT || false,
+		extraAllowedContent: window.CKEDITOR_CONFIG_EXTRA_ALLOWED_CONTENT || 'a[*]{*}(*);img[*]{*}(*);iframe[*];object[*];param[*];embed[*]',
 		toolbar: window.CKEDITOR_CONFIG_TOOLBAR,
 		format_tags: window.CKEDITOR_CONFIG_FORMAT_TAGS || 'p;h2;h3;h4',
 		stylesSet: window.CKEDITOR_CONFIG_STYLES_SET || null,
-		toolbarCanCollapse: false,
-		resize_maxWidth: 610,
-		baseFloatZIndex: 1100
-	});
+		toolbarCanCollapse: window.CKEDITOR_TOOLBAR_CAN_COLLAPSE || false,
+		resize_maxWidth: window.CKEDITOR_CONFIG_MAX_WIDTH || 610,
+		baseFloatZIndex: window.CKEDITOR_BASE_FLOAT_Z_INDEX || 1100
+	});	
 };
 
 Fiber.remove_textarea = function(textarea) {
