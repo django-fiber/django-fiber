@@ -167,7 +167,7 @@ Some default CKEditor config settings can be altered by creating a file called a
 
 Make sure 'appname' is placed _before_ 'fiber' in settings.INSTALLED_APPS, otherwise the admin-extra.js file won't override the default admin-extra.js provided by Django Fiber.
 
-Something like this should be placed in admin-extra.js:
+The following config settings can be used in admin-extra.js to override default CKEditor behavior:
 
 ::
 
@@ -175,6 +175,13 @@ Something like this should be placed in admin-extra.js:
     window.CKEDITOR_CONFIG_STYLES_SET = [
         { name: 'intro paragraph', element: 'p', attributes: { 'class': 'intro' } }
     ];
+    window.CKEDITOR_CONFIG_EXTRA_PLUGINS = 'fpagelink,ffilelink,fimagelink,fcustomlink,funlink,fimage,table,tabletools';
+    window.CKEDITOR_CONFIG_REMOVE_PLUGINS = 'scayt,language,menubutton,forms,image,link';
+    window.CKEDITOR_CONFIG_ALLOWED_CONTENT = false;
+    window.CKEDITOR_CONFIG_EXTRA_ALLOWED_CONTENT = 'a[*]{*}(*);img[*]{*}(*);iframe[*];object[*];param[*];embed[*]';
+    window.CKEDITOR_TOOLBAR_CAN_COLLAPSE = false;
+    window.CKEDITOR_CONFIG_MAX_WIDTH = 610;
+    window.CKEDITOR_BASE_FLOAT_Z_INDEX = 1100;
 
 You can also override the entire CKEditor toolbar, by setting the variable:
 
