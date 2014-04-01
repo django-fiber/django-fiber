@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.13
+
+**Date** 1st Apr 2014
+
+* More config settings for CKEditor (this is no joke)
+
+
 ## 0.12.2
 
 **Date** 18th Feb 2014
