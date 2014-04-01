@@ -192,13 +192,6 @@ You can also override the entire CKEditor toolbar, by setting the variable:
 To see how this works, check the fiber.ckeditor.js file in the Django Fiber source:
 https://github.com/ridethepony/django-fiber/blob/master/fiber/static/fiber/js/fiber.ckeditor.js
 
-To disable the Advanced Content Filter (introduced in CKEditor 4.1.) add:
-
-::
-
-    CKEDITOR.config.allowedContent = true;
-
-See also: http://docs.ckeditor.com/#!/api/CKEDITOR.filter-method-disable
 
 .. _advanced_usage_custom_permissions:
 
