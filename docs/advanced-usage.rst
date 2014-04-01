@@ -167,7 +167,7 @@ Some default CKEditor config settings can be altered by creating a file called a
 
 Make sure 'appname' is placed _before_ 'fiber' in settings.INSTALLED_APPS, otherwise the admin-extra.js file won't override the default admin-extra.js provided by Django Fiber.
 
-The following config settings can be used to override default CKEditor behavior:
+The following config settings can be used in admin-extra.js to override default CKEditor behavior:
 
 ::
 
