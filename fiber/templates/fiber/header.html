@@ -38,6 +38,10 @@
 <script src="{{ STATIC_URL }}fiber/js/file-uploader-3.2.0/client/js/handler.form.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}fiber/js/file-uploader-3.2.0/client/js/handler.xhr.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+    var FIBER_API_ROOT = '{% url 'fiber.rest_api.views.api_root' %}';
+    var DEPLOY_ROOT = FIBER_API_ROOT.replace("api/v2/", "");
+</script>
 <script src="{{ STATIC_URL }}fiber/js/admin-extra.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}fiber/js/admin.js" type="text/javascript"></script>
 {% endcompress %}

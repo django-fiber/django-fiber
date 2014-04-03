@@ -165,7 +165,7 @@ class AdminPageMiddleware(object):
         return True
 
     def is_django_admin(self, request):
-        return re.search(r'^%s' % (reverse('admin:index').lstrip('/')), request.path_info.lstrip('/'))
+        return re.search(r'^%s' % (reverse('admin:index').lstrip('/')), request.path.lstrip('/'))
 
     def get_header_html(self, request):
         t = loader.get_template('fiber/header.html')
