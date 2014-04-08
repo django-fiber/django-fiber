@@ -7,6 +7,7 @@ DEFAULT_TEMPLATE = getattr(settings, 'FIBER_DEFAULT_TEMPLATE', 'base.html')
 TEMPLATE_CHOICES = getattr(settings, 'FIBER_TEMPLATE_CHOICES', [])
 CONTENT_TEMPLATE_CHOICES = getattr(settings, 'FIBER_CONTENT_TEMPLATE_CHOICES', [])
 EXCLUDE_URLS = getattr(settings, 'FIBER_EXCLUDE_URLS', [])
+WHITELIST_URLS = getattr(settings, 'FIBER_WHITELIST_URLS', [])
 
 FILES_DIR = getattr(settings, 'FIBER_FILES_DIR', 'uploads/files')
 IMAGES_DIR = getattr(settings, 'FIBER_IMAGES_DIR', 'uploads/images')
