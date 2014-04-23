@@ -17,7 +17,7 @@ setup(
     license='Apache License, Version 2.0',
 
     install_requires=[
-        'Pillow==2.2.1',
+        'Pillow==2.2.1,==2.3.0',
         'django-mptt==0.6.0',
         'django_compressor==1.3',
         'djangorestframework==2.3.8',
