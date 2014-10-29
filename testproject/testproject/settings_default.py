@@ -89,10 +89,13 @@ SECRET_KEY = '%-$o$r0p4xqkwx)w$$r2-r^s9%%a^7$d76ygv2s+2*lxv+g+yc'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = DEFAULT_SETTINGS.MIDDLEWARE_CLASSES + (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'fiber.middleware.ObfuscateEmailAddressMiddleware',
     'fiber.middleware.AdminPageMiddleware',
 )
@@ -130,4 +133,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+
+    'django_extensions',
 )
