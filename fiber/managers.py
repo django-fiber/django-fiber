@@ -34,7 +34,7 @@ class ContentItemManager(models.Manager):
 
         today = datetime.date.today()
 
-        queryset = self.get_query_set()
+        queryset = self.get_queryset()
 
         #  Filter queryset through the permissions class
         if user:
@@ -102,7 +102,7 @@ class ContentItemManager(models.Manager):
                     content_item.content_markup,
                 )
 
-        for content_item in self.get_query_set():
+        for content_item in self.get_queryset():
             if editor.renderer:
                 markup = rename_markup(content_item.content_markup)
 
@@ -144,7 +144,7 @@ class PageManager(TreeManager):
         # We need to check against get_absolute_url(). Typically this will
         # recursively access .parent, so we retrieve the ancestors at the same time
         # for efficiency.
-        qs = self.get_query_set()
+        qs = self.get_queryset()
 
         # First check if there is a Page whose `url` matches the requested URL.
         try:
@@ -207,7 +207,7 @@ class PageManager(TreeManager):
         page_dict = dict()  # maps page id to page info
 
         # The queryset contains all pages in correct order
-        queryset = self.model.tree.get_query_set()
+        queryset = self.model.tree.get_queryset()
 
         # Filter queryset using the permissions class
         editables_queryset = load_class(PERMISSION_CLASS).filter_objects(user, queryset)

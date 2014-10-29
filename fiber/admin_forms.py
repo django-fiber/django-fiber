@@ -12,6 +12,7 @@ class ContentItemAdminForm(forms.ModelForm):
 
     class Meta:
         model = ContentItem
+        exclude = []
 
     def __init__(self, *args, **kwargs):
         super(ContentItemAdminForm, self).__init__(*args, **kwargs)
@@ -28,6 +29,7 @@ class PageForm(forms.ModelForm):
 
     class Meta:
         model = Page
+        exclude = []
 
     def __init__(self, *args, **kwargs):
         super(PageForm, self).__init__(*args, **kwargs)
