@@ -43,8 +43,8 @@ These settings are optional (default values are shown):
     FIBER_DETAIL_THUMBNAIL_OPTIONS = {'size': (228, 228)}
 
 
-Set or override fiber_page in the view
-======================================
+Set or override fiber_page in a view
+====================================
 
 In this example, the news_item_detail view looks up the Page of the news_item_list by looking up its named URL. This way, you can reuse the content you have placed on the news_item_list Page for each news_item_detail Page.
 
@@ -63,8 +63,8 @@ In this example, the news_item_detail view looks up the Page of the news_item_li
         return HttpResponse(t.render(c))
 
 
-Set or override fiber_page in the classed based view
-====================================================
+Set or override fiber_page in a class based view
+================================================
 
 In this example, the NewsItemDetailView's context is enriched with fiber_page and fiber_current_pages.
 
