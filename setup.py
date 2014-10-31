@@ -21,7 +21,7 @@ setup(
         'django-mptt>=0.6.1',
         'django_compressor>=1.4',
         'djangorestframework>=2.3.8',
-        'easy-thumbnails>=1.4',
+        'easy-thumbnails>=2.2',
     ],
 
     description='Django Fiber - a simple, user-friendly CMS for all your Django projects',

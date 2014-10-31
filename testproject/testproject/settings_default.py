@@ -123,7 +123,6 @@ INSTALLED_APPS = (
     'mptt',
     'compressor',
     'easy_thumbnails',
-    'south',
 
     # django
     'django.contrib.auth',
