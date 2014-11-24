@@ -5,7 +5,7 @@ import json
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 
 from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR
 from .models import ContentItem, Page
@@ -79,7 +79,7 @@ class AdminPageMiddleware(object):
                         # Inject admin html in body.
                         response.content = self.body_re.sub(
                             r"<head>\g<IN_HEAD></head>\g<AFTER_HEAD><body\g<IN_BODY_TAG>>%s\g<BODY_CONTENTS></body>" % ('<div id="wpr-body">',),
-                            smart_unicode(response.content)
+                            smart_text(response.content)
                         ).replace('</body>', '</div>' + t.render(c) + '</body>')
 
                         fiber_data['frontend'] = True
@@ -95,7 +95,7 @@ class AdminPageMiddleware(object):
                         self.get_header_html(request),
                         json.dumps(fiber_data),
                     ),
-                    smart_unicode(response.content)
+                    smart_text(response.content)
                 )
 
         return response
@@ -197,7 +197,7 @@ class ObfuscateEmailAddressMiddleware(object):
         email_pattern = re.compile(r'(mailto:)?[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))')
         if is_non_html(response):
             return response
-        response.content = email_pattern.sub(self.encode_string_repl, response.content)
+        response.content = email_pattern.sub(self.encode_string_repl, smart_text(response.content))
         return response
 
     def encode_string_repl(self, email_pattern_match):

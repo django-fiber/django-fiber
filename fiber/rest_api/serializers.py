@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from rest_framework import serializers, pagination
 
 from fiber.models import Page, PageContentItem, ContentItem, File, Image

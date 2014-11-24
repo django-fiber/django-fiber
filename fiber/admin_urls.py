@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls import include, patterns, url
 
 from . import admin_views

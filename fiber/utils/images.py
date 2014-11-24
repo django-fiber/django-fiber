@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 def get_thumbnail(image, thumbnail_options):
     try:
         from easy_thumbnails.files import get_thumbnailer
