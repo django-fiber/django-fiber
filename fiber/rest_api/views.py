@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+import six
+
 from django.db.models import Q
 from django.utils.encoding import smart_text
 
@@ -36,7 +39,7 @@ class PlainText(renderers.BaseRenderer):
     format = 'txt'
 
     def render(self, data, media_type=None, renderer_context=None):
-        if isinstance(data, basestring):
+        if isinstance(data, six.string_types):
             return data
         return smart_text(data)
 

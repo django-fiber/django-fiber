@@ -15,7 +15,7 @@ class FiberURLValidator(RegexValidator):
     Django's `URLValidator` only matches urls that are prefixed with a protocol.
     """
     protocol_regex = re.compile(r'^(((http|ftp)s?)://).+$', re.IGNORECASE)
-    regex = re.compile(r'^[-\w/\.\:#\?&"=]+$')
+    regex = re.compile(r'^[-\w/\.:#\?&"=]+$')
 
     def __call__(self, value):
         """
