@@ -1,14 +1,16 @@
+# -*- coding: utf-8 -*-
+
 import os
 import sys
 from setuptools import setup, find_packages
-
++https
 version = __import__('fiber').__version__
 
 if sys.argv[-1] == 'publish':  # upload to pypi
     os.system("python setup.py register sdist upload")
-    print "You probably want to also tag the version now:"
-    print "  git tag -a %s -m 'version %s'" % (version, version)
-    print "  git push --tags"
+    print("You probably want to also tag the version now:")
+    print("  git tag -a %s -m 'version %s'" % (version, version))
+    print("  git push --tags")
     sys.exit()
 
 setup(
@@ -17,6 +19,7 @@ setup(
     license='Apache License, Version 2.0',
 
     install_requires=[
+        'six',
         'Pillow>=2.2.1',
         'django-mptt>=0.6.0',
         'django_compressor>=1.3',

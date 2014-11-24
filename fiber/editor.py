@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .app_settings import EDITOR
 from .utils.import_util import import_element
 

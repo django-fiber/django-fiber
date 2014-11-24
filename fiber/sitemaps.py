@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 The `Sitemaps protocol <http://en.wikipedia.org/wiki/Sitemaps>`_ allows a webmaster
 to inform search engines about URLs on a website that are available for crawling.
