@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db.models import Q
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 
 from rest_framework import generics
 from rest_framework import renderers
@@ -38,7 +38,7 @@ class PlainText(renderers.BaseRenderer):
     def render(self, data, media_type=None, renderer_context=None):
         if isinstance(data, basestring):
             return data
-        return smart_unicode(data)
+        return smart_text(data)
 
 
 class IEUploadFixMixin(object):
