@@ -3,7 +3,7 @@
 import os
 import sys
 from setuptools import setup, find_packages
-+https
+
 version = __import__('fiber').__version__
 
 if sys.argv[-1] == 'publish':  # upload to pypi
