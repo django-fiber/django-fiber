@@ -1,4 +1,5 @@
 import re
+import json
 
 from django.conf.urls import patterns, url
 from django.views.generic import View
@@ -693,8 +694,12 @@ class TestContentItem(TestCase):
 
         # - call get_used_on_pages_json
         self.assertEqual(
-            content_item1.get_used_on_pages_json(),
-            '[{"url": "/abc/", "title": "p1"}]'
+            json.loads(
+                content_item1.get_used_on_pages_json()
+            ),
+            [
+                {"url": "/abc/", "title": "p1"}
+            ]
         )
 
         # - load contentitem
