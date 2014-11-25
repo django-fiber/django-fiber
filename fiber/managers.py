@@ -34,13 +34,11 @@ class ContentItemManager(models.Manager):
 
         today = datetime.date.today()
 
-
         # This can be changed to queryset = self.get_queryset() when support for Django < 1.6 is dropped.
-        if hasattr(self, 'get_query_set'):
-            queryset = self.get_query_set()
-        else:
+        if hasattr(self, 'get_queryset'):
             queryset = self.get_queryset()
-
+        else:
+            queryset = self.get_query_set()
 
         #  Filter queryset through the permissions class
         if user:
@@ -109,10 +107,10 @@ class ContentItemManager(models.Manager):
                 )
 
         # This can be changed to queryset = self.get_queryset() when support for Django < 1.6 is dropped.
-        if hasattr(self, 'get_query_set'):
-            queryset = self.get_query_set()
-        else:
+        if hasattr(self, 'get_queryset'):
             queryset = self.get_queryset()
+        else:
+            queryset = self.get_query_set()
 
         for content_item in queryset:
             if editor.renderer:
@@ -158,11 +156,10 @@ class PageManager(TreeManager):
         # for efficiency.
 
         # This can be changed to queryset = self.get_queryset() when support for Django < 1.6 is dropped.
-        if hasattr(self, 'get_query_set'):
-            queryset = self.get_query_set()
-        else:
+        if hasattr(self, 'get_queryset'):
             queryset = self.get_queryset()
-
+        else:
+            queryset = self.get_query_set()
 
         # First check if there is a Page whose `url` matches the requested URL.
         try:
