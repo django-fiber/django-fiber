@@ -5,7 +5,7 @@
 [pypi-image]: https://pypip.in/d/django-fiber/badge.png
 
 [coveralls-url]: https://coveralls.io/r/ridethepony/django-fiber
-[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=master
+[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=dev
 
 [![Travis build image][travis-build-image]][travis-url]
 [![PyPi download count image][pypi-image]][pypi-url]
@@ -34,10 +34,10 @@ We're assuming you are using Django 1.4, 1.5 or 1.6.
 These dependencies are automatically installed:
 
     Pillow==2.2.1
-    django-mptt==0.6.0
-    django_compressor==1.3
+    django-mptt==0.6.1
+    django_compressor==1.4
     djangorestframework==2.3.8
-    easy-thumbnails==1.4
+    easy-thumbnails==2.2
 
 
 ## Settings
@@ -47,6 +47,9 @@ These dependencies are automatically installed:
     import django.conf.global_settings as DEFAULT_SETTINGS
 
     MIDDLEWARE_CLASSES = DEFAULT_SETTINGS.MIDDLEWARE_CLASSES + (
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
         'fiber.middleware.ObfuscateEmailAddressMiddleware',
         'fiber.middleware.AdminPageMiddleware',
     )
