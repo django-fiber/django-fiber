@@ -35,9 +35,9 @@ These dependencies are automatically installed:
 
     Pillow==2.2.1
     django-mptt==0.6.1
-    django_compressor==1.3
+    django_compressor==1.4
     djangorestframework==2.3.8
-    easy-thumbnails==1.4
+    easy-thumbnails==2.2
 
 
 ## Settings
@@ -47,6 +47,9 @@ These dependencies are automatically installed:
     import django.conf.global_settings as DEFAULT_SETTINGS
 
     MIDDLEWARE_CLASSES = DEFAULT_SETTINGS.MIDDLEWARE_CLASSES + (
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
         'fiber.middleware.ObfuscateEmailAddressMiddleware',
         'fiber.middleware.AdminPageMiddleware',
     )
