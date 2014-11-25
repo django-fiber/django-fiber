@@ -1,4 +1,9 @@
-import operator, json
+# -*- coding: utf-8 -*-
+
+import operator
+import json
+
+from functools import reduce
 
 from django import template
 
@@ -140,7 +145,7 @@ def do_show_page_content(parser, token):
     try:
         bits = token.split_contents()
         if len(bits) not in (2, 3):
-            raise template.TemplateSyntaxError, "%r tag expects one or two arguments" % token.contents.split()[0]
+            raise template.TemplateSyntaxError("%r tag expects one or two arguments" % token.contents.split()[0])
         if len(bits) == 2:
             # split_contents() knows not to split quoted strings.
             tag_name, block_name = token.split_contents()
@@ -150,10 +155,10 @@ def do_show_page_content(parser, token):
             tag_name, page, block_name = token.split_contents()
 
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires one or two arguments" % token.contents.split()[0]
+        raise template.TemplateSyntaxError("%r tag requires one or two arguments" % token.contents.split()[0])
 
     if not (block_name[0] == block_name[-1] and block_name[0] in ('"', "'")):
-        raise template.TemplateSyntaxError, "%r tag's argument should be in quotes" % tag_name
+        raise template.TemplateSyntaxError("%r tag's argument should be in quotes" % tag_name)
     return ShowPageContentNode(page, block_name[1:-1])
 
 
@@ -240,7 +245,7 @@ def editable_attrs(parser, token):
     try:
         instance_var = token.split_contents()[1]
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires one argument" % token.contents.split()[0]
+        raise template.TemplateSyntaxError("%r tag requires one argument" % token.contents.split()[0])
 
     return EditableAttrsNode(instance_var)
 

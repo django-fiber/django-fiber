@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Module that provides a base Permission class. This class may be overridden by changing the `PERMISSION_CLASS` value in the settings module.
 """

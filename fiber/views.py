@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.http import HttpResponsePermanentRedirect, Http404
 from django.views.generic.base import TemplateView
@@ -18,9 +19,11 @@ class FiberTemplateView(FiberPageMixin, TemplateView):
             return DEFAULT_TEMPLATE
 
     def render_to_response(self, *args, **kwargs):
-        if self.get_fiber_page() == None:
+        if self.get_fiber_page() is None:
             """
-            Take care of Django's CommonMiddleware redirect if the request URL doesn't end in a slash, and APPEND_SLASH=True
+            Take care of Django's CommonMiddleware redirect if the request URL doesn't end in a slash, and
+            APPEND_SLASH=True
+
             https://docs.djangoproject.com/en/dev/ref/settings/#append-slash
             """
             url = self.get_fiber_page_url()
