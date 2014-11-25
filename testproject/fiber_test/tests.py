@@ -84,7 +84,7 @@ class FiberTests(TestCase):
         self.assertContains(self.client.get('/p1/'), '<title>p1</title>')
 
         # page with custom template
-        self.assertContains(self.client.get('/p2'), 'This is tenmplate1.')
+        self.assertContains(self.client.get('/p2'), 'This is template1.')
 
         # url without trailing '/'
         response = self.client.get('/p1')
