@@ -21,9 +21,9 @@ from datetime import datetime
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-import docs_settings
-from django.core.management import setup_environ
-setup_environ(docs_settings)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "docs_settings")
+import django
+django.setup()
 
 # -- General configuration -----------------------------------------------------
 
