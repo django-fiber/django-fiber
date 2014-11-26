@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 version = __import__('fiber').__version__
 
 if sys.argv[-1] == 'publish':  # upload to pypi
-    os.system("python setup.py register sdist upload")
+    os.system("python setup.py register sdist bdist_egg bdist_wheel upload")
     print "You probably want to also tag the version now:"
     print "  git tag -a %s -m 'version %s'" % (version, version)
     print "  git push --tags"
