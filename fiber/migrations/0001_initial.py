@@ -1,152 +1,130 @@
-# encoding: utf-8
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
-class Migration(SchemaMigration):
-
-    def forwards(self, orm):
-        
-        # Adding model 'ContentItem'
-        db.create_table('fiber_contentitem', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('html', self.gf('django.db.models.fields.TextField')()),
-            ('protected', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal('fiber', ['ContentItem'])
-
-        # Adding model 'Page'
-        db.create_table('fiber_page', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='subpages', null=True, to=orm['fiber.Page'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('relative_url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('named_url', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('mark_current_regexes', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('template_name', self.gf('django.db.models.fields.CharField')(max_length=70, blank=True)),
-            ('show_in_menu', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('protected', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('lft', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
-            ('rght', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
-            ('tree_id', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
-            ('level', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
-        ))
-        db.send_create_signal('fiber', ['Page'])
-
-        # Adding model 'PageContentItem'
-        db.create_table('fiber_pagecontentitem', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('content_item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['fiber.ContentItem'])),
-            ('page', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['fiber.Page'])),
-            ('block_name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('sort', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('fiber', ['PageContentItem'])
-
-        # Adding model 'Image'
-        db.create_table('fiber_image', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('width', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('height', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('fiber', ['Image'])
-
-        # Adding model 'File'
-        db.create_table('fiber_file', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
-        ))
-        db.send_create_signal('fiber', ['File'])
+from django.db import models, migrations
+import fiber.utils.fields
+import django.db.models.deletion
+import fiber.utils.json
 
 
-    def backwards(self, orm):
-        
-        # Deleting model 'ContentItem'
-        db.delete_table('fiber_contentitem')
+class Migration(migrations.Migration):
 
-        # Deleting model 'Page'
-        db.delete_table('fiber_page')
+    dependencies = [
+    ]
 
-        # Deleting model 'PageContentItem'
-        db.delete_table('fiber_pagecontentitem')
-
-        # Deleting model 'Image'
-        db.delete_table('fiber_image')
-
-        # Deleting model 'File'
-        db.delete_table('fiber_file')
-
-
-    models = {
-        'fiber.contentitem': {
-            'Meta': {'object_name': 'ContentItem'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'html': ('django.db.models.fields.TextField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'protected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'fiber.file': {
-            'Meta': {'ordering': "('file',)", 'object_name': 'File'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'fiber.image': {
-            'Meta': {'ordering': "('image',)", 'object_name': 'Image'},
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'height': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'width': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
-        },
-        'fiber.page': {
-            'Meta': {'ordering': "('tree_id', 'lft')", 'object_name': 'Page'},
-            'content_items': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['fiber.ContentItem']", 'through': "orm['fiber.PageContentItem']", 'symmetrical': 'False'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'mark_current_regexes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'named_url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'subpages'", 'null': 'True', 'to': "orm['fiber.Page']"}),
-            'protected': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'relative_url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'show_in_menu': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'template_name': ('django.db.models.fields.CharField', [], {'max_length': '70', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'url': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
-        },
-        'fiber.pagecontentitem': {
-            'Meta': {'object_name': 'PageContentItem'},
-            'block_name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'content_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['fiber.ContentItem']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['fiber.Page']"}),
-            'sort': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
-        }
-    }
-
-    complete_apps = ['fiber']
+    operations = [
+        migrations.CreateModel(
+            name='ContentItem',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created', models.DateTimeField(auto_now_add=True, verbose_name='created')),
+                ('updated', models.DateTimeField(auto_now=True, verbose_name='updated')),
+                ('name', models.CharField(max_length=255, verbose_name='name', blank=True)),
+                ('content_markup', fiber.utils.fields.FiberMarkupField(verbose_name='Content')),
+                ('content_html', fiber.utils.fields.FiberHTMLField(verbose_name='Content')),
+                ('protected', models.BooleanField(default=False, verbose_name='protected')),
+                ('metadata', fiber.utils.json.JSONField(null=True, verbose_name='metadata', blank=True)),
+                ('template_name', models.CharField(max_length=70, verbose_name='template name', blank=True)),
+                ('used_on_pages_data', fiber.utils.json.JSONField(null=True, verbose_name='used on pages', blank=True)),
+            ],
+            options={
+                'verbose_name': 'content item',
+                'verbose_name_plural': 'content items',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='File',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created', models.DateTimeField(auto_now_add=True, verbose_name='created')),
+                ('updated', models.DateTimeField(auto_now=True, verbose_name='updated')),
+                ('file', models.FileField(upload_to=b'uploads/files', max_length=255, verbose_name='file')),
+                ('title', models.CharField(max_length=255, verbose_name='title')),
+            ],
+            options={
+                'ordering': ('-updated',),
+                'verbose_name': 'file',
+                'verbose_name_plural': 'files',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Image',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created', models.DateTimeField(auto_now_add=True, verbose_name='created')),
+                ('updated', models.DateTimeField(auto_now=True, verbose_name='updated')),
+                ('image', models.ImageField(upload_to=b'uploads/images', max_length=255, verbose_name='image')),
+                ('title', models.CharField(max_length=255, verbose_name='title')),
+                ('width', models.IntegerField(null=True, verbose_name='width', blank=True)),
+                ('height', models.IntegerField(null=True, verbose_name='height', blank=True)),
+            ],
+            options={
+                'ordering': ('-updated',),
+                'verbose_name': 'image',
+                'verbose_name_plural': 'images',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Page',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created', models.DateTimeField(auto_now_add=True, verbose_name='created')),
+                ('updated', models.DateTimeField(auto_now=True, verbose_name='updated')),
+                ('meta_description', models.CharField(max_length=255, blank=True)),
+                ('meta_keywords', models.CharField(max_length=255, blank=True)),
+                ('title', models.CharField(max_length=255, verbose_name='title')),
+                ('doc_title', models.CharField(max_length=255, verbose_name='document title', blank=True)),
+                ('url', fiber.utils.fields.FiberURLField(max_length=255, blank=True)),
+                ('mark_current_regexes', models.TextField(verbose_name='mark current regexes', blank=True)),
+                ('template_name', models.CharField(max_length=70, verbose_name='template name', blank=True)),
+                ('show_in_menu', models.BooleanField(default=True, verbose_name='show in menu')),
+                ('is_public', models.BooleanField(default=True, verbose_name='is public')),
+                ('protected', models.BooleanField(default=False, verbose_name='protected')),
+                ('metadata', fiber.utils.json.JSONField(null=True, blank=True)),
+                ('lft', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('rght', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('tree_id', models.PositiveIntegerField(editable=False, db_index=True)),
+                ('level', models.PositiveIntegerField(editable=False, db_index=True)),
+            ],
+            options={
+                'ordering': ('tree_id', 'lft'),
+                'verbose_name': 'page',
+                'verbose_name_plural': 'pages',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='PageContentItem',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('block_name', models.CharField(max_length=255, verbose_name='block name')),
+                ('sort', models.IntegerField(null=True, verbose_name='sort', blank=True)),
+                ('content_item', models.ForeignKey(related_name='page_content_items', verbose_name='content item', to='fiber.ContentItem')),
+                ('page', models.ForeignKey(related_name='page_content_items', verbose_name='page', to='fiber.Page')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='page',
+            name='content_items',
+            field=models.ManyToManyField(to='fiber.ContentItem', verbose_name='content items', through='fiber.PageContentItem'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='page',
+            name='parent',
+            field=models.ForeignKey(related_name='subpages', verbose_name='parent', blank=True, to='fiber.Page', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='page',
+            name='redirect_page',
+            field=models.ForeignKey(related_name='redirected_pages', on_delete=django.db.models.deletion.SET_NULL, verbose_name='redirect page', blank=True, to='fiber.Page', null=True),
+            preserve_default=True,
+        ),
+    ]
