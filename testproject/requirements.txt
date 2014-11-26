@@ -1,3 +1,2 @@
 coverage==3.7.1
 mock==1.0.1
-South==1.0.1
