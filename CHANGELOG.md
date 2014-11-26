@@ -1,6 +1,8 @@
 # Changelog
 
-## dev version
+## 1.0
+
+**Date** 26th Nov 2014
 
 * Support Django 1.7
 
