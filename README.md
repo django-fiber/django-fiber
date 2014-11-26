@@ -93,7 +93,11 @@ These dependencies are automatically installed:
 
 ## Post-installation
 
-Create database tables:
+Create database tables for Django >= 1.7
+
+    $ python manage.py migrate
+
+Create database tables for Django < 1.7:
 
     $ python manage.py syncdb
 
