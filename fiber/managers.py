@@ -12,6 +12,8 @@ from .utils.urls import get_named_url_from_quoted_url
 from .utils.class_loader import load_class
 from .app_settings import PERMISSION_CLASS
 
+from django.core.urlresolvers import get_script_prefix
+
 
 class ContentItemManager(models.Manager):
 
@@ -237,7 +239,7 @@ class PageManager(TreeManager):
             url = page.get_absolute_url()
             if url:
                 # normal pages
-                page_info['url'] = url
+                page_info['url'] = get_script_prefix().rstrip('/') + url
                 page_info['change_url'] = page.get_change_url()
                 page_info['add_url'] = page.get_add_url()
 

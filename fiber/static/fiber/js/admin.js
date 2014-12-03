@@ -754,7 +754,7 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
-		url: '/api/v2/images/',
+		url: FIBER_API_ROOT + 'images/',
 		width: 520,
 		height: 'auto',
 		start_width: 480,
@@ -833,7 +833,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 	},
 
 	get_upload_path: function() {
-		return '/api/v2/images/';
+		return FIBER_API_ROOT + 'images/';
 	},
 
 	get_selected_row: function() {
@@ -849,7 +849,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
-		url: '/api/v2/files/',
+		url: FIBER_API_ROOT + 'files/',
 		width: 520,
 		height: 'auto',
 		start_width: 480,
@@ -913,7 +913,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 	},
 
 	get_upload_path: function() {
-		return '/api/v2/files/';
+		return FIBER_API_ROOT + 'files/';
 	},
 
 	action_click: function() {
@@ -933,7 +933,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 Fiber.PageSelectDialog = AdminRESTDialog.extend({
 
 	defaults: {
-		url: '/api/v2/pages/',
+		url: FIBER_API_ROOT + 'pages/',
 		width: 480,
 		height: 520,
 		start_width: 480,
@@ -999,7 +999,7 @@ Fiber.PageSelectDialog = AdminRESTDialog.extend({
 		}
 
 		$.ajax({
-			url: '/api/v2/pagetree/',
+			url: FIBER_API_ROOT + 'pagetree/',
 			type: 'GET',
 			success: $.proxy(handle_load_data, this),
 			cache: false,
@@ -1237,7 +1237,7 @@ var DroppableArea = Class.extend({
 		busyIndicator.show();
 
 		$.ajax({
-			url: '/api/v2/page_content_items/',
+			url: FIBER_API_ROOT + 'page_content_items/',
 			type: 'POST',
 			data: data,
 			success: function(response) {
@@ -1250,7 +1250,7 @@ var DroppableArea = Class.extend({
 		busyIndicator.show();
 
 		Fiber.move_page_content_item(
-			'/api/v2/page_content_items/' + fiber_item_data.page_content_item_id + '/move/',
+			FIBER_API_ROOT + 'page_content_items/' + fiber_item_data.page_content_item_id + '/move/',
 			this.fiber_item.element_data.page_content_item_id,
 			this.fiber_item.element_data.block_name
 		)
@@ -1311,7 +1311,7 @@ var AddContentItemFormDialog = ChangeContentItemFormDialog.extend({
 		busyIndicator.show();
 
 		$.ajax({
-			url: '/api/v2/page_content_items/',
+			url: FIBER_API_ROOT + 'page_content_items/',
 			type: 'POST',
 			data: data,
 			success: function(response) {
@@ -1411,7 +1411,7 @@ var adminPage = {
 
 			var info = event.move_info;
 			$.ajax({
-				url: '/api/v2/pages/' + info.moved_node.id + '/move_page/',
+				url: FIBER_API_ROOT + 'pages/' + info.moved_node.id + '/move_page/',
 				type: 'POST',
 				dataType: 'json',
 
@@ -1588,7 +1588,7 @@ var adminPage = {
 									busyIndicator.show();
 
 									$.ajax({
-										url: '/api/v2/pages/' + node.id + '/',
+										url: FIBER_API_ROOT + 'pages/' + node.id + '/',
 										type: 'DELETE',
 										data: {},
 										success: function(data) {
@@ -1671,7 +1671,7 @@ var adminPage = {
 								busyIndicator.show();
 
 								$.ajax({
-									url: '/api/v2/content_items/' + node.id + '/',
+									url: FIBER_API_ROOT + 'content_items/' + node.id + '/',
 									type: 'DELETE',
 									data: {},
 									success: function(data) {
@@ -1800,7 +1800,7 @@ var adminPage = {
 
 		var backend_toolbar = $('<div id="fiber-backend-toolbar"></div>');
 		var frontend_button = $('<p class="frontend"></p>').appendTo(backend_toolbar);
-		var link = $(document.createElement('a')).text(gettext('Frontend')).attr('href', '/').attr('title', gettext('Frontend')).appendTo(frontend_button);
+		var link = $(document.createElement('a')).text(gettext('Frontend')).attr('href', DEPLOY_ROOT).attr('title', gettext('Frontend')).appendTo(frontend_button);
 		$('<span class="icon"></span>').prependTo(link);
 		backend_toolbar.prependTo($('body'));
 	},
@@ -1879,10 +1879,10 @@ function reloadPage(params) {
 		busyIndicator.show();
 
 		$.ajax({
-			url: '/api/v2/pages/' + page_id + '/',
+			url: FIBER_API_ROOT + 'pages/' + page_id + '/',
 			type: 'GET',
 			success: function(data) {
-				window.location.replace(data.page_url);
+				window.location.replace((DEPLOY_ROOT + data.page_url).replace('//', '/'));
 			},
 			error: function() {
 				if (params && params.error) {
@@ -2236,7 +2236,7 @@ Fiber.FiberItem = Class.extend({
 		adminPage.hide_admin_elements();
 
 		$.ajax({
-			url: '/api/v2/page_content_items/' + this.element_data.page_content_item_id + '/',
+			url: FIBER_API_ROOT + 'page_content_items/' + this.element_data.page_content_item_id + '/',
 			type: 'DELETE',
 			data: {},
 			success: function(data) {
