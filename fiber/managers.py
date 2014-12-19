@@ -4,6 +4,7 @@ import re
 
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.encoding import force_text
 
 from mptt.managers import TreeManager
 
@@ -43,7 +44,7 @@ class ContentItemManager(models.Manager):
 
         for content_item in queryset.annotate(num_pages=models.Count('page')):
             content_item_info = dict(
-                label=unicode(content_item),
+                label=force_text(content_item),
                 id=content_item.id,
                 change_url=content_item.get_change_url(),
                 used_on_pages=content_item.used_on_pages_data
