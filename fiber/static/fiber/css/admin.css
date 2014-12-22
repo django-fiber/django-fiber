@@ -780,6 +780,8 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 /* file and image grid */
 .simple-data-grid {
 	width: 100%;
+    font-size: 11px;
+    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
 	color: #333;
 }
 
@@ -794,6 +796,16 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 
 .simple-data-grid tfoot {
 	background-color: #f6f6f6;
+}
+
+.simple-data-grid tfoot .pagination li {
+    list-style-type: none;
+    font-size: 11px;
+    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+}
+
+.simple-data-grid tfoot .pagination a {
+    text-decoration: none;
 }
 
 #ui-image-select-grid img {
