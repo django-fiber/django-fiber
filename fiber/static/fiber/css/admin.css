@@ -310,6 +310,12 @@ div.ui-dialog form textarea,
 	clear: none;
 }
 
+#ui-file-select-filter-input,
+#ui-image-select-filter-input {
+    margin-top: 5px;
+    width: 189px;
+}
+
 div.ui-dialog form textarea {
     padding: 3px;
     height: 80px;
@@ -539,12 +545,6 @@ span.nobr {
 	width: 100%;
 }
 
-.df-admin #ui-file-select-filter-input,
-.df-admin #ui-image-select-filter-input {
-	margin-top: 5px;
-	width: 170px;
-}
-
 /* ---[ tree ] --- */
 /* This is a copy of jqtree.css because styles are reset */
 
@@ -571,6 +571,7 @@ ul.jqtree-tree li.jqtree-closed > ul {
 }
 
 ul.jqtree-tree li {
+    list-style-type: none;
     clear: both;
 }
 
@@ -762,6 +763,8 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 .ui-dialog-content ul.jqtree-tree li {
 	margin-top: 0;
 	margin-bottom: 0;
+    font-size: 11px;
+    line-height: 14px;
 }
 
 .ui-dialog-content ul.jqtree-tree div {
@@ -785,8 +788,17 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 	color: #333;
 }
 
+.simple-data-grid thead th {
+    vertical-align: top;
+}
+
 .simple-data-grid thead th a {
 	color: #333;
+}
+
+.simple-data-grid tbody td {
+    vertical-align: top;
+    word-wrap: break-word;
 }
 
 .simple-data-grid tbody .selected,

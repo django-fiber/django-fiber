@@ -755,7 +755,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
 		url: '/api/v2/images/',
-		width: 520,
+		width: 540,
 		height: 'auto',
 		start_width: 480,
 		start_height: 'auto'
@@ -850,7 +850,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
 		url: '/api/v2/files/',
-		width: 520,
+		width: 540,
 		height: 'auto',
 		start_width: 480,
 		start_height: 'auto'
