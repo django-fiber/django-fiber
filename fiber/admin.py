@@ -1,7 +1,8 @@
 from django.conf import settings
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin.util import model_ngettext
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.deletion import ProtectedError
 from django.core.exceptions import PermissionDenied
 
 from mptt.admin import MPTTModelAdmin
@@ -62,17 +63,30 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
         return actions
 
     def really_delete_selected(self, request, queryset):
+        deleted_count = 0
+        protected_count = 0
+
         # Check that the user has delete permission for the actual model
         if not self.has_delete_permission(request):
             raise PermissionDenied
 
         for obj in queryset:
-            obj.delete()
+            try:
+                obj.delete()
+                deleted_count += 1
+            except ProtectedError:
+                protected_count += 1
 
-        n = queryset.count()
-        self.message_user(request, _("Successfully deleted %(count)d %(items)s.") % {
-            "count": n, "items": model_ngettext(self.opts, n)
-        })
+        if deleted_count:
+            messages.add_message(request, messages.INFO, _("Successfully deleted %(count)d %(items)s.") % {
+                "count": deleted_count, "items": model_ngettext(self.opts, deleted_count)
+            })
+
+        if protected_count:
+            # TODO More informative feedback. Also plural, single wording and Dutch translations. Compare messages on trying to delete one object
+            messages.add_message(request, messages.ERROR, _("%(count)d %(items)s not deleted, because they are referenced by other objects.") % {
+                "count": protected_count, "items": model_ngettext(self.opts, protected_count)
+            })
 
     really_delete_selected.short_description = _('Delete selected files')
 
