@@ -101,6 +101,12 @@ Create database tables for Django < 1.7:
 
     $ python manage.py syncdb
 
+Migrating database tables for Django < 1.7 using South 1.0:
+
+    $ python manage.py migrate
+
+Then the original South migrations in the `south_migrations` directory will be used, following the recommendation at <http://south.readthedocs.org/en/latest/releasenotes/1.0.html#library-migration-path>
+
 All static Fiber files need to be symlinked in (or copied to) your media folder:
 
     $ python manage.py collectstatic --link
