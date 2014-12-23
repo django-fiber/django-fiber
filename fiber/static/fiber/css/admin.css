@@ -110,6 +110,7 @@ div.ui-dialog form label,
 }
 
 #df-sidebar #df-sidebar-top-section {
+    box-sizing: content-box;
 	margin-bottom: 10px;
 	border-bottom: 1px solid #a6a6a6;
 	padding: 2px 0 3px 5px;
