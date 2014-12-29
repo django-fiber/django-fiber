@@ -34,7 +34,7 @@ def fiber_login(request):
                 'message': _('Please enter a correct username and password. Note that both fields are case-sensitive.'),
             }
     json_reponse = json.dumps(result)
-    return HttpResponse(json_reponse, mimetype='application/json')
+    return HttpResponse(json_reponse, content_type='application/json')
 
 
 @staff_member_required
