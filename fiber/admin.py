@@ -83,8 +83,8 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
             })
 
         if protected_count:
-            # TODO More informative feedback. Also plural, single wording and Dutch translations. Compare messages on trying to delete one object
-            messages.add_message(request, messages.ERROR, _("%(count)d %(items)s not deleted, because they are referenced by other objects.") % {
+            # TODO More informative feedback, possibly with an intermediate screen. Compare messages on trying to delete one object.
+            messages.add_message(request, messages.ERROR, _("%(count)d %(items)s not deleted, because that would require deleting protected related objects.") % {
                 "count": protected_count, "items": model_ngettext(self.opts, protected_count)
             })
 
