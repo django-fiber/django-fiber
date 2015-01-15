@@ -93,7 +93,7 @@ Fiber.enhance_textarea = function(textarea) {
 
 		var image_select_dialog = new Fiber.ImageSelectDialog();
 		image_select_dialog.action_click = function() {
-			var row = file_select_dialog.get_selected_row();
+			var row = image_select_dialog.get_selected_row();
 			var selected_image_path = row.image_url;
 
 			if (userSelectionIE.textRange) {
@@ -123,7 +123,8 @@ Fiber.enhance_textarea = function(textarea) {
 
 		var image_select_dialog = new Fiber.ImageSelectDialog();
 		image_select_dialog.action_click = function() {
-			var selected_image_path = $(this.uiDialog.find('tr.ui-state-highlight td')[0]).text();
+			var row = image_select_dialog.get_selected_row();
+			var selected_image_path = row.image_url;
 			var selected_image_textile = '!' + selected_image_path + '!';
 
 			if (userSelectionIE.textRange) {
