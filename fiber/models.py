@@ -18,7 +18,7 @@ from .app_settings import (
 )
 from .utils.class_loader import load_class
 from .utils.fields import FiberURLField, FiberMarkupField, FiberHTMLField
-from .utils.images import get_thumbnail, get_thumbnail_url
+from .utils.images import get_thumbnail, get_thumbnail_url, ThumbnailException
 from .utils.json import JSONField
 from .utils.urls import get_named_url_from_quoted_url, is_quoted_url
 
@@ -319,13 +319,12 @@ class Image(models.Model):
         return get_thumbnail_url(self.image, thumbnail_options=LIST_THUMBNAIL_OPTIONS)
 
     def preview(self):
-        thumbnail = get_thumbnail(self.image, thumbnail_options=LIST_THUMBNAIL_OPTIONS)
-        if thumbnail:
-            try:
+        try:
+            thumbnail = get_thumbnail(self.image, thumbnail_options=LIST_THUMBNAIL_OPTIONS)
+            if thumbnail:
                 return u'<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width, thumbnail.height)
-            except IOError:
-                # original image file is missing
-                return _('Image file is missing')
+        except ThumbnailException as e:
+            return str(e)
     preview.short_description = _('Preview')
     preview.allow_tags = True
 
