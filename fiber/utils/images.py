@@ -19,10 +19,10 @@ def get_thumbnail(image, thumbnail_options):
 
 
 def get_thumbnail_url(image, thumbnail_options):
-    thumbnail = get_thumbnail(image, thumbnail_options)
-    if thumbnail:
-        try:
+    try:
+        thumbnail = get_thumbnail(image, thumbnail_options)
+        if thumbnail:
             return thumbnail.url
-        except ThumbnailException:
-            return
+    except ThumbnailException:
+        return
     return
