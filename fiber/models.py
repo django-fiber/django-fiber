@@ -316,7 +316,10 @@ class Image(models.Model):
         return get_thumbnail(self.image, thumbnail_options=LIST_THUMBNAIL_OPTIONS)
 
     def thumbnail_url(self):
-        return get_thumbnail_url(self.image, thumbnail_options=LIST_THUMBNAIL_OPTIONS)
+        try:
+            return get_thumbnail_url(self.image, thumbnail_options=LIST_THUMBNAIL_OPTIONS)
+        except ThumbnailException:
+            return
 
     def preview(self):
         try:
