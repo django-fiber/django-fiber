@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-06 11:13+0100\n"
-"PO-Revision-Date: 2015-01-06 11:25+0100\n"
+"POT-Creation-Date: 2015-01-29 15:29+0100\n"
+"PO-Revision-Date: 2015-01-29 15:31+0100\n"
 "Last-Translator: Bram Simons <bsimons@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.6.0\n"
-"X-Generator: Poedit 1.7.1\n"
+"X-Generator: Poedit 1.6.8\n"
 
 #: admin.py:81
 #, python-format
@@ -119,11 +119,11 @@ msgstr "één keer gebruikt"
 msgid "recently changed"
 msgstr "recent gewijzigd"
 
-#: models.py:27 models.py:79 models.py:277 models.py:334
+#: models.py:27 models.py:79 models.py:277 models.py:333
 msgid "created"
 msgstr "aangemaakt"
 
-#: models.py:28 models.py:80 models.py:278 models.py:335
+#: models.py:28 models.py:80 models.py:278 models.py:334
 msgid "updated"
 msgstr "bijgewerkt"
 
@@ -167,7 +167,7 @@ msgstr "[ LEEG ]"
 msgid "parent"
 msgstr "parent"
 
-#: models.py:84 models.py:280 models.py:337
+#: models.py:84 models.py:280 models.py:336
 msgid "title"
 msgstr "titel"
 
@@ -224,20 +224,39 @@ msgid "images"
 msgstr "afbeeldingen"
 
 #: models.py:328
-msgid "Image file is missing"
-msgstr ""
-
-#: models.py:329
 msgid "Preview"
 msgstr "Voorvertoning"
 
-#: models.py:336 models.py:340
+#: models.py:335 models.py:339
 msgid "file"
 msgstr "bestand"
 
-#: models.py:341
+#: models.py:340
 msgid "files"
 msgstr "bestanden"
+
+#: rest_api/views.py:198 rest_api/views.py:264
+#, python-format
+msgid "You do not have permission the permission to delete %(file_name)s."
+msgstr "Je hebt niet voldoende rechten om %(file_name)s te verwijderen."
+
+#: rest_api/views.py:205 rest_api/views.py:271
+#, fuzzy, python-format
+#| msgid "Successfully deleted %(count)d %(items)s."
+msgid "Successfully deleted %(file_name)s."
+msgstr "%(count)d %(items)s succesvol verwijderd."
+
+#: rest_api/views.py:209 rest_api/views.py:275
+#, fuzzy, python-format
+#| msgid ""
+#| "%(count)d %(items)s not deleted, because that would require deleting "
+#| "protected related objects."
+msgid ""
+"You can not delete %(file_name)s, because that would require deleting "
+"protected related objects."
+msgstr ""
+"%(count)d %(items)s niet verwijderd, omdat dit het verwijderen van "
+"gerelateerde objecten zou vereisen."
 
 #: templates/fiber/admin.html:10
 msgid "Log out"
@@ -314,10 +333,6 @@ msgstr ""
 #: utils/validators.py:32
 msgid "No reverse match found for the named url"
 msgstr "Geen 'reverse match' gevonden voor de 'named url'"
-
-#: utils/widgets.py:102
-msgid "<p>{0}</p>"
-msgstr ""
 
 #~ msgid "Not available"
 #~ msgstr "Niet beschikbaar"

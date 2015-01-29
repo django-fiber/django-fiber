@@ -1,5 +1,7 @@
 from django.db.models import Q
+from django.db.models.deletion import ProtectedError
 from django.utils.encoding import smart_unicode
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import generics
 from rest_framework import renderers
@@ -187,6 +189,29 @@ class FileDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
+    def delete(self, request, *args, **kwargs):
+        obj = self.get_object()
+        file_name = obj.get_filename()
+        delete_response = ''
+
+        if not request.user.has_perm('fiber.delete_image'):
+            delete_response = _("You do not have permission the permission to delete %(file_name)s.") % {
+                'file_name': file_name
+            }
+            return Response(delete_response, status=403)
+
+        try:
+            obj.delete()
+            delete_response = _("Successfully deleted %(file_name)s.") % {
+                'file_name': file_name
+            }
+        except ProtectedError:
+            delete_response = _("You can not delete %(file_name)s, because that would require deleting protected related objects.") % {
+                'file_name': file_name
+            }
+
+        return Response(delete_response, status=200)
+
 
 class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
     model = Image
@@ -230,7 +255,28 @@ class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
-    # TODO Handle `ProtectedError`s in the delete method
+    def delete(self, request, *args, **kwargs):
+        obj = self.get_object()
+        file_name = obj.get_filename()
+        delete_response = ''
+
+        if not request.user.has_perm('fiber.delete_image'):
+            delete_response = _("You do not have permission the permission to delete %(file_name)s.") % {
+                'file_name': file_name
+            }
+            return Response(delete_response, status=403)
+
+        try:
+            obj.delete()
+            delete_response = _("Successfully deleted %(file_name)s.") % {
+                'file_name': file_name
+            }
+        except ProtectedError:
+            delete_response = _("You can not delete %(file_name)s, because that would require deleting protected related objects.") % {
+                'file_name': file_name
+            }
+
+        return Response(delete_response, status=200)
 
 
 @api_view(('GET',))
