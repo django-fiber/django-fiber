@@ -230,6 +230,8 @@ class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
+    # TODO Handle `ProtectedError`s in the delete method
+
 
 @api_view(('GET',))
 @renderer_classes(API_RENDERERS)
