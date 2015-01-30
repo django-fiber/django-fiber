@@ -741,8 +741,13 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 				type: 'DELETE',
 				data: {},
 				statusCode: {
-					204: function() {
+					200: function(data) {
+						alert(data);
 						self.refresh_grid();
+					},
+
+					403: function(data) {
+						alert(data);
 					}
 				}
 			});
