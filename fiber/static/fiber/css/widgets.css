@@ -9,24 +9,24 @@
 }
 
 .cke_button__fpagelink_icon {
-	background: url('../js/ckeditor-4.4.6-full/skins/moono/icons.png') no-repeat 0 -1440px !important;
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -1440px !important;
 }
 
 .cke_button__ffilelink_icon {
-	background: url('../js/ckeditor-4.4.6-full/skins/moono/icons.png') no-repeat 0 -456px !important;
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -456px !important;
 }
 
 .cke_button__fcustomlink_icon {
-	background: url('../js/ckeditor-4.4.6-full/skins/moono/icons.png') no-repeat 0 -1248px !important;
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -1248px !important;
 }
 
 .cke_button__funlink_icon {
-	background: url('../js/ckeditor-4.4.6-full/skins/moono/icons.png') no-repeat 0 -1272px !important;
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -1272px !important;
 }
 
 .cke_button__fimagelink_icon,
 .cke_button__fimage_icon {
-	background: url('../js/ckeditor-4.4.6-full/skins/moono/icons.png') no-repeat 0 -936px !important;
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -936px !important;
 }
 
 .cke_button__fimagelink_icon:before,
@@ -37,7 +37,7 @@
 	margin: 6px 0 0 5px;
 	width: 16px;
 	height: 16px;
-	background: url('../js/ckeditor-4.4.6-full/skins/moono/icons.png') no-repeat 0 -1248px !important;
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -1248px !important;
 }
 
 .cke_hidpi .cke_button__fpagelink_icon,
@@ -49,7 +49,7 @@
 .cke_hidpi .cke_button__fimagelink_icon:before,
 .cke_hidpi .cke_button__fpagelink_icon:before,
 .cke_hidpi .cke_button__ffilelink_icon:before {
-	background-image: url('../js/ckeditor-4.4.6-full/skins/moono/icons_hidpi.png') !important;
+	background-image: url('../js/ckeditor-4.4.7-full/skins/moono/icons_hidpi.png') !important;
 	background-size: 16px !important;
 }
 
