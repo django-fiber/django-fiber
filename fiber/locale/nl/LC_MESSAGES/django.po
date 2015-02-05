@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-29 15:29+0100\n"
-"PO-Revision-Date: 2015-01-29 15:31+0100\n"
+"POT-Creation-Date: 2015-02-05 11:24+0100\n"
+"PO-Revision-Date: 2015-02-05 11:26+0100\n"
 "Last-Translator: Bram Simons <bsimons@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.6.0\n"
-"X-Generator: Poedit 1.6.8\n"
+"X-Generator: Poedit 1.7.4\n"
 
 #: admin.py:81
 #, python-format
@@ -237,26 +237,22 @@ msgstr "bestanden"
 
 #: rest_api/views.py:198 rest_api/views.py:264
 #, python-format
-msgid "You do not have permission the permission to delete %(file_name)s."
-msgstr "Je hebt niet voldoende rechten om %(file_name)s te verwijderen."
+msgid "You don't have permission to delete %(file_name)s."
+msgstr "U heeft geen rechten om %(file_name)s te verwijderen."
 
 #: rest_api/views.py:205 rest_api/views.py:271
-#, fuzzy, python-format
-#| msgid "Successfully deleted %(count)d %(items)s."
+#, python-format
 msgid "Successfully deleted %(file_name)s."
-msgstr "%(count)d %(items)s succesvol verwijderd."
+msgstr "%(file_name)s is succesvol verwijderd."
 
 #: rest_api/views.py:209 rest_api/views.py:275
-#, fuzzy, python-format
-#| msgid ""
-#| "%(count)d %(items)s not deleted, because that would require deleting "
-#| "protected related objects."
+#, python-format
 msgid ""
-"You can not delete %(file_name)s, because that would require deleting "
-"protected related objects."
+"%(file_name)s is not deleted, because that would require deleting protected "
+"related objects."
 msgstr ""
-"%(count)d %(items)s niet verwijderd, omdat dit het verwijderen van "
-"gerelateerde objecten zou vereisen."
+"%(file_name)s is niet verwijderd, omdat dit het verwijderen van gerelateerde "
+"objecten zou vereisen."
 
 #: templates/fiber/admin.html:10
 msgid "Log out"
@@ -333,6 +329,17 @@ msgstr ""
 #: utils/validators.py:32
 msgid "No reverse match found for the named url"
 msgstr "Geen 'reverse match' gevonden voor de 'named url'"
+
+#, fuzzy
+#~| msgid ""
+#~| "%(count)d %(items)s not deleted, because that would require deleting "
+#~| "protected related objects."
+#~ msgid ""
+#~ "You can not delete %(file_name)s, because that would require deleting "
+#~ "protected related objects."
+#~ msgstr ""
+#~ "%(count)d %(items)s niet verwijderd, omdat dit het verwijderen van "
+#~ "gerelateerde objecten zou vereisen."
 
 #~ msgid "Not available"
 #~ msgstr "Niet beschikbaar"
