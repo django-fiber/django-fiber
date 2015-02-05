@@ -195,7 +195,7 @@ class FileDetail(generics.RetrieveUpdateDestroyAPIView):
         delete_response = ''
 
         if not request.user.has_perm('fiber.delete_image'):
-            delete_response = _("You do not have permission the permission to delete %(file_name)s.") % {
+            delete_response = _("You don't have permission to delete %(file_name)s.") % {
                 'file_name': file_name
             }
             return Response(delete_response, status=403)
@@ -206,7 +206,7 @@ class FileDetail(generics.RetrieveUpdateDestroyAPIView):
                 'file_name': file_name
             }
         except ProtectedError:
-            delete_response = _("You can not delete %(file_name)s, because that would require deleting protected related objects.") % {
+            delete_response = _("%(file_name)s is not deleted, because that would require deleting protected related objects.") % {
                 'file_name': file_name
             }
 
@@ -261,7 +261,7 @@ class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
         delete_response = ''
 
         if not request.user.has_perm('fiber.delete_image'):
-            delete_response = _("You do not have permission the permission to delete %(file_name)s.") % {
+            delete_response = _("You don't have permission to delete %(file_name)s.") % {
                 'file_name': file_name
             }
             return Response(delete_response, status=403)
@@ -272,7 +272,7 @@ class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
                 'file_name': file_name
             }
         except ProtectedError:
-            delete_response = _("You can not delete %(file_name)s, because that would require deleting protected related objects.") % {
+            delete_response = _("%(file_name)s is not deleted, because that would require deleting protected related objects.") % {
                 'file_name': file_name
             }
 

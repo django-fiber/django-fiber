@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-29 15:29+0100\n"
+"POT-Creation-Date: 2015-02-05 11:24+0100\n"
 "PO-Revision-Date: 2012-06-27 01:07+0100\n"
 "Last-Translator: Dennis Bunskoek <dbunskoek@leukeleu.nl>\n"
 "Language-Team: Norwegian Bokmål (Norway) (http://www.transifex.com/projects/"
@@ -170,7 +170,6 @@ msgstr "tittel"
 
 #: models.py:85
 #, fuzzy
-#| msgid "content item"
 msgid "document title"
 msgstr "innholdsobjekt"
 
@@ -236,7 +235,7 @@ msgstr "filer"
 
 #: rest_api/views.py:198 rest_api/views.py:264
 #, python-format
-msgid "You do not have permission the permission to delete %(file_name)s."
+msgid "You don't have permission to delete %(file_name)s."
 msgstr ""
 
 #: rest_api/views.py:205 rest_api/views.py:271
@@ -247,8 +246,8 @@ msgstr ""
 #: rest_api/views.py:209 rest_api/views.py:275
 #, python-format
 msgid ""
-"You can not delete %(file_name)s, because that would require deleting "
-"protected related objects."
+"%(file_name)s is not deleted, because that would require deleting protected "
+"related objects."
 msgstr ""
 
 #: templates/fiber/admin.html:10
