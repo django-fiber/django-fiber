@@ -7,85 +7,95 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-09 10:04-0500\n"
-"PO-Revision-Date: 2012-06-27 01:05+0100\n"
-"Last-Translator: Dennis Bunskoek <dbunskoek@leukeleu.nl>\n"
+"POT-Creation-Date: 2015-02-05 11:24+0100\n"
+"PO-Revision-Date: 2015-02-05 11:26+0100\n"
+"Last-Translator: Bram Simons <bsimons@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.6.0\n"
+"X-Generator: Poedit 1.7.4\n"
 
-#: admin.py:73
+#: admin.py:81
 #, python-format
 msgid "Successfully deleted %(count)d %(items)s."
-msgstr "Succesvol %(count)d %(items)s verwijderd."
+msgstr "%(count)d %(items)s succesvol verwijderd."
 
-#: admin.py:77
+#: admin.py:87
+#, python-format
+msgid ""
+"%(count)d %(items)s not deleted, because that would require deleting "
+"protected related objects."
+msgstr ""
+"%(count)d %(items)s niet verwijderd, omdat dit het verwijderen van "
+"gerelateerde objecten zou vereisen."
+
+#: admin.py:91
 msgid "Delete selected files"
 msgstr "Geselecteerde bestanden verwijderen"
 
-#: admin.py:84 models.py:313
+#: admin.py:98 models.py:313
 msgid "Size"
 msgstr "Afmetingen"
 
-#: admin.py:104 admin.py:127 admin.py:202 admin.py:208
+#: admin.py:118 admin.py:141 admin.py:216 admin.py:222
 msgid "Advanced options"
 msgstr "Uitgebreide opties"
 
-#: admin.py:105 admin.py:128
+#: admin.py:119 admin.py:142
 msgid "Metadata"
 msgstr "Metadata"
 
-#: admin.py:142
+#: admin.py:156
 msgid "View on site"
 msgstr "Toon op site"
 
-#: admin.py:154
+#: admin.py:168
 msgid "Move up"
 msgstr "Verplaats omhoog"
 
-#: admin.py:159
+#: admin.py:173
 msgid "Move down"
 msgstr "Verplaats omlaag"
 
-#: admin.py:165
+#: admin.py:179
 msgid "Add sub page"
 msgstr "Voeg een subpagina toe"
 
-#: admin.py:169
+#: admin.py:183
 msgid "Actions"
 msgstr "Acties"
 
-#: admin.py:203 admin.py:209
+#: admin.py:217 admin.py:223
 msgid "SEO"
 msgstr ""
 
-#: admin_forms.py:19
+#: admin_forms.py:20
 msgid "Content template"
 msgstr "Content sjabloon"
 
-#: admin_forms.py:27
+#: admin_forms.py:28
 msgid "Redirect page"
 msgstr "Automatische doorverwijzing"
 
-#: admin_forms.py:35
+#: admin_forms.py:37
 msgid "Template"
 msgstr "Sjabloon"
 
-#: admin_forms.py:47
+#: admin_forms.py:49
 msgid "A named url can't be combined with a redirect page"
 msgstr ""
 "Een 'named url' kan niet worden gecombineerd met een automatische "
 "doorverwijzing"
 
-#: admin_views.py:28
+#: admin_views.py:29
 msgid "This account is inactive."
 msgstr "Dit account is inactief."
 
-#: admin_views.py:33
+#: admin_views.py:34
 msgid ""
 "Please enter a correct username and password. Note that both fields are case-"
 "sensitive."
@@ -93,27 +103,27 @@ msgstr ""
 "Voer een correcte gebruikersnaam en wachtwoord in. Let op, de velden zijn "
 "hoofdlettergevoelig."
 
-#: managers.py:75
+#: managers.py:79
 msgid "used more than once"
 msgstr "meerdere keren gebruikt"
 
-#: managers.py:76
+#: managers.py:80
 msgid "unused"
 msgstr "ongebruikt"
 
-#: managers.py:77
+#: managers.py:81
 msgid "used once"
 msgstr "één keer gebruikt"
 
-#: managers.py:78
+#: managers.py:82
 msgid "recently changed"
 msgstr "recent gewijzigd"
 
-#: models.py:27 models.py:79 models.py:277 models.py:332
+#: models.py:27 models.py:79 models.py:277 models.py:333
 msgid "created"
 msgstr "aangemaakt"
 
-#: models.py:28 models.py:80 models.py:278 models.py:333
+#: models.py:28 models.py:80 models.py:278 models.py:334
 msgid "updated"
 msgstr "bijgewerkt"
 
@@ -157,7 +167,7 @@ msgstr "[ LEEG ]"
 msgid "parent"
 msgstr "parent"
 
-#: models.py:84 models.py:280 models.py:335
+#: models.py:84 models.py:280 models.py:336
 msgid "title"
 msgstr "titel"
 
@@ -213,21 +223,36 @@ msgstr "hoogte"
 msgid "images"
 msgstr "afbeeldingen"
 
-#: models.py:326
-msgid "Not available"
-msgstr "Niet beschikbaar"
-
-#: models.py:327
+#: models.py:328
 msgid "Preview"
 msgstr "Voorvertoning"
 
-#: models.py:334 models.py:338
+#: models.py:335 models.py:339
 msgid "file"
 msgstr "bestand"
 
-#: models.py:339
+#: models.py:340
 msgid "files"
 msgstr "bestanden"
+
+#: rest_api/views.py:198 rest_api/views.py:264
+#, python-format
+msgid "You don't have permission to delete %(file_name)s."
+msgstr "U heeft geen rechten om %(file_name)s te verwijderen."
+
+#: rest_api/views.py:205 rest_api/views.py:271
+#, python-format
+msgid "Successfully deleted %(file_name)s."
+msgstr "%(file_name)s is succesvol verwijderd."
+
+#: rest_api/views.py:209 rest_api/views.py:275
+#, python-format
+msgid ""
+"%(file_name)s is not deleted, because that would require deleting protected "
+"related objects."
+msgstr ""
+"%(file_name)s is niet verwijderd, omdat dit het verwijderen van gerelateerde "
+"objecten zou vereisen."
 
 #: templates/fiber/admin.html:10
 msgid "Log out"
@@ -304,6 +329,20 @@ msgstr ""
 #: utils/validators.py:32
 msgid "No reverse match found for the named url"
 msgstr "Geen 'reverse match' gevonden voor de 'named url'"
+
+#, fuzzy
+#~| msgid ""
+#~| "%(count)d %(items)s not deleted, because that would require deleting "
+#~| "protected related objects."
+#~ msgid ""
+#~ "You can not delete %(file_name)s, because that would require deleting "
+#~ "protected related objects."
+#~ msgstr ""
+#~ "%(count)d %(items)s niet verwijderd, omdat dit het verwijderen van "
+#~ "gerelateerde objecten zou vereisen."
+
+#~ msgid "Not available"
+#~ msgstr "Niet beschikbaar"
 
 #~ msgid ""
 #~ "This value must contain only letters, numbers, underscores, dashes or "

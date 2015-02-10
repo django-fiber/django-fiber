@@ -8,28 +8,52 @@
 	padding-right: 0;
 }
 
-.cke_ltr .cke_button .cke_button__bold_icon,
-.cke_ltr .cke_button .cke_button__italic_icon,
-.cke_ltr .cke_button .cke_button__indent_icon,
-.cke_ltr .cke_button .cke_button__outdent_icon,
-.cke_ltr .cke_button .cke_button__bulletedlist_icon,
-.cke_ltr .cke_button .cke_button__numberedlist_icon,
-.cke_ltr .cke_button .cke_button__unlink_icon,
-.cke_ltr .cke_button .cke_button__source_icon {
-	background-image: url(../images/ckeditor/bg-editor-toolbar-buttons.png) !important;
+.cke_button__fpagelink_icon {
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -1440px !important;
 }
 
-.cke_ltr .cke_button .cke_button__bold_icon         { background-position: -22px  -2px !important; }
-.cke_ltr .cke_button .cke_button__italic_icon       { background-position: -42px  -2px !important; }
-.cke_ltr .cke_button .cke_button__indent_icon       { background-position: -202px -2px !important; }
-.cke_ltr .cke_button .cke_button__outdent_icon      { background-position: -222px -2px !important; }
-.cke_ltr .cke_button .cke_button__bulletedlist_icon { background-position: -322px -2px !important; }
-.cke_ltr .cke_button .cke_button__numberedlist_icon { background-position: -342px -2px !important; }
-.cke_ltr .cke_button .cke_button__unlink_icon       { background-position: -442px -2px !important; }
-.cke_ltr .cke_button .cke_button__source_icon       { background-position: -542px -2px !important; }
+.cke_button__ffilelink_icon {
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -456px !important;
+}
+
+.cke_button__fcustomlink_icon {
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -1248px !important;
+}
+
+.cke_button__funlink_icon {
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -1272px !important;
+}
+
+.cke_button__fimagelink_icon,
+.cke_button__fimage_icon {
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -936px !important;
+}
+
+.cke_button__fimagelink_icon:before,
+.cke_button__fpagelink_icon:before,
+.cke_button__ffilelink_icon:before {
+	display: inline-block;
+	content: "";
+	margin: 6px 0 0 5px;
+	width: 16px;
+	height: 16px;
+	background: url('../js/ckeditor-4.4.7-full/skins/moono/icons.png') no-repeat 0 -1248px !important;
+}
+
+.cke_hidpi .cke_button__fpagelink_icon,
+.cke_hidpi .cke_button__ffilelink_icon,
+.cke_hidpi .cke_button__fcustomlink_icon,
+.cke_hidpi .cke_button__funlink_icon,
+.cke_hidpi .cke_button__fimagelink_icon,
+.cke_hidpi .cke_button__fimage_icon,
+.cke_hidpi .cke_button__fimagelink_icon:before,
+.cke_hidpi .cke_button__fpagelink_icon:before,
+.cke_hidpi .cke_button__ffilelink_icon:before {
+	background-image: url('../js/ckeditor-4.4.7-full/skins/moono/icons_hidpi.png') !important;
+	background-size: 16px !important;
+}
 
 .cke_ltr .cke_button .cke_button_label  { display: none !important; }
-
 
 /* ---[ Combobox ]--- */
 

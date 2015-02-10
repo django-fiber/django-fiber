@@ -110,6 +110,7 @@ div.ui-dialog form label,
 }
 
 #df-sidebar #df-sidebar-top-section {
+    box-sizing: content-box;
 	margin-bottom: 10px;
 	border-bottom: 1px solid #a6a6a6;
 	padding: 2px 0 3px 5px;
@@ -308,6 +309,12 @@ div.ui-dialog form textarea,
 	background: none;
 	float: none;
 	clear: none;
+}
+
+#ui-file-select-filter-input,
+#ui-image-select-filter-input {
+    margin-top: 5px;
+    width: 189px;
 }
 
 div.ui-dialog form textarea {
@@ -539,12 +546,6 @@ span.nobr {
 	width: 100%;
 }
 
-.df-admin #ui-file-select-filter-input,
-.df-admin #ui-image-select-filter-input {
-	margin-top: 5px;
-	width: 170px;
-}
-
 /* ---[ tree ] --- */
 /* This is a copy of jqtree.css because styles are reset */
 
@@ -571,6 +572,7 @@ ul.jqtree-tree li.jqtree-closed > ul {
 }
 
 ul.jqtree-tree li {
+    list-style-type: none;
     clear: both;
 }
 
@@ -762,6 +764,8 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 .ui-dialog-content ul.jqtree-tree li {
 	margin-top: 0;
 	margin-bottom: 0;
+    font-size: 11px;
+    line-height: 14px;
 }
 
 .ui-dialog-content ul.jqtree-tree div {
@@ -780,11 +784,22 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 /* file and image grid */
 .simple-data-grid {
 	width: 100%;
+    font-size: 11px;
+    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
 	color: #333;
+}
+
+.simple-data-grid thead th {
+    vertical-align: top;
 }
 
 .simple-data-grid thead th a {
 	color: #333;
+}
+
+.simple-data-grid tbody td {
+    vertical-align: top;
+    word-wrap: break-word;
 }
 
 .simple-data-grid tbody .selected,
@@ -794,6 +809,16 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 
 .simple-data-grid tfoot {
 	background-color: #f6f6f6;
+}
+
+.simple-data-grid tfoot .pagination li {
+    list-style-type: none;
+    font-size: 11px;
+    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
+}
+
+.simple-data-grid tfoot .pagination a {
+    text-decoration: none;
 }
 
 #ui-image-select-grid img {

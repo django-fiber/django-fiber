@@ -5,7 +5,7 @@
 [pypi-image]: https://pypip.in/d/django-fiber/badge.png
 
 [coveralls-url]: https://coveralls.io/r/ridethepony/django-fiber
-[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=master
+[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=dev
 
 [![Travis build image][travis-build-image]][travis-url]
 [![PyPi download count image][pypi-image]][pypi-url]
@@ -100,6 +100,12 @@ Create database tables for Django >= 1.7
 Create database tables for Django < 1.7:
 
     $ python manage.py syncdb
+
+Migrating database tables for Django < 1.7 using South 1.0:
+
+    $ python manage.py migrate
+
+Then the original South migrations in the `south_migrations` directory will be used, following the recommendation at <http://south.readthedocs.org/en/latest/releasenotes/1.0.html#library-migration-path>
 
 All static Fiber files need to be symlinked in (or copied to) your media folder:
 

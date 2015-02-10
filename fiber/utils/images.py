@@ -1,15 +1,28 @@
+class ThumbnailException(Exception):
+    pass
+
+
 def get_thumbnail(image, thumbnail_options):
     try:
         from easy_thumbnails.files import get_thumbnailer
-        thumbnailer = get_thumbnailer(image)
-        thumbnail = thumbnailer.get_thumbnail(thumbnail_options)
-        return thumbnail
+        from easy_thumbnails.exceptions import InvalidImageFormatError
+        try:
+            thumbnailer = get_thumbnailer(image)
+            thumbnail = thumbnailer.get_thumbnail(thumbnail_options)
+            return thumbnail
+        except InvalidImageFormatError as e:
+            raise ThumbnailException(str(e))
+        except IOError as e:
+            raise ThumbnailException(str(e))
     except ImportError:
-        return None
+        return
 
 
 def get_thumbnail_url(image, thumbnail_options):
-    thumbnail = get_thumbnail(image, thumbnail_options)
-    if thumbnail:
-        return thumbnail.url
-    return None
+    try:
+        thumbnail = get_thumbnail(image, thumbnail_options)
+        if thumbnail:
+            return thumbnail.url
+    except ThumbnailException:
+        return
+    return

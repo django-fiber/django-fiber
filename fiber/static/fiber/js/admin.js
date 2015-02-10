@@ -741,8 +741,13 @@ var BaseFileSelectDialog = AdminRESTDialog.extend({
 				type: 'DELETE',
 				data: {},
 				statusCode: {
-					204: function() {
+					200: function(data) {
+						alert(data);
 						self.refresh_grid();
+					},
+
+					403: function(data) {
+						alert(data);
 					}
 				}
 			});
@@ -755,7 +760,7 @@ Fiber.ImageSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
 		url: '/api/v2/images/',
-		width: 520,
+		width: 540,
 		height: 'auto',
 		start_width: 480,
 		start_height: 'auto'
@@ -850,7 +855,7 @@ Fiber.FileSelectDialog = BaseFileSelectDialog.extend({
 
 	defaults: {
 		url: '/api/v2/files/',
-		width: 520,
+		width: 540,
 		height: 'auto',
 		start_width: 480,
 		start_height: 'auto'

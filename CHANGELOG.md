@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.1.dev
+
+**Date** 10th Feb 2015
+
+* Updated Sphinx settings to work with Django 1.7
+* Upgraded CKEditor 4.3.2 -> 4.4.7
+* Re-use of default CKEditor icons for most of the icons
+* CKEditor icons now also support hidpi/retina screens
+* Corrections for aggressive styling in dialogs
+* Brought back the original South migrations in there own `south_migrations` directory
+* Fixed login issue with Django 1.7
+* Pinned djangorestframework to >=2.3.8,<3.0 in setup.py
+* Fixed image selectors in markitup editor
+* Fixed easy_thumbnails exceptions
+* Handle ProtectedErrors user friendly
+* Fine-tunes in several (new) messages and their Dutch translations
+
 ## 1.0
 
 **Date** 26th Nov 2014

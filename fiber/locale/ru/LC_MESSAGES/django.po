@@ -8,273 +8,307 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 01:24+0200\n"
+"POT-Creation-Date: 2015-02-05 11:24+0100\n"
 "PO-Revision-Date: 2012-06-27 01:26+0100\n"
 "Last-Translator: Dennis Bunskoek <dbunskoek@leukeleu.nl>\n"
 "Language-Team: Ride The Pony <info@ridethepony.org>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "X-Poedit-Language: English\n"
 
-#: admin.py:32
-#: admin.py:49
-#: admin.py:125
-#: admin.py:130
+#: admin.py:81
+#, python-format
+msgid "Successfully deleted %(count)d %(items)s."
+msgstr ""
+
+#: admin.py:87
+#, python-format
+msgid ""
+"%(count)d %(items)s not deleted, because that would require deleting "
+"protected related objects."
+msgstr ""
+
+#: admin.py:91
+msgid "Delete selected files"
+msgstr ""
+
+#: admin.py:98 models.py:313
+msgid "Size"
+msgstr ""
+
+#: admin.py:118 admin.py:141 admin.py:216 admin.py:222
 msgid "Advanced options"
 msgstr "Дополнительные параметры"
 
-#: admin.py:33
-#: admin.py:50
+#: admin.py:119 admin.py:142
 msgid "Metadata"
 msgstr ""
 
-#: admin.py:64
+#: admin.py:156
 msgid "View on site"
 msgstr "Смотреть на сайте"
 
-#: admin.py:76
+#: admin.py:168
 msgid "Move up"
 msgstr "Вверх"
 
-#: admin.py:81
+#: admin.py:173
 msgid "Move down"
 msgstr "Вниз"
 
-#: admin.py:87
+#: admin.py:179
 msgid "Add sub page"
 msgstr "Добавить дочернюю страницу"
 
-#: admin.py:91
+#: admin.py:183
 msgid "Actions"
 msgstr "Действия"
 
-#: admin_forms.py:19
+#: admin.py:217 admin.py:223
+msgid "SEO"
+msgstr ""
+
+#: admin_forms.py:20
 msgid "Content template"
 msgstr "Шаблон содержания"
 
-#: admin_forms.py:25
+#: admin_forms.py:28
 msgid "Redirect page"
 msgstr "Перенаправить на страницу"
 
-#: admin_forms.py:33
+#: admin_forms.py:37
 msgid "Template"
 msgstr "Шаблон"
 
-#: admin_forms.py:45
+#: admin_forms.py:49
 msgid "A named url can't be combined with a redirect page"
 msgstr "Имя ссылки не может быть объединено со страницей перенаправления"
 
-#: admin_views.py:25
+#: admin_views.py:29
 msgid "This account is inactive."
 msgstr "Аккаунт неактивен."
 
-#: admin_views.py:30
-msgid "Please enter a correct username and password. Note that both fields are case-sensitive."
-msgstr "Пожалуйста, введите имя пользователя и пароль. Обратите внимание, что оба поля чувствительны к регистру."
+#: admin_views.py:34
+msgid ""
+"Please enter a correct username and password. Note that both fields are case-"
+"sensitive."
+msgstr ""
+"Пожалуйста, введите имя пользователя и пароль. Обратите внимание, что оба "
+"поля чувствительны к регистру."
 
-#: managers.py:64
+#: managers.py:79
 msgid "used more than once"
 msgstr "используются более одного раза"
 
-#: managers.py:65
+#: managers.py:80
 msgid "unused"
 msgstr "не используются"
 
-#: managers.py:66
+#: managers.py:81
 msgid "used once"
 msgstr "используются однажды"
 
-#: managers.py:67
+#: managers.py:82
 msgid "recently changed"
 msgstr "недавно изменные"
 
-#: models.py:23
-#: models.py:75
-#: models.py:281
-#: models.py:311
+#: models.py:27 models.py:79 models.py:277 models.py:333
 msgid "created"
 msgstr "создано"
 
-#: models.py:24
-#: models.py:76
-#: models.py:282
-#: models.py:312
+#: models.py:28 models.py:80 models.py:278 models.py:334
 msgid "updated"
 msgstr "обновлено"
 
-#: models.py:25
+#: models.py:29
 msgid "name"
 msgstr "имя"
 
-#: models.py:26
-#: models.py:27
-#: templates/fiber/admin.html:21
+#: models.py:30 models.py:31 templates/fiber/admin.html:22
 msgid "Content"
 msgstr "Содержание"
 
-#: models.py:28
-#: models.py:87
+#: models.py:32 models.py:93
 msgid "protected"
 msgstr "защищено"
 
-#: models.py:29
+#: models.py:33
 msgid "metadata"
 msgstr "метаданные"
 
-#: models.py:30
-#: models.py:84
+#: models.py:34 models.py:90
 msgid "template name"
 msgstr "имя шаблона"
 
-#: models.py:31
+#: models.py:35
 msgid "used on pages"
 msgstr "используется на страницах"
 
-#: models.py:36
-#: models.py:234
+#: models.py:40 models.py:230
 msgid "content item"
 msgstr "блок содержимого"
 
-#: models.py:37
-#: models.py:88
+#: models.py:41 models.py:94
 msgid "content items"
 msgstr "блоки содержимого"
 
-#: models.py:46
+#: models.py:50
 msgid "[ EMPTY ]"
 msgstr "[ ПУСТО ]"
 
-#: models.py:77
+#: models.py:81
 msgid "parent"
 msgstr "родитель"
 
-#: models.py:79
-#: models.py:284
-#: models.py:314
+#: models.py:84 models.py:280 models.py:336
 msgid "title"
 msgstr "заголовок"
 
-#: models.py:81
+#: models.py:85
+#, fuzzy
+msgid "document title"
+msgstr "блок содержимого"
+
+#: models.py:87
 msgid "redirect page"
 msgstr "страница перенаправления"
 
-#: models.py:82
+#: models.py:88
 msgid "mark current regexes"
 msgstr "отметить текущие регулярные выражения"
 
-#: models.py:85
+#: models.py:91
 msgid "show in menu"
 msgstr "показывать в меню"
 
-#: models.py:86
+#: models.py:92
 msgid "is public"
 msgstr "опубликовано"
 
-#: models.py:95
-#: models.py:235
+#: models.py:101 models.py:231
 msgid "page"
 msgstr "страница"
 
-#: models.py:96
+#: models.py:102
 msgid "pages"
 msgstr "страницы"
 
-#: models.py:236
+#: models.py:232
 msgid "block name"
 msgstr "имя блока"
 
-#: models.py:237
+#: models.py:233
 msgid "sort"
 msgstr "сортировка"
 
-#: models.py:283
-#: models.py:289
+#: models.py:279 models.py:285
 msgid "image"
 msgstr "изображение"
 
-#: models.py:285
+#: models.py:281
 msgid "width"
 msgstr "ширина"
 
-#: models.py:286
+#: models.py:282
 msgid "height"
 msgstr "высота"
 
-#: models.py:290
+#: models.py:286
 msgid "images"
 msgstr "изображения"
 
-#: models.py:313
-#: models.py:317
+#: models.py:328
+msgid "Preview"
+msgstr ""
+
+#: models.py:335 models.py:339
 msgid "file"
 msgstr "файл"
 
-#: models.py:318
+#: models.py:340
 msgid "files"
 msgstr "файлы"
 
-#: templates/fiber/admin.html:9
+#: rest_api/views.py:198 rest_api/views.py:264
+#, python-format
+msgid "You don't have permission to delete %(file_name)s."
+msgstr ""
+
+#: rest_api/views.py:205 rest_api/views.py:271
+#, python-format
+msgid "Successfully deleted %(file_name)s."
+msgstr ""
+
+#: rest_api/views.py:209 rest_api/views.py:275
+#, python-format
+msgid ""
+"%(file_name)s is not deleted, because that would require deleting protected "
+"related objects."
+msgstr ""
+
+#: templates/fiber/admin.html:10
 msgid "Log out"
 msgstr "Выход"
 
-#: templates/fiber/admin.html:10
+#: templates/fiber/admin.html:11
 msgid "Backend"
 msgstr "В админку"
 
-#: templates/fiber/admin.html:13
+#: templates/fiber/admin.html:14
 msgid "Pages"
 msgstr "Страницы"
 
-#: utils/date.py:34
+#: utils/date.py:30
 msgid "just now"
 msgstr "только что"
 
-#: utils/date.py:36
+#: utils/date.py:32
 #, python-format
 msgid "%s seconds ago"
 msgstr "%s секунд назад"
 
-#: utils/date.py:40
+#: utils/date.py:36
 #, python-format
 msgid "%s minutes ago"
 msgstr "%s минут назад"
 
-#: utils/date.py:42
+#: utils/date.py:38
 msgid "an hour ago"
 msgstr "час назад"
 
-#: utils/date.py:44
+#: utils/date.py:40
 #, python-format
 msgid "%s hours ago"
 msgstr "%s часов назад"
 
-#: utils/date.py:46
+#: utils/date.py:42
 msgid "yesterday"
 msgstr "вчера"
 
-#: utils/date.py:48
+#: utils/date.py:44
 #, python-format
 msgid "%s days ago"
 msgstr "%s дней назад"
 
-#: utils/date.py:50
+#: utils/date.py:46
 msgid "a week ago"
 msgstr "неделю назад"
 
-#: utils/date.py:52
+#: utils/date.py:48
 #, python-format
 msgid "%s weeks ago"
 msgstr "%s недель назад"
 
-#: utils/date.py:54
+#: utils/date.py:50
 #, python-format
 msgid "%s months ago"
 msgstr "%s месяцев назад"
 
-#: utils/date.py:55
+#: utils/date.py:51
 #, python-format
 msgid "%s years ago"
 msgstr "%s лет назад"
@@ -287,7 +321,6 @@ msgstr "URL"
 msgid "Example: 'products' or '/section-1/products/' or '\"some_named_url\"'"
 msgstr ""
 
-#: utils/validators.py:27
+#: utils/validators.py:32
 msgid "No reverse match found for the named url"
 msgstr "Нет совпадений с указанным url"
-
