@@ -5,7 +5,7 @@
 [pypi-image]: https://pypip.in/d/django-fiber/badge.png
 
 [coveralls-url]: https://coveralls.io/r/ridethepony/django-fiber
-[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=dev
+[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=master
 
 [![Travis build image][travis-build-image]][travis-url]
 [![PyPi download count image][pypi-image]][pypi-url]

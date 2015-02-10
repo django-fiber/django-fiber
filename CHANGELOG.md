@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.dev
+## 1.1
 
 **Date** 10th Feb 2015
 
