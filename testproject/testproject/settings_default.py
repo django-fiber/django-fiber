@@ -1,5 +1,6 @@
 import os
 
+import django
 import django.conf.global_settings as DEFAULT_SETTINGS
 
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
@@ -17,6 +18,12 @@ DATABASES = {
         'PORT': '',                       # Set to empty string for default. Not used with sqlite3.
     }
 }
+
+# Use discover_runner for Django < 1.6
+if django.VERSION >= (1, 6):
+    TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+else:
+    TEST_RUNNER = 'discover_runner.DiscoverRunner'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
