@@ -1,0 +1,1 @@
+python testproject/manage.py test fiber_test
