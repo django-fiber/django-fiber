@@ -1,2 +1,0 @@
-coverage run --source=fiber manage.py test fiber fiber_test
-coverage report -m

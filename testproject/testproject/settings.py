@@ -13,3 +13,8 @@ DATABASES = {
         'PORT': '',                              # Set to empty string for default. Not used with sqlite3.
     }
 }
+
+# Use a fast hasher to speed up tests.
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+]

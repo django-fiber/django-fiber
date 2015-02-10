@@ -3,25 +3,21 @@ python:
   - 2.7
   - 2.6
 env:
-  - DJANGO_VERSION=1.4.16
-  - DJANGO_VERSION=1.5.11
-  - DJANGO_VERSION=1.6.8
-  - DJANGO_VERSION=1.7.1
+  - DJANGO_VERSION=1.4.19
+  - DJANGO_VERSION=1.5.12
+  - DJANGO_VERSION=1.6.10
+  - DJANGO_VERSION=1.7.4
 matrix:
   exclude:
     - python: 2.6
-      env: DJANGO_VERSION=1.7.1
+      env: DJANGO_VERSION=1.7.4
 install:
   - pip install Django==$DJANGO_VERSION
-  - "pip install . --use-mirrors"
-  - "pip install -r testproject/requirements.txt --use-mirrors"
+  - pip install -q -e .
+  - pip install -q -r test-requirements.txt
 script:
-  - cd testproject
-  - python manage.py test fiber fiber_test
-  - coverage run --source=fiber manage.py test fiber fiber_test
-  - coverage report -m
+  - coverage run testproject/manage.py test fiber_test
 after_success:
-  - pip install -r requirements_coveralls.txt
   - coveralls
 branches:
   only:
