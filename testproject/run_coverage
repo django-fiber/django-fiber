@@ -1,2 +1,2 @@
-coverage run --source=fiber manage.py test fiber fiber_test
+coverage run --source=fiber --omit=*migrations*  manage.py test fiber fiber_test
 coverage report -m
