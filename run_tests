@@ -1,1 +1,9 @@
-python testproject/manage.py test fiber_test
+echo $1
+if [ -n $1 ]
+then
+    echo "Running testproject/manage.py test fiber_test.tests.$1..."
+    python testproject/manage.py test fiber_test.tests.$1
+else
+    echo "Running testproject/manage.py test fiber_test..."
+    python testproject/manage.py test fiber_test
+fi

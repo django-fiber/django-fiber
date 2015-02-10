@@ -16,7 +16,7 @@ install:
   - pip install -q -e .
   - pip install -q -r test-requirements.txt
 script:
-  - coverage run --source fiber --omit *migrations* testproject/manage.py test fiber_test
+  - coverage run testproject/manage.py test fiber_test
 after_success:
   - coveralls
 branches:
