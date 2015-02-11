@@ -185,7 +185,7 @@ class AdminPageMiddleware(object):
 class ObfuscateEmailAddressMiddleware(object):
 
     def process_response(self, request, response):
-        if is_html(response):  # Do not obfuscate non-html
+        if is_html(response) and hasattr(response, 'content'):  # Do not obfuscate non-html and streaming responses.
             # http://www.lampdocs.com/blog/2008/10/regular-expression-to-extract-all-e-mail-addresses-from-a-file-with-php/
             email_pattern = re.compile(r'(mailto:)?[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))')
             response.content = email_pattern.sub(self.encode_string_repl, response.content)
