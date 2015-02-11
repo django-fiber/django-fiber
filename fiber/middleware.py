@@ -14,15 +14,12 @@ from .utils.class_loader import load_class
 from .app_settings import PERMISSION_CLASS
 
 
-def is_non_html(response):
+def is_html(response):
     """
-    Returns True if the response has no Content-type set or is not `text/html`
-    or not `application/xhtml+xml`.
+    Returns True if the response is either `text/html` or `application/xhtml+xml`
     """
-
     content_type = response.get('Content-Type', None)
-    if content_type is None or content_type.split(';')[0] not in ('text/html', 'application/xhtml+xml'):
-        return True
+    return bool(content_type and content_type.split(';')[0] in ('text/html', 'application/xhtml+xml'))
 
 
 class AdminPageMiddleware(object):
@@ -36,7 +33,7 @@ class AdminPageMiddleware(object):
 
     def process_response(self, request, response):
         # only process html and xhtml responses
-        if is_non_html(response):
+        if not is_html(response):
             return response
 
         if self.set_login_session(request, response):
@@ -105,12 +102,7 @@ class AdminPageMiddleware(object):
         Only set the fiber show_login session when the request
         - has LOGIN_STRING (defaults to @fiber) behind its request-url
         """
-        if response['Content-Type'].split(';')[0] not in ('text/html', 'application/xhtml+xml'):
-            return False
-        if not (request.path_info.endswith(LOGIN_STRING) or (request.META['QUERY_STRING'] and request.META['QUERY_STRING'].endswith(LOGIN_STRING))):
-            return False
-        else:
-            return True
+        return is_html(response) and (request.path_info.endswith(LOGIN_STRING) or request.META.get('QUERY_STRING', '').endswith(LOGIN_STRING))
 
     def show_login(self, request, response):
         """
@@ -119,7 +111,7 @@ class AdminPageMiddleware(object):
         - has session key show_fiber_admin = True
         - has a response which is either 'text/html' or 'application/xhtml+xml'
         """
-        if response['Content-Type'].split(';')[0] not in ('text/html', 'application/xhtml+xml'):
+        if not is_html(response):
             return False
         try:
             if request.user.is_staff:
@@ -127,7 +119,7 @@ class AdminPageMiddleware(object):
         except AttributeError:
             pass
         try:
-            if not request.session['show_fiber_admin'] == True:
+            if not request.session['show_fiber_admin']:
                 return False
         except AttributeError:
             return False
@@ -154,7 +146,7 @@ class AdminPageMiddleware(object):
             return False
         if not request.user.is_staff:
             return False
-        if response['Content-Type'].split(';')[0] not in ('text/html', 'application/xhtml+xml'):
+        if not is_html(response):
             return False
         if request.is_ajax():
             return False
@@ -193,16 +185,15 @@ class AdminPageMiddleware(object):
 class ObfuscateEmailAddressMiddleware(object):
 
     def process_response(self, request, response):
-        # http://www.lampdocs.com/blog/2008/10/regular-expression-to-extract-all-e-mail-addresses-from-a-file-with-php/
-        email_pattern = re.compile(r'(mailto:)?[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))')
-        if is_non_html(response):
-            return response
-        response.content = email_pattern.sub(self.encode_string_repl, response.content)
+        if is_html(response):  # Do not obfuscate non-html
+            # http://www.lampdocs.com/blog/2008/10/regular-expression-to-extract-all-e-mail-addresses-from-a-file-with-php/
+            email_pattern = re.compile(r'(mailto:)?[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))')
+            response.content = email_pattern.sub(self.encode_string_repl, response.content)
         return response
 
-    def encode_string_repl(self, email_pattern_match):
+    def encode_string_repl(self, matches):
         encoded_char_list = []
-        for char in email_pattern_match.group(0):
+        for char in matches.group(0):
             encoded_char_list.append(random.choice(['&#%d;' % ord(char), '&#x%x;' % ord(char)]))
 
         return ''.join(encoded_char_list)
