@@ -1,5 +1,13 @@
 import re
+from datetime import datetime
+
 import django
+from django.conf import settings
+
+try:
+    from django.utils.timezone import make_aware, utc
+except ImportError:
+    pass
 
 
 def get_short_django_version():
@@ -30,3 +38,17 @@ def condense_html_whitespace(s):
     s = re.sub(" class=\"\s?(.*?)\s?\"", " class=\"\\1\"", s)
     s = s.strip()
     return s
+
+
+def mock_tz_now():
+    """
+    Return january 15 2013 10:30
+
+    Depending on the Django version and the settings it will return a datetime with or without timezone.
+    """
+    result = datetime(2013, 1, 15, 10, 30)
+
+    if get_short_django_version() >= (1, 4) and settings.USE_TZ:
+        return make_aware(result, utc)
+    else:
+        return result
