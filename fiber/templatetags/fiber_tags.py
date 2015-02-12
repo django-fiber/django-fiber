@@ -6,10 +6,10 @@ from fiber import __version__ as fiber_version_number
 from fiber.models import Page, ContentItem
 from fiber.utils.urls import get_admin_change_url
 from fiber.app_settings import PERMISSION_CLASS, AUTO_CREATE_CONTENT_ITEMS
-from fiber.utils import class_loader
+from fiber.utils.import_util import load_class
 
 
-PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
+PERMISSIONS = load_class(PERMISSION_CLASS)
 
 register = template.Library()
 

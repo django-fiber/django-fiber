@@ -1,14 +1,19 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.test import SimpleTestCase
 
-from fiber.utils.import_util import import_element
+from fiber.utils.import_util import import_element, load_class
+
+
+class TestClass(object):
+    def __init__(self, foo=None):
+        self.foo = foo
 
 
 class TestImportUtil(SimpleTestCase):
     def test_import_element(self):
-        """Import this class by name"""
-        path = '.'.join([self.__module__, self.__class__.__name__])
-        self.assertEqual(import_element(path), self.__class__)
+        """Import TestClass by name"""
+        path = '.'.join([self.__module__, 'TestClass'])
+        self.assertEqual(import_element(path), TestClass)
 
     def test_import_module_raises_improperly_configured(self):
         """We can only import attributes from modules, not modules directly"""
@@ -27,3 +32,14 @@ class TestImportUtil(SimpleTestCase):
         with self.assertRaises(ImproperlyConfigured) as cm:
             import_element('fiber.missing_attribute')
         self.assertEqual(str(cm.exception), 'Error importing fiber.missing_attribute: Module "fiber.missing_attribute" does not define a "missing_attribute" attribute/class')
+
+    def test_load_class(self):
+        """Import and instantiate TestClass by name"""
+        path = '.'.join([self.__module__, 'TestClass'])
+        self.assertIsInstance(load_class(path), TestClass)
+
+    def test_load_class_with_kwargs(self):
+        """Import and instantiate TestClass by name with kwargs"""
+        path = '.'.join([self.__module__, 'TestClass'])
+        instance = load_class(path, foo='bar')
+        self.assertEqual(instance.foo, 'bar')

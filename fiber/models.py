@@ -16,7 +16,7 @@ from .app_settings import (
     IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA,
     PAGE_MANAGER, CONTENT_ITEM_MANAGER, LIST_THUMBNAIL_OPTIONS
 )
-from .utils.class_loader import load_class
+from .utils.import_util import load_class
 from .utils.fields import FiberURLField, FiberMarkupField, FiberHTMLField
 from .utils.images import get_thumbnail, get_thumbnail_url, ThumbnailException
 from .utils.json import JSONField

@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
 from fiber.app_settings import PERMISSION_CLASS
-from fiber.utils import class_loader
+from fiber.utils.import_util import load_class
 from fiber.utils.date import friendly_datetime
 
-PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
+PERMISSIONS = load_class(PERMISSION_CLASS)
 
 
 class CanEditField(serializers.Field):

@@ -9,7 +9,7 @@ from mptt.managers import TreeManager
 from . import editor
 from .utils.urls import get_named_url_from_quoted_url
 
-from .utils.class_loader import load_class
+from .utils.import_util import load_class
 from .app_settings import PERMISSION_CLASS
 
 

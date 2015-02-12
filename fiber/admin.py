@@ -12,7 +12,7 @@ from . import fiber_admin
 from .app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES, PERMISSION_CLASS, IMAGE_PREVIEW
 from .editor import get_editor_field_name
 from .models import Page, ContentItem, PageContentItem, Image, File
-from .utils.class_loader import load_class
+from .utils.import_util import load_class
 from .utils.widgets import AdminImageWidgetWithPreview
 
 perms = load_class(PERMISSION_CLASS)

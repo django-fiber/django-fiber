@@ -9,8 +9,7 @@ from django.utils.encoding import smart_unicode
 
 from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR
 from .models import ContentItem, Page
-from .utils.import_util import import_element
-from .utils.class_loader import load_class
+from .utils.import_util import import_element, load_class
 from .app_settings import PERMISSION_CLASS
 
 
