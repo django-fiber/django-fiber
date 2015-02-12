@@ -7,9 +7,9 @@ try:
 except ImportError:  # Django < 1.6
     StreamingHttpResponse = False
 try:
-    from unittest import skipIf
+    from unittest import skipUnless
 except ImportError:  # Python < 2.7
-    from django.utils.unittest import skipIf
+    from django.utils.unittest import skipUnless
 
 
 class TestEmailAddressObfuscation(SimpleTestCase):
@@ -97,7 +97,7 @@ class TestNonReplacement(SimpleTestCase):
         response = HttpResponse(content, content_type='text/plain')
         self.assertEqual(self.middleware.process_response(None, response).content, content)
 
-    @skipIf(not StreamingHttpResponse, 'StreamingHttpResponse is not available')
+    @skipUnless(StreamingHttpResponse, 'StreamingHttpResponse is not available')
     def test_skips_streaming(self):
         content = 'Contact me at: spam@example.com'
         response = StreamingHttpResponse(content)
