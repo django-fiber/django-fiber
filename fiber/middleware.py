@@ -1,6 +1,7 @@
 import random
 import re
 import json
+from urllib import unquote
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -11,6 +12,9 @@ from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR
 from .models import ContentItem, Page
 from .utils.import_util import import_element, load_class
 from .app_settings import PERMISSION_CLASS
+
+
+perms = load_class(PERMISSION_CLASS)
 
 
 def is_html(response):
@@ -37,16 +41,11 @@ class AdminPageMiddleware(object):
 
         if self.set_login_session(request, response):
             request.session['show_fiber_admin'] = True
-            url_without_fiber = request.path_info.replace(LOGIN_STRING, '')
-            querystring_without_fiber = ''
-            if request.META['QUERY_STRING']:
-                querystring_without_fiber = request.META['QUERY_STRING'].replace(LOGIN_STRING, '')
-            if (querystring_without_fiber != ''):
-                querystring = '?%s' % querystring_without_fiber
-            else:
-                querystring = ''
-
-            return HttpResponseRedirect('%s%s' % (url_without_fiber, querystring))
+            url = request.path_info.replace(LOGIN_STRING, '')
+            qs = unquote(request.META.get('QUERY_STRING', ''))
+            if qs:
+                qs = '?%s' % qs.replace(LOGIN_STRING, '').rstrip('&')
+            return HttpResponseRedirect(''.join([url, qs]))
         else:
             fiber_data = {}
 
@@ -101,62 +100,43 @@ class AdminPageMiddleware(object):
         Only set the fiber show_login session when the request
         - has LOGIN_STRING (defaults to @fiber) behind its request-url
         """
-        return is_html(response) and (request.path_info.endswith(LOGIN_STRING) or request.META.get('QUERY_STRING', '').endswith(LOGIN_STRING))
+        qs = unquote(request.META.get('QUERY_STRING', ''))
+        return is_html(response) and (request.path_info.endswith(LOGIN_STRING) or qs.endswith(LOGIN_STRING))
 
     def show_login(self, request, response):
         """
         Only show the Fiber login interface when the request
-        - is not performed by an admin user
-        - has session key show_fiber_admin = True
         - has a response which is either 'text/html' or 'application/xhtml+xml'
+        - is NOT performed by an admin user
+        - has session key show_fiber_admin = True
         """
-        if not is_html(response):
-            return False
-        try:
-            if request.user.is_staff:
-                return False
-        except AttributeError:
-            pass
-        try:
-            if not request.session['show_fiber_admin']:
-                return False
-        except AttributeError:
-            return False
-        except KeyError:
-            return False
-        else:
-            return True
+        if is_html(response):
+            return not request.user.is_staff and request.session.get('show_fiber_admin')
+        return False
 
     def show_admin(self, request, response):
         """
         Only show the Fiber admin interface when the request
+        - has a response which is either 'text/html' or 'application/xhtml+xml'
+        - is not an AJAX request
         - has a response status code of 200
         - is performed by an admin user
         - has a user with sufficient permissions based on the Permission Class
-        - has a response which is either 'text/html' or 'application/xhtml+xml'
-        - is not an AJAX request
         - does not match EXCLUDE_URLS (empty by default)
         """
-        if response.status_code != 200:
+        if request.is_ajax() or not is_html(response) or response.status_code != 200:
             return False
-        if not hasattr(request, 'user'):
-            return False
-        if not load_class(PERMISSION_CLASS).is_fiber_editor(request.user):
-            return False
-        if not request.user.is_staff:
-            return False
-        if not is_html(response):
-            return False
-        if request.is_ajax():
-            return False
-        if EXCLUDE_URLS:
-            for exclude_url in EXCLUDE_URLS:
-                if re.search(exclude_url, request.path_info.lstrip('/')):
-                    return False
-        return True
+        if request.user.is_staff and perms.is_fiber_editor(request.user):
+            if EXCLUDE_URLS:
+                url = request.path_info.lstrip('/')
+                for exclude_url in EXCLUDE_URLS:
+                    if re.search(exclude_url, url):
+                        return False
+            return True
+        return False
 
     def is_django_admin(self, request):
-        return re.search(r'^%s' % (reverse('admin:index').lstrip('/')), request.path_info.lstrip('/'))
+        return request.path_info.startswith(reverse('admin:index'))
 
     def get_header_html(self, request):
         t = loader.get_template('fiber/header.html')
