@@ -1,63 +1,32 @@
+import re
 from django.contrib.auth.models import User, AnonymousUser
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 
 import fiber.middleware
 from fiber.middleware import AdminPageMiddleware
+from fiber.models import Page, ContentItem, PageContentItem
 
+try:
+    from django.http import StreamingHttpResponse
+except ImportError:  # Django < 1.6
+    StreamingHttpResponse = False
+try:
+    from unittest import skipUnless
+except ImportError:  # Python < 2.7
+    from django.utils.unittest import skipUnless
 
 middleware = AdminPageMiddleware()
-
-
-class TestSetLoginSessionMethod(TestCase):
-    """Test middleware.set_login_session"""
-    client_class = RequestFactory
-
-    def test_at_fiber_in_path(self):
-        """@fiber is at the end"""
-        request = self.client.get('/@fiber')
-        response = HttpResponse('')
-        self.assertTrue(middleware.set_login_session(request, response))
-
-    def test_at_fiber_in_path_with_qs(self):
-        """@fiber is at the end, there's also a query string"""
-        request = self.client.get('/@fiber', {'foo': 'bar'})
-        response = HttpResponse('')
-        self.assertTrue(middleware.set_login_session(request, response))
-
-    def test_at_fiber_in_qs_value(self):
-        """@fiber is at the end, as a query value"""
-        request = self.client.get('/?login=%40fiber')
-        response = HttpResponse('')
-        self.assertTrue(middleware.set_login_session(request, response))
-
-    def test_at_fiber_in_qs_key(self):
-        """@fiber is at the end, as a query param"""
-        request = self.client.get('/?%40fiber')
-        response = HttpResponse('')
-        self.assertTrue(middleware.set_login_session(request, response))
-
-    def test_at_fiber_in_qs_middle(self):
-        """@fiber is NOT at the end"""
-        request = self.client.get('/?%40fiber&foo=bar')
-        response = HttpResponse('')
-        self.assertFalse(middleware.set_login_session(request, response))
-
-    def test_at_fiber_in_path_non_html(self):
-        """@fiber is at the end, NON html response"""
-        request = self.client.get('/@fiber')
-        response = HttpResponse('', content_type='application/json')
-        self.assertFalse(middleware.set_login_session(request, response))
 
 
 class TestAtFiberLoginRedirect(TestCase):
     """Test the actual @fiber login logic"""
 
-    def test_show_fiber_admin_in_session(self):
-        """Middleware sets show_fiber_admin session variable"""
+    def test_login_session_key_in_session(self):
+        """Middleware sets LOGIN_SESSION_KEY session variable"""
         self.client.get('/empty/@fiber')
-        self.assertIn('show_fiber_admin', self.client.session)
-        self.assertTrue(self.client.session['show_fiber_admin'])
+        self.assertIn(middleware.LOGIN_SESSION_KEY, self.client.session)
+        self.assertTrue(self.client.session[middleware.LOGIN_SESSION_KEY])
 
     def test_response_redirect(self):
         """Middleware strips @fiber from path"""
@@ -79,15 +48,15 @@ class TestAtFiberLoginRedirect(TestCase):
         response = self.client.get('/empty/?foo=bar&baz=qux&%40fiber')
         self.assertRedirects(response, '/empty/?foo=bar&baz=qux')
 
-    def test_follow_redirect_sets_show_fiber_admin_to_false(self):
-        """Following the redirect sets session['show_fiber_admin'] to False"""
+    def test_follow_redirect_sets_login_session_key_to_false(self):
+        """Following the redirect sets LOGIN_SESSION_KEY to False"""
         self.client.get('/empty/@fiber', follow=True)
-        self.assertFalse(self.client.session['show_fiber_admin'])
+        self.assertFalse(self.client.session[middleware.LOGIN_SESSION_KEY])
 
     def test_follow_redirect_shows_login_in_body(self):
         """Following the redirect adds fiber-data to body"""
         response = self.client.get('/empty/@fiber', follow=True)
-        self.assertRegexpMatches(response.content, '<body data-fiber-data=\'{"show_login": true}\'></body>')
+        self.assertRegexpMatches(response.content, '<body data-fiber-data="{&quot;show_login&quot;: true}"></body>')
 
     def test_does_nothing_for_non_html_response(self):
         """Middleware skips non-html responses"""
@@ -95,7 +64,106 @@ class TestAtFiberLoginRedirect(TestCase):
         request.session = {}
         response = HttpResponse('', content_type='application/json')
         middleware.process_response(request, response)
-        self.assertNotIn('show_fiber_admin', request.session)
+        self.assertNotIn(middleware.LOGIN_SESSION_KEY, request.session)
+
+    @skipUnless(StreamingHttpResponse, 'StreamingHttpResponse is not available')
+    def test_skips_streaming(self):
+        """Streaming responses don't get touched"""
+        request = self.client.get('/@fiber')
+        request.session = {}
+        response = StreamingHttpResponse('')
+        middleware.process_response(request, response)
+        self.assertNotIn(middleware.LOGIN_SESSION_KEY, request.session)
+
+
+class TestModifiedResponse(TestCase):
+    def setUp(self):
+        # Setup u a session with a logged in user
+        self.staff = User.objects.create_user('staff', 'staff@example.com', password='staff')
+        self.staff.is_staff = True
+        self.staff.save()
+        self.client.login(username='staff', password='staff')
+        # Create a test fiber page
+        page = Page.objects.create(title='home', url='/')
+        lipsum = ContentItem.objects.create(content_html='lorem ipsum')
+        PageContentItem.objects.create(page=page, content_item=lipsum, block_name='main')
+        self.page = page
+
+    def test_get_admin_url(self):
+        response = self.client.get('/admin/')
+        self.assertRegexpMatches(response.content, '<body data-fiber-data="{&quot;backend&quot;: true}"')
+
+    def test_get_frontend_url(self):
+        response = self.client.get('/empty/')
+        self.assertRegexpMatches(response.content, '<body data-fiber-data="{&quot;frontend&quot;: true}"')
+
+    def test_wraps_body(self):
+        response = self.client.get(self.page.get_absolute_url())
+        self.assertRegexpMatches(response.content, re.compile('<div id="wpr-body">.*lorem ipsum.*</div>', re.DOTALL))
+
+    def test_set_page_id(self):
+        response = self.client.get(self.page.get_absolute_url())
+        expected = '<body data-fiber-data="{&quot;frontend&quot;: true, &quot;page_id&quot;: %s}"' % self.page.pk
+        self.assertRegexpMatches(response.content, expected)
+
+    def test_adds_sidebar(self):
+        response = self.client.get('/empty/')
+        self.assertIn('<div id="df-sidebar">', response.content)
+
+    @skipUnless(StreamingHttpResponse, 'StreamingHttpResponse is not available')
+    def test_skips_streaming(self):
+        """
+        Streaming responses don't get touched
+        """
+        request = RequestFactory().get('/')
+        content = ''
+        response = StreamingHttpResponse(content)
+        self.assertEqual(''.join(middleware.process_response(request, response)), content)
+
+
+class TestResponseNotModified(TestCase):
+    def test_get_frontend_url(self):
+        """
+        A normal request has no trace of fiber
+        """
+        response = self.client.get('/empty/')
+        self.assertNotIn('data-fiber-data', response.content)
+        self.assertNotIn('<div id="df-sidebar">', response.content)
+
+
+class TestSetLoginSessionMethod(TestCase):
+    """Test middleware.set_login_session"""
+    client_class = RequestFactory
+
+    def test_at_fiber_in_path(self):
+        """@fiber is at the end"""
+        request = self.client.get('/@fiber')
+        self.assertTrue(middleware.should_setup_login_session(request))
+
+    def test_at_fiber_in_path_with_qs(self):
+        """@fiber is at the end, there's also a query string"""
+        request = self.client.get('/@fiber', {'foo': 'bar'})
+        self.assertTrue(middleware.should_setup_login_session(request))
+
+    def test_at_fiber_in_qs_value(self):
+        """@fiber is at the end, as a query value"""
+        request = self.client.get('/?login=%40fiber')
+        self.assertTrue(middleware.should_setup_login_session(request))
+
+    def test_at_fiber_in_qs_key(self):
+        """@fiber is at the end, as a query param"""
+        request = self.client.get('/?%40fiber')
+        self.assertTrue(middleware.should_setup_login_session(request))
+
+    def test_qs_value_ends_with_at_fiber(self):
+        """@fiber is at the end of some other value"""
+        request = self.client.get('/?foo=bar%40fiber')
+        self.assertTrue(middleware.should_setup_login_session(request))
+
+    def test_at_fiber_in_qs_middle(self):
+        """@fiber is NOT at the end"""
+        request = self.client.get('/?%40fiber&foo=bar')
+        self.assertFalse(middleware.should_setup_login_session(request))
 
 
 class TestShowLoginMethod(TestCase):
@@ -108,43 +176,33 @@ class TestShowLoginMethod(TestCase):
         self.staff.is_staff = True
         self.staff.save()
 
-    def prepare_request(self, user, show_fiber_admin=True):
+    def prepare_request(self, user, login_session_key=True):
         """Helper method to create requests"""
         request = self.client.get('/')
         request.user = user
-        request.session = {'show_fiber_admin': show_fiber_admin}
+        request.session = {middleware.LOGIN_SESSION_KEY: login_session_key}
         return request
 
     def test_anonymous(self):
         """Show login for anonymous (not logged in) user"""
         request = self.prepare_request(AnonymousUser())
-        response = HttpResponse('')
-        self.assertTrue(middleware.show_login(request, response))
+        self.assertTrue(middleware.show_login(request))
 
     def test_non_staff(self):
         """Show login for non-staff in user"""
         request = self.prepare_request(self.user)
-        response = HttpResponse('')
-        self.assertTrue(middleware.show_login(request, response))
+        self.assertTrue(middleware.show_login(request))
 
-    def test_show_fiber_admin_false(self):
-        """Don't show login if show_fiber_admin is False"""
+    def test_login_session_key_false(self):
+        """Don't show login if LOGIN_SESSION_KEY is False"""
         request = self.prepare_request(self.staff, False)
-        response = HttpResponse('')
-        self.assertFalse(middleware.show_login(request, response))
+        self.assertFalse(middleware.show_login(request))
 
     def test_empty_session(self):
-        """Don't show login if show_fiber_admin is not in session"""
+        """Don't show login if LOGIN_SESSION_KEY is not in session"""
         request = self.prepare_request(self.staff)
         request.session = {}
-        response = HttpResponse('')
-        self.assertFalse(middleware.show_login(request, response))
-
-    def test_non_html(self):
-        """Don't show login on non-html responses"""
-        request = self.prepare_request(self.staff)
-        response = HttpResponse('', content_type='application/json')
-        self.assertFalse(middleware.show_login(request, response))
+        self.assertFalse(middleware.show_login(request))
 
 
 class TestShowAdminMethod(TestCase):
@@ -183,13 +241,6 @@ class TestShowAdminMethod(TestCase):
         request = self.client.get('/')
         request.user = self.user
         response = HttpResponse('')
-        self.assertFalse(middleware.show_admin(request, response))
-
-    def test_non_html(self):
-        """Don't show admin on non-html responses"""
-        request = self.client.get('/')
-        request.user = self.user
-        response = HttpResponse('', content_type='application/json')
         self.assertFalse(middleware.show_admin(request, response))
 
     def test_404(self):
@@ -250,15 +301,3 @@ class TestGetLogoutUrlMethod(TestCase):
     def test_with_querystring(self):
         request = self.client.get('/', {'foo': 'bar'})
         self.assertEqual('/admin/logout/?next=/?foo=bar', middleware.get_logout_url(request))
-
-
-class TestModifiedResponse(TestCase):
-    def setUp(self):
-        self.staff = User.objects.create_user('staff', 'staff@example.com', password='staff')
-        self.staff.is_staff = True
-        self.staff.save()
-        self.client.login(username='staff', password='staff')
-
-    def test_get_admin_url(self):
-        response = self.client.get('/admin/')
-        self.assertRegexpMatches(response.content, '<body data-fiber-data=\'{"backend": true}\'')
