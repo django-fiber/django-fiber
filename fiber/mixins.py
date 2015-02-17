@@ -18,9 +18,17 @@ class FiberPageMixin(object):
     fiber_current_pages = None
 
     def get_context_data(self, **kwargs):
-        context = super(FiberPageMixin, self).get_context_data(**kwargs)
-        context['fiber_page'] = self.get_fiber_page()
-        context['fiber_current_pages'] = self.get_fiber_current_pages()
+        super_obj = super(FiberPageMixin, self)
+        if hasattr(super_obj, 'get_context_data'):
+            context = super_obj.get_context_data(**kwargs)
+        else:
+            context = {}
+            context.update(kwargs)
+        if self.get_fiber_page():
+            context.update({
+                'fiber_page': self.get_fiber_page(),
+                'fiber_current_pages': self.get_fiber_current_pages()
+            })
         return context
 
     def get_fiber_page_url(self):
