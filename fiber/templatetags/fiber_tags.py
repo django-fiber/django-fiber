@@ -1,6 +1,7 @@
 import operator, json
 
 from django import template
+from django.utils.html import escape
 
 import fiber
 from fiber.models import Page, ContentItem
@@ -245,12 +246,12 @@ def editable_attrs(parser, token):
     return EditableAttrsNode(instance_var)
 
 
-@register.filter(name='escape_json_for_html')
+@register.filter
 def escape_json_for_html(value):
     """
-    Escapes valid JSON for use in HTML, e.g. convert single quote to HTML character entity
+    Escapes valid JSON for use as a HTML attribute value
     """
-    return value.replace("'", "&#39;")
+    return escape(value)
 
 
 @register.filter
