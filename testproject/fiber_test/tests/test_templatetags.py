@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.template import Template, Context, TemplateSyntaxError
 from django.test import TestCase, SimpleTestCase
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 import fiber
 
 from fiber.models import Page, ContentItem, PageContentItem
@@ -10,27 +10,21 @@ from ..test_util import condense_html_whitespace
 
 class RenderMixin(object):
     def assertRendered(self, template, expected, context=None):
-        self.assertEqual(condense_html_whitespace(Template(template).render(Context(context or {}))), expected)
+        t, c = Template(template), Context(context or {})
+        self.assertEqual(condense_html_whitespace(t.render(c)), condense_html_whitespace(expected))
 
 
-class TestTemplateTags(TestCase):
-
+class TestShowMenu(RenderMixin, TestCase):
     def setUp(self):
-        """
-        Generates test data
-        """
-        # generate data
         main = Page.objects.create(title='main')
-        home = Page.objects.create(title='home', parent=main, url='/')
-        section1 = Page.objects.create(title='section1', parent=home, url='section1')
-        section2 = Page.objects.create(title='section2', parent=home, url='section2')
-        section11 = Page.objects.create(title='sub1', parent=section1, url='sub1')
-        section12 = Page.objects.create(title='sub2', parent=section1, url='sub2')
+        self.home = Page.objects.create(title='home', parent=main, url='/')
+        self.about = Page.objects.create(title='about', parent=self.home, url='about')
+        self.news = Page.objects.create(title='news', parent=self.home, url='news')
+        self.contact = Page.objects.create(title='contact', parent=self.about, url='contact')
+        self.jobs = Page.objects.create(title='jobs', parent=self.about, url='jobs')
 
     def get_non_staff_user(self):
-        user = User.objects.create_user('user1', 'u@ser.nl', password="pass")
-        user.is_staff = False
-        return user
+        return AnonymousUser()
 
     def get_staff_user(self):
         user = User.objects.create_user('user2', 'u2@ser.nl', password="secure")
@@ -38,207 +32,151 @@ class TestTemplateTags(TestCase):
         return user
 
     def test_show_user_menu_all(self):
-        # render menu with all pages
-        t = Template("""
-            {% load fiber_tags %}
-            {% show_menu 'main' 1 999 "all" %}
-            """
-        )
-        c = Context({
-            'user': self.get_non_staff_user(),
-            'fiber_page': Page.objects.get_by_url('/'),
-        })
         with self.assertNumQueries(2):
-            self.assertEquals(
-                condense_html_whitespace(t.render(c)),
-                ('<ul>'
-                   '<li class="home first last">'
-                     '<a href="/">home</a>'
-                     '<ul>'
-                       '<li class="section1 first">'
-                         '<a href="/section1/">section1</a>'
-                         '<ul>'
-                           '<li class="sub1 first">'
-                             '<a href="/section1/sub1/">sub1</a>'
-                           '</li>'
-                           '<li class="sub2 last">'
-                             '<a href="/section1/sub2/">sub2</a>'
-                           '</li>'
-                         '</ul>'
-                       '</li>'
-                       '<li class="section2 last">'
-                         '<a href="/section2/">section2</a>'
-                       '</li>'
-                     '</ul>'
-                   '</li>'
-                 '</ul>'))
+            self.assertRendered(
+                '{% load fiber_tags %}{% show_menu "main" 1 999 "all" %}',
+                '''
+                <ul>
+                    <li class="home first last">
+                        <a href="/">home</a>
+                        <ul>
+                            <li class="about first">
+                                <a href="/about/">about</a>
+                                <ul>
+                                    <li class="contact first"><a href="/about/contact/">contact</a></li>
+                                    <li class="jobs last"><a href="/about/jobs/">jobs</a></li>
+                                </ul>
+                            </li>
+                            <li class="news last"><a href="/news/">news</a></li>
+                        </ul>
+                    </li>
+                </ul>''', {
+                    'user': self.get_non_staff_user(),
+                    'fiber_page': self.home,
+                })
 
     def test_show_user_menu_all_descendants(self):
-        """
-        Tests for 'all_descendants' with a minimum level
-        """
+        """Tests for 'all_descendants' with a minimum level"""
         user = self.get_non_staff_user()
 
-        t = Template("""
-            {% load fiber_tags %}
-            {% show_menu 'main' 2 999 "all_descendants" %}
-            """
-        )
-
-        c = Context({
-            'user': user,
-            'fiber_page': Page.objects.get_by_url('/section1/'),
-        })
+        with self.assertNumQueries(2):
+            self.assertRendered(
+                '{% load fiber_tags %}{% show_menu "main" 2 999 "all_descendants" %}',
+                '''
+                <ul>
+                    <li class="about first">
+                        <a href="/about/">about</a>
+                        <ul>
+                            <li class="contact first"><a href="/about/contact/">contact</a></li>
+                            <li class="jobs last"><a href="/about/jobs/">jobs</a></li>
+                        </ul>
+                    </li>
+                    <li class="news last">
+                        <a href="/news/">news</a>
+                    </li>
+                 </ul>''', {
+                    'user': user,
+                    'fiber_page': self.about,
+                })
 
         with self.assertNumQueries(2):
-            self.assertEquals(
-                condense_html_whitespace(t.render(c)),
-                ('<ul>'
-                   '<li class="section1 first">'
-                     '<a href="/section1/">section1</a>'
-                     '<ul>'
-                       '<li class="sub1 first">'
-                         '<a href="/section1/sub1/">sub1</a>'
-                       '</li>'
-                       '<li class="sub2 last">'
-                         '<a href="/section1/sub2/">sub2</a>'
-                       '</li>'
-                     '</ul>'
-                   '</li>'
-                   '<li class="section2 last">'
-                     '<a href="/section2/">section2</a>'
-                   '</li>'
-                 '</ul>'))
-
-        c = Context({
-            'user': user,
-            'fiber_page': Page.objects.get_by_url('/section2/'),
-        })
-
-        with self.assertNumQueries(2):
-            self.assertEquals(
-                condense_html_whitespace(t.render(c)),
-                ('<ul>'
-                   '<li class="section1 first">'
-                     '<a href="/section1/">section1</a>'
-                   '</li>'
-                   '<li class="section2 last">'
-                     '<a href="/section2/">section2</a>'
-                   '</li>'
-                 '</ul>'))
+            self.assertRendered(
+                '{% load fiber_tags %}{% show_menu "main" 2 999 "all_descendants" %}',
+                '''
+                <ul>
+                    <li class="about first"><a href="/about/">about</a></li>
+                    <li class="news last"><a href="/news/">news</a></li>
+                </ul>''', {
+                    'user': user,
+                    'fiber_page': self.news,
+                })
 
     def test_show_user_menu_min_max_level(self):
-        """
-        Test for minimum and maximum level
-        """
-        t = Template("""
-            {% load fiber_tags %}
-            {% show_menu 'main' 2 2 %}
-            """
-        )
-        c = Context({
-            'user': self.get_non_staff_user(),
-            'fiber_page': Page.objects.get_by_url('/section1/sub1/'),
-        })
+        """Test for minimum and maximum level"""
         with self.assertNumQueries(2):
-            self.assertEquals(
-                condense_html_whitespace(t.render(c)),
-                ('<ul>'
-                   '<li class="section1 first">'
-                     '<a href="/section1/">section1</a>'
-                   '</li>'
-                   '<li class="section2 last">'
-                     '<a href="/section2/">section2</a>'
-                   '</li>'
-                 '</ul>'))
-
-        t = Template("""
-            {% load fiber_tags %}
-            {% show_menu 'main' 3 3 %}
-            """
-        )
+            self.assertRendered(
+                '{% load fiber_tags %}{% show_menu "main" 2 2 %}',
+                '''
+                <ul>
+                    <li class="about first"><a href="/about/">about</a></li>
+                    <li class="news last"><a href="/news/">news</a></li>
+                </ul>''', {
+                    'user': self.get_non_staff_user(),
+                    'fiber_page': self.contact,
+                })
 
         with self.assertNumQueries(2):
-            self.assertEquals(
-                condense_html_whitespace(t.render(c)),
-                ('<ul>'
-                   '<li class="sub1 first">'
-                     '<a href="/section1/sub1/">sub1</a>'
-                   '</li>'
-                   '<li class="sub2 last">'
-                     '<a href="/section1/sub2/">sub2</a>'
-                   '</li>'
-                 '</ul>'))
+            self.assertRendered(
+                '{% load fiber_tags %}{% show_menu "main" 3 3 %}',
+                '''
+                <ul>
+                    <li class="contact first"><a href="/about/contact/">contact</a></li>
+                    <li class="jobs last"><a href="/about/jobs/">jobs</a></li>
+                </ul>''', {
+                    'user': self.get_non_staff_user(),
+                    'fiber_page': self.contact,
+                })
 
     def test_show_user_menu_different_root(self):
-        """
-        Test that show_menu only shows top level if current
-        page is in different root.
-        """
+        """Test that show_menu only shows top level if current page is in different root"""
         other_root = Page.objects.create(title='other')
 
-        t = Template("""
-            {% load fiber_tags %}
-            {% show_menu 'main' 1 999 %}
-            """
-        )
-        c = Context({
-            'user': self.get_non_staff_user(),
-            'fiber_page': other_root,
-        })
         with self.assertNumQueries(2):
-            self.assertEquals(
-                condense_html_whitespace(t.render(c)),
-                ('<ul>'
-                 '<li class="home first last">'
-                 '<a href="/">home</a>'
-                 '</li>'
-                 '</ul>'))
+            self.assertRendered(
+                '{% load fiber_tags %}{% show_menu "main" 1 999 %}',
+                '''
+                <ul>
+                    <li class="home first last"><a href="/">home</a></li>
+                </ul>''', {
+                    'user': self.get_non_staff_user(),
+                    'fiber_page': other_root,
+                })
 
-    def test_show_admin_menu_all(self):
-        # render menu with all pages
-        t = Template("""
-            {% load fiber_tags %}
-            {% show_menu 'main' 1 999 "all" %}
-            """
-        )
-        c = Context({
-            'user': self.get_staff_user(),
-            'fiber_page': Page.objects.get_by_url('/'),
-        })
+    def test_show_staff_menu_all(self):
+        """Render menu with all pages for staff user"""
+        user = self.get_staff_user()
 
         with self.assertNumQueries(2):
-            self.assertEquals(
-                condense_html_whitespace(t.render(c)),
-                ('<ul data-fiber-data=\'{ "type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 1 }\'>'
-                   '<li class="home first last">'
-                     '<a href="/" data-fiber-data=\'{ "can_edit": true, "type": "page", "id": 2, "parent_id": 1, "url": "%(fiber_admin_page_edit_url_home)s", "add_url": "%(fiber_admin_page_add_url)s" }\'>home</a>'
-                     '<ul data-fiber-data=\'{ "type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 2 }\'>'
-                       '<li class="section1 first">'
-                         '<a href="/section1/" data-fiber-data=\'{ "can_edit": true, "type": "page", "id": 3, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_section1)s", "add_url": "%(fiber_admin_page_add_url)s" }\'>section1</a>'
-                         '<ul data-fiber-data=\'{ "type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 3 }\'>'
-                           '<li class="sub1 first">'
-                             '<a href="/section1/sub1/" data-fiber-data=\'{ "can_edit": true, "type": "page", "id": 5, "parent_id": 3, "url": "%(fiber_admin_page_edit_url_sub1)s", "add_url": "%(fiber_admin_page_add_url)s" }\'>sub1</a>'
-                           '</li>'
-                           '<li class="sub2 last">'
-                             '<a href="/section1/sub2/" data-fiber-data=\'{ "can_edit": true, "type": "page", "id": 6, "parent_id": 3, "url": "%(fiber_admin_page_edit_url_sub2)s", "add_url": "%(fiber_admin_page_add_url)s" }\'>sub2</a>'
-                           '</li>'
-                         '</ul>'
-                       '</li>'
-                       '<li class="section2 last">'
-                         '<a href="/section2/" data-fiber-data=\'{ "can_edit": true, "type": "page", "id": 4, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_section2)s", "add_url": "%(fiber_admin_page_add_url)s" }\'>section2</a>'
-                       '</li>'
-                     '</ul>'
-                   '</li>'
-                 '</ul>' % {
-                        'fiber_admin_page_add_url': reverse('fiber_admin:fiber_page_add'),
-                        'fiber_admin_page_edit_url_home': reverse('fiber_admin:fiber_page_change', args=(2, )),
-                        'fiber_admin_page_edit_url_section1': reverse('fiber_admin:fiber_page_change', args=(3, )),
-                        'fiber_admin_page_edit_url_section2': reverse('fiber_admin:fiber_page_change', args=(4, )),
-                        'fiber_admin_page_edit_url_sub1': reverse('fiber_admin:fiber_page_change', args=(5, )),
-                        'fiber_admin_page_edit_url_sub2': reverse('fiber_admin:fiber_page_change', args=(6, )),
-                        }
-                 ))
+            self.assertRendered(
+                '{% load fiber_tags %}{% show_menu "main" 1 999 "all" %}',
+                '''
+                <ul data-fiber-data='{ "type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 1 }'>
+                    <li class="home first last">
+                        <a href="/" data-fiber-data='{ "can_edit": true, "type": "page", "id": 2, "parent_id": 1, "url": "%(fiber_admin_page_edit_url_home)s", "add_url": "%(fiber_admin_page_add_url)s" }'>home</a>
+                        <ul data-fiber-data='{ "type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 2 }'>
+                            <li class="about first">
+                                <a href="/about/" data-fiber-data='{ "can_edit": true, "type": "page", "id": 3, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_about)s", "add_url": "%(fiber_admin_page_add_url)s" }'>about</a>
+                                <ul data-fiber-data='{ "type": "page", "add_url": "%(fiber_admin_page_add_url)s", "parent_id": 3 }'>
+                                    <li class="contact first">
+                                        <a href="/about/contact/" data-fiber-data='{ "can_edit": true, "type": "page", "id": 5, "parent_id": 3, "url": "%(fiber_admin_page_edit_url_contact)s", "add_url": "%(fiber_admin_page_add_url)s" }'>contact</a>
+                                    </li>
+                                    <li class="jobs last">
+                                        <a href="/about/jobs/" data-fiber-data='{ "can_edit": true, "type": "page", "id": 6, "parent_id": 3, "url": "%(fiber_admin_page_edit_url_jobs)s", "add_url": "%(fiber_admin_page_add_url)s" }'>jobs</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="news last">
+                                <a href="/news/" data-fiber-data='{ "can_edit": true, "type": "page", "id": 4, "parent_id": 2, "url": "%(fiber_admin_page_edit_url_news)s", "add_url": "%(fiber_admin_page_add_url)s" }'>news</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>''' % {
+                    'fiber_admin_page_add_url': reverse('fiber_admin:fiber_page_add'),
+                    'fiber_admin_page_edit_url_home': reverse('fiber_admin:fiber_page_change', args=[self.home.pk]),
+                    'fiber_admin_page_edit_url_about': reverse('fiber_admin:fiber_page_change', args=[self.about.pk]),
+                    'fiber_admin_page_edit_url_news': reverse('fiber_admin:fiber_page_change', args=[self.news.pk]),
+                    'fiber_admin_page_edit_url_contact': reverse('fiber_admin:fiber_page_change', args=[self.contact.pk]),
+                    'fiber_admin_page_edit_url_jobs': reverse('fiber_admin:fiber_page_change', args=[self.jobs.pk])
+                }, {
+                    'user': user,
+                    'fiber_page': self.home,
+                })
+
+    def test_show_non_existing_menu(self):
+        """Rendering a non-existing menu raises a specific Page.DoesNotExist exception"""
+        with self.assertRaises(Page.DoesNotExist) as cm:
+            Template('{% load fiber_tags %}{% show_menu "missing" 1 999 %}').render(Context())
+        self.assertEqual(str(cm.exception), "Menu does not exist.\nNo top-level page found with the title 'missing'.")
 
 
 class TestShowPageContent(RenderMixin, TestCase):
