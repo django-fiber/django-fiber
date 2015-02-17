@@ -13,6 +13,10 @@ class CustomContextView(View):
         return context
 
 
+class TestContext(FiberPageMixin):
+    pass
+
+
 class TestView(FiberPageMixin, CustomContextView):
     pass
 
@@ -103,34 +107,47 @@ class TestGetCurrentPagesWithMarkCurrentRegexes(TestCase):
 
 
 class TestGetContextData(TestCase):
+    """Test get_context_data, super object does NOT implement get_context_data"""
+    view_class = TestContext
+    extra_context = {}
+
     def setUp(self):
         self.root = Page.objects.create(title='root', url='/')
         self.child = Page.objects.create(title='child', parent=self.root, url='/child/')
         self.grandchild = Page.objects.create(title='grandchild', parent=self.child, url='/child/grandchild/')
 
     def test_get_root(self):
-        view = TestView()
+        view = self.view_class()
         view.fiber_page_url = '/'
-        self.assertEqual({
+        expected = {
             'fiber_page': self.root,
-            'fiber_current_pages': [],
-            'foo': 'bar'
-        }, view.get_context_data())
+            'fiber_current_pages': []
+        }
+        expected.update(self.extra_context)
+        self.assertEqual(expected, view.get_context_data())
 
     def test_get_first_child(self):
-        view = TestView()
+        view = self.view_class()
         view.fiber_page_url = '/child/'
-        self.assertEqual({
+        expected = {
             'fiber_page': self.child,
-            'fiber_current_pages': [self.child],
-            'foo': 'bar'
-        }, view.get_context_data())
+            'fiber_current_pages': [self.child]
+        }
+        expected.update(self.extra_context)
+        self.assertEqual(expected, view.get_context_data())
 
     def test_get_current_pages_with_ancestors(self):
-        view = TestView()
+        view = self.view_class()
         view.fiber_page_url = '/child/grandchild/'
-        self.assertEqual({
+        expected = {
             'fiber_page': self.grandchild,
-            'fiber_current_pages': [self.child, self.grandchild],
-            'foo': 'bar'
-        }, view.get_context_data())
+            'fiber_current_pages': [self.child, self.grandchild]
+        }
+        expected.update(self.extra_context)
+        self.assertEqual(expected, view.get_context_data())
+
+
+class TestGetContextWithSuper(TestGetContextData):
+    """Test get_context_data, super object DOES implements get_context_data"""
+    view_class = TestView
+    extra_context = {'foo': 'bar'}
