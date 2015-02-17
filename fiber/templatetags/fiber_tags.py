@@ -1,6 +1,7 @@
 import operator, json
 
 from django import template
+from django.template import TemplateSyntaxError
 from django.utils.html import escape
 
 import fiber
@@ -132,62 +133,41 @@ def show_content(context, content_item_name):
 register.inclusion_tag('fiber/content_item.html', takes_context=True)(show_content)
 
 
-@register.tag(name='show_page_content')
-def do_show_page_content(parser, token):
+@register.inclusion_tag('fiber/content_items.html', takes_context=True)
+def show_page_content(context, page_or_block_name, block_name=None):
     """
-    {% show_page_content "block_name" %}              uses page in the context for content items lookup
-    {% show_page_content other_page "block_name" %}   uses other_page for content items lookup
+    Fetch and render named content items for the current fiber page, or a given fiber page.
+
+    {% show_page_content "block_name" %}              use fiber_page in context for content items lookup
+    {% show_page_content other_page "block_name" %}   use other_page for content items lookup
     """
-    try:
-        bits = token.split_contents()
-        if len(bits) not in (2, 3):
-            raise template.TemplateSyntaxError, "%r tag expects one or two arguments" % token.contents.split()[0]
-        if len(bits) == 2:
-            # split_contents() knows not to split quoted strings.
-            tag_name, block_name = token.split_contents()
-            page = 'fiber_page'
-        elif len(bits) == 3:
-            # split_contents() knows not to split quoted strings.
-            tag_name, page, block_name = token.split_contents()
-
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires one or two arguments" % token.contents.split()[0]
-
-    if not (block_name[0] == block_name[-1] and block_name[0] in ('"', "'")):
-        raise template.TemplateSyntaxError, "%r tag's argument should be in quotes" % tag_name
-    return ShowPageContentNode(page, block_name[1:-1])
-
-
-class ShowPageContentNode(template.Node):
-
-    def __init__(self, page, block_name):
-        self.page = template.Variable(page)
-        self.block_name = block_name
-
-    def render(self, context):
+    if isinstance(page_or_block_name, basestring) and block_name is None:
+        # Single argument e.g. {% show_page_content 'main' %}
+        block_name = page_or_block_name
         try:
-            page = self.page.resolve(context)
-            page_content_items = page.page_content_items.filter(block_name=self.block_name).order_by('sort').select_related('content_item')
+            page = context['fiber_page']
+        except KeyError:
+            raise TemplateSyntaxError("'show_page_content' requires 'fiber_page' to be in the template context")
+    elif isinstance(page_or_block_name, Page) and block_name:
+        # Two arguments e.g. {% show_page_content other_page 'main' %}
+        page = page_or_block_name
+    else:
+        # Bad arguments
+        raise TemplateSyntaxError("'show_page_content' received invalid arguments")
 
-            content_items = []
-            for page_content_item in page_content_items:
-                content_item = page_content_item.content_item
-                content_item.page_content_item = page_content_item
-                content_items.append(content_item)
+    page_content_items = page.page_content_items.filter(block_name=block_name).order_by('sort').select_related('content_item')
+    content_items = []
+    for page_content_item in page_content_items:
+        content_item = page_content_item.content_item
+        content_item.page_content_item = page_content_item
+        content_items.append(content_item)
 
-            context.push()
-            context['fiber_page'] = page
-            context['ContentItem'] = ContentItem
-            context['fiber_block_name'] = self.block_name
-            context['fiber_content_items'] = content_items
-            t = template.loader.get_template('fiber/content_items.html')
-            content = t.render(context)
-            context.pop()
-            return content
-
-        except template.VariableDoesNotExist:
-            # page does not exist in the context
-            return ''
+    return {
+        'fiber_page': page,
+        'ContentItem': ContentItem,
+        'fiber_block_name': block_name,
+        'fiber_content_items': content_items
+    }
 
 
 @register.tag(name='captureas')

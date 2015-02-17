@@ -1,11 +1,16 @@
 from django.core.urlresolvers import reverse
-from django.template import Template, Context
+from django.template import Template, Context, TemplateSyntaxError
 from django.test import TestCase, SimpleTestCase
 from django.contrib.auth.models import User
 import fiber
 
 from fiber.models import Page, ContentItem, PageContentItem
 from ..test_util import condense_html_whitespace
+
+
+class RenderMixin(object):
+    def assertRendered(self, template, expected, context=None):
+        self.assertEqual(condense_html_whitespace(Template(template).render(Context(context or {}))), expected)
 
 
 class TestTemplateTags(TestCase):
@@ -235,36 +240,62 @@ class TestTemplateTags(TestCase):
                         }
                  ))
 
+
+class TestShowPageContent(RenderMixin, TestCase):
+    def setUp(self):
+        self.home = Page.objects.create(title='Home')
+        home = ContentItem.objects.create(content_html='<p>homepage</p>')
+        PageContentItem.objects.create(content_item=home, page=self.home, block_name='main')
+        self.about = Page.objects.create(title='About')
+        about = ContentItem.objects.create(content_html='<p>about</p>')
+        PageContentItem.objects.create(content_item=about, page=self.about, block_name='main')
+
     def test_show_page_content(self):
-        # The show_page_content templatetag should support rendering content from multiple pages in one view.
+        self.assertRendered(
+            '{% load fiber_tags %}{% show_page_content "main" %}',
+            '<div><div class="content"><p>homepage</p></div></div>',
+            context={'fiber_page': self.home})
 
-        p1 = Page.objects.create(title='p1')
-        c1 = ContentItem.objects.create(content_html='<p>c1</p>')
-        PageContentItem.objects.create(content_item=c1, page=p1, block_name='test_block')
-        p2 = Page.objects.create(title='p2')
-        c2 = ContentItem.objects.create(content_html='<p>c2</p>')
-        PageContentItem.objects.create(content_item=c2, page=p2, block_name='test_block')
+    def test_show_page_content_with_other(self):
+        """The show_page_content templatetag should support rendering content from multiple pages in one view."""
+        self.assertRendered(
+            '{% load fiber_tags %}{% show_page_content about_page "main" %}{% show_page_content "main" %}',
+            '<div><div class="content"><p>about</p></div></div><div><div class="content"><p>homepage</p></div></div>',
+            context={'fiber_page': self.home, 'about_page': self.about})
 
-        t = Template("""
-            {% load fiber_tags %}
-            {% show_page_content second_page 'test_block' %}
-            {% show_page_content 'test_block' %}
-            """
-            )
+    def test_too_little_arguments(self):
+        with self.assertRaises(TemplateSyntaxError) as cm:
+            Template('{% load fiber_tags %}{% show_page_content %}').render(Context({}))
+        self.assertEqual(str(cm.exception), "'show_page_content' did not receive value(s) for the argument(s): 'page_or_block_name'")
 
-        c = Context({
-            'fiber_page': p1,
-            'second_page': p2
-        })
+    def test_too_many_arguments(self):
+        with self.assertRaises(TemplateSyntaxError) as cm:
+            Template('{% load fiber_tags %}{% show_page_content "page" "main" "other" %}').render(Context({}))
+        self.assertEqual(str(cm.exception), "'show_page_content' received too many positional arguments")
 
-        self.assertEquals(
-            condense_html_whitespace(t.render(c)),
-            ('<div><div class="content"><p>c2</p></div></div><div><div class="content"><p>c1</p></div></div>'))
+    def test_wrong_single_argument(self):
+        with self.assertRaises(TemplateSyntaxError) as cm:
+            Template('{% load fiber_tags %}{% show_page_content page %}').render(Context({}))
+        self.assertEqual(str(cm.exception), "'show_page_content' requires 'fiber_page' to be in the template context")
+
+    def test_wrong_two_arguments(self):
+        with self.assertRaises(TemplateSyntaxError) as cm:
+            Template('{% load fiber_tags %}{% show_page_content "page" "main" %}').render(Context({}))
+        self.assertEqual(str(cm.exception), "'show_page_content' received invalid arguments")
+
+    def test_single_argument_lookup(self):
+        self.assertRendered(
+            '{% load fiber_tags %}{% show_page_content main %}',
+            '<div><div class="content"><p>homepage</p></div></div>',
+            context={'fiber_page': self.home, 'main': 'main'})
+
+    def test_two_argument_lookup(self):
+        self.assertRendered(
+            '{% load fiber_tags %}{% show_page_content about_page main %}',
+            '<div><div class="content"><p>about</p></div></div>',
+            context={'fiber_page': self.home, 'about_page': self.about, 'main': 'main'})
 
 
-class TestFiberVersion(SimpleTestCase):
-    def assertRendered(self, template, expected):
-        self.assertEqual(Template(template).render(Context()), expected)
-
+class TestFiberVersion(RenderMixin, SimpleTestCase):
     def test_fiber_version(self):
         self.assertRendered('{% load fiber_tags %}{% fiber_version %}', str(fiber.__version__))
