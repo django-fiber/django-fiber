@@ -2,7 +2,7 @@ import operator, json
 
 from django import template
 
-from fiber import __version__ as fiber_version_number
+import fiber
 from fiber.models import Page, ContentItem
 from fiber.utils.urls import get_admin_change_url
 from fiber.app_settings import PERMISSION_CLASS, AUTO_CREATE_CONTENT_ITEMS
@@ -258,6 +258,6 @@ def can_edit(obj, user):
     return PERMISSIONS.can_edit(user, obj)
 
 
-@register.simple_tag()
+@register.simple_tag
 def fiber_version():
-    return fiber_version_number
+    return fiber.__version__

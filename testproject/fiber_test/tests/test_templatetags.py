@@ -1,7 +1,8 @@
 from django.core.urlresolvers import reverse
 from django.template import Template, Context
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
 from django.contrib.auth.models import User
+import fiber
 
 from fiber.models import Page, ContentItem, PageContentItem
 from ..test_util import condense_html_whitespace
@@ -259,3 +260,11 @@ class TestTemplateTags(TestCase):
         self.assertEquals(
             condense_html_whitespace(t.render(c)),
             ('<div><div class="content"><p>c2</p></div></div><div><div class="content"><p>c1</p></div></div>'))
+
+
+class TestFiberVersion(SimpleTestCase):
+    def assertRendered(self, template, expected):
+        self.assertEqual(Template(template).render(Context()), expected)
+
+    def test_fiber_version(self):
+        self.assertRendered('{% load fiber_tags %}{% fiber_version %}', str(fiber.__version__))
