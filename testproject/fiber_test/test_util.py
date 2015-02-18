@@ -1,5 +1,7 @@
 import re
 
+from django.template import Template, Context
+
 try:
     from django.utils.timezone import make_aware, utc
 except ImportError:
@@ -26,3 +28,9 @@ def condense_html_whitespace(s):
     s = re.sub(" class=\"\s?(.*?)\s?\"", " class=\"\\1\"", s)
     s = s.strip()
     return s
+
+
+class RenderMixin(object):
+    def assertRendered(self, template, expected, context=None):
+        t, c = Template(template), Context(context or {})
+        self.assertEqual(condense_html_whitespace(t.render(c)), condense_html_whitespace(expected))
