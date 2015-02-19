@@ -249,7 +249,7 @@ def editable_attrs(context, obj):
             'url': change_url,
             'can_edit': PERMISSIONS.can_edit(user, obj)
         }
-        return 'data-fiber-data="%s"' % escape(json.dumps(data, sort_keys=True))
+        return ' data-fiber-data="%s"' % escape(json.dumps(data, sort_keys=True))
     return ''
 
 
