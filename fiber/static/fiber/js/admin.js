@@ -2216,24 +2216,26 @@ Fiber.FiberItem = Class.extend({
 				)
 			);
 
-			contextmenu.append(
-				$('<li><a href="#">'+gettext('Remove from page')+'</a></li>').click(
-					$.proxy(this.remove_from_page, this)
-				)
-			);
-			if (this.element_data.used_on_pages.length > 1) {
-				var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
-				$(this.element_data.used_on_pages).each(function(index, value) {
-					context_submenu_used_on_pages.append(
-						$('<li><a href="#">'+value.title+'</a></li>').click(function() {
-							location.href = value.url;
-						})
-					);
-				});
-
+			if (this.element_data.page_content_item_id) {
 				contextmenu.append(
-					$('<li><a href="#">'+gettext('Used on pages')+'</a></li>').prepend(context_submenu_used_on_pages)
+					$('<li><a href="#">' + gettext('Remove from page') + '</a></li>').click(
+						$.proxy(this.remove_from_page, this)
+					)
 				);
+				if (this.element_data.used_on_pages && this.element_data.used_on_pages.length > 1) {
+					var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
+					$(this.element_data.used_on_pages).each(function (index, value) {
+						context_submenu_used_on_pages.append(
+							$('<li><a href="#">' + value.title + '</a></li>').click(function () {
+								location.href = value.url;
+							})
+						);
+					});
+
+					contextmenu.append(
+						$('<li><a href="#">' + gettext('Used on pages') + '</a></li>').prepend(context_submenu_used_on_pages)
+					);
+				}
 			}
 		}
 
