@@ -204,7 +204,7 @@ class TestShowSubMenu(BaseTestShowMenu):
                 '{% load fiber_tags %}{% show_menu "main" 2 2 %}',
                 self.menu_2_2, {
                     'user': self.anon,
-                    'fiber_page': self.product_a,
+                    'fiber_page': self.product_a
                 })
 
     def test_show_menu_main_2_2_on_product_a_downloads(self):
@@ -213,7 +213,7 @@ class TestShowSubMenu(BaseTestShowMenu):
                 '{% load fiber_tags %}{% show_menu "main" 2 2 %}',
                 self.menu_2_2, {
                     'user': self.anon,
-                    'fiber_page': self.downloads,
+                    'fiber_page': self.downloads
                 })
 
     def test_show_menu_main_2_2_on_product_c(self):
@@ -222,12 +222,12 @@ class TestShowSubMenu(BaseTestShowMenu):
                 '{% load fiber_tags %}{% show_menu "main" 2 2 %}',
                 self.menu_2_2, {
                     'user': self.anon,
-                    'fiber_page': self.product_c,
+                    'fiber_page': self.product_c
                 })
 
     def test_show_menu_main_2_2_on_home(self):
         """
-        When visiting the 'disclaimer' page, this will show an empty menu, since no level 3 pages are currently active.
+        When visiting the 'home' page, this will show an empty menu, since no level 3 pages are currently active.
         """
         with self.assertNumQueries(2):
             self.assertRendered(
@@ -244,7 +244,7 @@ class TestShowSubMenu(BaseTestShowMenu):
                 '{% load fiber_tags %}{% show_menu "main" 3 3 %}',
                 self.menu_3_3, {
                     'user': self.anon,
-                    'fiber_page': self.product_a,
+                    'fiber_page': self.product_a
                 })
 
     def test_show_menu_main_3_3_on_product_a_downloads(self):
@@ -254,7 +254,7 @@ class TestShowSubMenu(BaseTestShowMenu):
                 '{% load fiber_tags %}{% show_menu "main" 3 3 %}',
                 self.menu_3_3, {
                     'user': self.anon,
-                    'fiber_page': self.downloads,
+                    'fiber_page': self.downloads
                 })
 
     def test_show_menu_main_3_3_on_product_c(self):
@@ -267,7 +267,7 @@ class TestShowSubMenu(BaseTestShowMenu):
                     <li class="downloads first last"><a href="/products/product-c/downloads/">downloads</a></li>
                 </ul>''', {
                     'user': self.anon,
-                    'fiber_page': self.product_c,
+                    'fiber_page': self.product_c
                 })
 
     def test_show_menu_main_3_3_on_home(self):
@@ -293,7 +293,7 @@ class TestShowSubMenu(BaseTestShowMenu):
                     <li class="downloads last"><a href="/products/product-a/downloads/">downloads</a></li>
                 </ul>''', {
                     'user': self.anon,
-                    'fiber_page': self.product_a,
+                    'fiber_page': self.product_a
                 })
 
     def test_show_menu_main_3_5_on_product_a_downloads(self):
@@ -314,7 +314,7 @@ class TestShowSubMenu(BaseTestShowMenu):
                 </ul>
                 ''', {
                     'user': self.anon,
-                    'fiber_page': self.downloads,
+                    'fiber_page': self.downloads
                 })
 
     def test_show_menu_main_3_5_on_product_a_downloads_manual(self):
@@ -335,7 +335,7 @@ class TestShowSubMenu(BaseTestShowMenu):
                 </ul>
                 ''', {
                     'user': self.anon,
-                    'fiber_page': self.manual,
+                    'fiber_page': self.manual
                 })
 
     def test_show_menu_main_3_5_on_product_c(self):
@@ -348,7 +348,7 @@ class TestShowSubMenu(BaseTestShowMenu):
                     <li class="downloads first last"><a href="/products/product-c/downloads/">downloads</a></li>
                 </ul>''', {
                     'user': self.anon,
-                    'fiber_page': self.product_c,
+                    'fiber_page': self.product_c
                 })
 
 
@@ -558,10 +558,10 @@ class TestStaffMenu(BaseTestShowMenu):
                     'products_pk': self.products.pk,
                     'edit_url_products': reverse(change_page, args=[self.products.pk]),
                     'contact_pk': self.contact.pk,
-                    'edit_url_contact': reverse(change_page, args=[self.contact.pk]),
+                    'edit_url_contact': reverse(change_page, args=[self.contact.pk])
                 }, {
                     'user': self.staff,
-                    'fiber_page': self.home,
+                    'fiber_page': self.home
                 })
 
     def test_render_empty_menu_1_1_for_staff(self):
@@ -578,7 +578,7 @@ class TestStaffMenu(BaseTestShowMenu):
                 'add_url': reverse('fiber_admin:fiber_page_add')
             }, {
                 'user': self.staff,
-                'fiber_page': self.home,
+                'fiber_page': self.home
             })
 
     def test_render_empty_menu_3_5_for_staff(self):
@@ -591,5 +591,5 @@ class TestStaffMenu(BaseTestShowMenu):
             <ul></ul>
             ''', {
                 'user': self.staff,
-                'fiber_page': self.home,
+                'fiber_page': self.home
             })
