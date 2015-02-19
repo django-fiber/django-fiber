@@ -13,7 +13,7 @@ class TestShowContent(RenderMixin, TestCase):
         self.home = Page.objects.create(title='home', url='/')
         self.contact = ContentItem.objects.create(
             name='contact', content_html='<p><a href="mailto:email@example.com">Contact me<a></p>')
-
+        # Staff user
         self.staff = User.objects.create_user('staff', 'staff@example.com', password='staff')
         self.staff.is_staff = True
         self.staff.save()
