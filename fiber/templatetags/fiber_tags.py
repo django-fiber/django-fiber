@@ -154,6 +154,12 @@ def show_menu(context, menu_name, min_level, max_level, expand=None):
 
 @register.inclusion_tag('fiber/content_item.html', takes_context=True)
 def show_content(context, content_item_name):
+    """
+    Fetch and render a named content item. If FIBER_AUTO_CREATE_CONTENT_ITEMS = True and the content item does not
+    yet exist, it will be created.
+
+    {% show_content "block_name" %}
+    """
     content_item = None
     try:
         content_item = ContentItem.objects.get(name__exact=content_item_name)
@@ -161,8 +167,8 @@ def show_content(context, content_item_name):
         if AUTO_CREATE_CONTENT_ITEMS:
             content_item = ContentItem.objects.create(name=content_item_name)
 
-    context['content_item'] = content_item
-
+    context = copy(context)
+    context.update({'content_item': content_item})
     return context
 
 
