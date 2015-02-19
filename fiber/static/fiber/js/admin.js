@@ -2038,13 +2038,15 @@ Fiber.FiberItem = Class.extend({
 	create_button: function() {
 		// TODO: split this into subclasses
 		if (this.element_data.type == 'page') {
-			var params = {
-				before_page_id: this.element_data.id
-			};
+			if (this.element_data.id) {
+				var params = {
+					before_page_id: this.element_data.id
+				};
 
-			this.button = new AddButton(
-				this, params
-			);
+				this.button = new AddButton(
+					this, params
+				);
+			}
 		} else if (this.element_data.type == 'content_item') {
 			if (
 				this.element_data.block_name &&
