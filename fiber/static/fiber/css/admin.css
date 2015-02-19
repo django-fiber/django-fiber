@@ -172,11 +172,8 @@ div.ui-dialog form label,
 	line-height: 0;
 }
 
-.content[data-fiber-data]:hover {
-	background: #e4e4e4;
-	background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#fafafa));
-	background: -moz-linear-gradient(top, #eaeaea, #fafafa);
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#eaeaea', endColorstr='#fafafa');
+body [data-fiber-data*='"url":']:hover {
+	box-shadow: 0 0 15px 5px rgba(87,182,255,0.5);
 	cursor: pointer;
 }
 
