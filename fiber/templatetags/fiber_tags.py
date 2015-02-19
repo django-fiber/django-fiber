@@ -236,36 +236,12 @@ class CaptureasNode(template.Node):
         return ''
 
 
-def get_editable_attrs(instance):
+@register.simple_tag(takes_context=True)
+def editable_attrs(context, instance):
     data = {
         "url": get_admin_change_url(instance),
     }
-
-    return "data-fiber-data='%s'" % json.dumps(data)
-
-
-class EditableAttrsNode(template.Node):
-
-    def __init__(self, instance_var):
-        self.instance_var = template.Variable(instance_var)
-
-    def render(self, context):
-        try:
-            instance = self.instance_var.resolve(context)
-            return get_editable_attrs(instance)
-        except template.VariableDoesNotExist:
-            return ''
-
-
-@register.tag(name='editable_attrs')
-def editable_attrs(parser, token):
-    try:
-        instance_var = token.split_contents()[1]
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires one argument" % token.contents.split()[0]
-
-    return EditableAttrsNode(instance_var)
-
+    return 'data-fiber-data="%s"' % escape(json.dumps(data))
 
 @register.filter
 def escape_json_for_html(value):
