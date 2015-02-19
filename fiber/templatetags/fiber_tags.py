@@ -237,13 +237,6 @@ class CaptureasNode(template.Node):
 
 
 @register.simple_tag(takes_context=True)
-
-@register.filter
-def escape_json_for_html(value):
-    """
-    Escapes valid JSON for use as a HTML attribute value
-    """
-    return escape(value)
 def editable_attrs(context, obj):
     user = context.get('user')
     if obj and user and user.is_staff:

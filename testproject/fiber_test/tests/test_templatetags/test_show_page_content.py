@@ -31,7 +31,7 @@ class TestShowPageContent(RenderMixin, TestCase):
             '{% load fiber_tags %}{% show_page_content "main" %}',
             '''
             <div data-fiber-data='{ "can_edit":true, "type": "content_item", "add_url": "%(add_url)s", "page_id": %(home_pk)s, "block_name": "main" }'>
-                <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(home_content_pk)s, "url": "%(edit_url_home_content)s", "add_url": "%(add_url)s", "page_id": %(home_pk)s, "block_name": "main", "page_content_item_id": %(home_page_content_pk)s, "used_on_pages": [{&quot;url&quot;: &quot;&quot;, &quot;title&quot;: &quot;Home&quot;}] }' class="content">
+                <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(home_content_pk)s, "url": "%(edit_url_home_content)s", "add_url": "%(add_url)s", "page_id": %(home_pk)s, "block_name": "main", "page_content_item_id": %(home_page_content_pk)s, "used_on_pages": [{&quot;title&quot;: &quot;Home&quot;, &quot;url&quot;: &quot;&quot;}] }' class="content">
                     <p>homepage</p>
                 </div>
             </div>''' % {
@@ -54,12 +54,12 @@ class TestShowPageContent(RenderMixin, TestCase):
             '{% load fiber_tags %}{% show_page_content about_page "main" %}{% show_page_content "main" %}',
             '''
             <div data-fiber-data='{ "can_edit":true, "type": "content_item", "add_url": "%(add_url)s", "page_id": %(about_pk)s, "block_name": "main" }'>
-                <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(about_content_pk)s, "url": "%(edit_url_about_content)s", "add_url": "%(add_url)s", "page_id": %(about_pk)s, "block_name": "main", "page_content_item_id": %(about_page_content_pk)s, "used_on_pages": [{&quot;url&quot;: &quot;&quot;, &quot;title&quot;: &quot;About&quot;}] }' class="content">
+                <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(about_content_pk)s, "url": "%(edit_url_about_content)s", "add_url": "%(add_url)s", "page_id": %(about_pk)s, "block_name": "main", "page_content_item_id": %(about_page_content_pk)s, "used_on_pages": [{&quot;title&quot;: &quot;About&quot;, &quot;url&quot;: &quot;&quot;}] }' class="content">
                     <p>about</p>
                 </div>
             </div>
             <div data-fiber-data='{ "can_edit":true, "type": "content_item", "add_url": "%(add_url)s", "page_id": %(home_pk)s, "block_name": "main" }'>
-                <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(home_content_pk)s, "url": "%(edit_url_home_content)s", "add_url": "%(add_url)s", "page_id": %(home_pk)s, "block_name": "main", "page_content_item_id": %(home_page_content_pk)s, "used_on_pages": [{&quot;url&quot;: &quot;&quot;, &quot;title&quot;: &quot;Home&quot;}] }' class="content">
+                <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(home_content_pk)s, "url": "%(edit_url_home_content)s", "add_url": "%(add_url)s", "page_id": %(home_pk)s, "block_name": "main", "page_content_item_id": %(home_page_content_pk)s, "used_on_pages": [{&quot;title&quot;: &quot;Home&quot;, &quot;url&quot;: &quot;&quot;}] }' class="content">
                     <p>homepage</p>
                 </div>
             </div>''' % {

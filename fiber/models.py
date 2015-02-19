@@ -72,7 +72,7 @@ class ContentItem(models.Model):
         if self.used_on_pages_data is None:
             self.set_used_on_pages_json()
 
-        return json.dumps(self.used_on_pages_data)
+        return json.dumps(self.used_on_pages_data, sort_keys=True)
 
 
 class Page(MPTTModel):
