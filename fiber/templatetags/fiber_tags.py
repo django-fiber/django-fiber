@@ -237,11 +237,6 @@ class CaptureasNode(template.Node):
 
 
 @register.simple_tag(takes_context=True)
-def editable_attrs(context, instance):
-    data = {
-        "url": get_admin_change_url(instance),
-    }
-    return 'data-fiber-data="%s"' % escape(json.dumps(data))
 
 @register.filter
 def escape_json_for_html(value):
@@ -249,6 +244,20 @@ def escape_json_for_html(value):
     Escapes valid JSON for use as a HTML attribute value
     """
     return escape(value)
+def editable_attrs(context, obj):
+    user = context.get('user')
+    if obj and user and user.is_staff:
+        if hasattr(obj, 'get_change_url'):
+            change_url = obj.get_change_url()
+        else:
+            change_url = get_admin_change_url(obj)
+        data = {
+            'type': obj.__class__.__name__.lower(),
+            'url': change_url,
+            'can_edit': PERMISSIONS.can_edit(user, obj)
+        }
+        return 'data-fiber-data="%s"' % escape(json.dumps(data, sort_keys=True))
+    return ''
 
 
 @register.filter
