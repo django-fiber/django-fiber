@@ -2179,7 +2179,6 @@ Fiber.FiberItem = Class.extend({
 	},
 
 	on_dblclick: function(e) {
-		console.log(this.element_data)
 		if (this.element_data.type == 'content_item') {
 			this.edit_content_item();
 		} else if (this.element_data.type == 'page') {
@@ -2237,6 +2236,12 @@ Fiber.FiberItem = Class.extend({
 					);
 				}
 			}
+		} else {
+			contextmenu.append(
+				$('<li><a href="#">'+gettext('Edit')+'</a></li>').click(
+					$.proxy(this.edit_item, this)
+				)
+			);
 		}
 
 		contextmenu.flyoutmenu().removeClass('ui-corner-all');
