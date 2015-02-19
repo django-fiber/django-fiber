@@ -2178,8 +2178,16 @@ Fiber.FiberItem = Class.extend({
 		}
 	},
 
-	on_dblclick: function() {
-		this.edit_content_item();
+	on_dblclick: function(e) {
+		console.log(this.element_data)
+		if (this.element_data.type == 'content_item') {
+			this.edit_content_item();
+		} else if (this.element_data.type == 'page') {
+			this.edit_page();
+		}
+		else{
+			this.edit_item();
+		}
 		return false;
 	},
 
@@ -2250,21 +2258,30 @@ Fiber.FiberItem = Class.extend({
 		});
 	},
 
+	edit_item: function () {
+		if (this.element_data.url) {
+			adminPage.hide_admin_elements();
+			new ChangeFormDialog({
+				url: this.element_data.url
+			});
+		}
+	},
+
 	// TODO: move to page specific class (edit)
 	edit_page: function() {
-		adminPage.hide_admin_elements();
-
-		var changePageFormDialog = new ChangePageFormDialog({
-			url: this.element_data.url,
-			page_id: this.element_data.id
-		});
+		if (this.element_data.url) {
+			adminPage.hide_admin_elements();
+			new ChangePageFormDialog({
+				url: this.element_data.url,
+				page_id: this.element_data.id
+			});
+		}
 	},
 
 	// TODO: move to content item specific class (edit)
 	edit_content_item: function() {
 		if (this.element_data.url) {
 			adminPage.hide_admin_elements();
-
 			new ChangeContentItemFormDialog({
 				url: this.element_data.url
 			});
