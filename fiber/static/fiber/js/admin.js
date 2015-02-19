@@ -2266,11 +2266,9 @@ Fiber.FiberItem = Class.extend({
 	},
 
 	edit_item: function () {
+		// Edit a "unknown" item, just go to the configured url.
 		if (this.element_data.url) {
-			adminPage.hide_admin_elements();
-			new ChangeFormDialog({
-				url: this.element_data.url
-			});
+			window.location = this.element_data.url;
 		}
 	},
 
