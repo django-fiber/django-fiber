@@ -86,16 +86,14 @@ class TestShowPageContent(RenderMixin, TestCase):
             '<div><div class="content"><p>about</p></div></div>',
             {'fiber_page': self.home, 'about_page': self.about, 'main': 'main'})
 
-
-class TestSyntaxErrors(TestCase):
     def test_on_non_fiber_page(self):
         """
         show_page_content on a non fiber page
         """
-        with self.assertRaises(TemplateSyntaxError) as cm:
-            Template('{% load fiber_tags %}{% show_page_content "main" %}').render(Context({}))
-        self.assertEqual(str(cm.exception), "'show_page_content' requires 'fiber_page' to be in the template context")
+        self.assertRendered('{% load fiber_tags %}{% show_page_content "main" %}', '')
 
+
+class TestSyntaxErrors(TestCase):
     def test_with_fiber_page_but_no_block_name(self):
         """
         show_page_content with only a given fiber page

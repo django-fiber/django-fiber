@@ -186,7 +186,7 @@ def show_page_content(context, page_or_block_name, block_name=None):
         try:
             page = context['fiber_page']
         except KeyError:
-            raise TemplateSyntaxError("'show_page_content' requires 'fiber_page' to be in the template context")
+            page = None
     elif isinstance(page_or_block_name, Page) and block_name:
         # Two arguments e.g. {% show_page_content other_page 'main' %}
         page = page_or_block_name
@@ -194,21 +194,22 @@ def show_page_content(context, page_or_block_name, block_name=None):
         # Bad arguments
         raise TemplateSyntaxError("'show_page_content' received invalid arguments")
 
-    page_content_items = page.page_content_items.filter(block_name=block_name).order_by('sort').select_related('content_item')
-    content_items = []
-    for page_content_item in page_content_items:
-        content_item = page_content_item.content_item
-        content_item.page_content_item = page_content_item
-        content_items.append(content_item)
+    if page and block_name:
+        page_content_items = page.page_content_items.filter(block_name=block_name).order_by('sort').select_related('content_item')
+        content_items = []
+        for page_content_item in page_content_items:
+            content_item = page_content_item.content_item
+            content_item.page_content_item = page_content_item
+            content_items.append(content_item)
 
-    context = copy(context)
-    context.update({
-        'fiber_page': page,
-        'ContentItem': ContentItem,
-        'fiber_block_name': block_name,
-        'fiber_content_items': content_items
-    })
-    return context
+        context = copy(context)
+        context.update({
+            'fiber_page': page,
+            'ContentItem': ContentItem,
+            'fiber_block_name': block_name,
+            'fiber_content_items': content_items
+        })
+        return context
 
 
 @register.tag(name='captureas')

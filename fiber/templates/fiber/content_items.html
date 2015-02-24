@@ -1,4 +1,5 @@
 {% load fiber_tags %}
+{% if fiber_page %}
 {% if fiber_page|can_edit:user %}
 
 <div data-fiber-data='{
@@ -20,3 +21,4 @@
     {% endfor %}
 
 </div>
+{% endif %}
