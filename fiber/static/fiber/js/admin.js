@@ -1423,7 +1423,7 @@ var adminPage = {
 				data: {
 					target_node_id: info.target_node.id,
 					position: info.position,
-					_method: 'PUT',
+					_method: 'PUT'
 				},
 				success: function(data) {
 					reloadPage();
@@ -1479,19 +1479,30 @@ var adminPage = {
 			}
 		}
 
-		this.admin_page_tree.tree({
-			data: window.fiber_page_data,
-			autoOpen: 0,
-			saveState: 'fiber_pages',
-			dragAndDrop: true,
-			selectable: true,
-			onCreateLi: $.proxy(createLi, this),
-			onCanMove: $.proxy(canMove, this),
-			onCanMoveTo: $.proxy(canMoveTo, this)
+		function handle_load_data(data) {
+			this.admin_page_tree.tree({
+				data: data,
+				autoOpen: 0,
+				saveState: 'fiber_pages',
+				dragAndDrop: true,
+				selectable: true,
+				onCreateLi: $.proxy(createLi, this),
+				onCanMove: $.proxy(canMove, this),
+				onCanMoveTo: $.proxy(canMoveTo, this)
+			});
+
+			this.admin_page_tree.bind('tree.click', handleClick);
+			this.admin_page_tree.bind('tree.contextmenu', $.proxy(this.handle_page_menu_context_menu, this));
+			this.admin_page_tree.bind('tree.move', handleMoveNode);
+		}
+
+		$.ajax({
+			url: '/api/v2/pagetree/',
+			type: 'GET',
+			success: $.proxy(handle_load_data, this),
+			cache: false,
+			dataType: 'json'
 		});
-		this.admin_page_tree.bind('tree.click', handleClick);
-		this.admin_page_tree.bind('tree.contextmenu', $.proxy(this.handle_page_menu_context_menu, this));
-		this.admin_page_tree.bind('tree.move', handleMoveNode);
 
 		// disable textual selection of tree elements
 		$('.sidebar-tree').disableSelection();

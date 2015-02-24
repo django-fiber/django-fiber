@@ -138,12 +138,7 @@ class AdminPageMiddleware(object):
     def get_body_html(self, request):
         context = {
             'logout_url': self.get_logout_url(request),
-            'pages_json': json.dumps(
-                Page.objects.create_jqtree_data(request.user)
-            ),
-            'content_items_json': json.dumps(
-                ContentItem.objects.get_content_groups(request.user)
-            )
+            'content_items_json': json.dumps(self.get_content_items(request))
         }
         return loader.render_to_string('fiber/admin.html', context, RequestContext(request))
 
@@ -153,6 +148,8 @@ class AdminPageMiddleware(object):
         else:
             return '%s?next=%s' % (reverse('admin:logout'), request.path_info)
 
+    def get_content_items(self, request):
+        return ContentItem.objects.get_content_groups(request.user)
 
 class ObfuscateEmailAddressMiddleware(object):
     """
