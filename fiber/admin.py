@@ -143,11 +143,11 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
     )
 
     inlines = (PageContentItemInline,)
-    list_display = ('title', 'view_on_site', 'url', 'redirect_page', 'get_absolute_url', 'action_links')
+    list_display = ('title', 'view_on_site_link', 'url', 'redirect_page', 'get_absolute_url', 'action_links')
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page__title')
 
-    def view_on_site(self, page):
+    def view_on_site_link(self, page):
         view_on_site = ''
 
         absolute_url = page.get_absolute_url()
@@ -157,8 +157,8 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
         return view_on_site
 
-    view_on_site.short_description = ''
-    view_on_site.allow_tags = True
+    view_on_site_link.short_description = ''
+    view_on_site_link.allow_tags = True
 
     def action_links(self, page):
         actions = ''
