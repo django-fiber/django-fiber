@@ -2,6 +2,7 @@ import re
 from operator import attrgetter
 
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.encoding import force_text
 
 from .models import Page
 
@@ -56,7 +57,7 @@ class FiberPageMixin(object):
 
             # Find all pages that are not already current_pages and have mark_current_regexes configured
             candidates = Page.objects.exclude(pk__in=map(attrgetter('pk'), current_pages)).exclude(mark_current_regexes__exact='')
-            url = self.get_fiber_page_url()
+            url = force_text(self.get_fiber_page_url())
 
             for candidate in candidates:
                 # Check if one of the mark_current_regexes matches the requested URL.
