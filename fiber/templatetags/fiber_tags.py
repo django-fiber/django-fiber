@@ -35,14 +35,14 @@ class MenuHelper(object):
         """
         Remove pages that are below the minimum_level
         """
-        return [p for p in tree if p.level >= self.min_level]
+        return (p for p in tree if p.level >= self.min_level)
 
     def filter_for_user(self, tree):
         """
         Remove pages that shouldn't be in the menu for the current user
         """
         user = self.context.get('user', AnonymousUser())
-        return [p for p in tree if (p.is_public_for_user(user) and p.show_in_menu)]
+        return (p for p in tree if (p.is_public_for_user(user) and p.show_in_menu))
 
     def get_context_data(self):
         return {
@@ -121,7 +121,6 @@ class MenuHelper(object):
         """
         root = self.get_root()
         current = self.context.get('fiber_page')
-
         if self.expand == 'all':
             # Unfiltered sitemap like tree
             tree = self.get_tree(root)
@@ -134,14 +133,13 @@ class MenuHelper(object):
         tree = self.filter_for_user(tree)
 
         # Order menu_pages for use with tree_info template tag.
-        tree.sort(key=operator.attrgetter('lft'))
+        tree = sorted(tree, key=operator.attrgetter('lft'))
 
         self.menu_parent = None
         if tree and self.min_level > 1:
             self.menu_parent = tree[0].parent
         elif self.min_level == 1:
             self.menu_parent = root
-
         return tree
 
 
