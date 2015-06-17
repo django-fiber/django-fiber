@@ -178,6 +178,7 @@ def show_page_content(context, page_or_block_name, block_name=None):
     {% show_page_content "block_name" %}              use fiber_page in context for content items lookup
     {% show_page_content other_page "block_name" %}   use other_page for content items lookup
     """
+    page_or_block_name = page_or_block_name or None
     if isinstance(page_or_block_name, basestring) and block_name is None:
         # Single argument e.g. {% show_page_content 'main' %}
         block_name = page_or_block_name
@@ -185,7 +186,7 @@ def show_page_content(context, page_or_block_name, block_name=None):
             page = context['fiber_page']
         except KeyError:
             page = None
-    elif isinstance(page_or_block_name, Page) and block_name:
+    elif (page_or_block_name is None or isinstance(page_or_block_name, Page)) and block_name:
         # Two arguments e.g. {% show_page_content other_page 'main' %}
         page = page_or_block_name
     else:
