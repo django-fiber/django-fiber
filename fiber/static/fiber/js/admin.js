@@ -2213,7 +2213,7 @@ Fiber.FiberItem = Class.extend({
 					$.proxy(this.remove_from_page, this)
 				)
 			);
-			if (this.element_data.used_on_pages.length > 1) {
+			if (this.element_data.used_on_pages && this.element_data.used_on_pages.length > 1) {
 				var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
 				$(this.element_data.used_on_pages).each(function(index, value) {
 					context_submenu_used_on_pages.append(
