@@ -1,5 +1,6 @@
+{% load static %}
 <script type="text/javascript">
-    var CKEDITOR_BASEPATH = '{{ STATIC_URL }}fiber/js/ckeditor-4.4.7-full/';
+    var CKEDITOR_BASEPATH = '{% get_static_prefix %}fiber/js/ckeditor-4.4.7-full/';
 </script>
-<script src="{{ STATIC_URL }}fiber/js/ckeditor-4.4.7-full/ckeditor.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}fiber/js/fiber.ckeditor.js" type="text/javascript"></script>
+<script src="{% static 'fiber/js/ckeditor-4.4.7-full/ckeditor.js' %}" type="text/javascript"></script>
+<script src="{% static 'fiber/js/fiber.ckeditor.js' %}" type="text/javascript"></script>
