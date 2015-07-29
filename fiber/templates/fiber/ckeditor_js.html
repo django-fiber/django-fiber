@@ -1,4 +1,6 @@
-{% load static %}
+{% load staticfiles %}
+{% load get_static_prefix from static %}
+
 <script type="text/javascript">
     var CKEDITOR_BASEPATH = '{% get_static_prefix %}fiber/js/ckeditor-4.4.7-full/';
 </script>
