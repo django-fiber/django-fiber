@@ -8,6 +8,7 @@ Diederik van der Boor <vdboor@edoburu.nl>
 Douwe van der Meij <vandermeij@gw20e.com>
 Dzjon Hessing <dhessing@ridethepony.nl>
 Jaap Roes <jroes@leukeleu.nl>
+Jaco Bovenschen <jbovenschen@leukeleu.nl>
 Luke Plant <L.Plant.98@cantab.net>
 Maarten Draijer <maarten@madra.nl>
 Marco Braak <mbraak@ridethepony.nl>
