@@ -1,3 +1,4 @@
-<script src="{{ STATIC_URL }}fiber/js/markitup-1.1.10/jquery.markitup.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}fiber/js/markitup-1.1.10/sets/textile_fiber/set.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}fiber/js/fiber.markitup.js" type="text/javascript"></script>
+{% load staticfiles %}
+<script src="{% static 'fiber/js/markitup-1.1.10/jquery.markitup.js' %}" type="text/javascript"></script>
+<script src="{% static 'fiber/js/markitup-1.1.10/sets/textile_fiber/set.js' %}" type="text/javascript"></script>
+<script src="{% static 'fiber/js/fiber.markitup.js' %}" type="text/javascript"></script>

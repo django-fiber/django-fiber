@@ -2,10 +2,13 @@ Bart Heesink <bheesink@leukeleu.nl>
 Bram Simons <bsimons@leukeleu.nl>
 Chi Shang Cheng <cscheng@leukeleu.nl>
 Chris Clark <chris@untrod.com>
+David Filipovic <david.filipovic@gmail.com>
 Dennis Bunskoek <dbunskoek@leukeleu.nl>
 Diederik van der Boor <vdboor@edoburu.nl>
 Douwe van der Meij <vandermeij@gw20e.com>
 Dzjon Hessing <dhessing@ridethepony.nl>
+Jaap Roes <jroes@leukeleu.nl>
+Jaco Bovenschen <jbovenschen@leukeleu.nl>
 Luke Plant <L.Plant.98@cantab.net>
 Maarten Draijer <maarten@madra.nl>
 Marco Braak <mbraak@ridethepony.nl>

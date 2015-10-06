@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2
+
+**Date** July 29th, 2015
+
+* Implemented Django's static template tag to support Django 1.8
+* Fixed an error where context menu would not show when right-clicking a fiber content item
+
 ## 1.1
 
 **Date** 10th Feb 2015
