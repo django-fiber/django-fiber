@@ -1509,13 +1509,22 @@ var adminPage = {
 	},
 
 	init_content_tree: function() {
-		this.admin_content_tree.tree({
-			data: window.fiber_content_items_data,
-			saveState: 'fiber_content_items'
-		});
-		this.admin_content_tree.bind('tree.contextmenu', $.proxy(this.handle_content_item_menu_context_menu, this));
+		function handle_load_data(data) {
+			this.admin_content_tree.tree({
+				data: data,
+				saveState: 'fiber_content_items'
+			});
+			this.admin_content_tree.bind('tree.contextmenu', $.proxy(this.handle_content_item_menu_context_menu, this));
+			this.make_content_items_draggable();
+		}
 
-		this.make_content_items_draggable();
+		$.ajax({
+			url: '/api/v2/contentitemgroups/',
+			type: 'GET',
+			success: $.proxy(handle_load_data, this),
+			cache: false,
+			dataType: 'json'
+		});
 	},
 
 	make_content_items_draggable: function() {

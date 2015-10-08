@@ -305,3 +305,14 @@ class PageTree(views.APIView):
         Provide jqTree data for the PageSelect dialog.
         """
         return Response(Page.objects.create_jqtree_data(request.user))
+
+
+class ContentItemGroups(views.APIView):
+    renderer_classes = API_RENDERERS
+    permission_classes = (permissions.IsAdminUser,)
+
+    def get(self, request, format=None):
+        """
+        Get content groups data which is suitable for jqtree.
+        """
+        return Response(ContentItem.objects.get_content_groups(request.user))
