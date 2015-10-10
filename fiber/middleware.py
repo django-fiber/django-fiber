@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.utils.encoding import smart_unicode
 
-from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR
+from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR, WHITELIST_URLS
 from .models import ContentItem, Page
 from .utils.import_util import import_element
 from .utils.class_loader import load_class
@@ -38,6 +38,21 @@ class AdminPageMiddleware(object):
         # only process html and xhtml responses
         if is_non_html(response):
             return response
+
+        url = request.path_info
+        """
+        If WHITELIST_URLS is defined then we need a positive match otherwise we dont continue
+        """
+        if WHITELIST_URLS:
+            if not any(map(lambda regex: re.search(regex, url.lstrip('/')), WHITELIST_URLS)):
+                return response
+
+        """
+        Avoid further processing or database queries if page is in EXCLUDE_URLS.
+        """
+        if EXCLUDE_URLS:
+            if any(map(lambda regex: re.search(regex, url.lstrip('/')), EXCLUDE_URLS)):
+                return response
 
         if self.set_login_session(request, response):
             request.session['show_fiber_admin'] = True
