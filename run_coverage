@@ -1,0 +1,9 @@
+if [ ! -z $1 ]
+then
+    echo "Running testproject/manage.py test fiber_test.tests.$1..."
+    coverage run testproject/manage.py test fiber_test.tests.$1
+else
+    echo "Running testproject/manage.py test fiber_test..."
+    coverage run testproject/manage.py test fiber_test
+fi
+coverage report -m

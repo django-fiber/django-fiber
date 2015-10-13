@@ -7,8 +7,7 @@ from .options import ModelAdmin, MPTTModelAdmin
 class FiberAdminSite(admin.AdminSite):
 
     def register(self, model_or_iterable, admin_class=None, **options):
-        if not admin_class:
-            admin_class = ModelAdmin
+        admin_class = admin_class or ModelAdmin
         return super(FiberAdminSite, self).register(model_or_iterable, admin_class=admin_class, **options)
 
 

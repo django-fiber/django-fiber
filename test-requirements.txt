@@ -1,0 +1,3 @@
+django-discover-runner==1.0
+coverage
+coveralls

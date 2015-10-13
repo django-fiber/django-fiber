@@ -14,11 +14,11 @@ from rest_framework import permissions
 
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
 from fiber.app_settings import API_RENDER_HTML, PERMISSION_CLASS
-from fiber.utils import class_loader
+from fiber.utils.import_util import load_class
 
 from .serializers import PageSerializer, MovePageSerializer, PageContentItemSerializer, MovePageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer, FiberPaginationSerializer
 
-PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
+PERMISSIONS = load_class(PERMISSION_CLASS)
 
 API_RENDERERS = (renderers.JSONRenderer, )
 if API_RENDER_HTML:
@@ -305,3 +305,14 @@ class PageTree(views.APIView):
         Provide jqTree data for the PageSelect dialog.
         """
         return Response(Page.objects.create_jqtree_data(request.user))
+
+
+class ContentItemGroups(views.APIView):
+    renderer_classes = API_RENDERERS
+    permission_classes = (permissions.IsAdminUser,)
+
+    def get(self, request, format=None):
+        """
+        Get content groups data which is suitable for jqtree.
+        """
+        return Response(ContentItem.objects.get_content_groups(request.user))

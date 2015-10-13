@@ -13,7 +13,7 @@
     "page_id": {{ fiber_page.id }},
     "block_name": "{{ fiber_block_name }}",
     "page_content_item_id": {{ content_item.page_content_item.id }},
-    "used_on_pages": {{ content_item.get_used_on_pages_json|safe|escape_json_for_html }}
+    "used_on_pages": {{ content_item.get_used_on_pages_json }}
 }' class="content">
 
             {% else %}

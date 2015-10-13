@@ -1,21 +1,25 @@
 from datetime import datetime
 
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
-
-tz_now = timezone.now
 
 def friendly_datetime(date_time):
     """
     Given a datetime object or an int() Unix timestamp, return a friendly
     string like 'an hour ago', 'yesterday', '3 months ago', 'just now', etc.
     """
-    now = tz_now()
-    if type(date_time) is datetime:
+    now = timezone.now()
+    if isinstance(date_time, int):
+        try:
+            date_time = datetime.fromtimestamp(date_time)
+        except ValueError:
+            pass
+    if isinstance(date_time, datetime):
+        if settings.USE_TZ and timezone.is_naive(date_time):
+            date_time = timezone.make_aware(date_time, timezone.get_current_timezone())
         diff = now - date_time
-    elif type(date_time) is int:
-        diff = now - datetime.fromtimestamp(date_time)
     else:
         return date_time
 
@@ -27,25 +31,32 @@ def friendly_datetime(date_time):
 
     if days_diff == 0:
         if seconds_diff < 10:
-            return unicode(_('just now'))
+            return _('just now')
         if seconds_diff < 60:
-            return _('%s seconds ago') % str(seconds_diff)
+            return _('%s seconds ago') % seconds_diff
         if seconds_diff < 120:
-            return unicode('a minute ago')
+            return _('a minute ago')
         if seconds_diff < 3600:
-            return _('%s minutes ago') % str(seconds_diff / 60)
+            return _('%s minutes ago') % (seconds_diff / 60)
         if seconds_diff < 7200:
-            return unicode(_('an hour ago'))
+            return _('an hour ago')
         if seconds_diff < 86400:
-            return _('%s hours ago') % str(seconds_diff / 3600)
+            return _('%s hours ago') % (seconds_diff / 3600)
     if days_diff == 1:
-        return unicode(_('yesterday'))
+        return _('yesterday')
     if days_diff < 7:
-        return _('%s days ago') % str(days_diff)
+        return _('%s days ago') % days_diff
     if days_diff < 14:
-        return unicode(_('a week ago'))
+        return _('a week ago')
     if days_diff < 31:
-        return _('%s weeks ago') % str(days_diff / 7)
+        return _('%s weeks ago') % (days_diff / 7)
     if days_diff < 365:
-        return _('%s months ago') % str(days_diff / 30)
-    return _('%s years ago') % str(days_diff / 365)
+        months_diff = days_diff / 30
+        if months_diff == 1:
+            return _('a month ago')
+        else:
+            return _('%s months ago') % (days_diff / 30)
+    years_diff = days_diff / 365
+    if years_diff == 1:
+        return _('a year ago')
+    return _('%s years ago') % (days_diff / 365)

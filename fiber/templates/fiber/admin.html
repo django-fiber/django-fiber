@@ -12,17 +12,13 @@
 		</div>
 		<div id="df-sidebar-page-section">
 			<h2>{% trans "Pages" %}</h2>
-			<script>
-				window.fiber_page_data = {{ pages_json|safe }};
-				window.fiber_content_items_data = {{ content_items_json|safe }};
-			</script>
 			<div id="df-sidebar-page-tree" class="sidebar-tree"></div>
 		</div>
 		<div id="df-sidebar-content-section">
 			<h2>{% trans "Content" %}</h2>
 			<div id="df-sidebar-content-tree" class="sidebar-tree"></div>
 		</div>
-        <div id="df-sidebar-version"><p>Django Fiber: {% fiber_version %}</p></div>
+		<div id="df-sidebar-version"><p>Django Fiber: {% fiber_version %}</p></div>
 	</div>
 	<div id="df-btn-toggle-sidebar"></div>
 </div>

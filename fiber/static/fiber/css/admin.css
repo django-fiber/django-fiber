@@ -172,11 +172,8 @@ div.ui-dialog form label,
 	line-height: 0;
 }
 
-.content[data-fiber-data]:hover {
-	background: #e4e4e4;
-	background: -webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#fafafa));
-	background: -moz-linear-gradient(top, #eaeaea, #fafafa);
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#eaeaea', endColorstr='#fafafa');
+body [data-fiber-data*='"url":']:hover {
+	box-shadow: 0 0 15px 5px rgba(87,182,255,0.5);
 	cursor: pointer;
 }
 
@@ -734,9 +731,7 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 
 .ui-dialog-content ul.jqtree-tree .df-page.df-non-editable .jqtree-title,
 #df-wpr-sidebar ul.jqtree-tree .df-page.df-non-editable .jqtree-title {
-    color: #999;
-    text-shadow: 0 1px 0 #fff;
-    filter: dropshadow(color=#fff, offx=0, offy=1);
+    color: #666;
 }
 
 .jqtree-tree .df-page,
@@ -747,7 +742,7 @@ ul.jqtree-tree .jqtree-moving > div .jqtree-title {
 /* permissions-related styling */
 .ui-dialog .df-non-editable,
 #df-wpr-sidebar .sidebar-tree .df-non-editable .title {
-	color: #f00;
+	color: #666;
 }
 
 /* page selection tree in dialog */

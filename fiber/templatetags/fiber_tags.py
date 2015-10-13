@@ -1,122 +1,163 @@
-import operator, json
+import json
+import operator
+from copy import copy
 
 from django import template
+from django.contrib.auth.models import AnonymousUser
+from django.template import TemplateSyntaxError
+from django.utils.html import escape
 
-from fiber import __version__ as fiber_version_number
+import fiber
 from fiber.models import Page, ContentItem
 from fiber.utils.urls import get_admin_change_url
 from fiber.app_settings import PERMISSION_CLASS, AUTO_CREATE_CONTENT_ITEMS
-from fiber.utils import class_loader
+from fiber.utils.import_util import load_class
 
 
-PERMISSIONS = class_loader.load_class(PERMISSION_CLASS)
+PERMISSIONS = load_class(PERMISSION_CLASS)
 
 register = template.Library()
 
 
-def show_menu(context, menu_name, min_level, max_level, expand=None):
+class MenuHelper(object):
+    """
+    Helper class for show_menu tag, for convenience/clarity
+    """
+    def __init__(self, context, menu_name, min_level=1, max_level=999, expand=None):
+        self.context = copy(context)
+        self.menu_name = menu_name
+        self.min_level = min_level
+        self.max_level = max_level
+        self.expand = expand
+        self.menu_parent = None
 
-    menu_pages = []
-    needed_pages = []
+    def filter_min_level(self, tree):
+        """
+        Remove pages that are below the minimum_level
+        """
+        return (p for p in tree if p.level >= self.min_level)
 
-    try:
-        root_page = Page.objects.get(title=menu_name, parent=None)
-    except Page.DoesNotExist:
-        raise Page.DoesNotExist("Menu does not exist.\nNo top-level page found with the title '%s'." % menu_name)
+    def filter_for_user(self, tree):
+        """
+        Remove pages that shouldn't be in the menu for the current user
+        """
+        user = self.context.get('user', AnonymousUser())
+        return (p for p in tree if (p.is_public_for_user(user) and p.show_in_menu))
 
-    # Page.get_absolute_url() accesses self.parent recursively to build URLs
-    # (assuming relative URLs).
-    # This means that to render any menu item, we need all the ancestors up to
-    # the root. Therefore it is more efficient to pull back this tree, without
-    # min_level applied, and apply it just to decide which items to render.
+    def get_context_data(self):
+        return {
+            'Page': Page,
+            'fiber_menu_pages': self.get_menu(),
+            'fiber_menu_parent_page': self.menu_parent,
+            'fiber_menu_args': {
+                'menu_name': self.menu_name,
+                'min_level': self.min_level,
+                'max_level': self.max_level,
+                'expand': self.expand
+            }
+        }
 
-    current_page = None
-    if 'fiber_page' in context:
-        current_page = context['fiber_page']
+    def get_root(self):
+        """
+        Get the root page for this menu
+        """
+        try:
+            return Page.objects.get(title=self.menu_name, parent=None)
+        except Page.DoesNotExist:
+            raise Page.DoesNotExist("Menu does not exist.\nNo top-level page found with the title '%s'." % self.menu_name)
 
-    if current_page and current_page.is_child_of(root_page):
-        tree = root_page.get_descendants(include_self=True).filter(level__lte=max_level)
-        if expand == 'all':
-            needed_pages = tree
+    def get_tree(self, root):
+        """
+        Get a page tree from the root page, limited to max_level
+        """
+        # Page.get_absolute_url() accesses self.parent recursively to build URLs (assuming relative URLs).
+        # To render any menu item, we need all the ancestors up to the root.
+        # Therefore it's more efficient to fetch the entire tree, and apply min_level manually later.
+        return root.get_descendants(include_self=True).filter(level__lte=self.max_level)
+
+    def get_tree_for_page(self, root, page):
+        """
+        Get a tree, taking a specific page into account
+        """
+        if not page or not page.is_child_of(root):
+            if self.min_level == 1:
+                # The current page is not part of the menu tree.
+                # Only show first level menus.
+                return self.get_tree(root).filter(level__lte=1)
+            else:
+                # The current page is not part of the menu tree, so it can't have a sub menu
+                return []
+        if page.level + 1 < self.min_level:
+            return []  # The current page is below the threshold, so no menu should be shown
         else:
-            if current_page.level + 1 < min_level:
-                # Nothing to do
-                needed_pages = []
-            else:
-                # We need the 'route' nodes, the 'sibling' nodes and the children
-                route = tree.filter(lft__lt=current_page.lft,
-                                    rght__gt=current_page.rght)
+            tree = self.get_tree(root)
 
-                # We show any siblings of anything in the route to the current page.
-                # The logic here is that if the user drills down, menu items
-                # shown previously should not disappear.
+            # We need the 'route' to the current page, the 'sibling' nodes and the children
+            route = tree.filter(lft__lt=page.lft, rght__gt=page.rght)
 
-                # The following assumes that accessing .parent is cheap, which
-                # it can be if current_page was loaded correctly.
-                p = current_page
-                sibling_qs = []
-                while p.parent_id is not None:
-                    sibling_qs.append(tree.filter(level=p.level,
-                                                  lft__gt=p.parent.lft,
-                                                  rght__lt=p.parent.rght))
-                    p = p.parent
-                route_siblings = reduce(operator.or_, sibling_qs)
+            # We show any siblings of anything in the route to the current page.
+            # The logic here is that if the user drills down, menu items
+            # shown previously should not disappear.
 
-                children = tree.filter(lft__gt=current_page.lft,
-                                       rght__lt=current_page.rght)
-                if expand != 'all_descendants':
-                    # only want immediate children:
-                    children = children.filter(level=current_page.level + 1)
+            # The following assumes that accessing .parent is cheap, which
+            # it can be if current_page was loaded correctly.
+            p = page
+            sibling_qs = []
+            while p.parent_id is not None:
+                sibling_qs.append(tree.filter(level=p.level, lft__gt=p.parent.lft, rght__lt=p.parent.rght))
+                p = p.parent
+            route_siblings = reduce(operator.or_, sibling_qs)
 
-                needed_pages = route | route_siblings | children
+            children = tree.filter(lft__gt=page.lft, rght__lt=page.rght)
+            if self.expand != 'all_descendants':
+                # only want immediate children:
+                children = children.filter(level=page.level + 1)
 
-    else:
-        # Only show menus that start at the first level (min_level == 1)
-        # when the current page is not in the menu tree.
-        if min_level == 1:
-            if not expand:
-                needed_pages = Page.objects.filter(tree_id=root_page.tree_id).filter(level__lte=1)
-            elif expand == 'all':
-                needed_pages = Page.objects.filter(tree_id=root_page.tree_id).filter(level__lte=max_level)
-            else:
-                needed_pages = []
+            return route | route_siblings | children
 
-    needed_pages = Page.objects.link_parent_objects(needed_pages)
+    def get_menu(self):
+        """
+        Get the menu tree
+        """
+        root = self.get_root()
+        current = self.context.get('fiber_page')
+        if self.expand == 'all':
+            # Unfiltered sitemap like tree
+            tree = self.get_tree(root)
+        else:
+            # (sub) menus, expanding/collapsing based on current page
+            tree = self.get_tree_for_page(root, current)
 
-    # Now we need to do min_level filtering
-    for p in needed_pages:
-        if p.level >= min_level:
-            menu_pages.append(p)
+        tree = Page.objects.link_parent_objects(tree)
+        tree = self.filter_min_level(tree)
+        tree = self.filter_for_user(tree)
 
-    # Remove pages that shouldn't be shown in the menu for the current user.
-    user = context['user']
-    menu_pages = [p for p in menu_pages if (p.is_public_for_user(user)
-                                            and p.show_in_menu)]
+        # Order menu_pages for use with tree_info template tag.
+        tree = sorted(tree, key=operator.attrgetter('lft'))
 
-    """
-    Order menu_pages for use with tree_info template tag.
-    """
-    menu_pages = sorted(menu_pages, key=lambda menu_page: menu_page.lft)
+        self.menu_parent = None
+        if tree and self.min_level > 1:
+            self.menu_parent = tree[0].parent
+        elif self.min_level == 1:
+            self.menu_parent = root
+        return tree
 
-    """
-    Find parent page for this menu
-    """
-    menu_parent_page = None
-    if menu_pages:
-        menu_parent_page = menu_pages[0].parent
-    elif min_level == 1:
-        menu_parent_page = root_page
 
-    context['Page'] = Page
-    context['fiber_menu_pages'] = menu_pages
-    context['fiber_menu_parent_page'] = menu_parent_page
-    context['fiber_menu_args'] = {'menu_name': menu_name, 'min_level': min_level, 'max_level': max_level, 'expand': expand}
+@register.inclusion_tag('fiber/menu.html', takes_context=True)
+def show_menu(context, menu_name, min_level, max_level, expand=None):
+    context = copy(context)
+    context.update(MenuHelper(context, menu_name, min_level, max_level, expand).get_context_data())
     return context
 
-register.inclusion_tag('fiber/menu.html', takes_context=True)(show_menu)
 
-
+@register.inclusion_tag('fiber/content_item.html', takes_context=True)
 def show_content(context, content_item_name):
+    """
+    Fetch and render a named content item. If FIBER_AUTO_CREATE_CONTENT_ITEMS = True and the content item does not
+    yet exist, it will be created.
+
+    {% show_content "block_name" %}
+    """
     content_item = None
     try:
         content_item = ContentItem.objects.get(name__exact=content_item_name)
@@ -124,69 +165,50 @@ def show_content(context, content_item_name):
         if AUTO_CREATE_CONTENT_ITEMS:
             content_item = ContentItem.objects.create(name=content_item_name)
 
-    context['content_item'] = content_item
-
+    context = copy(context)
+    context.update({'content_item': content_item})
     return context
 
-register.inclusion_tag('fiber/content_item.html', takes_context=True)(show_content)
 
-
-@register.tag(name='show_page_content')
-def do_show_page_content(parser, token):
+@register.inclusion_tag('fiber/content_items.html', takes_context=True)
+def show_page_content(context, page_or_block_name, block_name=None):
     """
-    {% show_page_content "block_name" %}              uses page in the context for content items lookup
-    {% show_page_content other_page "block_name" %}   uses other_page for content items lookup
+    Fetch and render named content items for the current fiber page, or a given fiber page.
+
+    {% show_page_content "block_name" %}              use fiber_page in context for content items lookup
+    {% show_page_content other_page "block_name" %}   use other_page for content items lookup
     """
-    try:
-        bits = token.split_contents()
-        if len(bits) not in (2, 3):
-            raise template.TemplateSyntaxError, "%r tag expects one or two arguments" % token.contents.split()[0]
-        if len(bits) == 2:
-            # split_contents() knows not to split quoted strings.
-            tag_name, block_name = token.split_contents()
-            page = 'fiber_page'
-        elif len(bits) == 3:
-            # split_contents() knows not to split quoted strings.
-            tag_name, page, block_name = token.split_contents()
-
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires one or two arguments" % token.contents.split()[0]
-
-    if not (block_name[0] == block_name[-1] and block_name[0] in ('"', "'")):
-        raise template.TemplateSyntaxError, "%r tag's argument should be in quotes" % tag_name
-    return ShowPageContentNode(page, block_name[1:-1])
-
-
-class ShowPageContentNode(template.Node):
-
-    def __init__(self, page, block_name):
-        self.page = template.Variable(page)
-        self.block_name = block_name
-
-    def render(self, context):
+    page_or_block_name = page_or_block_name or None
+    if isinstance(page_or_block_name, basestring) and block_name is None:
+        # Single argument e.g. {% show_page_content 'main' %}
+        block_name = page_or_block_name
         try:
-            page = self.page.resolve(context)
-            page_content_items = page.page_content_items.filter(block_name=self.block_name).order_by('sort').select_related('content_item')
+            page = context['fiber_page']
+        except KeyError:
+            page = None
+    elif (page_or_block_name is None or isinstance(page_or_block_name, Page)) and block_name:
+        # Two arguments e.g. {% show_page_content other_page 'main' %}
+        page = page_or_block_name
+    else:
+        # Bad arguments
+        raise TemplateSyntaxError("'show_page_content' received invalid arguments")
 
-            content_items = []
-            for page_content_item in page_content_items:
-                content_item = page_content_item.content_item
-                content_item.page_content_item = page_content_item
-                content_items.append(content_item)
+    if page and block_name:
+        page_content_items = page.page_content_items.filter(block_name=block_name).order_by('sort').select_related('content_item')
+        content_items = []
+        for page_content_item in page_content_items:
+            content_item = page_content_item.content_item
+            content_item.page_content_item = page_content_item
+            content_items.append(content_item)
 
-            context.push()
-            context['fiber_page'] = page
-            context['ContentItem'] = ContentItem
-            context['fiber_block_name'] = self.block_name
-            context['fiber_content_items'] = content_items
-            t = template.loader.get_template('fiber/content_items.html')
-            content = t.render(context)
-            context.pop()
-            return content
-
-        except template.VariableDoesNotExist:
-            # page does not exist in the context
-            return ''
+        context = copy(context)
+        context.update({
+            'fiber_page': page,
+            'ContentItem': ContentItem,
+            'fiber_block_name': block_name,
+            'fiber_content_items': content_items
+        })
+        return context
 
 
 @register.tag(name='captureas')
@@ -214,43 +236,21 @@ class CaptureasNode(template.Node):
         return ''
 
 
-def get_editable_attrs(instance):
-    data = {
-        "url": get_admin_change_url(instance),
-    }
-
-    return "data-fiber-data='%s'" % json.dumps(data)
-
-
-class EditableAttrsNode(template.Node):
-
-    def __init__(self, instance_var):
-        self.instance_var = template.Variable(instance_var)
-
-    def render(self, context):
-        try:
-            instance = self.instance_var.resolve(context)
-            return get_editable_attrs(instance)
-        except template.VariableDoesNotExist:
-            return ''
-
-
-@register.tag(name='editable_attrs')
-def editable_attrs(parser, token):
-    try:
-        instance_var = token.split_contents()[1]
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires one argument" % token.contents.split()[0]
-
-    return EditableAttrsNode(instance_var)
-
-
-@register.filter(name='escape_json_for_html')
-def escape_json_for_html(value):
-    """
-    Escapes valid JSON for use in HTML, e.g. convert single quote to HTML character entity
-    """
-    return value.replace("'", "&#39;")
+@register.simple_tag(takes_context=True)
+def editable_attrs(context, obj):
+    user = context.get('user')
+    if obj and user and user.is_staff:
+        if hasattr(obj, 'get_change_url'):
+            change_url = obj.get_change_url()
+        else:
+            change_url = get_admin_change_url(obj)
+        data = {
+            'type': obj.__class__.__name__.lower(),
+            'url': change_url,
+            'can_edit': PERMISSIONS.can_edit(user, obj)
+        }
+        return ' data-fiber-data="%s"' % escape(json.dumps(data, sort_keys=True))
+    return ''
 
 
 @register.filter
@@ -258,6 +258,6 @@ def can_edit(obj, user):
     return PERMISSIONS.can_edit(user, obj)
 
 
-@register.simple_tag()
+@register.simple_tag
 def fiber_version():
-    return fiber_version_number
+    return fiber.__version__

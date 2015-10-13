@@ -1423,7 +1423,7 @@ var adminPage = {
 				data: {
 					target_node_id: info.target_node.id,
 					position: info.position,
-					_method: 'PUT',
+					_method: 'PUT'
 				},
 				success: function(data) {
 					reloadPage();
@@ -1479,32 +1479,52 @@ var adminPage = {
 			}
 		}
 
-		this.admin_page_tree.tree({
-			data: window.fiber_page_data,
-			autoOpen: 0,
-			saveState: 'fiber_pages',
-			dragAndDrop: true,
-			selectable: true,
-			onCreateLi: $.proxy(createLi, this),
-			onCanMove: $.proxy(canMove, this),
-			onCanMoveTo: $.proxy(canMoveTo, this)
+		function handle_load_data(data) {
+			this.admin_page_tree.tree({
+				data: data,
+				autoOpen: 0,
+				saveState: 'fiber_pages',
+				dragAndDrop: true,
+				selectable: true,
+				onCreateLi: $.proxy(createLi, this),
+				onCanMove: $.proxy(canMove, this),
+				onCanMoveTo: $.proxy(canMoveTo, this)
+			});
+
+			this.admin_page_tree.bind('tree.click', handleClick);
+			this.admin_page_tree.bind('tree.contextmenu', $.proxy(this.handle_page_menu_context_menu, this));
+			this.admin_page_tree.bind('tree.move', handleMoveNode);
+		}
+
+		$.ajax({
+			url: '/api/v2/pagetree/',
+			type: 'GET',
+			success: $.proxy(handle_load_data, this),
+			cache: false,
+			dataType: 'json'
 		});
-		this.admin_page_tree.bind('tree.click', handleClick);
-		this.admin_page_tree.bind('tree.contextmenu', $.proxy(this.handle_page_menu_context_menu, this));
-		this.admin_page_tree.bind('tree.move', handleMoveNode);
 
 		// disable textual selection of tree elements
 		$('.sidebar-tree').disableSelection();
 	},
 
 	init_content_tree: function() {
-		this.admin_content_tree.tree({
-			data: window.fiber_content_items_data,
-			saveState: 'fiber_content_items'
-		});
-		this.admin_content_tree.bind('tree.contextmenu', $.proxy(this.handle_content_item_menu_context_menu, this));
+		function handle_load_data(data) {
+			this.admin_content_tree.tree({
+				data: data,
+				saveState: 'fiber_content_items'
+			});
+			this.admin_content_tree.bind('tree.contextmenu', $.proxy(this.handle_content_item_menu_context_menu, this));
+			this.make_content_items_draggable();
+		}
 
-		this.make_content_items_draggable();
+		$.ajax({
+			url: '/api/v2/contentitemgroups/',
+			type: 'GET',
+			success: $.proxy(handle_load_data, this),
+			cache: false,
+			dataType: 'json'
+		});
 	},
 
 	make_content_items_draggable: function() {
@@ -2038,13 +2058,15 @@ Fiber.FiberItem = Class.extend({
 	create_button: function() {
 		// TODO: split this into subclasses
 		if (this.element_data.type == 'page') {
-			var params = {
-				before_page_id: this.element_data.id
-			};
+			if (this.element_data.id) {
+				var params = {
+					before_page_id: this.element_data.id
+				};
 
-			this.button = new AddButton(
-				this, params
-			);
+				this.button = new AddButton(
+					this, params
+				);
+			}
 		} else if (this.element_data.type == 'content_item') {
 			if (
 				this.element_data.block_name &&
@@ -2178,8 +2200,15 @@ Fiber.FiberItem = Class.extend({
 		}
 	},
 
-	on_dblclick: function() {
-		this.edit_content_item();
+	on_dblclick: function(e) {
+		if (this.element_data.type == 'content_item') {
+			this.edit_content_item();
+		} else if (this.element_data.type == 'page') {
+			this.edit_page();
+		}
+		else{
+			this.edit_item();
+		}
 		return false;
 	},
 
@@ -2208,25 +2237,33 @@ Fiber.FiberItem = Class.extend({
 				)
 			);
 
+			if (this.element_data.page_content_item_id) {
+				contextmenu.append(
+					$('<li><a href="#">' + gettext('Remove from page') + '</a></li>').click(
+						$.proxy(this.remove_from_page, this)
+					)
+				);
+				if (this.element_data.used_on_pages && this.element_data.used_on_pages.length > 1) {
+					var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
+					$(this.element_data.used_on_pages).each(function (index, value) {
+						context_submenu_used_on_pages.append(
+							$('<li><a href="#">' + value.title + '</a></li>').click(function () {
+								location.href = value.url;
+							})
+						);
+					});
+
+					contextmenu.append(
+						$('<li><a href="#">' + gettext('Used on pages') + '</a></li>').prepend(context_submenu_used_on_pages)
+					);
+				}
+			}
+		} else {
 			contextmenu.append(
-				$('<li><a href="#">'+gettext('Remove from page')+'</a></li>').click(
-					$.proxy(this.remove_from_page, this)
+				$('<li><a href="#">'+gettext('Edit')+'</a></li>').click(
+					$.proxy(this.edit_item, this)
 				)
 			);
-			if (this.element_data.used_on_pages && this.element_data.used_on_pages.length > 1) {
-				var context_submenu_used_on_pages = $('<ul class="ui-context-menu"></ul>');
-				$(this.element_data.used_on_pages).each(function(index, value) {
-					context_submenu_used_on_pages.append(
-						$('<li><a href="#">'+value.title+'</a></li>').click(function() {
-							location.href = value.url;
-						})
-					);
-				});
-
-				contextmenu.append(
-					$('<li><a href="#">'+gettext('Used on pages')+'</a></li>').prepend(context_submenu_used_on_pages)
-				);
-			}
 		}
 
 		contextmenu.flyoutmenu().removeClass('ui-corner-all');
@@ -2250,21 +2287,29 @@ Fiber.FiberItem = Class.extend({
 		});
 	},
 
+	edit_item: function () {
+		// Edit a "unknown" item, just go to the configured url.
+		if (this.element_data.url) {
+			var win = window.open(this.element_data.url, '_blank');
+			win.focus();
+		}
+	},
+
 	// TODO: move to page specific class (edit)
 	edit_page: function() {
-		adminPage.hide_admin_elements();
-
-		var changePageFormDialog = new ChangePageFormDialog({
-			url: this.element_data.url,
-			page_id: this.element_data.id
-		});
+		if (this.element_data.url) {
+			adminPage.hide_admin_elements();
+			new ChangePageFormDialog({
+				url: this.element_data.url,
+				page_id: this.element_data.id
+			});
+		}
 	},
 
 	// TODO: move to content item specific class (edit)
 	edit_content_item: function() {
 		if (this.element_data.url) {
 			adminPage.hide_admin_elements();
-
 			new ChangeContentItemFormDialog({
 				url: this.element_data.url
 			});

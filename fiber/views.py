@@ -12,32 +12,27 @@ class FiberTemplateView(FiberPageMixin, TemplateView):
         return self.request.path_info
 
     def get_template_names(self):
-        if self.get_fiber_page() and self.get_fiber_page().template_name not in [None, '']:
+        if self.get_fiber_page() and self.get_fiber_page().template_name:
             return self.get_fiber_page().template_name
         else:
             return DEFAULT_TEMPLATE
 
     def render_to_response(self, *args, **kwargs):
-        if self.get_fiber_page() == None:
-            """
-            Take care of Django's CommonMiddleware redirect if the request URL doesn't end in a slash, and APPEND_SLASH=True
-            https://docs.djangoproject.com/en/dev/ref/settings/#append-slash
-            """
+        fiber_page = self.get_fiber_page()
+        if fiber_page is None:
             url = self.get_fiber_page_url()
-
+            # Redirect if the request URL doesn't end in a slash, and APPEND_SLASH=True (https://docs.djangoproject.com/en/dev/ref/settings/#append-slash)
             if not url.endswith('/') and settings.APPEND_SLASH:
                 return HttpResponsePermanentRedirect('%s/' % url)
             else:
                 raise Http404
         else:
-            """
-            Block access to pages that the current user isn't supposed to see.
-            """
-            if not self.get_fiber_page().is_public_for_user(self.request.user):
+            # Block access to pages the current user isn't supposed to see
+            if not fiber_page.is_public_for_user(self.request.user):
                 raise Http404
 
-            if self.get_fiber_page().redirect_page and self.get_fiber_page().redirect_page != self.get_fiber_page():  # prevent redirecting to itself
-                return HttpResponsePermanentRedirect(self.get_fiber_page().redirect_page.get_absolute_url())
+            if fiber_page.redirect_page and fiber_page.redirect_page != fiber_page:  # prevent redirecting to itself
+                return HttpResponsePermanentRedirect(fiber_page.redirect_page.get_absolute_url())
 
         return super(FiberTemplateView, self).render_to_response(*args, **kwargs)
 

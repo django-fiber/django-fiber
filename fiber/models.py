@@ -16,7 +16,8 @@ from .app_settings import (
     IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA,
     PAGE_MANAGER, CONTENT_ITEM_MANAGER, LIST_THUMBNAIL_OPTIONS
 )
-from .utils.class_loader import load_class
+from .utils.html import htmlentitydecode
+from .utils.import_util import load_class
 from .utils.fields import FiberURLField, FiberMarkupField, FiberHTMLField
 from .utils.images import get_thumbnail, get_thumbnail_url, ThumbnailException
 from .utils.json import JSONField
@@ -44,7 +45,7 @@ class ContentItem(models.Model):
         if self.name:
             return self.name
         else:
-            contents = ' '.join(strip_tags(self.content_html).strip().split())
+            contents = u' '.join(htmlentitydecode(strip_tags(self.content_html)).strip().split())
             if len(contents) > 50:
                 contents = contents[:50] + '...'
             return contents or ugettext('[ EMPTY ]')  # TODO: find out why ugettext_lazy doesn't work here
@@ -72,7 +73,7 @@ class ContentItem(models.Model):
         if self.used_on_pages_data is None:
             self.set_used_on_pages_json()
 
-        return json.dumps(self.used_on_pages_data)
+        return json.dumps(self.used_on_pages_data, sort_keys=True)
 
 
 class Page(MPTTModel):
