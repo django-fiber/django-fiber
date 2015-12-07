@@ -1,6 +1,7 @@
 import json
 import operator
 from copy import copy
+from functools import reduce
 
 from django import template
 from django.contrib.auth.models import AnonymousUser
