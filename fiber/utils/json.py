@@ -29,7 +29,7 @@ class JSONFormField(forms.CharField):
             return None
         try:
             return json.loads(value)
-        except Exception, exception:
+        except Exception as exception:
             raise forms.ValidationError(u'JSON decode error: %s' % (unicode(exception), ))
 
 
