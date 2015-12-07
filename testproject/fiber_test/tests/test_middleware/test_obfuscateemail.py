@@ -1,15 +1,10 @@
 from HTMLParser import HTMLParser
-from django.http import HttpResponse
+from unittest import skipUnless
+
+from django.http import HttpResponse, StreamingHttpResponse
 from django.test import SimpleTestCase
+
 from fiber.middleware import ObfuscateEmailAddressMiddleware
-try:
-    from django.http import StreamingHttpResponse
-except ImportError:  # Django < 1.6
-    StreamingHttpResponse = False
-try:
-    from unittest import skipUnless
-except ImportError:  # Python < 2.7
-    from django.utils.unittest import skipUnless
 
 
 class TestEmailAddressObfuscation(SimpleTestCase):

@@ -1,20 +1,14 @@
 import re
-from django.contrib.auth.models import User, AnonymousUser
-from django.http import HttpResponse
-from django.test import TestCase, RequestFactory
+from unittest import skipUnless
+
+from django.contrib.auth.models import AnonymousUser, User
+from django.http import HttpResponse, StreamingHttpResponse
+from django.test import RequestFactory, TestCase
 
 import fiber.middleware
-from fiber.middleware import AdminPageMiddleware
-from fiber.models import Page, ContentItem, PageContentItem
 
-try:
-    from django.http import StreamingHttpResponse
-except ImportError:  # Django < 1.6
-    StreamingHttpResponse = False
-try:
-    from unittest import skipUnless
-except ImportError:  # Python < 2.7
-    from django.utils.unittest import skipUnless
+from fiber.middleware import AdminPageMiddleware
+from fiber.models import ContentItem, Page, PageContentItem
 
 middleware = AdminPageMiddleware()
 
