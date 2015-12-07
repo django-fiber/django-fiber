@@ -2,6 +2,7 @@ from unittest import skipUnless
 
 from django.http import HttpResponse, StreamingHttpResponse
 from django.test import SimpleTestCase
+from django.utils.encoding import smart_text
 from django.utils.six.moves.html_parser import HTMLParser
 
 from fiber.middleware import ObfuscateEmailAddressMiddleware
@@ -15,13 +16,17 @@ class TestEmailAddressObfuscation(SimpleTestCase):
     def test_is_obfuscated(self):
         """Check if the given content is really not present in the response"""
         content = 'example@example.com'
-        self.assertNotEqual(self.middleware.process_response(None, HttpResponse(content)).content, content)
+        self.assertNotEqual(
+            smart_text(self.middleware.process_response(None, HttpResponse(content)).content),
+            content)
 
     def test_is_html_escaped(self):
         """Unescape the escaped response to see if it's the original content"""
         h = HTMLParser()
         content = 'example@example.com'
-        self.assertEqual(h.unescape(self.middleware.process_response(None, HttpResponse(content)).content), content)
+        self.assertEqual(h.unescape(
+            smart_text(self.middleware.process_response(None, HttpResponse(content)).content)),
+            content)
 
 
 class TestEmailAddressReplacement(SimpleTestCase):
@@ -33,7 +38,9 @@ class TestEmailAddressReplacement(SimpleTestCase):
 
     def assertResponse(self, content, expected):
         """Little helper assertion to dry things up"""
-        self.assertEqual(self.middleware.process_response(None, HttpResponse(content)).content, expected)
+        self.assertEqual(
+            smart_text(self.middleware.process_response(None, HttpResponse(content)).content),
+            expected)
 
     def test_simple(self):
         email = 'niceandsimple@example.com'
@@ -90,7 +97,8 @@ class TestNonReplacement(SimpleTestCase):
     def test_skips_non_html(self):
         content = 'Contact me at: spam@example.com'
         response = HttpResponse(content, content_type='text/plain')
-        self.assertEqual(self.middleware.process_response(None, response).content, content)
+        self.assertEqual(
+            smart_text(self.middleware.process_response(None, response).content), content)
 
     @skipUnless(StreamingHttpResponse, 'StreamingHttpResponse is not available')
     def test_skips_streaming(self):
@@ -101,4 +109,5 @@ class TestNonReplacement(SimpleTestCase):
     def test_twitter_username(self):
         content = 'On twitter I am known as @example'
         response = HttpResponse(content)
-        self.assertEqual(self.middleware.process_response(None, response).content, content)
+        self.assertEqual(
+            smart_text(self.middleware.process_response(None, response).content), content)
