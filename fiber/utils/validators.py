@@ -2,7 +2,7 @@ import re
 
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, URLValidator
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
 
 from .urls import get_named_url_from_quoted_url, is_quoted_url
@@ -20,7 +20,7 @@ class FiberURLValidator(RegexValidator):
         """
         Validates that the input matches the regular expression.
         """
-        url = smart_unicode(value)
+        url = smart_text(value)
         # check if it starts with http(s):// | ftp(s)://
         # Django's validator only works with full urls that include a protocol.
         if self.protocol_regex.search(url):
