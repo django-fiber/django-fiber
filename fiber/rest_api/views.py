@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.db.models.deletion import ProtectedError
+from django.utils import six
 from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
 
@@ -37,7 +38,7 @@ class PlainText(renderers.BaseRenderer):
     format = 'txt'
 
     def render(self, data, media_type=None, renderer_context=None):
-        if isinstance(data, basestring):
+        if isinstance(data, six.string_types):
             return data
         return smart_text(data)
 

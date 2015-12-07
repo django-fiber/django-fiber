@@ -3,6 +3,7 @@ import json
 
 from django import forms
 from django.db import models
+from django.utils import six
 from django.utils.encoding import force_text
 
 from .widgets import JSONWidget
@@ -60,7 +61,7 @@ class JSONField(models.TextField):
         if value is None:
             return None
         try:
-            if isinstance(value, basestring):
+            if isinstance(value, six.string_types):
                 return json.loads(value)
         except ValueError:
             pass
@@ -69,7 +70,7 @@ class JSONField(models.TextField):
     def _get_json_value(self, value):
         if value is None:
             return ''
-        elif isinstance(value, basestring):
+        elif isinstance(value, six.string_types):
             return value
         else:
             return json.dumps(value)
