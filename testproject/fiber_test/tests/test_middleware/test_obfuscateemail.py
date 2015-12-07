@@ -1,8 +1,8 @@
-from HTMLParser import HTMLParser
 from unittest import skipUnless
 
 from django.http import HttpResponse, StreamingHttpResponse
 from django.test import SimpleTestCase
+from django.utils.six.moves.html_parser import HTMLParser
 
 from fiber.middleware import ObfuscateEmailAddressMiddleware
 
