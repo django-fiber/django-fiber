@@ -42,4 +42,4 @@ if 'fiber.middleware.PageFallbackMiddleware' in settings.MIDDLEWARE_CLASSES:
         "See README.rst for new implementation details.\n"
         "It basically boils down to this:\n"
         "remove 'fiber.middleware.PageFallbackMiddleware' from settings.MIDDLEWARE_CLASSES, and\n"
-        "add (r'', 'fiber.views.page') to the end of your urls.py")
+        "add url(r'', fiber.views.page) to the end of your urls.py")

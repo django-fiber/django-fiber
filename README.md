@@ -82,14 +82,14 @@ These dependencies are automatically installed:
 
     from django.conf import settings
 
-    urlpatterns = patterns('',
+    urlpatterns = [
         ...
-        (r'^api/v2/', include('fiber.rest_api.urls')),
-        (r'^admin/fiber/', include('fiber.admin_urls')),
-        (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', {'packages': ('fiber',),}),
+        url(r'^api/v2/', include('fiber.rest_api.urls')),
+        url(r'^admin/fiber/', include('fiber.admin_urls')),
+        url(r'^jsi18n/$', django.views.i18n.javascript_catalog, {'packages': ('fiber',),}),
         ...
-        (r'', 'fiber.views.page'),
-    )
+        url(r'', fiber.views.page),
+    ]
 
 
 ## Post-installation
