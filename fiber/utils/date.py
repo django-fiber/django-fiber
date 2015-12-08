@@ -14,7 +14,7 @@ def friendly_datetime(date_time):
     if isinstance(date_time, int):
         try:
             date_time = datetime.fromtimestamp(date_time)
-        except ValueError:
+        except (ValueError, OSError):
             pass
     if isinstance(date_time, datetime):
         if settings.USE_TZ and timezone.is_naive(date_time):
@@ -37,11 +37,11 @@ def friendly_datetime(date_time):
         if seconds_diff < 120:
             return _('a minute ago')
         if seconds_diff < 3600:
-            return _('%s minutes ago') % (seconds_diff / 60)
+            return _('%s minutes ago') % int(seconds_diff / 60)
         if seconds_diff < 7200:
             return _('an hour ago')
         if seconds_diff < 86400:
-            return _('%s hours ago') % (seconds_diff / 3600)
+            return _('%s hours ago') % int(seconds_diff / 3600)
     if days_diff == 1:
         return _('yesterday')
     if days_diff < 7:
@@ -49,14 +49,14 @@ def friendly_datetime(date_time):
     if days_diff < 14:
         return _('a week ago')
     if days_diff < 31:
-        return _('%s weeks ago') % (days_diff / 7)
+        return _('%s weeks ago') % int(days_diff / 7)
     if days_diff < 365:
-        months_diff = days_diff / 30
+        months_diff = int(days_diff / 30)
         if months_diff == 1:
             return _('a month ago')
         else:
-            return _('%s months ago') % (days_diff / 30)
-    years_diff = days_diff / 365
+            return _('%s months ago') % int(days_diff / 30)
+    years_diff = int(days_diff / 365)
     if years_diff == 1:
         return _('a year ago')
-    return _('%s years ago') % (days_diff / 365)
+    return _('%s years ago') % int(days_diff / 365)
