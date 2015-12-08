@@ -1,20 +1,20 @@
 from django.conf.urls import url
-from django.views.generic import View
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.test import TestCase, override_settings
+from django.views.generic import View
 
-from fiber.utils.validators import FiberURLValidator
 from fiber.models import Page
+from fiber.utils.validators import FiberURLValidator
 
 
 class TestView(View):
     pass
 
 
+@override_settings(ROOT_URLCONF=[
+    url(r'^test_url/$', TestView.as_view(), name='another_named_url'),
+])
 class TestUtilsURLValidator(TestCase):
-    urls = [
-        url(r'^test_url/$', TestView.as_view(), name='another_named_url'),
-    ]  # use this url conf for our tests
     validator = FiberURLValidator()
 
     def test_passes_normal(self):
