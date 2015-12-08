@@ -35,7 +35,7 @@ class TestAtFiberLoginRedirect(TestCase):
     def test_response_redirect_querystring_with_fiber(self):
         """Middleware strips @fiber from querystring"""
         response = self.client.get('/empty/?%40fiber')
-        self.assertRedirects(response, '/empty/')
+        self.assertRedirects(response, '/empty/?')
 
     def test_response_redirect_querystring_and_at_fiber(self):
         """Middleware strips @fiber from querystring, rest of qs stays intact"""
