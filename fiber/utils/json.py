@@ -36,8 +36,6 @@ class JSONFormField(forms.CharField):
 
 
 class JSONField(models.TextField):
-    __metaclass__ = models.SubfieldBase
-
     def __init__(self, *args, **kwargs):
 
         if 'schema' in kwargs:
@@ -84,6 +82,9 @@ class JSONField(models.TextField):
         if isinstance(value, dict):
             value = json.dumps(value)
         return super(JSONField, self).get_db_prep_save(value, *args, **kwargs)
+
+    def from_db_value(self, value, expression, connection, context):
+        return self.to_python(value)
 
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)
