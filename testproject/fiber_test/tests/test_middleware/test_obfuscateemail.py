@@ -2,7 +2,7 @@ from unittest import skipUnless
 
 from django.http import HttpResponse, StreamingHttpResponse
 from django.test import SimpleTestCase
-from django.utils.encoding import smart_text
+from django.utils.encoding import force_text
 from django.utils.six.moves.html_parser import HTMLParser
 
 from fiber.middleware import ObfuscateEmailAddressMiddleware
@@ -17,7 +17,7 @@ class TestEmailAddressObfuscation(SimpleTestCase):
         """Check if the given content is really not present in the response"""
         content = 'example@example.com'
         self.assertNotEqual(
-            smart_text(self.middleware.process_response(None, HttpResponse(content)).content),
+            force_text(self.middleware.process_response(None, HttpResponse(content)).content),
             content)
 
     def test_is_html_escaped(self):
@@ -25,7 +25,7 @@ class TestEmailAddressObfuscation(SimpleTestCase):
         h = HTMLParser()
         content = 'example@example.com'
         self.assertEqual(h.unescape(
-            smart_text(self.middleware.process_response(None, HttpResponse(content)).content)),
+            force_text(self.middleware.process_response(None, HttpResponse(content)).content)),
             content)
 
 
@@ -39,7 +39,7 @@ class TestEmailAddressReplacement(SimpleTestCase):
     def assertResponse(self, content, expected):
         """Little helper assertion to dry things up"""
         self.assertEqual(
-            smart_text(self.middleware.process_response(None, HttpResponse(content)).content),
+            force_text(self.middleware.process_response(None, HttpResponse(content)).content),
             expected)
 
     def test_simple(self):
@@ -98,16 +98,16 @@ class TestNonReplacement(SimpleTestCase):
         content = 'Contact me at: spam@example.com'
         response = HttpResponse(content, content_type='text/plain')
         self.assertEqual(
-            smart_text(self.middleware.process_response(None, response).content), content)
+            force_text(self.middleware.process_response(None, response).content), content)
 
     @skipUnless(StreamingHttpResponse, 'StreamingHttpResponse is not available')
     def test_skips_streaming(self):
         content = 'Contact me at: spam@example.com'
         response = StreamingHttpResponse(content)
-        self.assertEqual(''.join(self.middleware.process_response(None, response)), content)
+        self.assertEqual(''.join(force_text(s) for s in self.middleware.process_response(None, response)), content)
 
     def test_twitter_username(self):
         content = 'On twitter I am known as @example'
         response = HttpResponse(content)
         self.assertEqual(
-            smart_text(self.middleware.process_response(None, response).content), content)
+            force_text(self.middleware.process_response(None, response).content), content)
