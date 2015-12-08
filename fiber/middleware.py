@@ -133,13 +133,13 @@ class AdminPageMiddleware(object):
             'BACKEND_BASE_URL': reverse('admin:index'),
             'FIBER_LOGIN_URL': reverse('fiber_login'),
         }
-        return loader.render_to_string('fiber/header.html', context, RequestContext(request))
+        return loader.render_to_string('fiber/header.html', context, request=request)
 
     def get_body_html(self, request):
         context = {
             'logout_url': self.get_logout_url(request)
         }
-        return loader.render_to_string('fiber/admin.html', context, RequestContext(request))
+        return loader.render_to_string('fiber/admin.html', context, request=request)
 
     def get_logout_url(self, request):
         if request.META['QUERY_STRING']:
