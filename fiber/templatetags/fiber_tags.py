@@ -8,13 +8,13 @@ from django.contrib.auth.models import AnonymousUser
 from django.template import TemplateSyntaxError
 from django.utils import six
 from django.utils.html import escape
+from django.utils.safestring import mark_safe
 
 import fiber
-from fiber.models import Page, ContentItem
-from fiber.utils.urls import get_admin_change_url
-from fiber.app_settings import PERMISSION_CLASS, AUTO_CREATE_CONTENT_ITEMS
+from fiber.app_settings import AUTO_CREATE_CONTENT_ITEMS, PERMISSION_CLASS
+from fiber.models import ContentItem, Page
 from fiber.utils.import_util import load_class
-
+from fiber.utils.urls import get_admin_change_url
 
 PERMISSIONS = load_class(PERMISSION_CLASS)
 
@@ -251,7 +251,7 @@ def editable_attrs(context, obj):
             'url': change_url,
             'can_edit': PERMISSIONS.can_edit(user, obj)
         }
-        return ' data-fiber-data="%s"' % escape(json.dumps(data, sort_keys=True))
+        return mark_safe(' data-fiber-data="%s"' % escape(json.dumps(data, sort_keys=True)))
     return ''
 
 
