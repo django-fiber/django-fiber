@@ -25,7 +25,7 @@ class TestImportUtil(SimpleTestCase):
         """Fail trying to import a missing module"""
         with self.assertRaises(ImproperlyConfigured) as cm:
             import_element('fiber.missing_module.missing_attribute')
-        self.assertEqual(str(cm.exception), 'Error importing fiber.missing_module.missing_attribute: No module named missing_module')
+        self.assertRegexpMatches(str(cm.exception), r'Error importing fiber.missing_module.missing_attribute: No module named .+')
 
     def test_import_invalid_attribute_raises_improperly_configured(self):
         """Fail trying to import a missing attribute"""
