@@ -1,10 +1,10 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from . import views
 
 
-urlpatterns = patterns('',
-    (r'^$', views.api_root),
+urlpatterns = [
+    url(r'^$', views.api_root),
     url(r'^pages/$', views.PageList.as_view(), name='page-list'),
     url(r'^pages/(?P<pk>[^/]+)/$', views.PageDetail.as_view(), name='page-detail'),
     url(r'^pages/(?P<pk>[^/]+)/move_page/$', views.MovePageView.as_view(), name='page-move'),
@@ -19,4 +19,4 @@ urlpatterns = patterns('',
     url(r'^images/(?P<pk>[^/]+)/$', views.ImageDetail.as_view(), name='image-detail'),
     url(r'^files/$', views.FileList.as_view(), name='file-list'),
     url(r'^files/(?P<pk>[^/]+)/$', views.FileDetail.as_view(), name='file-detail'),
-)
+]

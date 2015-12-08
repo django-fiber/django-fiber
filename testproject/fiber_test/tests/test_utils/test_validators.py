@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.views.generic import View
 from django.core.exceptions import ValidationError
 from django.test import TestCase
@@ -12,9 +12,9 @@ class TestView(View):
 
 
 class TestUtilsURLValidator(TestCase):
-    urls = patterns('',
+    urls = [
         url(r'^test_url/$', TestView.as_view(), name='another_named_url'),
-    )  # use this url conf for our tests
+    ]  # use this url conf for our tests
     validator = FiberURLValidator()
 
     def test_passes_normal(self):
