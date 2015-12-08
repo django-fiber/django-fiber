@@ -55,9 +55,19 @@ These dependencies are automatically installed:
         'fiber.middleware.AdminPageMiddleware',
     )
 
-    TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
-        'django.core.context_processors.request',
-    )
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    ...
+                    'django.template.context_processors.request',
+                ]
+            }
+        },
+    ]
+
 
     INSTALLED_APPS = (
         ...
