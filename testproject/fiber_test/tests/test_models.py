@@ -1,4 +1,6 @@
 import json
+
+from django.core import urlresolvers
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.utils.encoding import force_text
@@ -326,12 +328,16 @@ class TestContentItem(TestCase):
         self.assertEqual(force_text(ContentItem(content_html='abcdefghij' * 6)), 'abcdefghijabcdefghijabcdefghijabcdefghijabcdefghij...')
 
     def test_get_add_url(self):
-        self.assertEqual(ContentItem.get_add_url(), '/admin/fiber/fiber_admin/fiber/contentitem/add/')
+        self.assertEqual(
+            ContentItem.get_add_url(),
+            urlresolvers.reverse('fiber_admin:fiber_contentitem_add'))
 
     def test_get_change_url(self):
         content_item1 = ContentItem.objects.create()
 
-        self.assertEqual(content_item1.get_change_url(), '/admin/fiber/fiber_admin/fiber/contentitem/%d/' % content_item1.id)
+        self.assertEqual(
+            content_item1.get_change_url(),
+            urlresolvers.reverse('fiber_admin:fiber_contentitem_change', args=(content_item1.id,)))
 
     def test_used_on_pages_json(self):
         # setup
