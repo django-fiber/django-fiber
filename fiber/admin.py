@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import admin, messages
-from django.contrib.admin.util import model_ngettext
+from django.contrib.admin.utils import model_ngettext
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.deletion import ProtectedError
 from django.core.exceptions import PermissionDenied
