@@ -6,7 +6,6 @@
 
 
 [![Travis build image][travis-build-image]][travis-url]
-[![PyPi download count image][pypi-image]][pypi-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
 
 # Django Fiber
