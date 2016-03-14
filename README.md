@@ -1,9 +1,6 @@
 [travis-url]: http://travis-ci.org/#!/ridethepony/django-fiber
 [travis-build-image]: https://secure.travis-ci.org/ridethepony/django-fiber.png?branch=dev
 
-[pypi-url]: https://pypi.python.org/pypi/django-fiber/
-[pypi-image]: https://pypip.in/d/django-fiber/badge.png
-
 [coveralls-url]: https://coveralls.io/r/ridethepony/django-fiber
 [coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=dev
 
