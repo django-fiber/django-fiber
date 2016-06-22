@@ -111,7 +111,7 @@ class ImageAdminWithPreview(ImageAdmin):
 
 
 class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
-    list_display = ('__srt__', 'unused')
+    list_display = ('__str__', 'unused')
     form = forms.ContentItemAdminForm
     fieldsets = (
         (None, {'fields': ('name', get_editor_field_name('content_html'),)}),
