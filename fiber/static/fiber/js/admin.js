@@ -1169,13 +1169,13 @@ var AddButton = Class.extend({ // TODO: subclass to AddPageButton / AddContentIt
 Fiber.move_page_content_item = function(page_content_item_url, before_page_content_item_id, block_name) {
 	$.ajax({
 		url: page_content_item_url,
-		type: 'POST',
+		type: 'PUT',
 		dataType: 'json',
 
 		data: {
 			before_page_content_item_id: before_page_content_item_id,
 			block_name: block_name,
-			_method: 'PUT',
+			// _method: 'PUT',
 		},
 		success: reloadPage
 	});
@@ -1296,7 +1296,7 @@ var AddContentItemFormDialog = ChangeContentItemFormDialog.extend({
 
 		this.after_action_success = $.proxy(function(responseText, statusText, xhr, $form) {
 			// find id of added content item
-			var added_content_item_id = xhr.responseXML.URL.replace(/\/$/,'').split('/').pop();
+			var added_content_item_id = xhr.responseXML.URL.replace(/\/$/,'').split('/').slice(-2)[0];
 
 			if (added_content_item_id) {
 				this.add_content_item(added_content_item_id);
