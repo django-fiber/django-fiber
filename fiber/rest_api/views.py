@@ -79,6 +79,9 @@ class PageDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
+    def get_queryset(self):
+        return Page.objects.filter()
+
 
 class MovePageView(views.APIView):
     serializer_class = MovePageSerializer
