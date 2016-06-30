@@ -169,18 +169,18 @@ class FileList(IEUploadFixMixin, FiberListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         qs = super(FileList, self).get_queryset(*args, **kwargs)
         qs = PERMISSIONS.filter_files(self.request.user, qs)
-        search = self.request.QUERY_PARAMS.get('search')
+        search = self.request.query_params.get('search')
 
         if search:
             qs = qs.filter(file__icontains=search)
 
-        order_by = self.request.QUERY_PARAMS.get('order_by', 'updated')
+        order_by = self.request.query_params.get('order_by', 'updated')
         self.check_fields(order_by)
 
         if order_by == 'filename':
             order_by = 'file'
 
-        sort_order = self.request.QUERY_PARAMS.get('sortorder', 'asc')
+        sort_order = self.request.query_params.get('sortorder', 'asc')
 
         qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
 
@@ -231,14 +231,14 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
             return Response("Can not order by the passed value.", status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self, *args, **kwargs):
-        qs = super(ImageList, self).get_queryset(*args, **kwargs)
+        qs = Image.objects.filter()
         qs = PERMISSIONS.filter_images(self.request.user, qs)
-        search = self.request.QUERY_PARAMS.get('search')
+        search = self.request.query_params.get('search')
         if search:
             # TODO: image_icontains searches in the entire path, it should only search in the filename (use iregex for this?)
             qs = qs.filter(Q(image__icontains=search) | Q(title__icontains=search) | Q(width__icontains=search) | Q(height__icontains=search))
 
-        order_by = self.request.QUERY_PARAMS.get('order_by', 'updated')
+        order_by = self.request.query_params.get('order_by', 'updated')
         self.check_fields(order_by)
 
         if order_by == 'filename':
@@ -246,7 +246,7 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
         elif order_by == 'size':
             order_by = 'width'
 
-        sort_order = self.request.QUERY_PARAMS.get('sortorder', 'asc')
+        sort_order = self.request.query_params.get('sortorder', 'asc')
 
         qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
 

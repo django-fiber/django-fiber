@@ -98,6 +98,8 @@ class Page(MPTTModel):
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
 
+    image = models.ImageField(_('image'), upload_to=IMAGES_DIR, max_length=255, blank=True, default='')
+
     tree = TreeManager()
     objects = load_class(PAGE_MANAGER)
 
@@ -228,6 +230,11 @@ class Page(MPTTModel):
             return True
         else:
             return False
+
+    def get_image(self):
+        if self.image:
+            return self.image
+        return 'noimage.png'
 
 
 class PageContentItem(models.Model):

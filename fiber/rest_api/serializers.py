@@ -47,10 +47,10 @@ class ContentItemSerializer(serializers.ModelSerializer):
 
 
 class FileSerializer(serializers.HyperlinkedModelSerializer):
-    file_url = serializers.Field(source='file.url')
-    filename = serializers.Field(source='get_filename')
-    can_edit = CanEditField()
-    updated = UpdatedField()
+    file_url = serializers.ReadOnlyField(source='file.url')
+    filename = serializers.ReadOnlyField(source='get_filename')
+    #can_edit = CanEditField(read_only=True)
+    #updated = UpdatedField()
 
     class Meta:
         model = File
@@ -58,16 +58,16 @@ class FileSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
-    image_url = serializers.Field(source='image.url')
-    thumbnail_url = serializers.Field(source='thumbnail_url')
-    filename = serializers.Field(source='get_filename')
-    size = serializers.Field(source='get_size')
-    can_edit = CanEditField()
-    updated = UpdatedField()
+    image_url = serializers.ReadOnlyField(source='image.url')
+    thumbnail_url = serializers.ReadOnlyField()
+    filename = serializers.ReadOnlyField(source='get_filename')
+    size = serializers.ReadOnlyField(source='get_size')
+    #can_edit = CanEditField(default=1, read_only=True)
+    #updated = UpdatedField(required=False)
 
     class Meta:
         model = Image
-        read_only_fields = ('created', )
+        read_only_fields = ('created', 'image_url', 'filename', 'size', 'can_edit', 'thumbnail_url',  )
 
 # FIXME: This used to inherit from rest_framework.pagination.BasePaginationSerializer, however
 # the way django-rest-framework handles pagination has changed. Figure out how to fix this.
