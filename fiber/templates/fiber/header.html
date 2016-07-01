@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load get_static_prefix from static %}
 
-<script src="{% url 'fiber_i18n' %}" type="text/javascript"></script>
+<script src="{% url 'django.views.i18n.javascript_catalog' %}" type="text/javascript"></script>
 
 <script type="text/javascript">
 	var LANGUAGE_CODE = '{{ LANGUAGE_CODE }}'
