@@ -22,7 +22,7 @@ class FiberTextarea(forms.Textarea):
 
 class FiberCombobox(forms.Select):
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, choices=()):
         attrs['class'] = 'fiber-combobox'
         return super(FiberCombobox, self).render(name, value, attrs)
 

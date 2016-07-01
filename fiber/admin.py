@@ -118,7 +118,7 @@ class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
         (_('Advanced options'), {'classes': ('collapse',), 'fields': ('template_name', 'protected',)}),
         (_('Metadata'), {'classes': ('collapse',), 'fields': ('metadata',)}),
     )
-    date_hierarchy = 'updated'
+    #date_hierarchy = 'updated'
     search_fields = ('name', get_editor_field_name('content_html'))
 
     def unused(self, obj):
@@ -137,7 +137,7 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
     form = forms.PageForm
     fieldsets = (
-        (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name')}),
+        (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name', 'image',)}),
         (_('Advanced options'), {'classes': ('collapse',), 'fields': ('meta_description', 'mark_current_regexes', 'show_in_menu', 'is_public', 'protected',)}),
         (_('Metadata'), {'classes': ('collapse',), 'fields': ('metadata',)}),
     )

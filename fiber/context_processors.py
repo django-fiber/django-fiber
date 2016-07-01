@@ -1,7 +1,8 @@
 import warnings
 from fiber.mixins import FiberPageMixin
 
-warnings.warn('NOTE: the page_info context processor is deprecated and will be removed in the near future.', DeprecationWarning)
+warnings.warn('NOTE: the page_info context processor is deprecated and will be removed in the near future.',
+              DeprecationWarning)
 
 import re
 

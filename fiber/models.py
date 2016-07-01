@@ -33,7 +33,8 @@ class ContentItem(models.Model):
     content_markup = FiberMarkupField(verbose_name=_('Content'))
     content_html = FiberHTMLField(verbose_name=_('Content'))
     protected = models.BooleanField(_('protected'), default=False)
-    metadata = JSONField(_('metadata'), blank=True, null=True, schema=METADATA_CONTENT_SCHEMA, prefill_from='fiber.models.ContentItem')
+    metadata = JSONField(_('metadata'), blank=True, null=True, schema=METADATA_CONTENT_SCHEMA,
+                         prefill_from='fiber.models.ContentItem')
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
     used_on_pages_data = JSONField(_('used on pages'), blank=True, null=True)
 
@@ -97,6 +98,8 @@ class Page(MPTTModel):
     protected = models.BooleanField(_('protected'), default=False)
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
+
+    image = models.ImageField(_('image'), upload_to=IMAGES_DIR, max_length=255, blank=True, default='')
 
     tree = TreeManager()
     objects = load_class(PAGE_MANAGER)
@@ -228,6 +231,11 @@ class Page(MPTTModel):
             return True
         else:
             return False
+
+    def get_image(self):
+        if self.image:
+            return self.image
+        return 'noimage.png'
 
 
 class PageContentItem(models.Model):

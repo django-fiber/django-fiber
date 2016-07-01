@@ -16,7 +16,6 @@ def fiber_login(request):
     password = request.POST['password']
     user = authenticate(username=username, password=password)
 
-    result = {}
     if user is not None:
         if user.is_active:
             login(request, user)
@@ -29,12 +28,12 @@ def fiber_login(request):
                 'message': _('This account is inactive.'),
             }
     else:
-            result = {
+        result = {
                 'status': 'failed',
                 'message': _('Please enter a correct username and password. Note that both fields are case-sensitive.'),
             }
-    json_reponse = json.dumps(result)
-    return HttpResponse(json_reponse, content_type='application/json')
+    json_response = json.dumps(result)
+    return HttpResponse(json_response, content_type='application/json')
 
 
 @staff_member_required

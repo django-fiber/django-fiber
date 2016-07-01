@@ -128,8 +128,8 @@ class MovePageContentItemView(views.APIView):
         if not PERMISSIONS.can_edit(request.user, Page.objects.get(page_content_items__id=pk)):
             return _403_FORBIDDEN_RESPONSE
         page_content_item = PageContentItem.objects.get(id=pk)
-        before_page_content_item_id = request.DATA.get('before_page_content_item_id')
-        block_name = request.DATA.get('block_name')
+        before_page_content_item_id = request.data.get('before_page_content_item_id')
+        block_name = request.data.get('block_name')
         page_content_item.move(before_page_content_item_id, block_name)
         return Response('PageContentItem moved successfully.')
 
@@ -228,7 +228,7 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
             return Response("Can not order by the passed value.", status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self, *args, **kwargs):
-        qs = super(ImageList, self).get_queryset(*args, **kwargs)
+        qs = Image.objects.filter()
         qs = PERMISSIONS.filter_images(self.request.user, qs)
         search = self.request.QUERY_PARAMS.get('search')
         if search:

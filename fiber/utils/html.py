@@ -1,9 +1,9 @@
 import re
 from django.utils.six import unichr
-from django.utils.six.moves import html_entities
+import htmlentitydefs
 
 
-name2codepoint = html_entities.name2codepoint.copy()
+name2codepoint = htmlentitydefs.name2codepoint.copy()
 name2codepoint['apos'] = ord("'")
 
 _ENTITY_REF = re.compile(r'&(?:#(\d+)|(?:#x([\da-fA-F]+))|([a-zA-Z]+));')

@@ -1,17 +1,18 @@
-from textile import Textile
+import textile
 
 
 """
 Monkeypatch Textile - Disable glyphs substitution.
 """
+
 def custom_glyphs(self, text):
     return text
 
-Textile.glyphs = custom_glyphs
+textile.Textile().glyphs = custom_glyphs
 
 
 def textile_renderer(text):
-    rendered_textile = Textile().textile(text)
+    rendered_textile = textile.textile(text)
     return rendered_textile
 
 EDITOR = {

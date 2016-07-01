@@ -28,8 +28,7 @@ def is_html(response):
 class AdminPageMiddleware(object):
     LOGIN_SESSION_KEY = 'show_fiber_login'
     body_re = re.compile(
-        r'<head>(?P<HEAD>.*)</head>(?P<AFTER_HEAD>.*)<body(?P<BODY_ATTRS>.*?)>(?P<BODY>.*)</body>',
-        re.DOTALL)
+        r'<head>(?P<HEAD>.*)</head>(?P<AFTER_HEAD>.*)<body(?P<BODY_ATTRS>.*?)>(?P<BODY>.*)</body>', re.DOTALL)
 
     def __init__(self):
         self.editor_settings = import_element(EDITOR)
