@@ -79,3 +79,7 @@ class FiberPaginationSerializer(serializers.Serializer):
     """
     total_pages = serializers.Field(source='paginator.num_pages')
     results_field = 'rows'
+
+
+class IdCounterSerializer(serializers.Serializer):
+    id = serializers.CharField(required=True)

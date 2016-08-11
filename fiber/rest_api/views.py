@@ -1,5 +1,7 @@
 from django.db.models import Q
 from django.db.models.deletion import ProtectedError
+from django.db import transaction
+from django.db.models import F
 from django.utils import six
 from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
@@ -18,7 +20,17 @@ from fiber.app_settings import API_RENDER_HTML, PERMISSION_CLASS
 from fiber.utils.import_util import load_class
 from fiber.permission_api import IsAllOrReadOnly
 
-from .serializers import PageSerializer, MovePageSerializer, PageContentItemSerializer, MovePageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer, FiberPaginationSerializer
+from .serializers import (
+    PageSerializer,
+    MovePageSerializer,
+    PageContentItemSerializer,
+    MovePageContentItemSerializer,
+    ContentItemSerializer,
+    FileSerializer,
+    ImageSerializer,
+    FiberPaginationSerializer,
+    IdCounterSerializer
+)
 
 PERMISSIONS = load_class(PERMISSION_CLASS)
 
@@ -321,3 +333,14 @@ class ContentItemGroups(views.APIView):
         Get content groups data which is suitable for jqtree.
         """
         return Response(ContentItem.objects.get_content_groups(request.user))
+
+
+class CalcUrlDRFView(views.APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = IdCounterSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            with transaction.atomic():
+                Page.objects.filter(id=serializer.data['id']).update(count_page=F('count_page') + 1)
+            return Response({'status': 'Ok'})
+        else:
+            return Response({'status': 'Error'}, status=status.HTTP_404_NOT_FOUND)
