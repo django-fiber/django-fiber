@@ -335,8 +335,8 @@ class ContentItemGroups(views.APIView):
         return Response(ContentItem.objects.get_content_groups(request.user))
 
 
-class CalcUrlDRFView(views.APIView):
-    def post(self, request, *args, **kwargs):
+class PageIncrementView(views.APIView):
+    def put(self, request, *args, **kwargs):
         serializer = IdCounterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             with transaction.atomic():
