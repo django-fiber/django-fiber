@@ -143,7 +143,7 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
     )
 
     inlines = (PageContentItemInline,)
-    list_display = ('title', 'view_on_site_link', 'url', 'redirect_page', 'get_absolute_url', 'action_links')
+    list_display = ('title', 'view_on_site_link', 'url', 'redirect_page', 'get_absolute_url', 'action_links', 'count_page')
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page__title')
 
