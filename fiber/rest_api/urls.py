@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.api_root),
-    url(r'^calc_url/$', views.CalcUrlDRFView.as_view(), name='Drf_api_view'),
+    url(r'^pages/(?P<pk>[^/]+)/increment/$', views.CalcUrlDRFView.as_view(), name='page-increment'),
     url(r'^pages/$', views.PageList.as_view(), name='page-list'),
     url(r'^pages/(?P<pk>[^/]+)/$', views.PageDetail.as_view(), name='page-detail'),
     url(r'^pages/(?P<pk>[^/]+)/move_page/$', views.MovePageView.as_view(), name='page-move'),
