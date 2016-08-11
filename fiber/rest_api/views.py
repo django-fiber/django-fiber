@@ -70,7 +70,7 @@ class PageList(FiberListCreateAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
-    permission_classes = (permissions.IsAdminUser,)
+    # permission_classes = (permissions.IsAdminUser,)
 
 
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
