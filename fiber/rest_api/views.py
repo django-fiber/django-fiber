@@ -16,6 +16,7 @@ from rest_framework import permissions
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
 from fiber.app_settings import API_RENDER_HTML, PERMISSION_CLASS
 from fiber.utils.import_util import load_class
+from fiber.permission_api import IsAllOrReadOnly
 
 from .serializers import PageSerializer, MovePageSerializer, PageContentItemSerializer, MovePageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer, FiberPaginationSerializer
 
@@ -70,7 +71,7 @@ class PageList(FiberListCreateAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
-    # permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (IsAllOrReadOnly,)
 
 
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
