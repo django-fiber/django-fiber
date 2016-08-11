@@ -67,14 +67,14 @@ class FiberListCreateAPIView(generics.ListCreateAPIView):
 
 
 class PageList(FiberListCreateAPIView):
-    model = Page
+    queryset = Page.objects.all()
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
 
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = Page
+    queryset = Page.objects.all()
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
@@ -104,14 +104,14 @@ class MovePageView(views.APIView):
 
 
 class PageContentItemList(FiberListCreateAPIView):
-    model = PageContentItem
+    queryset = PageContentItem.objects.all()
     serializer_class = PageContentItemSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
 
 class PageContentItemDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = PageContentItem
+    queryset = PageContentItem.objects.all()
     serializer_class = PageContentItemSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
@@ -138,21 +138,21 @@ class MovePageContentItemView(views.APIView):
 
 
 class ContentItemList(FiberListCreateAPIView):
-    model = ContentItem
+    queryset = ContentItem.objects.all()
     serializer_class = ContentItemSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
 
 class ContentItemDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = ContentItem
+    queryset = ContentItem.objects.all()
     serializer_class = ContentItemSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
 
 class FileList(IEUploadFixMixin, FiberListCreateAPIView):
-    model = File
+    queryset = File.objects.all()
     serializer_class = FileSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
@@ -188,7 +188,7 @@ class FileList(IEUploadFixMixin, FiberListCreateAPIView):
 
 
 class FileDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = File
+    queryset = File.objects.all()
     serializer_class = FileSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
@@ -218,7 +218,7 @@ class FileDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
-    model = Image
+    queryset = Image.objects.all()
     serializer_class = ImageSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
@@ -254,7 +254,7 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
 
 
 class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = Image
+    queryset = Image.objects.all()
     serializer_class = ImageSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
