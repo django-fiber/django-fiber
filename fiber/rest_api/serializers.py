@@ -8,19 +8,6 @@ from .fields import CanEditField, UpdatedField
 POSITION_CHOICES = sorted((item, item) for item in ['before', 'after', 'inside'])
 
 
-class PageSerializer(serializers.ModelSerializer):
-    move_url = serializers.HyperlinkedIdentityField(view_name='page-move')
-    page_url = serializers.ReadOnlyField(source='get_absolute_url')
-    depth = 1
-
-    class Meta:
-        model = Page
-
-    def get_field(self, model_field):
-        if model_field.name == 'url':
-            return serializers.URLField()
-
-
 class MovePageSerializer(serializers.Serializer):
     position = serializers.ChoiceField(choices=POSITION_CHOICES)
     target_node_id = serializers.IntegerField()
@@ -28,10 +15,10 @@ class MovePageSerializer(serializers.Serializer):
 
 class PageContentItemSerializer(serializers.ModelSerializer):
     move_url = serializers.HyperlinkedIdentityField(view_name='pagecontentitem-move')
-    depth = 1
 
     class Meta:
         model = PageContentItem
+        depth = 1
 
 
 class MovePageContentItemSerializer(serializers.Serializer):
@@ -40,10 +27,41 @@ class MovePageContentItemSerializer(serializers.Serializer):
 
 
 class ContentItemSerializer(serializers.ModelSerializer):
-    depth = 1
+    #depth = 1
 
     class Meta:
         model = ContentItem
+        depth = 1
+        fields = [
+            'name',
+            'content_markup',
+            'content_html',
+            'protected',
+            'metadata',
+            'template_name',
+        ]
+
+
+class PageSerializer(serializers.ModelSerializer):
+    #contentitems = ContentItemSerializer(read_only=True, many=True)
+    page_content_items = PageContentItemSerializer(many=True)
+
+    class Meta:
+        model = Page
+        depth = 1
+        fields = [
+            'title',
+            'doc_title',
+            'get_absolute_url',
+            'redirect_page',
+            'template_name',
+            'show_in_menu',
+            'page_content_items',
+            'metadata',
+            'image',
+            'created',
+            'updated',
+        ]
 
 
 class FileSerializer(serializers.HyperlinkedModelSerializer):
