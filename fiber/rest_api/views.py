@@ -1,5 +1,7 @@
 from django.db.models import Q
 from django.db.models.deletion import ProtectedError
+from django.db import transaction
+from django.db.models import F
 from django.utils import six
 from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
@@ -16,8 +18,19 @@ from rest_framework import permissions
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
 from fiber.app_settings import API_RENDER_HTML, PERMISSION_CLASS
 from fiber.utils.import_util import load_class
+from fiber.permission_api import IsAllOrReadOnly
 
-from .serializers import PageSerializer, MovePageSerializer, PageContentItemSerializer, MovePageContentItemSerializer, ContentItemSerializer, FileSerializer, ImageSerializer, FiberPaginationSerializer
+from .serializers import (
+    PageSerializer,
+    MovePageSerializer,
+    PageContentItemSerializer,
+    MovePageContentItemSerializer,
+    ContentItemSerializer,
+    FileSerializer,
+    ImageSerializer,
+    FiberPaginationSerializer,
+    IdCounterSerializer
+)
 
 PERMISSIONS = load_class(PERMISSION_CLASS)
 
@@ -70,14 +83,14 @@ class PageList(FiberListCreateAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (IsAllOrReadOnly,)
 
 
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (IsAllOrReadOnly,)
 
     def get_queryset(self):
         return Page.objects.filter()
@@ -320,3 +333,11 @@ class ContentItemGroups(views.APIView):
         Get content groups data which is suitable for jqtree.
         """
         return Response(ContentItem.objects.get_content_groups(request.user))
+
+
+class PageIncrementView(generics.UpdateAPIView):
+
+    def partial_update(self, request, *args, **kwargs):
+        with transaction.atomic():
+                Page.objects.filter(**kwargs).update(count_page=F('count_page') + 1)
+        return Response({'status': 'Ok'})
