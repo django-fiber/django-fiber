@@ -90,7 +90,7 @@ class PageDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (IsAllOrReadOnly,)
 
     def get_queryset(self):
         return Page.objects.filter()
@@ -335,12 +335,9 @@ class ContentItemGroups(views.APIView):
         return Response(ContentItem.objects.get_content_groups(request.user))
 
 
-class PageIncrementView(views.APIView):
-    def put(self, request, *args, **kwargs):
-        serializer = IdCounterSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            with transaction.atomic():
-                Page.objects.filter(id=serializer.data['id']).update(count_page=F('count_page') + 1)
-            return Response({'status': 'Ok'})
-        else:
-            return Response({'status': 'Error'}, status=status.HTTP_404_NOT_FOUND)
+class PageIncrementView(generics.UpdateAPIView):
+
+    def partial_update(self, request, *args, **kwargs):
+        with transaction.atomic():
+                Page.objects.filter(**kwargs).update(count_page=F('count_page') + 1)
+        return Response({'status': 'Ok'})
