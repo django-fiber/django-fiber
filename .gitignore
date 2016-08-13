@@ -1,3 +1,8 @@
 *.pyc
 /testproject/reports/
 /testproject/static/
+.idea/
+build/
+dist/
+django_fiber.egg-info/
+testproject/.idea/

@@ -4,6 +4,9 @@ from setuptools import setup, find_packages
 
 version = __import__('fiber').__version__
 
+if sys.version_info[0] > 2:
+    sys.exit('Python > 2 is unsupported.')
+
 if sys.argv[-1] == 'publish':  # upload to pypi
     os.system("python setup.py register sdist bdist_egg bdist_wheel upload")
     print("You probably want to also tag the version now:")
@@ -19,8 +22,8 @@ setup(
     install_requires=[
         'Pillow>=2.2.1',
         'django-mptt>=0.6.1',
-        'django_compressor>=1.4',
-        'djangorestframework>=3.3.1',
+        'django_compressor>=1.4,<2.0',
+        'djangorestframework>=2.3.8,<3.0',
         'easy-thumbnails>=2.2',
     ],
 
