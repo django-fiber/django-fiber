@@ -21,6 +21,27 @@ class PageContentItemSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class ContentItemShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContentItem
+        depth = 1
+        fields = [
+            'name',
+            'content_html',
+        ]
+
+
+class PageContentItemShortSerializer(serializers.ModelSerializer):
+    content_item = ContentItemShortSerializer()
+
+    class Meta:
+        model = PageContentItem
+        fields = [
+            'content_item',
+        ]
+
+
+
 class MovePageContentItemSerializer(serializers.Serializer):
     before_page_content_item_id = serializers.IntegerField(required=False)
     block_name = serializers.CharField()
@@ -44,7 +65,7 @@ class ContentItemSerializer(serializers.ModelSerializer):
 
 class PageSerializer(serializers.ModelSerializer):
     #contentitems = ContentItemSerializer(read_only=True, many=True)
-    page_content_items = PageContentItemSerializer(many=True)
+    page_content_items = PageContentItemShortSerializer(many=True)
 
     class Meta:
         model = Page
@@ -52,9 +73,7 @@ class PageSerializer(serializers.ModelSerializer):
         fields = [
             'url',
             'page_content_items',
-            'level',
-            'name',
-            'content_html'
+            'level'
         ]
 
 

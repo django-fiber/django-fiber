@@ -90,8 +90,6 @@ class Page(MPTTModel):
     url = FiberURLField(blank=True)
     redirect_page = models.ForeignKey('self', null=True, blank=True, related_name='redirected_pages', verbose_name=_('redirect page'), on_delete=models.SET_NULL)
     mark_current_regexes = models.TextField(_('mark current regexes'), blank=True)
-    name = models.CharField(_('name'), blank=True, null=True, max_length=255)
-    content_html = FiberHTMLField(verbose_name=_('Content'), blank=True, null=True)
     count_page = models.PositiveIntegerField(verbose_name=_('Count url'), default=0, blank=True)
     # TODO: add `alias_page` field
     template_name = models.CharField(_('template name'), blank=True, max_length=70)
