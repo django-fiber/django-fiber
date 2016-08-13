@@ -50,17 +50,11 @@ class PageSerializer(serializers.ModelSerializer):
         model = Page
         depth = 1
         fields = [
-            'title',
-            'doc_title',
-            'get_absolute_url',
-            'redirect_page',
-            'template_name',
-            'show_in_menu',
+            'url',
             'page_content_items',
-            'metadata',
-            'image',
-            'created',
-            'updated',
+            'level',
+            'name',
+            'content_html'
         ]
 
 
