@@ -26,6 +26,7 @@ class ContentItemShortSerializer(serializers.ModelSerializer):
         model = ContentItem
         depth = 1
         fields = [
+            'created',
             'name',
             'content_html',
         ]
@@ -72,7 +73,17 @@ class PageSerializer(serializers.ModelSerializer):
         depth = 1
         fields = [
             'url',
+            'title',
+            'doc_title',
+            'get_absolute_url',
+            'redirect_page',
+            'template_name',
+            'show_in_menu',
             'page_content_items',
+            'metadata',
+            'image',
+            'created',
+            'updated',
             'level'
         ]
 
