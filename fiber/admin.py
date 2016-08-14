@@ -137,13 +137,13 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
     form = forms.PageForm
     fieldsets = (
-        (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name', 'image', 'name', 'content_html', 'count_page')}),
+        (None, {'fields': ('site_id' ,'parent', 'title', 'url', 'redirect_page', 'template_name', 'image', 'name', 'content_html', 'count_page')}),
         (_('Advanced options'), {'classes': ('collapse',), 'fields': ('meta_description', 'mark_current_regexes', 'show_in_menu', 'is_public', 'protected',)}),
         (_('Metadata'), {'classes': ('collapse',), 'fields': ('metadata',)}),
     )
 
     inlines = (PageContentItemInline,)
-    list_display = ('title', 'view_on_site_link', 'url', 'redirect_page', 'get_absolute_url', 'action_links', 'count_page')
+    list_display = ('title', 'view_on_site_link', 'url', 'redirect_page', 'get_absolute_url', 'action_links', 'count_page', 'site_id')
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page__title')
 

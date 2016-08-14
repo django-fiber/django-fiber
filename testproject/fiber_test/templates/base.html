@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-{% load fiber_tags %}
+{% load fiber_tags thumbnail %}
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>{% block title %}{{ fiber_page.title }}{% endblock %}</title>
 </head>
 <body>
+    {% show_page_content "block1" %}
+    {% show_page_content "block2" %}
+    {% show_page_content "block3" %}
+
     {% block body %}
         {% show_page_content "main" %}
     {% endblock %}
