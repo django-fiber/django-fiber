@@ -9,6 +9,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.sites.models import Site
 
 from mptt.managers import TreeManager
 from mptt.models import MPTTModel
@@ -80,6 +81,7 @@ class ContentItem(models.Model):
 
 @python_2_unicode_compatible
 class Page(MPTTModel):
+    site_id = models.ForeignKey(Site, blank=True, null=True, verbose_name=_('Site id'))
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='subpages', verbose_name=_('parent'))

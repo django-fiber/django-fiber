@@ -72,6 +72,7 @@ class PageSerializer(serializers.ModelSerializer):
         model = Page
         depth = 1
         fields = [
+            'site_id',
             'url',
             'title',
             'doc_title',
