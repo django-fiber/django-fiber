@@ -5,6 +5,7 @@ from django.db.models import F
 from django.utils import six
 from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import get_object_or_404
 
 from rest_framework import generics
 from rest_framework import renderers
@@ -87,13 +88,16 @@ class PageList(FiberListCreateAPIView):
 
 
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Page.objects.all()
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (IsAllOrReadOnly,)
 
-    def get_queryset(self):
-        return Page.objects.filter()
+    def get_object(self):
+        url = self.kwargs.get('url', '')
+        try:
+            return Page.objects.get(url=url, host=self.request.META.get('HTTP_HOST', ''))
+        except:
+            return get_object_or_404(Page, url=url)
 
 
 class MovePageView(views.APIView):
