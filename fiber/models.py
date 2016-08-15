@@ -81,6 +81,7 @@ class ContentItem(models.Model):
 
 @python_2_unicode_compatible
 class Page(MPTTModel):
+    host = models.CharField(max_length=255, blank=True, null=True, default='', verbose_name=_('Host'))
     site_id = models.ForeignKey(Site, blank=True, null=True, verbose_name=_('Site id'))
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
