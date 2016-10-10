@@ -66,14 +66,14 @@ class FiberListCreateAPIView(generics.ListCreateAPIView):
 
 
 class PageList(FiberListCreateAPIView):
-    model = Page
+    queryset = Page.objects.all()
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
 
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = Page
+    queryset = Page.objects.all()
     serializer_class = PageSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
@@ -100,14 +100,14 @@ class MovePageView(views.APIView):
 
 
 class PageContentItemList(FiberListCreateAPIView):
-    model = PageContentItem
+    queryset = PageContentItem.objects.all()
     serializer_class = PageContentItemSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
 
 class PageContentItemDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = PageContentItem
+    queryset = PageContentItem.objects.all()
     serializer_class = PageContentItemSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
@@ -134,14 +134,14 @@ class MovePageContentItemView(views.APIView):
 
 
 class ContentItemList(FiberListCreateAPIView):
-    model = ContentItem
+    queryset = ContentItem.objects.all()
     serializer_class = ContentItemSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
 
 class ContentItemDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = ContentItem
+    queryset = ContentItem.objects.all()
     serializer_class = ContentItemSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
@@ -214,7 +214,6 @@ class FileDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
-    model = Image
     serializer_class = ImageSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
@@ -227,7 +226,7 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
             return Response("Can not order by the passed value.", status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self, *args, **kwargs):
-        qs = super(ImageList, self).get_queryset(*args, **kwargs)
+        qs = Image.objects.all()
         qs = PERMISSIONS.filter_images(self.request.user, qs)
         search = self.request.QUERY_PARAMS.get('search')
         if search:

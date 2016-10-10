@@ -2,15 +2,41 @@ from rest_framework import serializers, pagination
 
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
 
-from .fields import CanEditField, UpdatedField
 
+from fiber.app_settings import PERMISSION_CLASS
+from fiber.utils.import_util import load_class
+from fiber.utils.date import friendly_datetime
+
+PERMISSIONS = load_class(PERMISSION_CLASS)
 
 POSITION_CHOICES = sorted((item, item) for item in ['before', 'after', 'inside'])
 
 
+class CanEditMixin(object):
+    """
+    Adds a 'can_edit' field that returns True if request.user has permission to edit obj.
+    """
+
+    can_edit = serializers.SerializerMethodField()
+
+    def get_can_edit(self, obj):
+        return PERMISSIONS.can_edit(self.context['request'].user, obj)
+
+
+class UpdatedMixin(object):
+
+    """
+    Adds a 'updated' field that returns a friendly timestamp.
+    """
+    updated = serializers.SerializerMethodField()
+
+    def get_updated(self, obj):
+        return friendly_datetime(obj.updated)
+
+
 class PageSerializer(serializers.ModelSerializer):
     move_url = serializers.HyperlinkedIdentityField(view_name='page-move')
-    page_url = serializers.Field(source='get_absolute_url')
+    page_url = serializers.ReadOnlyField(source='get_absolute_url')
     depth = 1
 
     class Meta:
@@ -46,24 +72,20 @@ class ContentItemSerializer(serializers.ModelSerializer):
         model = ContentItem
 
 
-class FileSerializer(serializers.HyperlinkedModelSerializer):
+class FileSerializer(CanEditMixin, UpdatedMixin, serializers.HyperlinkedModelSerializer):
     file_url = serializers.Field(source='file.url')
     filename = serializers.Field(source='get_filename')
-    can_edit = CanEditField()
-    updated = UpdatedField()
 
     class Meta:
         model = File
         read_only_fields = ('created', )
 
 
-class ImageSerializer(serializers.HyperlinkedModelSerializer):
-    image_url = serializers.Field(source='image.url')
-    thumbnail_url = serializers.Field(source='thumbnail_url')
-    filename = serializers.Field(source='get_filename')
-    size = serializers.Field(source='get_size')
-    can_edit = CanEditField()
-    updated = UpdatedField()
+class ImageSerializer(CanEditMixin, UpdatedMixin, serializers.HyperlinkedModelSerializer):
+    image_url = serializers.ReadOnlyField(source='image.url')
+    thumbnail_url = serializers.ReadOnlyField()
+    filename = serializers.ReadOnlyField(source='get_filename')
+    size = serializers.ReadOnlyField(source='get_size')
 
     class Meta:
         model = Image
@@ -75,5 +97,5 @@ class FiberPaginationSerializer(pagination.BasePaginationSerializer):
     Simple-data-grid expects a total_pages key for a paginated view.
     Simple-data-grid expects rows as the key for objects.
     """
-    total_pages = serializers.Field(source='paginator.num_pages')
+    total_pages = serializers.ReadOnlyField(source='paginator.num_pages')
     results_field = 'rows'
