@@ -24,7 +24,7 @@ setup(
         'django-mptt>=0.6.1',
         'django_compressor>=1.4,<2.0',
         # Cannot use drf < 3.1 as pagination has completely changed.
-        'djangorestframework==3.1.0',
+        'djangorestframework>=3.1.0,<=3.2.0',
         'easy-thumbnails>=2.2',
     ],
 

@@ -92,8 +92,8 @@ class MovePageView(views.APIView):
     def put(self, request, pk, format=None):
         if not PERMISSIONS.can_move_page(request.user, Page.objects.get(id=pk)):
             return _403_FORBIDDEN_RESPONSE
-        position = request.DATA.get('position')
-        target = request.DATA.get('target_node_id')
+        position = request.data.get('position')
+        target = request.data.get('target_node_id')
         page = Page.objects.get(id=pk)
         page.move_page(target, position)
         return Response('Page moved successfully.')
@@ -127,8 +127,8 @@ class MovePageContentItemView(views.APIView):
         if not PERMISSIONS.can_edit(request.user, Page.objects.get(page_content_items__id=pk)):
             return _403_FORBIDDEN_RESPONSE
         page_content_item = PageContentItem.objects.get(id=pk)
-        before_page_content_item_id = request.DATA.get('before_page_content_item_id')
-        block_name = request.DATA.get('block_name')
+        before_page_content_item_id = request.data.get('before_page_content_item_id')
+        block_name = request.data.get('block_name')
         page_content_item.move(before_page_content_item_id, block_name)
         return Response('PageContentItem moved successfully.')
 
@@ -164,18 +164,18 @@ class FileList(IEUploadFixMixin, FiberListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         qs = super(FileList, self).get_queryset(*args, **kwargs)
         qs = PERMISSIONS.filter_files(self.request.user, qs)
-        search = self.request.QUERY_PARAMS.get('search')
+        search = self.request.query_params.get('search')
 
         if search:
             qs = qs.filter(file__icontains=search)
 
-        order_by = self.request.QUERY_PARAMS.get('order_by', 'updated')
+        order_by = self.request.query_params.get('order_by', 'updated')
         self.check_fields(order_by)
 
         if order_by == 'filename':
             order_by = 'file'
 
-        sort_order = self.request.QUERY_PARAMS.get('sortorder', 'asc')
+        sort_order = self.request.query_params.get('sortorder', 'asc')
 
         qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
 
@@ -226,12 +226,12 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
     def get_queryset(self, *args, **kwargs):
         qs = Image.objects.all()
         qs = PERMISSIONS.filter_images(self.request.user, qs)
-        search = self.request.QUERY_PARAMS.get('search')
+        search = self.request.query_params.get('search')
         if search:
             # TODO: image_icontains searches in the entire path, it should only search in the filename (use iregex for this?)
             qs = qs.filter(Q(image__icontains=search) | Q(title__icontains=search) | Q(width__icontains=search) | Q(height__icontains=search))
 
-        order_by = self.request.QUERY_PARAMS.get('order_by', 'updated')
+        order_by = self.request.query_params.get('order_by', 'updated')
         self.check_fields(order_by)
 
         if order_by == 'filename':
@@ -239,7 +239,7 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
         elif order_by == 'size':
             order_by = 'width'
 
-        sort_order = self.request.QUERY_PARAMS.get('sortorder', 'asc')
+        sort_order = self.request.query_params.get('sortorder', 'asc')
 
         qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
 
