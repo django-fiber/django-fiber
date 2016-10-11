@@ -1169,13 +1169,12 @@ var AddButton = Class.extend({ // TODO: subclass to AddPageButton / AddContentIt
 Fiber.move_page_content_item = function(page_content_item_url, before_page_content_item_id, block_name) {
 	$.ajax({
 		url: page_content_item_url,
-		type: 'POST',
+		type: 'PUT',
 		dataType: 'json',
 
 		data: {
 			before_page_content_item_id: before_page_content_item_id,
 			block_name: block_name,
-			_method: 'PUT',
 		},
 		success: reloadPage
 	});
