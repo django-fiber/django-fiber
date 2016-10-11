@@ -153,8 +153,7 @@ class FileList(IEUploadFixMixin, FiberListCreateAPIView):
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
 
-    pagination_serializer_class = FiberPaginationSerializer
-    paginate_by = 5
+    pagination_class = FiberPaginationSerializer
 
     orderable_fields = ('filename', 'updated')
 
@@ -217,8 +216,7 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
     serializer_class = ImageSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
-    pagination_serializer_class = FiberPaginationSerializer
-    paginate_by = 5
+    pagination_class = FiberPaginationSerializer
     orderable_fields = ('filename', 'size', 'updated')
 
     def check_fields(self, order_by):

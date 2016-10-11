@@ -92,10 +92,23 @@ class ImageSerializer(CanEditMixin, UpdatedMixin, serializers.HyperlinkedModelSe
         read_only_fields = ('created', )
 
 
-class FiberPaginationSerializer(pagination.BasePaginationSerializer):
+from rest_framework.response import Response
+from collections import OrderedDict
+
+
+class FiberPaginationSerializer(pagination.PageNumberPagination):
     """
     Simple-data-grid expects a total_pages key for a paginated view.
     Simple-data-grid expects rows as the key for objects.
     """
     total_pages = serializers.ReadOnlyField(source='paginator.num_pages')
     results_field = 'rows'
+    page_size = 5
+
+    def get_paginated_response(self, data):
+        """We can use rest-framework's PageNumberPagination class, which returns data in a json format - but Fiber
+        expects slightly different variable names. We can tweak the response by overiding this method."""
+        return Response(OrderedDict([
+            ('total_pages', self.page.paginator.num_pages),
+            ('rows', data)
+        ]))
