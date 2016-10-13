@@ -247,10 +247,14 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
 
 
 class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = Image
     serializer_class = ImageSerializer
     renderer_classes = API_RENDERERS
     permission_classes = (permissions.IsAdminUser,)
+
+    def get_queryset(self, *args, **kwargs):
+        qs = Image.objects.all()
+        qs = PERMISSIONS.filter_images(self.request.user, qs)
+        return qs
 
     def delete(self, request, *args, **kwargs):
         obj = self.get_object()

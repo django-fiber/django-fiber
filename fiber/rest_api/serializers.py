@@ -1,8 +1,9 @@
+from collections import OrderedDict
+
 from rest_framework import serializers, pagination
+from rest_framework.response import Response
 
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
-
-
 from fiber.app_settings import PERMISSION_CLASS
 from fiber.utils.import_util import load_class
 from fiber.utils.date import friendly_datetime
@@ -17,10 +18,10 @@ class CanEditMixin(object):
     Adds a 'can_edit' field that returns True if request.user has permission to edit obj.
     """
 
-    can_edit = serializers.SerializerMethodField()
-
-    def get_can_edit(self, obj):
-        return PERMISSIONS.can_edit(self.context['request'].user, obj)
+    def to_representation(self, obj):
+        representation = super(CanEditMixin, self).to_representation(obj)
+        representation['can_edit'] = PERMISSIONS.can_edit(self.context['request'].user, obj)
+        return representation
 
 
 class UpdatedMixin(object):
@@ -28,10 +29,11 @@ class UpdatedMixin(object):
     """
     Adds a 'updated' field that returns a friendly timestamp.
     """
-    updated = serializers.SerializerMethodField()
 
-    def get_updated(self, obj):
-        return friendly_datetime(obj.updated)
+    def to_representation(self, obj):
+        representation = super(UpdatedMixin, self).to_representation(obj)
+        representation['updated'] = friendly_datetime(obj.updated)
+        return representation
 
 
 class PageSerializer(serializers.ModelSerializer):
@@ -90,10 +92,6 @@ class ImageSerializer(CanEditMixin, UpdatedMixin, serializers.HyperlinkedModelSe
     class Meta:
         model = Image
         read_only_fields = ('created', )
-
-
-from rest_framework.response import Response
-from collections import OrderedDict
 
 
 class FiberPaginationSerializer(pagination.PageNumberPagination):
