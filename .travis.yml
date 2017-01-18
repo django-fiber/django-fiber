@@ -5,6 +5,7 @@ python:
 env:
   - DJANGO_VERSION=\>=1.8,\<1.9
   - DJANGO_VERSION=\>=1.9,\<1.10
+  - DJANGO_VERSION=\>=1.10,\<1.11
 install:
   - pip install --upgrade pip
   - pip install Django$DJANGO_VERSION --upgrade
