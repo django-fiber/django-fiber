@@ -1,12 +1,18 @@
 # Changelog
 
+## 1.3.1
+
+**Date** Oct 27th, 2015
+
+* upgrade CKEditor 4.4.7 -> 4.5.4
+
+
 ## 1.3
 
 **Date** Oct 27th, 2015
 
 * run tests on Django 1.8, fix test failure
 * tox.ini uses new features of tox
-* upgrade CKEditor 4.4.7 -> 4.5.4
 * load Fiber page data and contentitem groups async, makes navigating pages with Fiber enabled much faster
 * fix incompatibility with django-compressor running in offline mode
 * handle lazy URLs

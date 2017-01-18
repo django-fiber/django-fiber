@@ -1,4 +1,4 @@
-from rest_framework import serializers, pagination
+from rest_framework import serializers
 
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
 
@@ -69,8 +69,10 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         model = Image
         read_only_fields = ('created', )
 
-
-class FiberPaginationSerializer(pagination.BasePaginationSerializer):
+# FIXME: This used to inherit from rest_framework.pagination.BasePaginationSerializer, however
+# the way django-rest-framework handles pagination has changed. Figure out how to fix this.
+# class FiberPaginationSerializer(pagination.BasePaginationSerializer):
+class FiberPaginationSerializer(serializers.Serializer):
     """
     Simple-data-grid expects a total_pages key for a paginated view.
     Simple-data-grid expects rows as the key for objects.

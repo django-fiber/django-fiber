@@ -1,15 +1,11 @@
 [travis-url]: http://travis-ci.org/#!/ridethepony/django-fiber
-[travis-build-image]: https://secure.travis-ci.org/ridethepony/django-fiber.png?branch=dev
-
-[pypi-url]: https://pypi.python.org/pypi/django-fiber/
-[pypi-image]: https://pypip.in/d/django-fiber/badge.png
+[travis-build-image]: https://secure.travis-ci.org/ridethepony/django-fiber.svg?branch=dev
 
 [coveralls-url]: https://coveralls.io/r/ridethepony/django-fiber
-[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.png?branch=dev
-
+[coveralls-image]: https://coveralls.io/repos/ridethepony/django-fiber/badge.svg?branch=dev
 
 [![Travis build image][travis-build-image]][travis-url]
-[![PyPi download count image][pypi-image]][pypi-url]
+[![PyPI](https://img.shields.io/pypi/dm/django-fiber.svg)]()
 [![Coverage Status][coveralls-image]][coveralls-url]
 
 # Django Fiber
@@ -55,9 +51,19 @@ These dependencies are automatically installed:
         'fiber.middleware.AdminPageMiddleware',
     )
 
-    TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
-        'django.core.context_processors.request',
-    )
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    ...
+                    'django.template.context_processors.request',
+                ]
+            }
+        },
+    ]
+
 
     INSTALLED_APPS = (
         ...
@@ -82,14 +88,13 @@ These dependencies are automatically installed:
 
     from django.conf import settings
 
-    urlpatterns = patterns('',
+    urlpatterns = [
         ...
-        (r'^api/v2/', include('fiber.rest_api.urls')),
-        (r'^admin/fiber/', include('fiber.admin_urls')),
-        (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', {'packages': ('fiber',),}),
+        url(r'^api/v2/', include('fiber.rest_api.urls')),
+        url(r'^admin/fiber/', include('fiber.admin_urls')),
         ...
-        (r'', 'fiber.views.page'),
-    )
+        url(r'', fiber.views.page),
+    ]
 
 
 ## Post-installation
