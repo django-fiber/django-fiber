@@ -7,19 +7,19 @@ from fiber.utils.date import friendly_datetime
 PERMISSIONS = load_class(PERMISSION_CLASS)
 
 
-class CanEditField(serializers.Field):
+class CanEditField(serializers.ReadOnlyField):
     """
     A custom field that returns True if request.user has 
     permission to edit obj.
     """
 
-    def field_to_native(self, obj, field_name):
+    def to_representation(self, value):
         return PERMISSIONS.can_edit(self.context['request'].user, obj)
 
 
-class UpdatedField(serializers.Field):
+class UpdatedField(serializers.ReadOnlyField):
     """
     Return a friendly timestamp.
     """
-    def field_to_native(self, obj, field_name):
-        return friendly_datetime(obj.updated)
+    def to_representation(self, value):
+        return friendly_datetime(value)

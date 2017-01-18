@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import pagination, response, serializers
 
 from fiber.models import Page, PageContentItem, ContentItem, File, Image
 
@@ -10,11 +10,12 @@ POSITION_CHOICES = sorted((item, item) for item in ['before', 'after', 'inside']
 
 class PageSerializer(serializers.ModelSerializer):
     move_url = serializers.HyperlinkedIdentityField(view_name='page-move')
-    page_url = serializers.Field(source='get_absolute_url')
+    page_url = serializers.ReadOnlyField(source='get_absolute_url')
     depth = 1
 
     class Meta:
         model = Page
+        fields = '__all__'
 
     def get_field(self, model_field):
         if model_field.name == 'url':
@@ -32,6 +33,7 @@ class PageContentItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PageContentItem
+        fields = '__all__'
 
 
 class MovePageContentItemSerializer(serializers.Serializer):
@@ -44,38 +46,46 @@ class ContentItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContentItem
+        fields = '__all__'
 
 
 class FileSerializer(serializers.HyperlinkedModelSerializer):
-    file_url = serializers.Field(source='file.url')
-    filename = serializers.Field(source='get_filename')
+    file_url = serializers.ReadOnlyField(source='file.url')
+    filename = serializers.ReadOnlyField(source='get_filename')
     can_edit = CanEditField()
     updated = UpdatedField()
 
     class Meta:
         model = File
+        fields = '__all__'
         read_only_fields = ('created', )
 
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
-    image_url = serializers.Field(source='image.url')
-    thumbnail_url = serializers.Field(source='thumbnail_url')
-    filename = serializers.Field(source='get_filename')
-    size = serializers.Field(source='get_size')
+    image_url = serializers.ReadOnlyField(source='image.url')
+    thumbnail_url = serializers.ReadOnlyField()
+    filename = serializers.ReadOnlyField(source='get_filename')
+    size = serializers.ReadOnlyField(source='get_size')
     can_edit = CanEditField()
     updated = UpdatedField()
 
     class Meta:
         model = Image
+        fields = '__all__'
         read_only_fields = ('created', )
 
-# FIXME: This used to inherit from rest_framework.pagination.BasePaginationSerializer, however
-# the way django-rest-framework handles pagination has changed. Figure out how to fix this.
-# class FiberPaginationSerializer(pagination.BasePaginationSerializer):
-class FiberPaginationSerializer(serializers.Serializer):
+
+class FiberPaginationSerializer(pagination.PageNumberPagination):
     """
     Simple-data-grid expects a total_pages key for a paginated view.
     Simple-data-grid expects rows as the key for objects.
     """
-    total_pages = serializers.Field(source='paginator.num_pages')
+    total_pages = serializers.ReadOnlyField(source='paginator.num_pages')
     results_field = 'rows'
+    page_size = 5
+
+    def get_paginated_response(self, data):
+        return response.Response({
+            'total_pages': self.page.paginator.num_pages,
+            'rows': data
+        })
