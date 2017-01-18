@@ -30,11 +30,11 @@ We're assuming you are using Django 1.4-1.8.
 
 These dependencies are automatically installed:
 
-    Pillow==2.2.1
-    django-mptt==0.8
-    django_compressor==2.0
-    djangorestframework==3.4
-    easy-thumbnails==2.2
+    Pillow>=2.2.1
+    django-mptt>=0.8
+    django_compressor>=2.0
+    djangorestframework>=3.4
+    easy-thumbnails>=2.2
 
 
 ## Settings
