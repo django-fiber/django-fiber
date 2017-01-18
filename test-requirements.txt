@@ -1,2 +1,2 @@
-coverage
+coverage>=4.2
 coveralls

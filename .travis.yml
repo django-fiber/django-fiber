@@ -12,7 +12,7 @@ install:
   - pip install -q -e .
   - pip install -q -r test-requirements.txt
 script:
-  - coverage run testproject/manage.py test fiber_test
+  - python -W module -m coverage run testproject/manage.py test fiber_test
 after_success:
   - coveralls
 branches:
