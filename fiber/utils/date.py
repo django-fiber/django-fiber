@@ -14,7 +14,7 @@ def friendly_datetime(date_time):
     if isinstance(date_time, int):
         try:
             date_time = datetime.fromtimestamp(date_time)
-        except (ValueError, OSError):
+        except (ValueError, OSError, OverflowError):
             pass
     if isinstance(date_time, datetime):
         if settings.USE_TZ and timezone.is_naive(date_time):
