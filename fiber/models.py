@@ -82,7 +82,7 @@ class ContentItem(models.Model):
 class Page(MPTTModel):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='subpages', verbose_name=_('parent'))
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='subpages', verbose_name=_('parent'), on_delete=models.CASCADE)
     meta_description = models.CharField(max_length=255, blank=True)
     meta_keywords = models.CharField(max_length=255, blank=True)
     title = models.CharField(_('title'), max_length=255)
@@ -231,8 +231,8 @@ class Page(MPTTModel):
 
 
 class PageContentItem(models.Model):
-    content_item = models.ForeignKey(ContentItem, related_name='page_content_items', verbose_name=_('content item'))
-    page = models.ForeignKey(Page, related_name='page_content_items', verbose_name=_('page'))
+    content_item = models.ForeignKey(ContentItem, related_name='page_content_items', verbose_name=_('content item'), on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, related_name='page_content_items', verbose_name=_('page'), on_delete=models.CASCADE)
     block_name = models.CharField(_('block name'), max_length=255)
     sort = models.IntegerField(_('sort'), blank=True, null=True)
 
