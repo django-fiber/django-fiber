@@ -9,14 +9,6 @@ for you? `Check it out on Vimeo <http://vimeo.com/ridethepony/django-fiber>`_
 Convinced? Want to use Django Fiber in your own Django project? Then follow the
 instructions below.
 
-Installation
-------------
-
-We're assuming you are using Django 1.8-1.10. Then simply install Fiber
-using pip::
-
-    $ pip install django-fiber
-
 Requirements
 ------------
 
@@ -28,28 +20,51 @@ These dependencies are automatically installed::
     djangorestframework>=3.4
     easy-thumbnails>=2.2
 
-Settings
---------
+Installation
+------------
 
-settings.py
-~~~~~~~~~~~
+We're assuming you are using Django 1.8-1.10. Then simply install Fiber
+using pip::
+
+    $ pip install django-fiber
+
+
+
+Setup
+~~~~~
+
+Open **settings.py** and add the following to your INSTALLED_APPS
+
+::
+
+   INSTALLED_APPS = (
+        ...
+        'mptt',
+        'compressor',
+        'easy_thumbnails',
+        'fiber',
+        ...
+   )
+
+Add Fiber to the MIDDLEWARE_CLASSES list
 
 ::
 
     import django.conf.global_settings as DEFAULT_SETTINGS
 
     MIDDLEWARE_CLASSES = DEFAULT_SETTINGS.MIDDLEWARE_CLASSES + (
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
+        ...
         'fiber.middleware.ObfuscateEmailAddressMiddleware',
         'fiber.middleware.AdminPageMiddleware',
     )
 
+Add the request context processor
+
+::
+
     TEMPLATES = [
         {
-            'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'APP_DIRS': True,
+            ...
             'OPTIONS': {
                 'context_processors': [
                     ...
@@ -59,39 +74,31 @@ settings.py
         },
     ]
 
+And configure compressor
 
-    INSTALLED_APPS = (
-        ...
-        'django.contrib.staticfiles',
-        'mptt',
-        'compressor',
-        'easy_thumbnails',
-        'fiber',
-        ...
-    )
+::
 
-    import os
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATIC_URL = '/static/'
-    STATICFILES_FINDERS = DEFAULT_SETTINGS.STATICFILES_FINDERS + (
+    STATICFILES_FINDERS = DEFAULT_SETTINGS.STATICFILES_FINDERS + [
         'compressor.finders.CompressorFinder',
-    )
+    ]
 
-urls.py
-~~~~~~~
+Edit your **urls.py** to add the Fiber site to your url-patterns
 
 ::
 
     from django.conf import settings
+    from fiber.views import page
 
     urlpatterns = [
         ...
         url(r'^api/v2/', include('fiber.rest_api.urls')),
         url(r'^admin/fiber/', include('fiber.admin_urls')),
         ...
-        url(r'', fiber.views.page),
+        url(r'', page),
     ]
 
 Post-installation
