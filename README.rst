@@ -90,7 +90,7 @@ Edit your **urls.py** to add the Fiber site to your url-patterns
 
 ::
 
-    from django.conf.urls import include
+    from django.conf.urls import include, url
     from fiber.views import page
 
     urlpatterns = [
