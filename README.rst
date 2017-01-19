@@ -78,7 +78,7 @@ And configure compressor
 
 ::
 
-    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     STATIC_URL = '/static/'
@@ -90,7 +90,7 @@ Edit your **urls.py** to add the Fiber site to your url-patterns
 
 ::
 
-    from django.conf import settings
+    from django.conf.urls import include
     from fiber.views import page
 
     urlpatterns = [
