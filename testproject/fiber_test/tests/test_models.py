@@ -1,6 +1,9 @@
 import json
+
+from django.core import urlresolvers
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.utils.encoding import force_text
 
 from fiber.models import Page, ContentItem, PageContentItem
 from ..test_util import format_list, condense_html_whitespace
@@ -219,7 +222,7 @@ class PageTest(TestCase):
         )
 
     def test_unicode(self):
-        self.assertEqual(unicode(Page(title='abc')), 'abc')
+        self.assertEqual(force_text(Page(title='abc')), 'abc')
 
     def test_is_first_child(self):
         # setup
@@ -313,24 +316,28 @@ class PageContentItemTest(TestCase):
 class TestContentItem(TestCase):
     def test_unicode(self):
         # with name
-        self.assertEqual(unicode(ContentItem(name='abc')), 'abc')
+        self.assertEqual(force_text(ContentItem(name='abc')), 'abc')
 
         # without name, no content
-        self.assertEqual(unicode(ContentItem()), '[ EMPTY ]')
+        self.assertEqual(force_text(ContentItem()), '[ EMPTY ]')
 
         # without name, content length < 50
-        self.assertEqual(unicode(ContentItem(content_html='xyz')), 'xyz')
+        self.assertEqual(force_text(ContentItem(content_html='xyz')), 'xyz')
 
         # without name, content length > 50
-        self.assertEqual(unicode(ContentItem(content_html='abcdefghij' * 6)), 'abcdefghijabcdefghijabcdefghijabcdefghijabcdefghij...')
+        self.assertEqual(force_text(ContentItem(content_html='abcdefghij' * 6)), 'abcdefghijabcdefghijabcdefghijabcdefghijabcdefghij...')
 
     def test_get_add_url(self):
-        self.assertEqual(ContentItem.get_add_url(), '/admin/fiber/fiber_admin/fiber/contentitem/add/')
+        self.assertEqual(
+            ContentItem.get_add_url(),
+            urlresolvers.reverse('fiber_admin:fiber_contentitem_add'))
 
     def test_get_change_url(self):
         content_item1 = ContentItem.objects.create()
 
-        self.assertEqual(content_item1.get_change_url(), '/admin/fiber/fiber_admin/fiber/contentitem/%d/' % content_item1.id)
+        self.assertEqual(
+            content_item1.get_change_url(),
+            urlresolvers.reverse('fiber_admin:fiber_contentitem_change', args=(content_item1.id,)))
 
     def test_used_on_pages_json(self):
         # setup

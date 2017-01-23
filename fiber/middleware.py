@@ -1,13 +1,13 @@
 import random
 import re
 import json
-from urllib import unquote
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
-from django.utils.encoding import smart_text
+from django.utils.encoding import force_text
 from django.utils.html import escape
+from django.utils.six.moves.urllib_parse import unquote
 
 from fiber.app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR, PERMISSION_CLASS
 from fiber.models import ContentItem, Page
@@ -96,7 +96,7 @@ class AdminPageMiddleware(object):
         """
         fiber_data = {}
         replacement = r'<head>\g<HEAD>%(header_html)s</head>\g<AFTER_HEAD><body data-fiber-data="%(fiber_data)s"\g<BODY_ATTRS>>\g<BODY></body>'
-        content = smart_text(response.content)
+        content = force_text(response.content)
         if self.show_login(request):
             # Only show the login window once
             request.session[self.LOGIN_SESSION_KEY] = False
@@ -133,13 +133,13 @@ class AdminPageMiddleware(object):
             'BACKEND_BASE_URL': reverse('admin:index'),
             'FIBER_LOGIN_URL': reverse('fiber_login'),
         }
-        return loader.render_to_string('fiber/header.html', context, RequestContext(request))
+        return loader.render_to_string('fiber/header.html', context, request=request)
 
     def get_body_html(self, request):
         context = {
             'logout_url': self.get_logout_url(request)
         }
-        return loader.render_to_string('fiber/admin.html', context, RequestContext(request))
+        return loader.render_to_string('fiber/admin.html', context, request=request)
 
     def get_logout_url(self, request):
         if request.META['QUERY_STRING']:
@@ -155,7 +155,7 @@ class ObfuscateEmailAddressMiddleware(object):
         if is_html(response) and hasattr(response, 'content'):  # Do not obfuscate non-html and streaming responses.
             # http://www.lampdocs.com/blog/2008/10/regular-expression-to-extract-all-e-mail-addresses-from-a-file-with-php/
             email_pattern = re.compile(r'(mailto:)?[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*(\+[_a-zA-Z0-9-]+)?@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))')
-            response.content = email_pattern.sub(self.encode_email, response.content)
+            response.content = email_pattern.sub(self.encode_email, force_text(response.content))
         return response
 
     def encode_email(self, matches):

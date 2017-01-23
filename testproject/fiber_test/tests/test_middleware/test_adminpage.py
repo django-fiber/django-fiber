@@ -1,20 +1,15 @@
 import re
-from django.contrib.auth.models import User, AnonymousUser
-from django.http import HttpResponse
-from django.test import TestCase, RequestFactory
+from unittest import skipUnless
+
+from django.contrib.auth.models import AnonymousUser, User
+from django.http import HttpResponse, StreamingHttpResponse
+from django.test import RequestFactory, TestCase
+from django.utils.encoding import force_text
 
 import fiber.middleware
-from fiber.middleware import AdminPageMiddleware
-from fiber.models import Page, ContentItem, PageContentItem
 
-try:
-    from django.http import StreamingHttpResponse
-except ImportError:  # Django < 1.6
-    StreamingHttpResponse = False
-try:
-    from unittest import skipUnless
-except ImportError:  # Python < 2.7
-    from django.utils.unittest import skipUnless
+from fiber.middleware import AdminPageMiddleware
+from fiber.models import ContentItem, Page, PageContentItem
 
 middleware = AdminPageMiddleware()
 
@@ -41,7 +36,7 @@ class TestAtFiberLoginRedirect(TestCase):
     def test_response_redirect_querystring_with_fiber(self):
         """Middleware strips @fiber from querystring"""
         response = self.client.get('/empty/?%40fiber')
-        self.assertRedirects(response, '/empty/')
+        self.assertRedirects(response, '/empty/?')
 
     def test_response_redirect_querystring_and_at_fiber(self):
         """Middleware strips @fiber from querystring, rest of qs stays intact"""
@@ -56,7 +51,7 @@ class TestAtFiberLoginRedirect(TestCase):
     def test_follow_redirect_shows_login_in_body(self):
         """Following the redirect adds fiber-data to body"""
         response = self.client.get('/empty/@fiber', follow=True)
-        self.assertRegexpMatches(response.content, '<body data-fiber-data="{&quot;show_login&quot;: true}"></body>')
+        self.assertRegexpMatches(force_text(response.content), '<body data-fiber-data="{&quot;show_login&quot;: true}"></body>')
 
     def test_does_nothing_for_non_html_response(self):
         """Middleware skips non-html responses"""
@@ -91,24 +86,24 @@ class TestModifiedResponse(TestCase):
 
     def test_get_admin_url(self):
         response = self.client.get('/admin/')
-        self.assertRegexpMatches(response.content, '<body data-fiber-data="{&quot;backend&quot;: true}"')
+        self.assertRegexpMatches(force_text(response.content), '<body data-fiber-data="{&quot;backend&quot;: true}"')
 
     def test_get_frontend_url(self):
         response = self.client.get('/empty/')
-        self.assertRegexpMatches(response.content, '<body data-fiber-data="{&quot;frontend&quot;: true}"')
+        self.assertRegexpMatches(force_text(response.content), '<body data-fiber-data="{&quot;frontend&quot;: true}"')
 
     def test_wraps_body(self):
         response = self.client.get(self.page.get_absolute_url())
-        self.assertRegexpMatches(response.content, re.compile('<div id="wpr-body">.*lorem ipsum.*</div>', re.DOTALL))
+        self.assertRegexpMatches(force_text(response.content), re.compile('<div id="wpr-body">.*lorem ipsum.*</div>', re.DOTALL))
 
     def test_set_page_id(self):
         response = self.client.get(self.page.get_absolute_url())
         expected = '<body data-fiber-data="{&quot;frontend&quot;: true, &quot;page_id&quot;: %s}"' % self.page.pk
-        self.assertRegexpMatches(response.content, expected)
+        self.assertRegexpMatches(force_text(response.content), expected)
 
     def test_adds_sidebar(self):
         response = self.client.get('/empty/')
-        self.assertIn('<div id="df-sidebar">', response.content)
+        self.assertIn('<div id="df-sidebar">', force_text(response.content))
 
     @skipUnless(StreamingHttpResponse, 'StreamingHttpResponse is not available')
     def test_skips_streaming(self):
@@ -127,8 +122,8 @@ class TestResponseNotModified(TestCase):
         A normal request has no trace of fiber
         """
         response = self.client.get('/empty/')
-        self.assertNotIn('data-fiber-data', response.content)
-        self.assertNotIn('<div id="df-sidebar">', response.content)
+        self.assertNotIn('data-fiber-data', force_text(response.content))
+        self.assertNotIn('<div id="df-sidebar">', force_text(response.content))
 
 
 class TestSetLoginSessionMethod(TestCase):

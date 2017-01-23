@@ -1,18 +1,20 @@
 import json
 import operator
 from copy import copy
+from functools import reduce
 
 from django import template
 from django.contrib.auth.models import AnonymousUser
 from django.template import TemplateSyntaxError
+from django.utils import six
 from django.utils.html import escape
+from django.utils.safestring import mark_safe
 
 import fiber
-from fiber.models import Page, ContentItem
-from fiber.utils.urls import get_admin_change_url
-from fiber.app_settings import PERMISSION_CLASS, AUTO_CREATE_CONTENT_ITEMS
+from fiber.app_settings import AUTO_CREATE_CONTENT_ITEMS, PERMISSION_CLASS
+from fiber.models import ContentItem, Page
 from fiber.utils.import_util import load_class
-
+from fiber.utils.urls import get_admin_change_url
 
 PERMISSIONS = load_class(PERMISSION_CLASS)
 
@@ -179,7 +181,7 @@ def show_page_content(context, page_or_block_name, block_name=None):
     {% show_page_content other_page "block_name" %}   use other_page for content items lookup
     """
     page_or_block_name = page_or_block_name or None
-    if isinstance(page_or_block_name, basestring) and block_name is None:
+    if isinstance(page_or_block_name, six.string_types) and block_name is None:
         # Single argument e.g. {% show_page_content 'main' %}
         block_name = page_or_block_name
         try:
@@ -249,7 +251,7 @@ def editable_attrs(context, obj):
             'url': change_url,
             'can_edit': PERMISSIONS.can_edit(user, obj)
         }
-        return ' data-fiber-data="%s"' % escape(json.dumps(data, sort_keys=True))
+        return mark_safe(' data-fiber-data="%s"' % escape(json.dumps(data, sort_keys=True)))
     return ''
 
 

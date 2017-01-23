@@ -82,4 +82,4 @@ class TestInvalidFriendlyDateTime(TestCase):
         self.assertEqual(date.friendly_datetime('abc'), 'abc')
 
     def test_invalid_timestamp(self):
-        self.assertEqual(date.friendly_datetime(sys.maxint), sys.maxint)
+        self.assertEqual(date.friendly_datetime(sys.maxsize), sys.maxsize)
