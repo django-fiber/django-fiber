@@ -1295,7 +1295,12 @@ var AddContentItemFormDialog = ChangeContentItemFormDialog.extend({
 
 		this.after_action_success = $.proxy(function(responseText, statusText, xhr, $form) {
 			// find id of added content item
+			// Django 1.8.x: "/admin/fiber/fiber_admin/fiber/contentitem/<pk>/
 			var added_content_item_id = xhr.responseXML.URL.replace(/\/$/,'').split('/').pop();
+			if (added_content_item_id === 'change') {
+				// Django > 1.8.x: "/admin/fiber/fiber_admin/fiber/contentitem/<pk>/change/"
+				added_content_item_id = xhr.responseXML.URL.replace(/\/$/,'').split('/').slice(-2)[0]
+			}
 
 			if (added_content_item_id) {
 				this.add_content_item(added_content_item_id);
