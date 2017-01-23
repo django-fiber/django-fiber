@@ -2,7 +2,7 @@
 
 ## 1.4.0-dev
 
-**Date** Jan 23th, 2017
+**Date** Jan 23rd, 2017
 
 * Upgraded CKEditor 4.5.4 -> 4.6.2
 * Updates and improvements of README
