@@ -14,9 +14,9 @@ But we can't let you (and our clients, ahem...) get stuck on an old version of D
 We hope you're happy with this latest push, but we can also imagine that you're a little sad (we are!) that Django Fiber is moving into its retirement home.
 If you think that Django Fiber has a lot more to give, we are more than welcome to give you a commit bit to this repository, so you can 'make Django Fiber great again' (pun totally intended).
 
-Join the discussion about this development in issue #244
+Join the discussion about this development in `issue #244 <https://github.com/ridethepony/django-fiber/issues/244>`_.
 
-The guys and gals at Ride The Pony, Leukeleu and Jouw Omgeving
+*The guys and gals at Ride The Pony, Leukeleu and Jouw Omgeving*
 
 
 |Travis build image| |PyPI version| |Coverage Status|
