@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.0-dev
+## 1.4.0
 
 **Date** Jan 23rd, 2017
 
@@ -10,7 +10,7 @@
 * Correction in migrations: on_delete will be required for ForeignKeys in the future
 * Fix API to work with django-rest-framework >= 3.4
 * Updated dependencies to versions that support Django >= 1.8
-* Added Django 1.9 and 1.10 support 
+* Added Django 1.9 and 1.10 support
 * Added Python 3.4 support
 * Dropped Django < 1.8 support
 * Dropped Python < 2.7 support
