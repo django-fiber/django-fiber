@@ -146,11 +146,11 @@ for the latest changes.
 
 |Analytics|
 
-.. |Travis build image| image:: https://secure.travis-ci.org/ridethepony/django-fiber.svg?branch=master
+.. |Travis build image| image:: https://secure.travis-ci.org/ridethepony/django-fiber.svg?branch=dev
    :target: http://travis-ci.org/#!/ridethepony/django-fiber
 .. |PyPI version| image:: https://img.shields.io/pypi/v/django-fiber.svg
    :target: https://pypi.python.org/pypi/django-fiber/
-.. |Coverage Status| image:: https://coveralls.io/repos/ridethepony/django-fiber/badge.svg?branch=master
+.. |Coverage Status| image:: https://coveralls.io/repos/ridethepony/django-fiber/badge.svg?branch=dev
    :target: https://coveralls.io/r/ridethepony/django-fiber
 .. |Analytics| image:: https://ga-beacon.appspot.com/UA-24341330-5/django-fiber/readme
    :target: https://github.com/ridethepony/django-fiber
