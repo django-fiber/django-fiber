@@ -239,9 +239,9 @@ function extend_CKEditor() {
 			var image_select_dialog = new Fiber.ImageSelectDialog();
 
 			image_select_dialog.action_click = function() {
-				var selected_image_path = $(this.uiDialog.find('tr.selected td'));
-				selected_image_path =$(selected_image_path[0]).text();
-				var selected_image_title = '';
+				var selected_image_td = $(this.uiDialog.find('tr.selected td'));
+				var selected_image_path = $(selected_image_td[0]).text();
+				var selected_image_title = $(selected_image_td[0]).find('img').attr('title');
 
 				// create image element, and insert it
 				var imageElement = CKEDITOR.dom.element.createFromHtml('<img src="' + selected_image_path + '" title="' + CKEDITOR.tools.htmlEncode(selected_image_title) + '" />');
