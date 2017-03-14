@@ -244,7 +244,7 @@ function extend_CKEditor() {
 				var selected_image_title = $(selected_image_td[0]).find('img').attr('title');
 
 				// create image element, and insert it
-				var imageElement = CKEDITOR.dom.element.createFromHtml('<img src="' + selected_image_path + '" title="' + CKEDITOR.tools.htmlEncode(selected_image_title) + '" />');
+				var imageElement = CKEDITOR.dom.element.createFromHtml('<img src="' + selected_image_path + '" alt="' + CKEDITOR.tools.htmlEncode(selected_image_title) + '" title="' + CKEDITOR.tools.htmlEncode(selected_image_title) + '" />');
 				editor.insertElement(imageElement);
 
 				this.destroy();
