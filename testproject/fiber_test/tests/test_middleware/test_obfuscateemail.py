@@ -7,6 +7,8 @@ from django.utils.six.moves.html_parser import HTMLParser
 
 from fiber.middleware import ObfuscateEmailAddressMiddleware
 
+from fiber_test.tests.test_utils.test_middleware import TestNewStyleMiddlewareMixin
+
 
 class TestEmailAddressObfuscation(SimpleTestCase):
     """Test the obfuscation method"""
@@ -111,3 +113,7 @@ class TestNonReplacement(SimpleTestCase):
         response = HttpResponse(content)
         self.assertEqual(
             force_text(self.middleware.process_response(None, response).content), content)
+
+
+class TestNewStyleMiddleware(TestNewStyleMiddlewareMixin, SimpleTestCase):
+    middleware_factory = ObfuscateEmailAddressMiddleware

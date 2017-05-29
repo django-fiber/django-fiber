@@ -13,6 +13,11 @@ from fiber.app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR, PERMISSION_CL
 from fiber.models import ContentItem, Page
 from fiber.utils.import_util import import_element, load_class
 
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    MiddlewareMixin = object
+
 
 perms = load_class(PERMISSION_CLASS)
 
@@ -25,13 +30,14 @@ def is_html(response):
     return bool(content_type and content_type.split(';')[0] in ('text/html', 'application/xhtml+xml'))
 
 
-class AdminPageMiddleware(object):
+class AdminPageMiddleware(MiddlewareMixin):
     LOGIN_SESSION_KEY = 'show_fiber_login'
     body_re = re.compile(
         r'<head>(?P<HEAD>.*)</head>(?P<AFTER_HEAD>.*)<body(?P<BODY_ATTRS>.*?)>(?P<BODY>.*)</body>',
         re.DOTALL)
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(AdminPageMiddleware, self).__init__(*args, **kwargs)
         self.editor_settings = import_element(EDITOR)
 
     def process_response(self, request, response):
@@ -68,7 +74,8 @@ class AdminPageMiddleware(object):
         - is NOT performed by an admin user
         - has session key self.LOGIN_SESSION_KEY = True
         """
-        return not request.user.is_staff and request.session.get(self.LOGIN_SESSION_KEY)
+        return (not (hasattr(request, 'user') and request.user.is_staff) and
+                (hasattr(request, 'session') and request.session.get(self.LOGIN_SESSION_KEY)))
 
     def show_admin(self, request, response):
         """
@@ -81,7 +88,7 @@ class AdminPageMiddleware(object):
         """
         if request.is_ajax() or response.status_code != 200:
             return False
-        if request.user.is_staff and perms.is_fiber_editor(request.user):
+        if (hasattr(request, 'user') and request.user.is_staff) and perms.is_fiber_editor(request.user):
             if EXCLUDE_URLS:
                 url = request.path_info.lstrip('/')
                 for exclude_url in EXCLUDE_URLS:
@@ -147,7 +154,8 @@ class AdminPageMiddleware(object):
         else:
             return '%s?next=%s' % (reverse('admin:logout'), request.path_info)
 
-class ObfuscateEmailAddressMiddleware(object):
+
+class ObfuscateEmailAddressMiddleware(MiddlewareMixin):
     """
     Replaces plain email addresses with escaped addresses in (non streaming) HTML responses
     """
