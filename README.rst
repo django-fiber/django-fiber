@@ -76,6 +76,8 @@ Add Fiber to the MIDDLEWARE_CLASSES list
         'fiber.middleware.AdminPageMiddleware',
     )
 
+(Or, add the same items to ``MIDDLEWARE`` if you are using Django 1.10 or later.)
+
 Add the request context processor
 
 ::
