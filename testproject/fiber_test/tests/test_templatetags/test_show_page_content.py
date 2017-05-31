@@ -1,7 +1,10 @@
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.template import Template, Context, TemplateSyntaxError
 from django.test import TestCase, SimpleTestCase
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 from fiber.models import Page, ContentItem, PageContentItem
 from ...test_util import RenderMixin

@@ -2,12 +2,15 @@ import random
 import re
 import json
 
-from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.six.moves.urllib_parse import unquote
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 from fiber.app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR, PERMISSION_CLASS
 from fiber.models import ContentItem, Page

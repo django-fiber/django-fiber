@@ -2,7 +2,10 @@ import os
 import json
 import warnings
 
-from django.core.urlresolvers import reverse
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
