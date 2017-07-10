@@ -30,8 +30,8 @@ setup(
     author='Dennis Bunskoek',
     author_email='dbunskoek@leukeleu.nl',
 
-    url='https://github.com/ridethepony/django-fiber',
-    download_url='https://github.com/ridethepony/django-fiber/zipball/master',
+    url='https://github.com/django-fiber/django-fiber',
+    download_url='https://github.com/django-fiber/django-fiber/zipball/master',
 
     packages=find_packages(),
     include_package_data=True,

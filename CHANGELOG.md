@@ -153,9 +153,9 @@
 
 * Added [coveralls.io] support, pull request [pull176]
 
-[pull182]: https://github.com/ridethepony/django-fiber/pull/182
-[pull176]: https://github.com/ridethepony/django-fiber/pull/176
-[coveralls.io]: https://coveralls.io/r/ridethepony/django-fiber
+[pull182]: https://github.com/django-fiber/django-fiber/pull/182
+[pull176]: https://github.com/django-fiber/django-fiber/pull/176
+[coveralls.io]: https://coveralls.io/r/django-fiber/django-fiber
 
 
 ## 0.11.0
@@ -203,8 +203,8 @@
     * Django MPTT to 0.6
     * Django REST Framework to 2.3.7
 
-[issue180]: https://github.com/ridethepony/django-fiber/issues/180
-[issue175]: https://github.com/ridethepony/django-fiber/pull/175
+[issue180]: https://github.com/django-fiber/django-fiber/issues/180
+[issue175]: https://github.com/django-fiber/django-fiber/pull/175
 
 
 ## 0.10.4
@@ -228,7 +228,7 @@
     * Fixed a [bug][issue171] in the middleware which was introduced in 0.10.2 if using Django 1.3
     * Thanks to the upgrade of Django REST Framework [this issue][issue] is also resolved.
 
-[issue171]: https://github.com/ridethepony/django-fiber/pull/171
+[issue171]: https://github.com/django-fiber/django-fiber/pull/171
 [issue]: https://github.com/tomchristie/django-rest-framework/issues/705
 
 

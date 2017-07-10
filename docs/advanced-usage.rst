@@ -190,7 +190,7 @@ You can also override the entire CKEditor toolbar, by setting the variable:
     window.CKEDITOR_CONFIG_TOOLBAR
 
 To see how this works, check the fiber.ckeditor.js file in the Django Fiber source:
-https://github.com/ridethepony/django-fiber/blob/master/fiber/static/fiber/js/fiber.ckeditor.js
+https://github.com/django-fiber/django-fiber/blob/master/fiber/static/fiber/js/fiber.ckeditor.js
 
 
 .. _advanced_usage_custom_permissions:
