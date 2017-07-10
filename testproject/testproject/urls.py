@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^api/v2/', include('fiber.rest_api.urls')),
     url(r'^admin/fiber/', include('fiber.admin_urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:

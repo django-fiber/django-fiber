@@ -14,7 +14,7 @@ But we can't let you (and our clients, ahem...) get stuck on an old version of D
 We hope you're happy with this latest push, but we can also imagine that you're a little sad (we are!) that Django Fiber is moving into its retirement home.
 If you think that Django Fiber has a lot more to give, we are more than welcome to give you a commit bit to this repository, so you can 'make Django Fiber great again' (pun totally intended).
 
-Join the discussion about this development in `issue #244 <https://github.com/ridethepony/django-fiber/issues/244>`_.
+Join the discussion about this development in `issue #244 <https://github.com/django-fiber/django-fiber/issues/244>`_.
 
 *The guys and gals at Ride The Pony, Leukeleu and Jouw Omgeving*
 
@@ -22,7 +22,7 @@ Join the discussion about this development in `issue #244 <https://github.com/ri
 |Travis build image| |PyPI version| |Coverage Status|
 
 Do you want to see a Django Fiber screencast, to get a feel for what  it can do
-for you? `Check it out on Vimeo <http://vimeo.com/ridethepony/django-fiber>`_
+for you? `Check it out on Vimeo <http://vimeo.com/django-fiber/django-fiber>`_
 
 Convinced? Want to use Django Fiber in your own Django project? Then follow the
 instructions below.
@@ -75,6 +75,8 @@ Add Fiber to the MIDDLEWARE_CLASSES list
         'fiber.middleware.ObfuscateEmailAddressMiddleware',
         'fiber.middleware.AdminPageMiddleware',
     )
+
+(Or, add the same items to ``MIDDLEWARE`` if you are using Django 1.10 or later.)
 
 Add the request context processor
 
@@ -141,16 +143,16 @@ documentation project at
 Changelog
 ---------
 
-See `CHANGELOG.md <https://github.com/ridethepony/django-fiber/blob/master/CHANGELOG.md>`_
+See `CHANGELOG.md <https://github.com/django-fiber/django-fiber/blob/master/CHANGELOG.md>`_
 for the latest changes.
 
 |Analytics|
 
-.. |Travis build image| image:: https://secure.travis-ci.org/ridethepony/django-fiber.svg?branch=dev
-   :target: http://travis-ci.org/#!/ridethepony/django-fiber
+.. |Travis build image| image:: https://secure.travis-ci.org/django-fiber/django-fiber.svg?branch=dev
+   :target: http://travis-ci.org/#!/django-fiber/django-fiber
 .. |PyPI version| image:: https://img.shields.io/pypi/v/django-fiber.svg
    :target: https://pypi.python.org/pypi/django-fiber/
-.. |Coverage Status| image:: https://coveralls.io/repos/ridethepony/django-fiber/badge.svg?branch=dev
-   :target: https://coveralls.io/r/ridethepony/django-fiber
+.. |Coverage Status| image:: https://coveralls.io/repos/django-fiber/django-fiber/badge.svg?branch=dev
+   :target: https://coveralls.io/r/django-fiber/django-fiber
 .. |Analytics| image:: https://ga-beacon.appspot.com/UA-24341330-5/django-fiber/readme
-   :target: https://github.com/ridethepony/django-fiber
+   :target: https://github.com/django-fiber/django-fiber

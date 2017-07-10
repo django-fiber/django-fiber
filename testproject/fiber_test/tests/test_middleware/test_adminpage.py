@@ -3,13 +3,15 @@ from unittest import skipUnless
 
 from django.contrib.auth.models import AnonymousUser, User
 from django.http import HttpResponse, StreamingHttpResponse
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, SimpleTestCase
 from django.utils.encoding import force_text
-
+ 
 import fiber.middleware
 
 from fiber.middleware import AdminPageMiddleware
 from fiber.models import ContentItem, Page, PageContentItem
+
+from fiber_test.tests.test_utils.test_middleware import TestNewStyleMiddlewareMixin
 
 middleware = AdminPageMiddleware()
 
@@ -296,3 +298,7 @@ class TestGetLogoutUrlMethod(TestCase):
     def test_with_querystring(self):
         request = self.client.get('/', {'foo': 'bar'})
         self.assertEqual('/admin/logout/?next=/?foo=bar', middleware.get_logout_url(request))
+
+
+class TestNewStyleMiddleware(TestNewStyleMiddlewareMixin, SimpleTestCase):
+    middleware_factory = AdminPageMiddleware

@@ -89,15 +89,3 @@
 	cursor: pointer;
 	color: #cc3434
 }
-
-.fiber-json-widget a.add-btn {
-	cursor: pointer;
-	margin-left: 5px;
-	color: #5b80b2;
-  background: url("../../admin/img/icon_addlink.gif") no-repeat scroll 0 0.25em transparent;
-  padding-left: 12px;
-}
-
-.fiber-json-widget tr.add-row {
-	background: url("../../admin/img/nav-bg.gif") repeat-x scroll left top #e1e1e1;
-}
