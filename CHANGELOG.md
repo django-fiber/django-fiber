@@ -286,4 +286,4 @@ dependencies will break.
 
 ---
 
-Older changes not documented. Revert to the git log for details.
+Older changes not documented. Refer to the git log for details.
