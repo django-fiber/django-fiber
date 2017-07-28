@@ -13,7 +13,7 @@ same, which was why Django Fiber became pretty popular. And it is still going st
 Later, they discovered `Wagtail <https://wagtail.io/>`_, and found it to be even better than their own creation. So
 they decided to move on. Nevertheless, Django Fiber was popular, used in many websites, and they didn't want to just
 drop it. At the start of 2017 they handed over control of the project to a new group of maintainers - the discussion
-about this handover can be found in `issue #244 <https://github.com/django-fiber/django-fiber/issues/244>`_
+about this handover can be found in `issue #244 <https://github.com/django-fiber/django-fiber/issues/244>`_.
 
 Currently Django Fiber is in 'maintenance mode'. What this means it that it will be updated to run with the
 latest releases of Django - and of other packages that Django Fiber depends on. However, no effort will be made to
