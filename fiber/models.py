@@ -101,8 +101,8 @@ class Page(MPTTModel):
     content_items = models.ManyToManyField(ContentItem, through='PageContentItem', verbose_name=_('content items'))
     metadata = JSONField(blank=True, null=True, schema=METADATA_PAGE_SCHEMA, prefill_from='fiber.models.Page')
 
-    tree = TreeManager()
     objects = load_class(PAGE_MANAGER)
+    tree = TreeManager()
 
     class Meta:
         verbose_name = _('page')
