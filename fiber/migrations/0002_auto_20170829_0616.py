@@ -14,12 +14,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelManagers(
-            name='page',
-            managers=[
-                ('tree', django.db.models.manager.Manager()),
-            ],
-        ),
         migrations.AlterField(
             model_name='file',
             name='file',
