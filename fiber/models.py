@@ -280,11 +280,15 @@ class PageContentItem(models.Model):
                 resort()
 
 
+def images_directory(instance, filename):
+    return IMAGES_DIR
+
+
 @python_2_unicode_compatible
 class Image(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
-    image = models.ImageField(_('image'), upload_to=IMAGES_DIR, max_length=255)
+    image = models.ImageField(_('image'), upload_to=images_directory, max_length=255)
     title = models.CharField(_('title'), max_length=255)
     width = models.IntegerField(_('width'), blank=True, null=True)
     height = models.IntegerField(_('height'), blank=True, null=True)
@@ -299,7 +303,7 @@ class Image(models.Model):
 
     def save(self, *args, **kwargs):
         # delete existing Image(s) with the same image.name - TODO: warn about this?
-        existing_images = Image.objects.filter(image=os.path.join(IMAGES_DIR, self.image.name))
+        existing_images = Image.objects.filter(image=os.path.join(images_directory, self.image.name))
         for existing_image in existing_images:
             existing_image.delete()
 
@@ -337,11 +341,15 @@ class Image(models.Model):
     preview.allow_tags = True
 
 
+def files_directory(instance, filename):
+    return FILES_DIR
+
+
 @python_2_unicode_compatible
 class File(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
-    file = models.FileField(_('file'), upload_to=FILES_DIR, max_length=255)
+    file = models.FileField(_('file'), upload_to=files_directory, max_length=255)
     title = models.CharField(_('title'), max_length=255)
 
     class Meta:
@@ -354,7 +362,7 @@ class File(models.Model):
 
     def save(self, *args, **kwargs):
         # delete existing File(s) with the same file.name - TODO: warn about this?
-        existing_files = File.objects.filter(file=os.path.join(FILES_DIR, self.file.name))
+        existing_files = File.objects.filter(file=os.path.join(files_directory, self.file.name))
         for existing_file in existing_files:
             existing_file.delete()
 
