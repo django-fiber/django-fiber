@@ -281,10 +281,8 @@ class PageContentItem(models.Model):
 
 
 def images_directory(instance, filename):
-    return '{directory}/{filename}'.format(
-        directory=IMAGES_DIR,
-        filename=filename
-    )
+    return os.path.join(IMAGES_DIR, filename)
+
 
 @python_2_unicode_compatible
 class Image(models.Model):
@@ -344,10 +342,7 @@ class Image(models.Model):
 
 
 def files_directory(instance, filename):
-    return '{directory}/{filename}'.format(
-        directory=FILES_DIR,
-        filename=filename
-    )
+    return os.path.join(FILES_DIR, filename)
 
 
 @python_2_unicode_compatible
