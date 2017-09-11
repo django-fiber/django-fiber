@@ -36,7 +36,11 @@ class TestEmailAddressReplacement(SimpleTestCase):
     def setUp(self):
         """Mock the encoding method, so we can get predictable output"""
         self.middleware = ObfuscateEmailAddressMiddleware()
-        self.middleware.encode_email = lambda matches: '!!%s!!' % matches.group(0)
+        self.middleware.encode_email = self.mail_exclaimer
+
+    @staticmethod
+    def mail_exclaimer(matches):
+        return matches.group().replace(matches.group('email'), '!!%s!!' % matches.group('email'))
 
     def assertResponse(self, content, expected):
         """Little helper assertion to dry things up"""
@@ -78,16 +82,16 @@ class TestEmailAddressReplacement(SimpleTestCase):
 
     def test_replaces_single_email_in_anchor(self):
         content = 'Contact me at: <a href="mailto:spam@example.com">spam@example.com</a>'
-        expected = 'Contact me at: <a href="!!mailto:spam@example.com!!">!!spam@example.com!!</a>'
+        expected = 'Contact me at: <a href="mailto:!!spam@example.com!!">!!spam@example.com!!</a>'
         self.assertResponse(content, expected)
 
     def test_replaces_multiple_email_addresses_in_anchors(self):
         content = ('Contact me at: <a href="mailto:spam@example.com">spam@example.com</a>\n'
                    '<a href="mailto:my-friend@example.com">my-friend@example.com</a> is the email address of my friend\n'
                    'We share <a href="mailto:email@example.com">email@example.com</a> for email')
-        expected = ('Contact me at: <a href="!!mailto:spam@example.com!!">!!spam@example.com!!</a>\n'
-                    '<a href="!!mailto:my-friend@example.com!!">!!my-friend@example.com!!</a> is the email address of my friend\n'
-                    'We share <a href="!!mailto:email@example.com!!">!!email@example.com!!</a> for email')
+        expected = ('Contact me at: <a href="mailto:!!spam@example.com!!">!!spam@example.com!!</a>\n'
+                    '<a href="mailto:!!my-friend@example.com!!">!!my-friend@example.com!!</a> is the email address of my friend\n'
+                    'We share <a href="mailto:!!email@example.com!!">!!email@example.com!!</a> for email')
         self.assertResponse(content, expected)
 
 
