@@ -1,3 +1,5 @@
+import os
+
 from unittest import skipUnless
 
 from django.http import HttpResponse, StreamingHttpResponse
@@ -82,17 +84,29 @@ class TestEmailAddressReplacement(SimpleTestCase):
 
     def test_replaces_single_email_in_anchor(self):
         content = 'Contact me at: <a href="mailto:spam@example.com">spam@example.com</a>'
-        expected = 'Contact me at: <a href="mailto:!!spam@example.com!!">!!spam@example.com!!</a>'
+        expected = 'Contact me at: <a href="!!mailto:spam@example.com!!">!!spam@example.com!!</a>'
         self.assertResponse(content, expected)
 
     def test_replaces_multiple_email_addresses_in_anchors(self):
         content = ('Contact me at: <a href="mailto:spam@example.com">spam@example.com</a>\n'
                    '<a href="mailto:my-friend@example.com">my-friend@example.com</a> is the email address of my friend\n'
                    'We share <a href="mailto:email@example.com">email@example.com</a> for email')
-        expected = ('Contact me at: <a href="mailto:!!spam@example.com!!">!!spam@example.com!!</a>\n'
-                    '<a href="mailto:!!my-friend@example.com!!">!!my-friend@example.com!!</a> is the email address of my friend\n'
-                    'We share <a href="mailto:!!email@example.com!!">!!email@example.com!!</a> for email')
+        expected = ('Contact me at: <a href="!!mailto:spam@example.com!!">!!spam@example.com!!</a>\n'
+                    '<a href="!!mailto:my-friend@example.com!!">!!my-friend@example.com!!</a> is the email address of my friend\n'
+                    'We share <a href="!!mailto:email@example.com!!">!!email@example.com!!</a> for email')
         self.assertResponse(content, expected)
+
+    def test_replacement_in_brackets(self):
+        content = 'Email Me <email@example.com>'
+        expected = 'Email Me <!!email@example.com!!>'
+        self.assertResponse(content, expected)
+
+    def test_replacement_in_very_large_page(self):
+        with open(os.path.join(os.path.dirname(__file__), 'very_large_page.html')) as f:
+            content = f.read()
+        output = force_text(self.middleware.process_response(None, HttpResponse(content)).content)
+        self.assertIn('<a href="!!mailto:info@example.com!!">!!info@example.com!!</a>', output, msg='href not replaced')
+        self.assertIn('<img alt="!!alt@example.com!!"', output, msg='alt not replaced')
 
 
 class TestNonReplacement(SimpleTestCase):
