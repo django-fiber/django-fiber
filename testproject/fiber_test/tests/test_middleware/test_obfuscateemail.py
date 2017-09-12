@@ -38,11 +38,7 @@ class TestEmailAddressReplacement(SimpleTestCase):
     def setUp(self):
         """Mock the encoding method, so we can get predictable output"""
         self.middleware = ObfuscateEmailAddressMiddleware()
-        self.middleware.encode_email = self.mail_exclaimer
-
-    @staticmethod
-    def mail_exclaimer(matches):
-        return matches.group().replace(matches.group('email'), '!!%s!!' % matches.group('email'))
+        self.middleware.encode_email = lambda email: '!!%s!!' % email
 
     def assertResponse(self, content, expected):
         """Little helper assertion to dry things up"""
