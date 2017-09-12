@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.1
+
+**Date** Sep 12th, 2017
+
+* Django 1.11 support
+* Python 3.5 support
+* Support new style middleware
+* Fix issues with migrations
+  * Django used to create a migration when the file/image upload directory setting changed
+  * Django used to create a migration for the default manager
+
 ## 1.4.0
 
 **Date** Jan 23rd, 2017
