@@ -165,12 +165,19 @@ class ObfuscateEmailAddressMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
         if is_html(response) and hasattr(response, 'content'):  # Do not obfuscate non-html and streaming responses.
             # http://www.lampdocs.com/blog/2008/10/regular-expression-to-extract-all-e-mail-addresses-from-a-file-with-php/
-            email_pattern = re.compile(r'(mailto:)?[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*(\+[_a-zA-Z0-9-]+)?@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))')
-            response.content = email_pattern.sub(self.encode_email, force_text(response.content))
+            email_pattern = r'(?P<email>(?:mailto:)?[_a-zA-Z0-9-]+(?:\.[_a-zA-Z0-9-]+)*(?:\+[_a-zA-Z0-9-]+)?@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.(?:(?:[0-9]{1,3})|(?:[a-zA-Z]{2,3})|(?:aero|coop|info|museum|name)))'
+            # Checks for emails:
+            # - At start of the string
+            # - Preceeded by a space
+            # - Preceeded by a ", ', >, (, [
+            email_re = re.compile(r'(^|\s|\"|\'|>|\(|<|\[){email_pattern}'.format(email_pattern=email_pattern))
+            response.content = email_re.sub(self.replace_email, force_text(response.content))
         return response
 
-    def encode_email(self, matches):
-        encoded_char_list = []
-        for char in matches.group(0):
-            encoded_char_list.append(random.choice(['&#%d;' % ord(char), '&#x%x;' % ord(char)]))
-        return ''.join(encoded_char_list)
+    def replace_email(self, matches):
+        email = matches.group('email')
+        return matches.group().replace(email, self.encode_email(email))
+
+    def encode_email(self, email):
+        formats = '&#{:d};', '&#x{:x};'
+        return ''.join(random.choice(formats).format(ord(c)) for c in email)
