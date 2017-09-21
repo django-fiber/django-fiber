@@ -1,3 +1,5 @@
+import os
+
 from unittest import skipUnless
 
 from django.http import HttpResponse, StreamingHttpResponse
@@ -36,7 +38,7 @@ class TestEmailAddressReplacement(SimpleTestCase):
     def setUp(self):
         """Mock the encoding method, so we can get predictable output"""
         self.middleware = ObfuscateEmailAddressMiddleware()
-        self.middleware.encode_email = lambda matches: '!!%s!!' % matches.group(0)
+        self.middleware.encode_email = lambda email: '!!%s!!' % email
 
     def assertResponse(self, content, expected):
         """Little helper assertion to dry things up"""
@@ -89,6 +91,23 @@ class TestEmailAddressReplacement(SimpleTestCase):
                     '<a href="!!mailto:my-friend@example.com!!">!!my-friend@example.com!!</a> is the email address of my friend\n'
                     'We share <a href="!!mailto:email@example.com!!">!!email@example.com!!</a> for email')
         self.assertResponse(content, expected)
+
+    def test_replacement_in_brackets(self):
+        content = 'Email Me <email@example.com>'
+        expected = 'Email Me <!!email@example.com!!>'
+        self.assertResponse(content, expected)
+
+    def test_replacement_with_dot(self):
+        content = 'Email Me email@example.com.'
+        expected = 'Email Me !!email@example.com!!.'
+        self.assertResponse(content, expected)
+
+    def test_replacement_in_very_large_page(self):
+        with open(os.path.join(os.path.dirname(__file__), 'very_large_page.html')) as f:
+            content = f.read()
+        output = force_text(self.middleware.process_response(None, HttpResponse(content)).content)
+        self.assertIn('<a href="!!mailto:info@example.com!!">!!info@example.com!!</a>', output, msg='href not replaced')
+        self.assertIn('<img alt="!!alt@example.com!!"', output, msg='alt not replaced')
 
 
 class TestNonReplacement(SimpleTestCase):
