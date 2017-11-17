@@ -1,8 +1,12 @@
 # Changelog
 
+## Unreleased
+
+* Updated translations strings (Spanish, Norwegian, Portuguese).
+
 ## 1.4.1
 
-**Date** TBA
+**Date** Sep 12th, 2017
 
 * Django 1.11 support
 * Python 3.5 support
@@ -10,7 +14,6 @@
 * Fix issues with migrations
   * Django used to create a migration when the file/image upload directory setting changed
   * Django used to create a migration for the default manager
-* Updated translations strings (Spanish, Norwegian, Portuguese).
 
 ## 1.4.0
 
