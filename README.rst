@@ -132,8 +132,7 @@ Create database tables::
 
     $ python manage.py migrate
 
-All static Fiber files need to be symlinked in (or copied to) your media
-folder::
+All static Fiber files need to be symlinked in (or copied to) your static files folder if you're not on your dev machine::
 
     $ python manage.py collectstatic --link
 
