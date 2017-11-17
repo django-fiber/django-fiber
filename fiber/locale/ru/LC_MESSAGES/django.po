@@ -3,21 +3,24 @@
 # This file is distributed under the same license as the Django Fiber package.
 #
 # Translators:
-# Ride The Pony <info@ridethepony.org>, 2011.
+# koodjo <koodjo@mail.ru>, 2012
+# Ride The Pony <info@ridethepony.org>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: django-fiber\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-05 11:24+0100\n"
-"PO-Revision-Date: 2012-06-27 01:26+0100\n"
-"Last-Translator: Dennis Bunskoek <dbunskoek@leukeleu.nl>\n"
-"Language-Team: Ride The Pony <info@ridethepony.org>\n"
+"POT-Creation-Date: 2017-11-17 17:59+0100\n"
+"PO-Revision-Date: 2017-09-19 13:35+0000\n"
+"Last-Translator: Fábio C. Barrionuevo da Luz <bnafta@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.com/django-fiber/django-fiber/"
+"language/ru/)\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Language: English\n"
 
 #: admin.py:81
@@ -36,7 +39,7 @@ msgstr ""
 msgid "Delete selected files"
 msgstr ""
 
-#: admin.py:98 models.py:313
+#: admin.py:98 models.py:325
 msgid "Size"
 msgstr ""
 
@@ -46,7 +49,7 @@ msgstr "Дополнительные параметры"
 
 #: admin.py:119 admin.py:142
 msgid "Metadata"
-msgstr ""
+msgstr "Метаданные"
 
 #: admin.py:156
 msgid "View on site"
@@ -72,27 +75,27 @@ msgstr "Действия"
 msgid "SEO"
 msgstr ""
 
-#: admin_forms.py:20
+#: admin_forms.py:21
 msgid "Content template"
 msgstr "Шаблон содержания"
 
-#: admin_forms.py:28
+#: admin_forms.py:29
 msgid "Redirect page"
 msgstr "Перенаправить на страницу"
 
-#: admin_forms.py:37
+#: admin_forms.py:38
 msgid "Template"
 msgstr "Шаблон"
 
-#: admin_forms.py:49
+#: admin_forms.py:50
 msgid "A named url can't be combined with a redirect page"
 msgstr "Имя ссылки не может быть объединено со страницей перенаправления"
 
-#: admin_views.py:29
+#: admin_views.py:32
 msgid "This account is inactive."
 msgstr "Аккаунт неактивен."
 
-#: admin_views.py:34
+#: admin_views.py:37
 msgid ""
 "Please enter a correct username and password. Note that both fields are case-"
 "sensitive."
@@ -100,215 +103,232 @@ msgstr ""
 "Пожалуйста, введите имя пользователя и пароль. Обратите внимание, что оба "
 "поля чувствительны к регистру."
 
-#: managers.py:79
+#: managers.py:76
 msgid "used more than once"
 msgstr "используются более одного раза"
 
-#: managers.py:80
+#: managers.py:77
 msgid "unused"
 msgstr "не используются"
 
-#: managers.py:81
+#: managers.py:78
 msgid "used once"
 msgstr "используются однажды"
 
-#: managers.py:82
+#: managers.py:79
 msgid "recently changed"
 msgstr "недавно изменные"
 
-#: models.py:27 models.py:79 models.py:277 models.py:333
+#: models.py:33 models.py:86 models.py:289 models.py:350
 msgid "created"
 msgstr "создано"
 
-#: models.py:28 models.py:80 models.py:278 models.py:334
+#: models.py:34 models.py:87 models.py:290 models.py:351
 msgid "updated"
 msgstr "обновлено"
 
-#: models.py:29
+#: models.py:35
 msgid "name"
 msgstr "имя"
 
-#: models.py:30 models.py:31 templates/fiber/admin.html:22
+#: models.py:36 models.py:37 templates/fiber/admin.html:17
 msgid "Content"
 msgstr "Содержание"
 
-#: models.py:32 models.py:93
+#: models.py:38 models.py:100
 msgid "protected"
 msgstr "защищено"
 
-#: models.py:33
+#: models.py:39
 msgid "metadata"
 msgstr "метаданные"
 
-#: models.py:34 models.py:90
+#: models.py:40 models.py:97
 msgid "template name"
 msgstr "имя шаблона"
 
-#: models.py:35
+#: models.py:41
 msgid "used on pages"
 msgstr "используется на страницах"
 
-#: models.py:40 models.py:230
+#: models.py:46 models.py:237
 msgid "content item"
 msgstr "блок содержимого"
 
-#: models.py:41 models.py:94
+#: models.py:47 models.py:101
 msgid "content items"
 msgstr "блоки содержимого"
 
-#: models.py:50
+#: models.py:56
 msgid "[ EMPTY ]"
 msgstr "[ ПУСТО ]"
 
-#: models.py:81
+#: models.py:88
 msgid "parent"
 msgstr "родитель"
 
-#: models.py:84 models.py:280 models.py:336
+#: models.py:91 models.py:292 models.py:353
 msgid "title"
 msgstr "заголовок"
 
-#: models.py:85
-#, fuzzy
+#: models.py:92
 msgid "document title"
-msgstr "блок содержимого"
+msgstr ""
 
-#: models.py:87
+#: models.py:94
 msgid "redirect page"
 msgstr "страница перенаправления"
 
-#: models.py:88
+#: models.py:95
 msgid "mark current regexes"
 msgstr "отметить текущие регулярные выражения"
 
-#: models.py:91
+#: models.py:98
 msgid "show in menu"
 msgstr "показывать в меню"
 
-#: models.py:92
+#: models.py:99
 msgid "is public"
 msgstr "опубликовано"
 
-#: models.py:101 models.py:231
+#: models.py:108 models.py:238
 msgid "page"
 msgstr "страница"
 
-#: models.py:102
+#: models.py:109
 msgid "pages"
 msgstr "страницы"
 
-#: models.py:232
+#: models.py:239
 msgid "block name"
 msgstr "имя блока"
 
-#: models.py:233
+#: models.py:240
 msgid "sort"
 msgstr "сортировка"
 
-#: models.py:279 models.py:285
+#: models.py:291 models.py:297
 msgid "image"
 msgstr "изображение"
 
-#: models.py:281
+#: models.py:293
 msgid "width"
 msgstr "ширина"
 
-#: models.py:282
+#: models.py:294
 msgid "height"
 msgstr "высота"
 
-#: models.py:286
+#: models.py:298
 msgid "images"
 msgstr "изображения"
 
-#: models.py:328
+#: models.py:340
 msgid "Preview"
 msgstr ""
 
-#: models.py:335 models.py:339
+#: models.py:352 models.py:356
 msgid "file"
 msgstr "файл"
 
-#: models.py:340
+#: models.py:357
 msgid "files"
 msgstr "файлы"
 
-#: rest_api/views.py:198 rest_api/views.py:264
+#: rest_api/views.py:198 rest_api/views.py:263
 #, python-format
 msgid "You don't have permission to delete %(file_name)s."
 msgstr ""
 
-#: rest_api/views.py:205 rest_api/views.py:271
+#: rest_api/views.py:205 rest_api/views.py:270
 #, python-format
 msgid "Successfully deleted %(file_name)s."
 msgstr ""
 
-#: rest_api/views.py:209 rest_api/views.py:275
+#: rest_api/views.py:209 rest_api/views.py:274
 #, python-format
 msgid ""
 "%(file_name)s is not deleted, because that would require deleting protected "
 "related objects."
 msgstr ""
 
-#: templates/fiber/admin.html:10
+#: templates/fiber/admin.html:9
 msgid "Log out"
 msgstr "Выход"
 
-#: templates/fiber/admin.html:11
+#: templates/fiber/admin.html:10
 msgid "Backend"
 msgstr "В админку"
 
-#: templates/fiber/admin.html:14
+#: templates/fiber/admin.html:13
 msgid "Pages"
 msgstr "Страницы"
 
-#: utils/date.py:30
+#: utils/date.py:34
 msgid "just now"
 msgstr "только что"
 
-#: utils/date.py:32
+#: utils/date.py:36
 #, python-format
 msgid "%s seconds ago"
 msgstr "%s секунд назад"
 
-#: utils/date.py:36
+#: utils/date.py:38
+#, fuzzy
+#| msgid "%s minutes ago"
+msgid "a minute ago"
+msgstr "%s минут назад"
+
+#: utils/date.py:40
 #, python-format
 msgid "%s minutes ago"
 msgstr "%s минут назад"
 
-#: utils/date.py:38
+#: utils/date.py:42
 msgid "an hour ago"
 msgstr "час назад"
 
-#: utils/date.py:40
+#: utils/date.py:44
 #, python-format
 msgid "%s hours ago"
 msgstr "%s часов назад"
 
-#: utils/date.py:42
+#: utils/date.py:46
 msgid "yesterday"
 msgstr "вчера"
 
-#: utils/date.py:44
+#: utils/date.py:48
 #, python-format
 msgid "%s days ago"
 msgstr "%s дней назад"
 
-#: utils/date.py:46
+#: utils/date.py:50
 msgid "a week ago"
 msgstr "неделю назад"
 
-#: utils/date.py:48
+#: utils/date.py:52
 #, python-format
 msgid "%s weeks ago"
 msgstr "%s недель назад"
 
-#: utils/date.py:50
+#: utils/date.py:56
+#, fuzzy
+#| msgid "%s months ago"
+msgid "a month ago"
+msgstr "%s месяцев назад"
+
+#: utils/date.py:58
 #, python-format
 msgid "%s months ago"
 msgstr "%s месяцев назад"
 
-#: utils/date.py:51
+#: utils/date.py:61
+#, fuzzy
+#| msgid "%s years ago"
+msgid "a year ago"
+msgstr "%s лет назад"
+
+#: utils/date.py:62
 #, python-format
 msgid "%s years ago"
 msgstr "%s лет назад"
@@ -320,6 +340,7 @@ msgstr "URL"
 #: utils/form_fields.py:10
 msgid "Example: 'products' or '/section-1/products/' or '\"some_named_url\"'"
 msgstr ""
+"Например: 'products' или '/section-1/products/' или '\"some_named_url\"'"
 
 #: utils/validators.py:32
 msgid "No reverse match found for the named url"
