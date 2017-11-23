@@ -5,7 +5,7 @@ from django.contrib.auth.models import AnonymousUser, User
 from django.http import HttpResponse, StreamingHttpResponse
 from django.test import RequestFactory, TestCase, SimpleTestCase
 from django.utils.encoding import force_text
- 
+
 import fiber.middleware
 
 from fiber.middleware import AdminPageMiddleware
@@ -53,7 +53,7 @@ class TestAtFiberLoginRedirect(TestCase):
     def test_follow_redirect_shows_login_in_body(self):
         """Following the redirect adds fiber-data to body"""
         response = self.client.get('/empty/@fiber', follow=True)
-        self.assertRegexpMatches(force_text(response.content), '<body data-fiber-data="{&quot;show_login&quot;: true}"></body>')
+        self.assertRegex(force_text(response.content), '<body data-fiber-data="{&quot;show_login&quot;: true}"></body>')
 
     def test_does_nothing_for_non_html_response(self):
         """Middleware skips non-html responses"""
@@ -88,20 +88,21 @@ class TestModifiedResponse(TestCase):
 
     def test_get_admin_url(self):
         response = self.client.get('/admin/')
-        self.assertRegexpMatches(force_text(response.content), '<body data-fiber-data="{&quot;backend&quot;: true}"')
+        self.assertRegex(force_text(response.content), '<body data-fiber-data="{&quot;backend&quot;: true}"')
 
     def test_get_frontend_url(self):
         response = self.client.get('/empty/')
-        self.assertRegexpMatches(force_text(response.content), '<body data-fiber-data="{&quot;frontend&quot;: true}"')
+        self.assertRegex(force_text(response.content), '<body data-fiber-data="{&quot;frontend&quot;: true}"')
 
     def test_wraps_body(self):
         response = self.client.get(self.page.get_absolute_url())
-        self.assertRegexpMatches(force_text(response.content), re.compile('<div id="wpr-body">.*lorem ipsum.*</div>', re.DOTALL))
+        self.assertRegex(force_text(response.content),
+                         re.compile('<div id="wpr-body">.*lorem ipsum.*</div>', re.DOTALL))
 
     def test_set_page_id(self):
         response = self.client.get(self.page.get_absolute_url())
         expected = '<body data-fiber-data="{&quot;frontend&quot;: true, &quot;page_id&quot;: %s}"' % self.page.pk
-        self.assertRegexpMatches(force_text(response.content), expected)
+        self.assertRegex(force_text(response.content), expected)
 
     def test_adds_sidebar(self):
         response = self.client.get('/empty/')

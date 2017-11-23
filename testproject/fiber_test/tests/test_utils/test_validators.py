@@ -32,8 +32,8 @@ class TestUtilsURLValidator(TestCase):
             self.validator('"some_named_url"')
 
         # Named url does exist
-        self.assertEquals(self.validator('"another_named_url"'), None)
+        self.assertEqual(self.validator('"another_named_url"'), None)
 
         # A fiber page also uses that named_url
         Page.objects.create(title='some_page', url='"another_named_url"').save()
-        self.assertEquals(self.validator('"another_named_url"'), None)
+        self.assertEqual(self.validator('"another_named_url"'), None)

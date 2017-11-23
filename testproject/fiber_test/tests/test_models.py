@@ -3,6 +3,7 @@ import json
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.utils.encoding import force_text
+
 try:
     from django.urls import reverse
 except ImportError:
@@ -13,7 +14,6 @@ from ..test_util import format_list, condense_html_whitespace
 
 
 class ContentItemTest(TestCase):
-
     def generate_data(self):
         """
         Generate test data:
@@ -39,31 +39,30 @@ class ContentItemTest(TestCase):
 
         content_groups = ContentItem.objects.get_content_groups()
 
-        self.assertEquals(
+        self.assertEqual(
             format_list([g['label'] for g in content_groups], must_sort=False, separator=';'),
             'used more than once;unused;used once;recently changed'
         )
-        self.assertEquals(
+        self.assertEqual(
             format_list(n['label'] for n in content_groups[0]['children']),
             'a'
         )
-        self.assertEquals(
+        self.assertEqual(
             format_list(n['label'] for n in content_groups[1]['children']),
             'c'
         )
-        self.assertEquals(
+        self.assertEqual(
             format_list(n['label'] for n in content_groups[2]['children']),
             'b'
         )
-        self.assertEquals(
+        self.assertEqual(
             format_list(n['label'] for n in content_groups[3]['children']),
             'a b c'
         )
 
     def test_rename_url(self):
-
         def check_content(name, html):
-            self.assertEquals(
+            self.assertEqual(
                 condense_html_whitespace(
                     ContentItem.objects.get(name=name).content_html
                 ),
@@ -96,7 +95,6 @@ class ContentItemTest(TestCase):
 
 
 class PageTest(TestCase):
-
     def generate_data(self):
         """
         ---home
@@ -142,18 +140,18 @@ class PageTest(TestCase):
         page_abc.move_page(page_section2.id, 'inside')
 
         page_abc = Page.objects.get(title='abc')  # reload the page
-        self.assertEquals(page_abc.parent.title, 'section2')
-        self.assertEquals(page_abc.get_previous_sibling(), None)
-        self.assertEquals(page_abc.get_next_sibling().title, 'def')
+        self.assertEqual(page_abc.parent.title, 'section2')
+        self.assertEqual(page_abc.get_previous_sibling(), None)
+        self.assertEqual(page_abc.get_next_sibling().title, 'def')
 
         # references in content items are changed
-        self.assertEquals(
+        self.assertEqual(
             condense_html_whitespace(
                 ContentItem.objects.get(name='a').content_html
             ),
             '<p><a href="/section2/abc/">abc</a></p>'
         )
-        self.assertEquals(
+        self.assertEqual(
             condense_html_whitespace(
                 ContentItem.objects.get(name='b').content_html
             ),
@@ -168,14 +166,13 @@ class PageTest(TestCase):
         page_xyz.move_page(page_def.id, 'after')
 
         page_xyz = Page.objects.get(title='xyz')  # reload the page
-        self.assertEquals(page_xyz.parent.title, 'section2')
-        self.assertEquals(page_xyz.get_previous_sibling().title, 'def')
-        self.assertEquals(page_xyz.get_next_sibling().title, 'ghi')
+        self.assertEqual(page_xyz.parent.title, 'section2')
+        self.assertEqual(page_xyz.get_previous_sibling().title, 'def')
+        self.assertEqual(page_xyz.get_next_sibling().title, 'ghi')
 
     def test_get_absolute_url(self):
-
         def test_url(title, url):
-            self.assertEquals(
+            self.assertEqual(
                 Page.objects.get(title=title).get_absolute_url(),
                 url
             )
@@ -211,13 +208,13 @@ class PageTest(TestCase):
         page_abc.save()
 
         # references in content items are changed
-        self.assertEquals(
+        self.assertEqual(
             condense_html_whitespace(
                 ContentItem.objects.get(name='a').content_html
             ),
             '<p><a href="/section1/a_b_c/">abc</a></p>'
         )
-        self.assertEquals(
+        self.assertEqual(
             condense_html_whitespace(
                 ContentItem.objects.get(name='b').content_html
             ),
@@ -266,9 +263,7 @@ class PageTest(TestCase):
 
 
 class PageContentItemTest(TestCase):
-
     def test_move(self):
-
         def get_content(page_id, block_name='main'):
             page = Page.objects.get(id=page_id)
             return format_list(
@@ -287,33 +282,33 @@ class PageContentItemTest(TestCase):
         item_c = PageContentItem.objects.create(page=page, content_item=content_c, block_name='main', sort=2)
 
         # 1. get content
-        self.assertEquals(u'a b c', get_content(page.id))
+        self.assertEqual(u'a b c', get_content(page.id))
 
         # 2. move 'a' before 'c'
         item_a.move(item_c.id)
 
-        self.assertEquals(u'b a c', get_content(page.id))
+        self.assertEqual(u'b a c', get_content(page.id))
 
         # 3. move 'c' before 'a'
         item_c.move(item_a.id)
-        self.assertEquals(u'b c a', get_content(page.id))
+        self.assertEqual(u'b c a', get_content(page.id))
 
         # 4. move 'b' last
         item_b.move()
-        self.assertEquals(u'c a b', get_content(page.id))
+        self.assertEqual(u'c a b', get_content(page.id))
 
         # 5. move 'a' to block 'side'
         item_a.move(block_name='side')
-        self.assertEquals(u'c b', get_content(page.id, 'main'))
-        self.assertEquals(u'a', get_content(page.id, 'side'))
+        self.assertEqual(u'c b', get_content(page.id, 'main'))
+        self.assertEqual(u'a', get_content(page.id, 'side'))
 
         # 6. move 'c' before 'a' in block 'side'
         item_a = PageContentItem.objects.get(id=item_a.id)
         item_c = PageContentItem.objects.get(id=item_c.id)
 
         item_c.move(item_a.id, block_name='side')
-        self.assertEquals(u'b', get_content(page.id, 'main'))
-        self.assertEquals(u'c a', get_content(page.id, 'side'))
+        self.assertEqual(u'b', get_content(page.id, 'main'))
+        self.assertEqual(u'c a', get_content(page.id, 'side'))
 
 
 class TestContentItem(TestCase):
@@ -328,7 +323,8 @@ class TestContentItem(TestCase):
         self.assertEqual(force_text(ContentItem(content_html='xyz')), 'xyz')
 
         # without name, content length > 50
-        self.assertEqual(force_text(ContentItem(content_html='abcdefghij' * 6)), 'abcdefghijabcdefghijabcdefghijabcdefghijabcdefghij...')
+        self.assertEqual(force_text(ContentItem(content_html='abcdefghij' * 6)),
+                         'abcdefghijabcdefghijabcdefghijabcdefghijabcdefghij...')
 
     def test_get_add_url(self):
         self.assertEqual(
