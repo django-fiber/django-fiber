@@ -18,10 +18,10 @@ setup(
 
     install_requires=[
         'Pillow>=2.2.1',
-        'django-mptt>=0.8',
-        'django_compressor>=2.0',
-        'djangorestframework>=3.4',
-        'easy-thumbnails>=2.2',
+        'django-mptt>=0.8.6',
+        'django_compressor>=2.2',
+        'djangorestframework>=3.7',
+        'easy-thumbnails>=2.5.0',
     ],
 
     description='Django Fiber - a simple, user-friendly CMS for all your Django projects',
