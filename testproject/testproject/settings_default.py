@@ -100,10 +100,9 @@ TEMPLATES = [
     },
 ]
 
-MIDDLEWARE = list(DEFAULT_SETTINGS.MIDDLEWARE_CLASSES) + [
+MIDDLEWARE = list(DEFAULT_SETTINGS.MIDDLEWARE) + [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'fiber.middleware.ObfuscateEmailAddressMiddleware',
     'fiber.middleware.AdminPageMiddleware',

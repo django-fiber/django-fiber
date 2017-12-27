@@ -1,6 +1,5 @@
 from django.conf import settings
 
-
 LOGIN_STRING = getattr(settings, 'FIBER_LOGIN_STRING', '@fiber')
 
 DEFAULT_TEMPLATE = getattr(settings, 'FIBER_DEFAULT_TEMPLATE', 'base.html')
@@ -36,10 +35,10 @@ Point this class to your own Permission Class as declared in :mod:`fiber.permiss
 """
 PERMISSION_CLASS = getattr(settings, 'PERMISSION_CLASS', 'fiber.permissions.Permissions')
 
-if 'fiber.middleware.PageFallbackMiddleware' in settings.MIDDLEWARE_CLASSES:
+if 'fiber.middleware.PageFallbackMiddleware' in settings.MIDDLEWARE:
     raise DeprecationWarning(
         "fiber.middleware.PageFallbackMiddleware has been removed.\n"
         "See README.rst for new implementation details.\n"
         "It basically boils down to this:\n"
-        "remove 'fiber.middleware.PageFallbackMiddleware' from settings.MIDDLEWARE_CLASSES, and\n"
+        "remove 'fiber.middleware.PageFallbackMiddleware' from settings.MIDDLEWARE, and\n"
         "add url(r'', fiber.views.page) to the end of your urls.py")

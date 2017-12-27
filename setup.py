@@ -18,9 +18,9 @@ setup(
 
     install_requires=[
         'Pillow>=2.2.1',
-        'django-mptt>=0.8.6',
+        'django-mptt>=0.9.0',
         'django_compressor>=2.2',
-        'djangorestframework>=3.7',
+        'djangorestframework>=3.7.7',
         'easy-thumbnails>=2.5.0',
     ],
 
@@ -46,6 +46,8 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Framework :: Django',
     ]
 )
