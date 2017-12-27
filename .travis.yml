@@ -8,6 +8,10 @@ env:
   - DJANGO_VERSION=\>=1.8,\<1.9
   - DJANGO_VERSION=\>=1.11,\<1.12
   - DJANGO_VERSION=\>=2.0,\<2.1
+matrix:
+  exclude:
+    - python: 2.7
+      env: DJANGO_VERSION=\>=2.0,\<2.1
 install:
   - pip install --upgrade pip
   - pip install Django$DJANGO_VERSION --upgrade
