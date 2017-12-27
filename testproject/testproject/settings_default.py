@@ -100,13 +100,23 @@ TEMPLATES = [
     },
 ]
 
-MIDDLEWARE = list(DEFAULT_SETTINGS.MIDDLEWARE) + [
+if django.VERSION <= (2, 0):
+    default_middleware = DEFAULT_SETTINGS.MIDDLEWARE_CLASSES
+else:
+    default_middleware = DEFAULT_SETTINGS.MIDDLEWARE
+
+middleware = list(default_middleware) + [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'fiber.middleware.ObfuscateEmailAddressMiddleware',
     'fiber.middleware.AdminPageMiddleware',
 ]
+
+if django.VERSION < (1, 11):
+    MIDDLEWARE_CLASSES = middleware
+else:
+    MIDDLEWARE = middleware
 
 ROOT_URLCONF = 'testproject.urls'
 
