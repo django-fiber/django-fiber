@@ -34,11 +34,3 @@ DETAIL_THUMBNAIL_OPTIONS = getattr(settings, 'FIBER_DETAIL_THUMBNAIL_OPTIONS', {
 Point this class to your own Permission Class as declared in :mod:`fiber.permissions`.
 """
 PERMISSION_CLASS = getattr(settings, 'PERMISSION_CLASS', 'fiber.permissions.Permissions')
-
-if 'fiber.middleware.PageFallbackMiddleware' in settings.MIDDLEWARE:
-    raise DeprecationWarning(
-        "fiber.middleware.PageFallbackMiddleware has been removed.\n"
-        "See README.rst for new implementation details.\n"
-        "It basically boils down to this:\n"
-        "remove 'fiber.middleware.PageFallbackMiddleware' from settings.MIDDLEWARE, and\n"
-        "add url(r'', fiber.views.page) to the end of your urls.py")
