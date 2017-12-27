@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+* Django 2.0 support
+* Python 3.6 support
+* Dropped Django 1.8 support as A/ django-rest-framework no longer supports it B/ it will be end-of-lifed
+  in a few months anyway.
 * Updated translations strings (Spanish, Norwegian, Portuguese).
 
 ## 1.4.1
