@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^login/$', admin_views.fiber_login, name='fiber_login'),
     url(r'^pages.json$', admin_views.pages_json, name='pages_json'),
     url(r'^fiber_admin/', fiber_admin.site.urls),
-    url(r'^jsi18n/$', JavaScriptCatalog.as_view(), {'packages': ['fiber']}, name='fiber_i18n'),
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(), {'packages': 'fiber'}, name='fiber_i18n'),
 ]
