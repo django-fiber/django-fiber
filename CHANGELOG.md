@@ -7,6 +7,7 @@
 * Dropped Django 1.8 support as A/ django-rest-framework no longer supports it B/ it will be end-of-lifed
   in a few months anyway.
 * Updated translations strings (Spanish, Norwegian, Portuguese).
+* Updated docs.
 
 ## 1.4.1
 

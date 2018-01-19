@@ -16,7 +16,6 @@ Contents
 
    usage
    advanced-usage
-   django_1_7
    contributors
    settings
 
