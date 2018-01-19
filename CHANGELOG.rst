@@ -1,6 +1,8 @@
-# Changelog
+Changelog for Django-Fiber
+==========================
 
-## Unreleased
+1.5 (Unreleased)
+----------------
 
 * Django 2.0 support
 * Python 3.6 support
@@ -9,9 +11,8 @@
 * Updated translations strings (Spanish, Norwegian, Portuguese).
 * Updated docs.
 
-## 1.4.1
-
-**Date** Sep 12th, 2017
+1.4.1 (2017-09-12)
+------------------
 
 * Django 1.11 support
 * Python 3.5 support
@@ -20,9 +21,8 @@
   * Django used to create a migration when the file/image upload directory setting changed
   * Django used to create a migration for the default manager
 
-## 1.4.0
-
-**Date** Jan 23rd, 2017
+1.4.0 (2017-01-23)
+------------------
 
 * Upgraded CKEditor 4.5.4 -> 4.6.2
 * Updates and improvements of README
@@ -36,16 +36,14 @@
 * Dropped Python < 2.7 support
 
 
-## 1.3.1
-
-**Date** Oct 27th, 2015
+1.3.1 (2015-10-27)
+------------------
 
 * upgrade CKEditor 4.4.7 -> 4.5.4
 
 
-## 1.3
-
-**Date** Oct 27th, 2015
+1.3 (2015-10-27)
+------------------
 
 * run tests on Django 1.8, fix test failure
 * tox.ini uses new features of tox
@@ -69,17 +67,15 @@
 * numerous small fixes and improvements
 
 
-## 1.2
-
-**Date** July 29th, 2015
+1.2 (2015-07-29)
+------------------
 
 * Implemented Django's static template tag to support Django 1.8
 * Fixed an error where context menu would not show when right-clicking a fiber content item
 
 
-## 1.1
-
-**Date** Feb 10th, 2015
+1.1 (2015-02-10)
+------------------
 
 * Updated Sphinx settings to work with Django 1.7
 * Upgraded CKEditor 4.3.2 -> 4.4.7
@@ -95,71 +91,62 @@
 * Fine-tunes in several (new) messages and their Dutch translations
 
 
-## 1.0
-
-**Date** Nov 26th, 2014
+1.0 (2014-11-26)
+------------------
 
 * Support Django 1.7
 
 
-## 0.13
-
-**Date** Apr 1st, 2014
+0.13 (2014-04-01)
+------------------
 
 * More config settings for CKEditor (this is no joke)
 
 
-## 0.12.2
-
-**Date** Feb 18th, 2014
+0.12.2 (2014-02-18)
+------------------
 
 * Fixed object style selection in new CKEditor
 * Allow classes and styles on a and img elements
 
 
-## 0.12.1
-
-**Date** Feb 13th, 2014
+0.12.1 (2014-02-13)
+------------------
 
 * Quick fix - don’t let the new CKEditor strip out a and img tags
 
 
-## 0.12
-
-**Date** Feb 13th, 2014
+0.12 (2014-02-13)
+------------------
 
 * (re)allow embedding of media using iframes, objects (with params and embed)
 * Fixed 500 error that occurred when adding a Fiber Image without providing a title
 * Return an informative text instead of raising 500 errors when image files are missing
 
 
-## 0.11.4
-
-**Date** Feb 11th, 2014
+0.11.4 (2014-02-11)
+------------------
 
 * Fixed issue with non-workinbg CKEditor when no stylesSet is defined
 
 
-## 0.11.3
-
-**Date** Feb 11th, 2014
+0.11.3 (2014-02-11)
+------------------
 
 * Upgraded CKEditor to 4.3.2
 * Correctly reverse admin urls instead of relying on relative paths
 
 
-## 0.11.2
-
-**Date** Jan 29th, 2014
+0.11.2 (2014-01-29)
+------------------
 
 * Added fix for issue with protected ForeignKey relations
 * Added sitemap.xml support
 * Added missing image and fixed image paths
 
 
-## 0.11.1
-
-**Date** Oct 14th, 2013
+0.11.1 (2013-10-14)
+------------------
 
 * New feature: Auto add content items, pull request [pull182]
 
@@ -178,9 +165,8 @@
 [coveralls.io]: https://coveralls.io/r/django-fiber/django-fiber
 
 
-## 0.11.0
-
-**Date**: Oct 9th, 2013
+0.11.0 (2013-10-09)
+------------------
 
 * Image previews for Fiber Image in the Django admin
     * Using Easy Thumbnails 1.4
@@ -194,9 +180,8 @@
 * Fixed a bug when change_list for Fiber Image was rendered in a popup, for instance called from a raw_id widget
 
 
-## 0.10.5
-
-**Date**: Aug 27th, 2013
+0.10.5 (2013-08-27)
+------------------
 
 * Added meta_keywords field to Fiber Page model, so now you can add metatag keywords to your template. Ex:
 
@@ -227,16 +212,14 @@
 [issue175]: https://github.com/django-fiber/django-fiber/pull/175
 
 
-## 0.10.4
-
-**Date**: Jul 3rd, 2013
+0.10.4 (2013-07-03)
+------------------
 
 * Upgraded Django REST Framework to 2.3.6
 
 
-## 0.10.3
-
-**Date**: Apr 25th, 2013
+0.10.3 (2013-04-25)
+------------------
 
 * Upgraded external packages to the latest stable releases:
     * Django REST Framework 2.2.6
@@ -252,9 +235,8 @@
 [issue]: https://github.com/tomchristie/django-rest-framework/issues/705
 
 
-## 0.10.2
-
-**Date**: Mar 22nd, 2013
+0.10.2 (2013-05-22)
+------------------
 
 * Django 1.5 compatibility fixes
 * block non-POST requests on login
@@ -266,9 +248,8 @@
     * added tox support
 
 
-## 0.10.1
-
-**Date**: Feb 7th, 2013
+0.10.1 (2013-02-07)
+------------------
 
 * updated Django REST Framework to 2.1.17
 * updated requirements
@@ -282,25 +263,22 @@
 * improved file deletion for multiple storage backends
 
 
-## 0.10
-
-**Date**: Dec 21st, 2012
+0.10 (2012-12-21)
+------------------
 
 * Enhancement: Ported to REST Framework. **Note:** projects with local REST Framework 0.3.X or 0.3.4
 dependencies will break.
 * Enhancements: Updated README file and added this changelog.
 
 
-## 0.9.9.1
-
-**Date**: Dec 6th, 2012
+0.9.9.1 (2012-12-06)
+--------------------
 
 * Security-Bugfix: Changed permission check in API from IsAuthenticated to IsAdminUser
 
 
-## 0.9.9
-
-**Date**: Nov 27th, 2012
+0.9.9 (2012-11-27)
+------------------
 
 * Enhancement: Title fields of pages are now required. Solves inconsistent behaviour in the UI.
 
