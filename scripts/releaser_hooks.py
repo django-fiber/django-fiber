@@ -8,4 +8,4 @@ def prereleaser_middle(data):
     It runs the unit tests one last time.
     """
     print('Running unit tests.')
-    subprocess.check_output(["run_tests"])
+    subprocess.check_output(['python', 'testproject/manage.py', 'test', 'fiber_test'])
