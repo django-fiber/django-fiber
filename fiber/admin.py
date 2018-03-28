@@ -36,6 +36,10 @@ class UserPermissionMixin(object):
         if obj:  # instance-delete action
             return perms.can_edit(request.user, obj)
         pks = request.POST.getlist('_selected_action')  # bulk delete action
+        if any(not isinstance(x, int) for x in pks):
+            # Handling of non-Fiber models that might use non-integer primary keys.
+            # TODO: should this code even be running for non-Fiber models? See issue 261.
+            return
         qs = self.model.objects.filter(pk__in=pks)
         editables_qs = perms.filter_objects(request.user, self.model.objects.all())
         if len(set(qs) & set(editables_qs)) != len(qs):
@@ -53,13 +57,14 @@ class UserPermissionMixin(object):
 class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
     list_display = ('__str__', 'title', 'updated',)
     date_hierarchy = 'updated'
-    search_fields = ('title', )
+    search_fields = ('title',)
     actions = ['really_delete_selected']
 
     def get_actions(self, request):
         actions = super(FileAdmin, self).get_actions(request)
         if 'delete_selected' in actions:
-            del actions['delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
+            del actions[
+                'delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
         return actions
 
     def really_delete_selected(self, request, queryset):
@@ -84,9 +89,10 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
 
         if protected_count:
             # TODO More informative feedback, possibly with an intermediate screen. Compare messages on trying to delete one object.
-            messages.add_message(request, messages.ERROR, _("%(count)d %(items)s not deleted, because that would require deleting protected related objects.") % {
-                "count": protected_count, "items": model_ngettext(self.opts, protected_count)
-            })
+            messages.add_message(request, messages.ERROR, _(
+                "%(count)d %(items)s not deleted, because that would require deleting protected related objects.") % {
+                                     "count": protected_count, "items": model_ngettext(self.opts, protected_count)
+                                 })
 
     really_delete_selected.short_description = _('Delete selected files')
 
@@ -125,6 +131,7 @@ class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
         if obj.used_on_pages_data is None:
             return True
         return False
+
     unused.boolean = True
 
 
@@ -134,11 +141,11 @@ class PageContentItemInline(UserPermissionMixin, admin.TabularInline):
 
 
 class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
-
     form = forms.PageForm
     fieldsets = (
         (None, {'fields': ('parent', 'title', 'url', 'redirect_page', 'template_name')}),
-        (_('Advanced options'), {'classes': ('collapse',), 'fields': ('meta_description', 'mark_current_regexes', 'show_in_menu', 'is_public', 'protected',)}),
+        (_('Advanced options'), {'classes': ('collapse',), 'fields': (
+            'meta_description', 'mark_current_regexes', 'show_in_menu', 'is_public', 'protected',)}),
         (_('Metadata'), {'classes': ('collapse',), 'fields': ('metadata',)}),
     )
 
@@ -165,18 +172,23 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
         # first child cannot be moved up, last child cannot be moved down
         if not page.is_first_child():
-            actions += u'<a href="%s/move_up" title="%s"><img src="%sfiber/admin/images/arrow_up.gif" width="16" height="16" alt="%s" /></a> ' % (page.pk, _('Move up'), settings.STATIC_URL, _('Move up'))
+            actions += u'<a href="%s/move_up" title="%s"><img src="%sfiber/admin/images/arrow_up.gif" width="16" height="16" alt="%s" /></a> ' % (
+                page.pk, _('Move up'), settings.STATIC_URL, _('Move up'))
         else:
-            actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (settings.STATIC_URL,)
+            actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
+                settings.STATIC_URL,)
 
         if not page.is_last_child():
-            actions += u'<a href="%s/move_down" title="%s"><img src="%sfiber/admin/images/arrow_down.gif" width="16" height="16" alt="%s" /></a> ' % (page.pk, _('Move down'), settings.STATIC_URL, _('Move down'))
+            actions += u'<a href="%s/move_down" title="%s"><img src="%sfiber/admin/images/arrow_down.gif" width="16" height="16" alt="%s" /></a> ' % (
+                page.pk, _('Move down'), settings.STATIC_URL, _('Move down'))
         else:
-            actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (settings.STATIC_URL,)
+            actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
+                settings.STATIC_URL,)
 
         # add subpage
         actions += u'<a href="add/?%s=%s" title="%s"><img src="%sfiber/admin/images/page_new.gif" width="16" height="16" alt="%s" /></a> ' % \
-                   (self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL, _('Add sub page'))
+                   (self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL,
+                    _('Add sub page'))
 
         return u'<span class="nobr">%s</span>' % (actions,)
 
@@ -194,16 +206,16 @@ class FiberAdminContentItemAdmin(UserPermissionMixin, fiber_admin.ModelAdmin):
         # remove content template choices if there are no choices
         if len(CONTENT_TEMPLATE_CHOICES) == 0:
             self.fieldsets = (
-                (None, {'classes': ('hide-label',), 'fields': (get_editor_field_name('content_html'), )}),
+                (None, {'classes': ('hide-label',), 'fields': (get_editor_field_name('content_html'),)}),
             )
         else:
             self.fieldsets = (
-                (None, {'classes': ('hide-label',), 'fields': (get_editor_field_name('content_html'), 'template_name', )}),
+                (None,
+                 {'classes': ('hide-label',), 'fields': (get_editor_field_name('content_html'), 'template_name',)}),
             )
 
 
 class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
-
     form = forms.PageForm
 
     def __init__(self, *args, **kwargs):
@@ -212,15 +224,15 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
         # remove template choices if there are no choices
         if len(TEMPLATE_CHOICES) == 0:
             self.fieldsets = (
-                (None, {'fields': ('title', 'url', )}),
-                (_('Advanced options'), {'fields': ('redirect_page', 'show_in_menu', 'is_public', )}),
-                (_('SEO'), {'fields': ('doc_title', 'meta_description', 'meta_keywords', )}),
+                (None, {'fields': ('title', 'url',)}),
+                (_('Advanced options'), {'fields': ('redirect_page', 'show_in_menu', 'is_public',)}),
+                (_('SEO'), {'fields': ('doc_title', 'meta_description', 'meta_keywords',)}),
             )
         else:
             self.fieldsets = (
-                (None, {'fields': ('title', 'url', )}),
-                (_('Advanced options'), {'fields': ('template_name', 'redirect_page', 'show_in_menu', 'is_public', )}),
-                (_('SEO'), {'fields': ('doc_title', 'meta_description', 'meta_keywords', )}),
+                (None, {'fields': ('title', 'url',)}),
+                (_('Advanced options'), {'fields': ('template_name', 'redirect_page', 'show_in_menu', 'is_public',)}),
+                (_('SEO'), {'fields': ('doc_title', 'meta_description', 'meta_keywords',)}),
             )
 
     def save_model(self, request, obj, form, change):

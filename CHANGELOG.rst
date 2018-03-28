@@ -4,8 +4,7 @@ Changelog for Django-Fiber
 1.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Fix for #261: Fiber admin crashes if non-Fiber models use non-integer primary keys.
 
 1.5 (2018-01-19)
 ----------------
