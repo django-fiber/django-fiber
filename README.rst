@@ -146,7 +146,7 @@ documentation project at
 Changelog
 ---------
 
-See `CHANGELOG.md <https://github.com/django-fiber/django-fiber/blob/master/CHANGELOG.md>`_
+See `CHANGELOG.md <https://github.com/django-fiber/django-fiber/blob/master/CHANGELOG.rst>`_
 for the latest changes.
 
 |Analytics|
