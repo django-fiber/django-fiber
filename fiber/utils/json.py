@@ -87,7 +87,7 @@ class JSONField(models.TextField):
         return self.to_python(value)
 
     def value_to_string(self, obj):
-        value = self._get_val_from_obj(obj)
+        value = self.value_from_object(obj)
         return self._get_json_value(value)
 
 try:
