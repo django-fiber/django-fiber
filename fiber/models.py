@@ -221,6 +221,8 @@ class Page(MPTTModel):
             new_url = self.get_absolute_url()
             if old_url != new_url:
                 ContentItem.objects.rename_url(old_url, new_url)
+                for page_content_item in self.page_content_items.all():
+                    page_content_item.content_item.set_used_on_pages_json()
 
     def is_public_for_user(self, user):
         return user.is_staff or self.is_public
