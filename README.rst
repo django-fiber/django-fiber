@@ -45,7 +45,7 @@ These dependencies are automatically installed::
 Installation
 ------------
 
-We're assuming you are using Django 1.8-1.10. Then simply install Fiber
+We're assuming you are using Django 1.9-2.0. Then simply install Fiber
 using pip::
 
     $ pip install django-fiber
