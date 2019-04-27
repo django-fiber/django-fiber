@@ -4,3 +4,4 @@
 /testproject/reports/
 /testproject/static/
 django_fiber.egg-info
+.tox
