@@ -4,3 +4,4 @@ recursive-include fiber/templates *
 recursive-include fiber/static *
 recursive-include fiber/locale *
 global-exclude */.DS_Store
+include requirements.txt

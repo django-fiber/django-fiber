@@ -11,18 +11,15 @@ if sys.argv[-1] == 'publish':  # upload to pypi
     print("  git push --tags")
     sys.exit()
 
+with open('requirements.txt', 'r') as file:
+    reqs = [line for line in file.readlines() if not line.strip().startswith('#')]
+
 setup(
     name='django-fiber',
     version=version,
     license='Apache License, Version 2.0',
 
-    install_requires=[
-        'Pillow>=2.2.1',
-        'django-mptt>=0.9.0',
-        'django_compressor>=2.2',
-        'djangorestframework>=3.7.7',
-        'easy-thumbnails>=2.5.0',
-    ],
+    install_requires=reqs,
 
     description='Django Fiber - a simple, user-friendly CMS for all your Django projects',
     long_description=open('README.rst').read(),

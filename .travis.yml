@@ -1,27 +1,28 @@
+dist: xenial
 language: python
-python:
-  - 2.7
-  - 3.4
-  - 3.5
-  - 3.6
-env:
-  - DJANGO_VERSION=\>=1.11,\<1.12
-  - DJANGO_VERSION=\>=2.0,\<2.1
-matrix:
-  exclude:
-    - python: 2.7
-      env: DJANGO_VERSION=\>=2.0,\<2.1
-install:
-  - pip install --upgrade pip
-  - pip install Django$DJANGO_VERSION --upgrade
-  - pip install -q -e .
-  - pip install -q -r test-requirements.txt
-script:
-  - python -W module -m coverage run testproject/manage.py test fiber_test
-after_success:
-  - coveralls
-branches:
-  only:
-    - master
-    - dev
 sudo: false
+# Travis config is driven by the tox.ini file.
+
+# Here we just specify:
+# 1. The Python versions to run - it will start a CI server for each, and run all the tox environments
+#    that use that Python. So in Travis we are running both in parallel (one server per Python version)
+#    and in series (each server runs all the Django envs for that version of Python).
+# 2. For *one* python version, we add an extra run of the unit tests - with coverage. The results are then fed to
+#    coveralls.
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+install:
+  - pip install tox-travis
+  - if [ "$TRAVIS_PYTHON_VERSION" = "3.6" ]; then pip install coveralls -r requirements.txt; fi
+
+script:
+  # Run against all the Python interpreter and Django versions specified in the tox.ini file.
+  - tox
+  - if [ "$TRAVIS_PYTHON_VERSION" = "3.6" ]; then python -W module -m coverage run testproject/manage.py test fiber_test; fi
+
+after_success:
+  - if [ "$TRAVIS_PYTHON_VERSION" = "3.6" ]; then coveralls; fi
