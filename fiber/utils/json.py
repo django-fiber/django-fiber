@@ -89,9 +89,3 @@ class JSONField(models.TextField):
     def value_to_string(self, obj):
         value = self.value_from_object(obj)
         return self._get_json_value(value)
-
-try:
-    from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ['^fiber\.utils\.json\.JSONField'])
-except ImportError:
-    pass
