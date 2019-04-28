@@ -1,11 +1,15 @@
 import os
 
+try:
+    import html
+except ImportError:
+    from django.utils.six.moves.html_parser import HTMLParser
+
 from unittest import skipUnless
 
 from django.http import HttpResponse, StreamingHttpResponse
 from django.test import SimpleTestCase
 from django.utils.encoding import force_text
-from django.utils.six.moves.html_parser import HTMLParser
 
 from fiber.middleware import ObfuscateEmailAddressMiddleware
 
@@ -14,6 +18,7 @@ from fiber_test.tests.test_utils.test_middleware import TestNewStyleMiddlewareMi
 
 class TestEmailAddressObfuscation(SimpleTestCase):
     """Test the obfuscation method"""
+
     def setUp(self):
         self.middleware = ObfuscateEmailAddressMiddleware()
 
@@ -26,7 +31,10 @@ class TestEmailAddressObfuscation(SimpleTestCase):
 
     def test_is_html_escaped(self):
         """Unescape the escaped response to see if it's the original content"""
-        h = HTMLParser()
+        try:
+            h = html
+        except:
+            h = HTMLParser()
         content = 'example@example.com'
         self.assertEqual(h.unescape(
             force_text(self.middleware.process_response(None, HttpResponse(content)).content)),
@@ -35,6 +43,7 @@ class TestEmailAddressObfuscation(SimpleTestCase):
 
 class TestEmailAddressReplacement(SimpleTestCase):
     """Test if email addresses get detected, and replaced, correctly"""
+
     def setUp(self):
         """Mock the encoding method, so we can get predictable output"""
         self.middleware = ObfuscateEmailAddressMiddleware()
@@ -112,6 +121,7 @@ class TestEmailAddressReplacement(SimpleTestCase):
 
 class TestNonReplacement(SimpleTestCase):
     """Test that email addresses do not get replaced under certain circumstances"""
+
     def setUp(self):
         self.middleware = ObfuscateEmailAddressMiddleware()
 
