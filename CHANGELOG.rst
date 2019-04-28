@@ -5,6 +5,7 @@ Changelog for Django-Fiber
 ----------------
 
 - Fix for #261: Fiber admin crashes if non-Fiber models use non-integer primary keys.
+- Removed context processor that had been deprecated for several years.
 
 1.5 (2018-01-19)
 ----------------
