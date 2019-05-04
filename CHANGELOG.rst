@@ -4,6 +4,7 @@ Changelog for Django-Fiber
 1.6 (unreleased)
 ----------------
 
+- Django 2.1 support.
 - Fix for #261: Fiber admin crashes if non-Fiber models use non-integer primary keys.
 - Removed context processor that had been deprecated for several years.
 

@@ -15,16 +15,16 @@ from fiber.utils.images import get_thumbnail, ThumbnailException
 
 class FiberTextarea(forms.Textarea):
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         attrs['class'] = 'fiber-editor'
-        return super(FiberTextarea, self).render(name, value, attrs)
+        return super(FiberTextarea, self).render(name, value, attrs, renderer)
 
 
 class FiberCombobox(forms.Select):
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         attrs['class'] = 'fiber-combobox'
-        return super(FiberCombobox, self).render(name, value, attrs)
+        return super(FiberCombobox, self).render(name, value, attrs, renderer)
 
 
 class JSONWidget(forms.Textarea):
@@ -42,7 +42,7 @@ class JSONWidget(forms.Textarea):
 
         super(JSONWidget, self).__init__(**kwargs)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         attrs['class'] = 'fiber-jsonwidget'
         if isinstance(value, dict):
             value = json.dumps(value)
@@ -81,7 +81,7 @@ class JSONWidget(forms.Textarea):
             'name': name,
             'json': json.dumps(schema),
         }
-        output = super(JSONWidget, self).render(name, value, attrs)
+        output = super(JSONWidget, self).render(name, value, attrs, renderer)
         return output + mark_safe(jquery)
 
 
@@ -89,15 +89,17 @@ class AdminImageWidgetWithPreview(AdminFileWidget):
     """
     A Widget for an ImageField with a preview of the current image.
     """
-    def render(self, name, value, attrs=None):
+
+    def render(self, name, value, attrs=None, renderer=None):
         output = []
         if value and isinstance(value, ImageFieldFile):
             file_name = str(value)
             try:
                 thumbnail = get_thumbnail(file_name, thumbnail_options=DETAIL_THUMBNAIL_OPTIONS)
                 if thumbnail:
-                    output.append('<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width, thumbnail.height))
+                    output.append('<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width,
+                                                                                      thumbnail.height))
             except ThumbnailException as e:
                 output.append('<p>{0}</p>'.format(str(e)))
-        output.append(super(AdminImageWidgetWithPreview, self).render(name, value, attrs))
+        output.append(super(AdminImageWidgetWithPreview, self).render(name, value, attrs, renderer))
         return mark_safe(u''.join(output))
