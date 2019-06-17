@@ -83,7 +83,7 @@ class JSONField(models.TextField):
             value = json.dumps(value)
         return super(JSONField, self).get_db_prep_save(value, *args, **kwargs)
 
-    def from_db_value(self, value, expression, connection):
+    def from_db_value(self, value, expression, connection, context):
         return self.to_python(value)
 
     def value_to_string(self, obj):
