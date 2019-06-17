@@ -7,6 +7,7 @@ from django.template import loader, RequestContext
 from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.six.moves.urllib_parse import unquote
+
 try:
     from django.urls import reverse
 except ImportError:
@@ -20,7 +21,6 @@ try:
     from django.utils.deprecation import MiddlewareMixin
 except ImportError:
     MiddlewareMixin = object
-
 
 perms = load_class(PERMISSION_CLASS)
 
@@ -162,10 +162,12 @@ class ObfuscateEmailAddressMiddleware(MiddlewareMixin):
     """
     Replaces plain email addresses with escaped addresses in (non streaming) HTML responses
     """
+
     def process_response(self, request, response):
         if is_html(response) and hasattr(response, 'content'):  # Do not obfuscate non-html and streaming responses.
             # http://www.lampdocs.com/blog/2008/10/regular-expression-to-extract-all-e-mail-addresses-from-a-file-with-php/
-            email_pattern = re.compile(r'\b(?P<email>(mailto:)?[\w-]+(\.[\w-]+)*(\+[\w-]+)?@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]+)))\b')
+            email_pattern = re.compile(
+                r'\b(?P<email>(mailto:)?[\w-]+(\.[\w-]+)*(\+[\w-]+)?@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]+)))\b')
             response.content = email_pattern.sub(self.replace_email, force_text(response.content))
         return response
 
