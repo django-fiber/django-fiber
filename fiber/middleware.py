@@ -50,13 +50,6 @@ class AdminPageMiddleware(MiddlewareMixin):
                 return self.setup_login_session(request)
             if self.show_login(request) or self.show_admin(request, response):
                 return self.modify_response(request, response)
-            # Ugly hack to make Fiber work with Django 2.1 - see PR #266 for more.
-            if not request.POST and '/fiber_admin/fiber/contentitem/' in request.path:
-                content = force_text(response.content)
-                content = content.replace(
-                    '<form action="" method="post" id="contentitem_form" novalidate>',
-                    '<form enctype="multipart/form-data" action="" method="post" id="contentitem_form" novalidate>')
-                response.content = content.encode()
         return response
 
     def should_setup_login_session(self, request):
