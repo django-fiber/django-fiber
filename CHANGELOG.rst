@@ -1,7 +1,7 @@
 Changelog for Django-Fiber
 ==========================
 
-1.6 (unreleased)
+1.6 (2019-06-20)
 ----------------
 
 - Django 2.1 and 2.2 support.
