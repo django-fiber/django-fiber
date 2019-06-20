@@ -1,14 +1,14 @@
 {% load compress %}
-{% load staticfiles %}
+{% load static %}
 {% load get_static_prefix from static %}
 
 <script src="{% url 'fiber_i18n' %}" type="text/javascript"></script>
 
 <script type="text/javascript">
-	var LANGUAGE_CODE = '{{ LANGUAGE_CODE }}'
-	var STATIC_URL = '{% get_static_prefix %}';
-	var BACKEND_BASE_URL = '{{ BACKEND_BASE_URL }}';
-	var FIBER_LOGIN_URL = '{{ FIBER_LOGIN_URL }}';
+    var LANGUAGE_CODE = '{{ LANGUAGE_CODE }}'
+    var STATIC_URL = '{% get_static_prefix %}';
+    var BACKEND_BASE_URL = '{{ BACKEND_BASE_URL }}';
+    var FIBER_LOGIN_URL = '{{ FIBER_LOGIN_URL }}';
 </script>
 
 {% compress js %}
@@ -45,17 +45,17 @@
 {% endcompress %}
 
 {% if editor_template_js %}
-	{% include editor_template_js %}
+{% include editor_template_js %}
 {% endif %}
 
 {% compress css %}
-<link rel="stylesheet" href="{% static 'fiber/css/df-reset.css' %}" type="text/css" media="screen" />
-<link rel="stylesheet" href="{% static 'fiber/css/Aristo-jQuery-UI-Theme/css/Aristo/jquery-ui-1.8.5.custom.css' %}" type="text/css" media="screen" />
-<link rel="stylesheet" href="{% static 'fiber/js/simple-datagrid/simple.datagrid.css' %}" type="text/css" media="screen" />
-<link rel="stylesheet" href="{% static 'fiber/css/widgets.css' %}" type="text/css" media="screen" />
-<link rel="stylesheet" href="{% static 'fiber/css/admin.css' %}" type="text/css" media="screen" />
+<link rel="stylesheet" href="{% static 'fiber/css/df-reset.css' %}" type="text/css" media="screen"/>
+<link rel="stylesheet" href="{% static 'fiber/css/Aristo-jQuery-UI-Theme/css/Aristo/jquery-ui-1.8.5.custom.css' %}" type="text/css" media="screen"/>
+<link rel="stylesheet" href="{% static 'fiber/js/simple-datagrid/simple.datagrid.css' %}" type="text/css" media="screen"/>
+<link rel="stylesheet" href="{% static 'fiber/css/widgets.css' %}" type="text/css" media="screen"/>
+<link rel="stylesheet" href="{% static 'fiber/css/admin.css' %}" type="text/css" media="screen"/>
 
 {% if editor_template_css %}
-	{% include editor_template_css %}
+{% include editor_template_css %}
 {% endif %}
 {% endcompress %}

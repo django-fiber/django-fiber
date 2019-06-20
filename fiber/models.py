@@ -10,6 +10,7 @@ from django.core.files.images import get_image_dimensions
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 
@@ -336,11 +337,10 @@ class Image(models.Model):
         try:
             thumbnail = get_thumbnail(self.image, thumbnail_options=LIST_THUMBNAIL_OPTIONS)
             if thumbnail:
-                return u'<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width, thumbnail.height)
+                return mark_safe('<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width, thumbnail.height))
         except ThumbnailException as e:
             return str(e)
     preview.short_description = _('Preview')
-    preview.allow_tags = True
 
 
 def files_directory(instance, filename):
