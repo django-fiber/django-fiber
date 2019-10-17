@@ -1,8 +1,8 @@
 Changelog for Django-Fiber
 ==========================
 
-1.7 (unreleased)
-----------------
+1.6.1 (2019-10-17)
+------------------
 
 - Specified more precisely django-mptt version.
 
