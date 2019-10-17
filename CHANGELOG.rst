@@ -4,7 +4,7 @@ Changelog for Django-Fiber
 1.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Specified more precisely django-mptt version.
 
 
 1.6 (2019-06-20)
