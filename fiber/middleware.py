@@ -131,6 +131,10 @@ class AdminPageMiddleware(MiddlewareMixin):
             'fiber_data': escape(json.dumps(fiber_data, sort_keys=True))
         }
         response.content = self.body_re.sub(replacement, content)
+        if response.has_header('Content-Length'):
+            # Reset 'Content-Length' header (usually set by CommonMiddleware)
+            # to make sure clients read the full response body
+            response['Content-Length'] = str(len(response.content))
         return response
 
     def is_django_admin(self, request):
@@ -169,6 +173,10 @@ class ObfuscateEmailAddressMiddleware(MiddlewareMixin):
             email_pattern = re.compile(
                 r'\b(?P<email>(mailto:)?[\w-]+(\.[\w-]+)*(\+[\w-]+)?@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]+)))\b')
             response.content = email_pattern.sub(self.replace_email, force_text(response.content))
+            if response.has_header('Content-Length'):
+                # Reset 'Content-Length' header (usually set by CommonMiddleware)
+                # to make sure clients read the full response body
+                response['Content-Length'] = str(len(response.content))
         return response
 
     def replace_email(self, matches):
