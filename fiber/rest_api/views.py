@@ -1,6 +1,7 @@
+import six
+
 from django.db.models import Q
 from django.db.models.deletion import ProtectedError
-from django.utils import six
 from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
 

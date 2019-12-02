@@ -8,7 +8,6 @@ except ImportError:
     from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext
@@ -16,6 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from mptt.managers import TreeManager
 from mptt.models import MPTTModel
+
+from six import python_2_unicode_compatible
 
 from .app_settings import (
     IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA,

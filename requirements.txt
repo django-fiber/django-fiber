@@ -3,3 +3,4 @@ django-mptt>=0.9.1,<0.10.0
 django_compressor>=2.2
 djangorestframework>=3.9.3
 easy-thumbnails>=2.6.0
+six

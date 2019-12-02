@@ -1,8 +1,9 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.utils.six import unichr
 
 from mptt.forms import TreeNodeChoiceField
+
+from six import unichr
 
 from fiber.app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES
 from fiber.models import Page, ContentItem

@@ -3,7 +3,7 @@ import os
 try:
     import html
 except ImportError:
-    from django.utils.six.moves.html_parser import HTMLParser
+    from six.moves.html_parser import HTMLParser
 
 from unittest import skipUnless
 

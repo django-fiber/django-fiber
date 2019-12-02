@@ -6,7 +6,8 @@ from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.utils.encoding import force_text
 from django.utils.html import escape
-from django.utils.six.moves.urllib_parse import unquote
+
+from six.moves.urllib_parse import unquote
 
 try:
     from django.urls import reverse

@@ -1,12 +1,14 @@
 import json
 import operator
+
 from copy import copy
 from functools import reduce
+
+import six
 
 from django import template
 from django.contrib.auth.models import AnonymousUser
 from django.template import TemplateSyntaxError
-from django.utils import six
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 

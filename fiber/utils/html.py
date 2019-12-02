@@ -1,6 +1,7 @@
 import re
-from django.utils.six import unichr
-from django.utils.six.moves import html_entities
+
+from six import unichr
+from six.moves import html_entities
 
 
 name2codepoint = html_entities.name2codepoint.copy()
