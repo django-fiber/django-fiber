@@ -14,9 +14,9 @@ try:
 except ImportError:
     from django.core.urlresolvers import reverse
 
-from fiber.app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR, PERMISSION_CLASS
-from fiber.models import ContentItem, Page
-from fiber.utils.import_util import import_element, load_class
+from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR, PERMISSION_CLASS
+from .models import Page
+from .utils.import_util import import_element, load_class
 
 try:
     from django.utils.deprecation import MiddlewareMixin
