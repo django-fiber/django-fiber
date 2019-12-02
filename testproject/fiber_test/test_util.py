@@ -24,9 +24,9 @@ def format_list(l, must_sort=True, separator=' '):
 
 
 def condense_html_whitespace(s):
-    s = re.sub("\s\s*", " ", s)
-    s = re.sub(">\s*<", "><", s)
-    s = re.sub(" class=\"\s?(.*?)\s?\"", " class=\"\\1\"", s)
+    s = re.sub(r'\s+', " ", s)
+    s = re.sub(r'>\s+<', "><", s)
+    s = re.sub(r' class="\s*(.*?)\s*"', r' class="\1"', s)
     s = s.strip()
     return s
 
