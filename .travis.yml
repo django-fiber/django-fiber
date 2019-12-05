@@ -10,7 +10,6 @@ sudo: false
 # 2. For *one* python version, we add an extra run of the unit tests - with coverage. The results are then fed to
 #    coveralls.
 python:
-  - "2.7"
   - "3.5"
   - "3.6"
   - "3.7"

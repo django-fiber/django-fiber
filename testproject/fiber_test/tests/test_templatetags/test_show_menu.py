@@ -520,7 +520,7 @@ class TestEdgeCases(TestCase):
 
 class TestStaffMenu(BaseTestShowMenu):
     def setUp(self):
-        super(TestStaffMenu, self).setUp()
+        super().setUp()
         self.staff = User.objects.create_user('staff', 'staff@example.com', password='staff')
         self.staff.is_staff = True
         self.staff.save()

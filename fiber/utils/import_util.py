@@ -13,7 +13,7 @@ def import_element(path):
     try:
         return import_string(path)
     except ImportError as e:
-        raise ImproperlyConfigured('Error importing %s: %s' % (path, e))
+        raise ImproperlyConfigured('Error importing {}: {}'.format(path, e))
 
 
 def load_class(path, **kwds):

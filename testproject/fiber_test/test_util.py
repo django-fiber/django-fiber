@@ -24,14 +24,14 @@ def format_list(l, must_sort=True, separator=' '):
 
 
 def condense_html_whitespace(s):
-    s = re.sub("\s\s*", " ", s)
-    s = re.sub(">\s*<", "><", s)
-    s = re.sub(" class=\"\s?(.*?)\s?\"", " class=\"\\1\"", s)
+    s = re.sub(r"\s\s*", " ", s)
+    s = re.sub(r">\s*<", "><", s)
+    s = re.sub(" class=\"\\s?(.*?)\\s?\"", " class=\"\\1\"", s)
     s = s.strip()
     return s
 
 
-class RenderMixin(object):
+class RenderMixin:
     def assertRendered(self, template, expected, context=None):
         t, c = Template(template), Context(context or {})
         self.assertEqual(condense_html_whitespace(t.render(c)), condense_html_whitespace(expected))

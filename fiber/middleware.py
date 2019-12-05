@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.utils.encoding import force_text
 from django.utils.html import escape
-from django.utils.six.moves.urllib_parse import unquote
+from urllib.parse import unquote
 
 try:
     from django.urls import reverse
@@ -40,7 +40,7 @@ class AdminPageMiddleware(MiddlewareMixin):
         re.DOTALL)
 
     def __init__(self, *args, **kwargs):
-        super(AdminPageMiddleware, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.editor_settings = import_element(EDITOR)
 
     def process_response(self, request, response):
@@ -157,9 +157,9 @@ class AdminPageMiddleware(MiddlewareMixin):
 
     def get_logout_url(self, request):
         if request.META['QUERY_STRING']:
-            return '%s?next=%s?%s' % (reverse('admin:logout'), request.path_info, request.META['QUERY_STRING'])
+            return '{}?next={}?{}'.format(reverse('admin:logout'), request.path_info, request.META['QUERY_STRING'])
         else:
-            return '%s?next=%s' % (reverse('admin:logout'), request.path_info)
+            return '{}?next={}'.format(reverse('admin:logout'), request.path_info)
 
 
 class ObfuscateEmailAddressMiddleware(MiddlewareMixin):

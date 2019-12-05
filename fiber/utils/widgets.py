@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 import json
 
 from warnings import warn
@@ -17,14 +16,14 @@ class FiberTextarea(forms.Textarea):
 
     def render(self, name, value, attrs=None, renderer=None):
         attrs['class'] = 'fiber-editor'
-        return super(FiberTextarea, self).render(name, value, attrs, renderer)
+        return super().render(name, value, attrs, renderer)
 
 
 class FiberCombobox(forms.Select):
 
     def render(self, name, value, attrs=None, renderer=None):
         attrs['class'] = 'fiber-combobox'
-        return super(FiberCombobox, self).render(name, value, attrs, renderer)
+        return super().render(name, value, attrs, renderer)
 
 
 class JSONWidget(forms.Textarea):
@@ -40,7 +39,7 @@ class JSONWidget(forms.Textarea):
         else:
             self.prefill_from = None
 
-        super(JSONWidget, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def render(self, name, value, attrs=None, renderer=None):
         attrs['class'] = 'fiber-jsonwidget'
@@ -81,7 +80,7 @@ class JSONWidget(forms.Textarea):
             'name': name,
             'json': json.dumps(schema),
         }
-        output = super(JSONWidget, self).render(name, value, attrs, renderer)
+        output = super().render(name, value, attrs, renderer)
         return output + mark_safe(jquery)
 
 
@@ -97,9 +96,9 @@ class AdminImageWidgetWithPreview(AdminFileWidget):
             try:
                 thumbnail = get_thumbnail(file_name, thumbnail_options=DETAIL_THUMBNAIL_OPTIONS)
                 if thumbnail:
-                    output.append('<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width,
+                    output.append('<img src="{}" width="{}" height="{}" />'.format(thumbnail.url, thumbnail.width,
                                                                                       thumbnail.height))
             except ThumbnailException as e:
-                output.append('<p>{0}</p>'.format(str(e)))
-        output.append(super(AdminImageWidgetWithPreview, self).render(name, value, attrs, renderer))
-        return mark_safe(u''.join(output))
+                output.append('<p>{}</p>'.format(str(e)))
+        output.append(super().render(name, value, attrs, renderer))
+        return mark_safe(''.join(output))

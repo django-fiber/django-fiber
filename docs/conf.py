@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # django-fiber documentation build configuration file, created by
 # sphinx-quickstart on Fri Mar  2 15:50:27 2012.
@@ -49,8 +48,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'django-fiber'
-copyright = u'%d, Ride The Pony' % datetime.today().year
+project = 'django-fiber'
+copyright = '%d, Ride The Pony' % datetime.today().year
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -193,8 +192,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ('index', 'django-fiber.tex', u'django-fiber Documentation',
-     u'Ride The Pony', 'manual'),
+    ('index', 'django-fiber.tex', 'django-fiber Documentation',
+     'Ride The Pony', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -223,8 +222,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-fiber', u'django-fiber Documentation',
-     [u'Ride The Pony'], 1)
+    ('index', 'django-fiber', 'django-fiber Documentation',
+     ['Ride The Pony'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -237,8 +236,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'django-fiber', u'django-fiber Documentation',
-     u'Ride The Pony', 'django-fiber', 'One line description of project.',
+    ('index', 'django-fiber', 'django-fiber Documentation',
+     'Ride The Pony', 'django-fiber', 'One line description of project.',
      'Miscellaneous'),
 ]
 

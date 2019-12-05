@@ -1,11 +1,9 @@
-from __future__ import unicode_literals
-
 import django
 from django.test import RequestFactory
 from django.http import HttpResponse
 
 
-class TestNewStyleMiddlewareMixin(object):
+class TestNewStyleMiddlewareMixin:
     middleware_factory = NotImplemented
 
     if django.VERSION >= (1, 10):

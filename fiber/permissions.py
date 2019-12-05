@@ -3,7 +3,7 @@ Module that provides a base Permission class. This class may be overridden by ch
 """
 
 
-class Permissions(object):
+class Permissions:
     """
     This class defines the methods that a Permission class should implement.
 

@@ -1,4 +1,4 @@
-"""
+r"""
 The `Sitemaps protocol <http://en.wikipedia.org/wiki/Sitemaps>`_ allows a webmaster
 to inform search engines about URLs on a website that are available for crawling.
 Django comes with a high-level framework that makes generating sitemap XML files easy.

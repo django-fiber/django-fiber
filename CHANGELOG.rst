@@ -7,6 +7,7 @@ Changelog for Django-Fiber
 - Reset 'Content-Length' header in AdminPageMiddleware and
   ObfuscateEmailAddressMiddleware to make sure clients read
   the full response.
+- Dropped support for Python 2, cleaned up the code.
 
 
 1.6.1 (2019-10-17)

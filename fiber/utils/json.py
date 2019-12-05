@@ -1,9 +1,7 @@
-from __future__ import absolute_import
 import json
 
 from django import forms
 from django.db import models
-from django.utils import six
 from django.utils.encoding import force_text
 
 from .widgets import JSONWidget
@@ -24,7 +22,7 @@ class JSONFormField(forms.CharField):
 
         kwargs['widget'] = JSONWidget(schema=self.schema, prefill_from=self.prefill_from)
 
-        super(JSONFormField, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def clean(self, value):
         if not value:
@@ -32,7 +30,7 @@ class JSONFormField(forms.CharField):
         try:
             return json.loads(value)
         except Exception as exception:
-            raise forms.ValidationError(u'JSON decode error: %s' % force_text(exception))
+            raise forms.ValidationError('JSON decode error: %s' % force_text(exception))
 
 
 class JSONField(models.TextField):
@@ -48,18 +46,18 @@ class JSONField(models.TextField):
         else:
             self.prefill_from = None
 
-        super(JSONField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def formfield(self, **kwargs):
         kwargs['schema'] = self.schema
         kwargs['prefill_from'] = self.prefill_from
-        return super(JSONField, self).formfield(form_class=JSONFormField, **kwargs)
+        return super().formfield(form_class=JSONFormField, **kwargs)
 
     def to_python(self, value):
         if value is None:
             return None
         try:
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 return json.loads(value)
         except ValueError:
             pass
@@ -68,7 +66,7 @@ class JSONField(models.TextField):
     def _get_json_value(self, value):
         if value is None:
             return ''
-        elif isinstance(value, six.string_types):
+        elif isinstance(value, str):
             return value
         else:
             return json.dumps(value)
@@ -81,7 +79,7 @@ class JSONField(models.TextField):
             return None
         if isinstance(value, dict):
             value = json.dumps(value)
-        return super(JSONField, self).get_db_prep_save(value, *args, **kwargs)
+        return super().get_db_prep_save(value, *args, **kwargs)
 
     def from_db_value(self, value, expression, connection, context):
         return self.to_python(value)
