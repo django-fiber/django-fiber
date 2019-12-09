@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # django-fiber documentation build configuration file, created by
 # sphinx-quickstart on Fri Mar  2 15:50:27 2012.
 #
