@@ -1,7 +1,6 @@
 import re
 
-from six import unichr
-from six.moves import html_entities
+import html.entities as html_entities
 
 
 name2codepoint = html_entities.name2codepoint.copy()
@@ -9,9 +8,9 @@ name2codepoint['apos'] = ord("'")
 
 _ENTITY_REF = re.compile(r'&(?:#(\d+)|(?:#x([\da-fA-F]+))|([a-zA-Z]+));')
 _ENTITY_REPLACE = [
-    lambda code: unichr(int(code, 10)) if code else None,
-    lambda code: unichr(int(code, 16)) if code else None,
-    lambda code: unichr(name2codepoint[code]) if code in name2codepoint else None
+    lambda code: chr(int(code, 10)) if code else None,
+    lambda code: chr(int(code, 16)) if code else None,
+    lambda code: chr(name2codepoint[code]) if code in name2codepoint else None
 ]
 
 def htmlentitydecode(s):

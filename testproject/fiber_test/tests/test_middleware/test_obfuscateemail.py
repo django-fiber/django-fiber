@@ -1,9 +1,6 @@
 import os
 
-try:
-    import html
-except ImportError:
-    from six.moves.html_parser import HTMLParser
+import html
 
 from unittest import skipUnless
 
@@ -31,12 +28,8 @@ class TestEmailAddressObfuscation(SimpleTestCase):
 
     def test_is_html_escaped(self):
         """Unescape the escaped response to see if it's the original content"""
-        try:
-            h = html
-        except:
-            h = HTMLParser()
         content = 'example@example.com'
-        self.assertEqual(h.unescape(
+        self.assertEqual(html.unescape(
             force_text(self.middleware.process_response(None, HttpResponse(content)).content)),
             content)
 

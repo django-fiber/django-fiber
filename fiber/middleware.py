@@ -2,12 +2,12 @@ import random
 import re
 import json
 
+from urllib.parse import unquote
+
 from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.utils.encoding import force_text
 from django.utils.html import escape
-
-from six.moves.urllib_parse import unquote
 
 try:
     from django.urls import reverse

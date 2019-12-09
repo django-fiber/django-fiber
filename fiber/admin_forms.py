@@ -3,8 +3,6 @@ from django.utils.translation import gettext_lazy as _
 
 from mptt.forms import TreeNodeChoiceField
 
-from six import unichr
-
 from fiber.app_settings import TEMPLATE_CHOICES, CONTENT_TEMPLATE_CHOICES
 from fiber.models import Page, ContentItem
 from fiber.utils.urls import is_quoted_url
@@ -26,8 +24,8 @@ class PageForm(forms.ModelForm):
 
     meta_description = forms.CharField(widget=forms.Textarea, required=False)
     meta_keywords = forms.CharField(widget=forms.Textarea, required=False)
-    parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3 * unichr(160), empty_label='---------', required=False)
-    redirect_page = TreeNodeChoiceField(label=_('Redirect page'), queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3 * unichr(160), empty_label='---------', required=False)
+    parent = TreeNodeChoiceField(queryset=Page.tree.all(), level_indicator=3 * chr(160), empty_label='---------', required=False)
+    redirect_page = TreeNodeChoiceField(label=_('Redirect page'), queryset=Page.objects.filter(redirect_page__isnull=True), level_indicator=3 * chr(160), empty_label='---------', required=False)
 
     class Meta:
         model = Page

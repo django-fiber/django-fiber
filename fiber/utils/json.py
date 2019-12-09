@@ -1,8 +1,6 @@
 from __future__ import absolute_import
 import json
 
-import six
-
 from django import forms
 from django.db import models
 from django.utils.encoding import force_text
@@ -60,7 +58,7 @@ class JSONField(models.TextField):
         if value is None:
             return None
         try:
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 return json.loads(value)
         except ValueError:
             pass
@@ -69,7 +67,7 @@ class JSONField(models.TextField):
     def _get_json_value(self, value):
         if value is None:
             return ''
-        elif isinstance(value, six.string_types):
+        elif isinstance(value, str):
             return value
         else:
             return json.dumps(value)

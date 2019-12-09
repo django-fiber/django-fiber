@@ -16,8 +16,6 @@ from django.utils.translation import gettext_lazy as _
 from mptt.managers import TreeManager
 from mptt.models import MPTTModel
 
-from six import python_2_unicode_compatible
-
 from .app_settings import (
     IMAGES_DIR, FILES_DIR, METADATA_PAGE_SCHEMA, METADATA_CONTENT_SCHEMA,
     PAGE_MANAGER, CONTENT_ITEM_MANAGER, LIST_THUMBNAIL_OPTIONS
@@ -30,7 +28,6 @@ from .utils.json import JSONField
 from .utils.urls import get_named_url_from_quoted_url, is_quoted_url
 
 
-@python_2_unicode_compatible
 class ContentItem(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -83,7 +80,6 @@ class ContentItem(models.Model):
         return json.dumps(self.used_on_pages_data, sort_keys=True)
 
 
-@python_2_unicode_compatible
 class Page(MPTTModel):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -288,7 +284,6 @@ def images_directory(instance, filename):
     return os.path.join(IMAGES_DIR, filename)
 
 
-@python_2_unicode_compatible
 class Image(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -348,7 +343,6 @@ def files_directory(instance, filename):
     return os.path.join(FILES_DIR, filename)
 
 
-@python_2_unicode_compatible
 class File(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)

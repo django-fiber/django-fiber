@@ -1,5 +1,3 @@
-import six
-
 from django.db.models import Q
 from django.db.models.deletion import ProtectedError
 from django.utils.encoding import smart_text
@@ -39,7 +37,7 @@ class PlainText(renderers.BaseRenderer):
     format = 'txt'
 
     def render(self, data, media_type=None, renderer_context=None):
-        if isinstance(data, six.string_types):
+        if isinstance(data, str):
             return data
         return smart_text(data)
 
