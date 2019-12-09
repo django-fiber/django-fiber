@@ -6,22 +6,15 @@ from urllib.parse import unquote
 
 from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
+from django.urls import reverse
+from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import force_text
 from django.utils.html import escape
-
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
 
 from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR, PERMISSION_CLASS
 from .models import Page
 from .utils.import_util import import_element, load_class
 
-try:
-    from django.utils.deprecation import MiddlewareMixin
-except ImportError:
-    MiddlewareMixin = object
 
 perms = load_class(PERMISSION_CLASS)
 

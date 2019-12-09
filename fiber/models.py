@@ -2,12 +2,9 @@ import os
 import json
 import warnings
 
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
 from django.db import models
+from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext

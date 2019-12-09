@@ -1,13 +1,8 @@
 import json
 
 from django.test import TestCase
-from django.contrib.auth.models import User
+from django.urls import reverse
 from django.utils.encoding import force_text
-
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
 
 from fiber.models import Page, ContentItem, PageContentItem
 from ..test_util import format_list, condense_html_whitespace

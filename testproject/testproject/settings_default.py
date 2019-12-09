@@ -1,6 +1,5 @@
 import os
 
-import django
 import django.conf.global_settings as DEFAULT_SETTINGS
 
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
@@ -100,23 +99,13 @@ TEMPLATES = [
     },
 ]
 
-if django.VERSION <= (2, 0):
-    default_middleware = DEFAULT_SETTINGS.MIDDLEWARE_CLASSES
-else:
-    default_middleware = DEFAULT_SETTINGS.MIDDLEWARE
-
-middleware = list(default_middleware) + [
+MIDDLEWARE = DEFAULT_SETTINGS.MIDDLEWARE + [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'fiber.middleware.ObfuscateEmailAddressMiddleware',
     'fiber.middleware.AdminPageMiddleware',
 ]
-
-if django.VERSION < (1, 11):
-    MIDDLEWARE_CLASSES = middleware
-else:
-    MIDDLEWARE = middleware
 
 ROOT_URLCONF = 'testproject.urls'
 
