@@ -2,7 +2,7 @@ import datetime
 import re
 
 from django.db import models
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.translation import gettext, gettext_lazy as _
 
 from mptt.managers import TreeManager
@@ -43,7 +43,7 @@ class ContentItemManager(models.Manager):
 
         for content_item in queryset.annotate(num_pages=models.Count('page')):
             content_item_info = dict(
-                label=force_text(content_item),
+                label=force_str(content_item),
                 id=content_item.id,
                 change_url=content_item.get_change_url(),
                 used_on_pages=content_item.used_on_pages_data

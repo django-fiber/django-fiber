@@ -2,7 +2,7 @@ import json
 
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 from fiber.models import Page, ContentItem, PageContentItem
 from ..test_util import format_list, condense_html_whitespace
@@ -217,7 +217,7 @@ class PageTest(TestCase):
         )
 
     def test_unicode(self):
-        self.assertEqual(force_text(Page(title='abc')), 'abc')
+        self.assertEqual(force_str(Page(title='abc')), 'abc')
 
     def test_is_first_child(self):
         # setup
@@ -309,16 +309,16 @@ class PageContentItemTest(TestCase):
 class TestContentItem(TestCase):
     def test_unicode(self):
         # with name
-        self.assertEqual(force_text(ContentItem(name='abc')), 'abc')
+        self.assertEqual(force_str(ContentItem(name='abc')), 'abc')
 
         # without name, no content
-        self.assertEqual(force_text(ContentItem()), '[ EMPTY ]')
+        self.assertEqual(force_str(ContentItem()), '[ EMPTY ]')
 
         # without name, content length < 50
-        self.assertEqual(force_text(ContentItem(content_html='xyz')), 'xyz')
+        self.assertEqual(force_str(ContentItem(content_html='xyz')), 'xyz')
 
         # without name, content length > 50
-        self.assertEqual(force_text(ContentItem(content_html='abcdefghij' * 6)),
+        self.assertEqual(force_str(ContentItem(content_html='abcdefghij' * 6)),
                          'abcdefghijabcdefghijabcdefghijabcdefghijabcdefghij...')
 
     def test_get_add_url(self):

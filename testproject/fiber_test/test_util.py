@@ -1,7 +1,7 @@
 import re
 
 from django.template import Template, Context
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 try:
     from django.utils.timezone import make_aware, utc
@@ -16,7 +16,7 @@ def format_list(l, must_sort=True, separator=' '):
     >>> format_list([3, 2, 1])
     '1 2 3'
     """
-    titles = [force_text(v) for v in l]
+    titles = [force_str(v) for v in l]
     if must_sort:
         titles = sorted(titles)
 

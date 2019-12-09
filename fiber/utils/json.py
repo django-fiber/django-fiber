@@ -2,7 +2,7 @@ import json
 
 from django import forms
 from django.db import models
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 from .widgets import JSONWidget
 
@@ -30,7 +30,7 @@ class JSONFormField(forms.CharField):
         try:
             return json.loads(value)
         except Exception as exception:
-            raise forms.ValidationError('JSON decode error: %s' % force_text(exception))
+            raise forms.ValidationError('JSON decode error: %s' % force_str(exception))
 
 
 class JSONField(models.TextField):

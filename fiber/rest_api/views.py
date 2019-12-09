@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.db.models.deletion import ProtectedError
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics
@@ -39,7 +39,7 @@ class PlainText(renderers.BaseRenderer):
     def render(self, data, media_type=None, renderer_context=None):
         if isinstance(data, str):
             return data
-        return smart_text(data)
+        return smart_str(data)
 
 
 class IEUploadFixMixin:

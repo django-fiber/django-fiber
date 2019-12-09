@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.urls import reverse
 from django.utils.deprecation import MiddlewareMixin
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import escape
 
 from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR, PERMISSION_CLASS
@@ -100,7 +100,7 @@ class AdminPageMiddleware(MiddlewareMixin):
         """
         fiber_data = {}
         replacement = r'<head>\g<HEAD>%(header_html)s</head>\g<AFTER_HEAD><body data-fiber-data="%(fiber_data)s"\g<BODY_ATTRS>>\g<BODY></body>'
-        content = force_text(response.content)
+        content = force_str(response.content)
         if self.show_login(request):
             # Only show the login window once
             request.session[self.LOGIN_SESSION_KEY] = False
@@ -166,7 +166,7 @@ class ObfuscateEmailAddressMiddleware(MiddlewareMixin):
             # http://www.lampdocs.com/blog/2008/10/regular-expression-to-extract-all-e-mail-addresses-from-a-file-with-php/
             email_pattern = re.compile(
                 r'\b(?P<email>(mailto:)?[\w-]+(\.[\w-]+)*(\+[\w-]+)?@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]+)))\b')
-            response.content = email_pattern.sub(self.replace_email, force_text(response.content))
+            response.content = email_pattern.sub(self.replace_email, force_str(response.content))
             if response.has_header('Content-Length'):
                 # Reset 'Content-Length' header (usually set by CommonMiddleware)
                 # to make sure clients read the full response body
