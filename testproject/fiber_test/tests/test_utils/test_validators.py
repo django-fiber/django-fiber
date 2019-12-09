@@ -11,9 +11,12 @@ class TestView(View):
     pass
 
 
-@override_settings(ROOT_URLCONF=[
+urlpatterns = [
     url(r'^test_url/$', TestView.as_view(), name='another_named_url'),
-])
+]
+
+
+@override_settings(ROOT_URLCONF=__name__)
 class TestUtilsURLValidator(TestCase):
     validator = FiberURLValidator()
 
