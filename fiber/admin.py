@@ -18,7 +18,7 @@ from .utils.widgets import AdminImageWidgetWithPreview
 perms = load_class(PERMISSION_CLASS)
 
 
-class UserPermissionMixin(object):
+class UserPermissionMixin:
 
     def has_change_permission(self, request, obj=None):
         """
@@ -26,7 +26,7 @@ class UserPermissionMixin(object):
         """
         if obj:  # obj can be None for list views
             return perms.can_edit(request.user, obj)
-        return super(UserPermissionMixin, self).has_change_permission(request)
+        return super().has_change_permission(request)
 
     def has_delete_permission(self, request, obj=None):
         """
@@ -50,7 +50,7 @@ class UserPermissionMixin(object):
         """
         Notifies the PERMISSION_CLASS that an `obj` was created by `user`.
         """
-        super(UserPermissionMixin, self).save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)
         perms.object_created(request.user, obj)
 
 
@@ -61,7 +61,7 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
     actions = ['really_delete_selected']
 
     def get_actions(self, request):
-        actions = super(FileAdmin, self).get_actions(request)
+        actions = super().get_actions(request)
         if 'delete_selected' in actions:
             del actions[
                 'delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
@@ -113,7 +113,7 @@ class ImageAdminWithPreview(ImageAdmin):
             request = kwargs.pop("request", None)
             kwargs['widget'] = AdminImageWidgetWithPreview
             return db_field.formfield(**kwargs)
-        return super(ImageAdminWithPreview, self).formfield_for_dbfield(db_field, **kwargs)
+        return super().formfield_for_dbfield(db_field, **kwargs)
 
 
 class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
@@ -201,7 +201,7 @@ class FiberAdminContentItemAdmin(UserPermissionMixin, fiber_admin.ModelAdmin):
     form = forms.ContentItemAdminForm
 
     def __init__(self, *args, **kwargs):
-        super(FiberAdminContentItemAdmin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # remove content template choices if there are no choices
         if len(CONTENT_TEMPLATE_CHOICES) == 0:
@@ -219,7 +219,7 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
     form = forms.PageForm
 
     def __init__(self, *args, **kwargs):
-        super(FiberAdminPageAdmin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # remove template choices if there are no choices
         if len(TEMPLATE_CHOICES) == 0:
@@ -249,7 +249,7 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
             obj.parent = below_page
             obj.insert_at(below_page, position='last-child', save=False)
 
-        super(FiberAdminPageAdmin, self).save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)
 
 
 admin.site.register(ContentItem, ContentItemAdmin)

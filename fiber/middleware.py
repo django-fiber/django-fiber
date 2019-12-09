@@ -41,7 +41,7 @@ class AdminPageMiddleware(MiddlewareMixin):
         re.DOTALL)
 
     def __init__(self, *args, **kwargs):
-        super(AdminPageMiddleware, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.editor_settings = import_element(EDITOR)
 
     def process_response(self, request, response):

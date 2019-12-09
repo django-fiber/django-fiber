@@ -42,7 +42,7 @@ class PlainText(renderers.BaseRenderer):
         return smart_text(data)
 
 
-class IEUploadFixMixin(object):
+class IEUploadFixMixin:
     """
     A Mixin that fixes issues with IE 8 and IE 9 file uploads.
     Both user agents expect plain text responses when uploading files.
@@ -54,12 +54,12 @@ class IEUploadFixMixin(object):
         user_agent = self.request._request.META['HTTP_USER_AGENT']
         if self.request.method == 'POST' and ('MSIE 8' in user_agent or 'MSIE 9' in user_agent):
             return [PlainText()]
-        return super(IEUploadFixMixin, self).get_renderers()
+        return super().get_renderers()
 
 
 class FiberListCreateAPIView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
-        response = super(FiberListCreateAPIView, self).create(request, *args, **kwargs)
+        response = super().create(request, *args, **kwargs)
         if hasattr(self, 'object'):
             PERMISSIONS.object_created(request.user, self.object)
         return response
@@ -162,7 +162,7 @@ class FileList(IEUploadFixMixin, FiberListCreateAPIView):
             return Response("Can not order by the passed value.", status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self, *args, **kwargs):
-        qs = super(FileList, self).get_queryset(*args, **kwargs)
+        qs = super().get_queryset(*args, **kwargs)
         qs = PERMISSIONS.filter_files(self.request.user, qs)
         search = self.request.query_params.get('search')
 
@@ -225,7 +225,7 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
             return Response("Can not order by the passed value.", status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self, *args, **kwargs):
-        qs = super(ImageList, self).get_queryset(*args, **kwargs)
+        qs = super().get_queryset(*args, **kwargs)
         qs = PERMISSIONS.filter_images(self.request.user, qs)
         search = self.request.query_params.get('search')
         if search:

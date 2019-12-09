@@ -31,7 +31,7 @@ def condense_html_whitespace(s):
     return s
 
 
-class RenderMixin(object):
+class RenderMixin:
     def assertRendered(self, template, expected, context=None):
         t, c = Template(template), Context(context or {})
         self.assertEqual(condense_html_whitespace(t.render(c)), condense_html_whitespace(expected))

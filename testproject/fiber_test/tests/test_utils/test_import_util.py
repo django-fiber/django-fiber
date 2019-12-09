@@ -4,7 +4,7 @@ from django.test import SimpleTestCase
 from fiber.utils.import_util import import_element, load_class
 
 
-class TestClass(object):
+class TestClass:
     def __init__(self, foo=None):
         self.foo = foo
 

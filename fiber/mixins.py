@@ -7,7 +7,7 @@ from django.utils.encoding import force_text
 from .models import Page
 
 
-class FiberPageMixin(object):
+class FiberPageMixin:
     """
     Adds fiber_page and fiber_current_pages to the context
     """
@@ -19,7 +19,7 @@ class FiberPageMixin(object):
     fiber_current_pages = None
 
     def get_context_data(self, **kwargs):
-        super_obj = super(FiberPageMixin, self)
+        super_obj = super()
         if hasattr(super_obj, 'get_context_data'):
             context = super_obj.get_context_data(**kwargs)
         else:

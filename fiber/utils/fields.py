@@ -14,7 +14,7 @@ class FiberURLField(models.CharField):
 
     def __init__(self, verbose_name=None, name=None, **kwargs):
         kwargs['max_length'] = kwargs.get('max_length', 255)
-        super(FiberURLField, self).__init__(verbose_name, name, **kwargs)
+        super().__init__(verbose_name, name, **kwargs)
         self.validators.append(validators.FiberURLValidator())
 
     def formfield(self, **kwargs):
@@ -22,19 +22,19 @@ class FiberURLField(models.CharField):
             'form_class': form_fields.FiberURLField,
         }
         defaults.update(kwargs)
-        return super(FiberURLField, self).formfield(**defaults)
+        return super().formfield(**defaults)
 
 
 class FiberTextField(models.TextField):
     def formfield(self, **kwargs):
         defaults = {'widget': FiberTextarea}
         defaults.update(kwargs)
-        return super(FiberTextField, self).formfield(**defaults)
+        return super().formfield(**defaults)
 
 
 class FiberMarkupField(FiberTextField):
     def pre_save(self, model_instance, add):
-        value = super(FiberMarkupField, self).pre_save(model_instance, add)
+        value = super().pre_save(model_instance, add)
 
         if editor.renderer:
             # also save html
@@ -46,7 +46,7 @@ class FiberMarkupField(FiberTextField):
 class FiberHTMLField(FiberTextField):
     def pre_save(self, model_instance, add):
         if not editor.renderer:
-            return super(FiberHTMLField, self).pre_save(model_instance, add)
+            return super().pre_save(model_instance, add)
         else:
             # render the markup to get the html
             markup_field_name = self.name.replace('_html', '_markup')

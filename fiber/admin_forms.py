@@ -15,7 +15,7 @@ class ContentItemAdminForm(forms.ModelForm):
         exclude = []
 
     def __init__(self, *args, **kwargs):
-        super(ContentItemAdminForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if len(CONTENT_TEMPLATE_CHOICES) > 0:
             self.fields['template_name'] = forms.ChoiceField(choices=CONTENT_TEMPLATE_CHOICES, required=False, label=_('Content template'))
 
@@ -32,7 +32,7 @@ class PageForm(forms.ModelForm):
         exclude = []
 
     def __init__(self, *args, **kwargs):
-        super(PageForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if len(TEMPLATE_CHOICES) > 0:
             self.fields['template_name'] = forms.ChoiceField(choices=TEMPLATE_CHOICES, required=False, label=_('Template'))
 

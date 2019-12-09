@@ -116,7 +116,7 @@ class Page(MPTTModel):
         else:
             old_url = ''
 
-        super(Page, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         if old_url:
             new_url = self.get_absolute_url()
@@ -185,7 +185,7 @@ class Page(MPTTModel):
                 node = node.parent
             return ancestors
         else:
-            return super(Page, self).get_ancestors(*args, **kwargs)
+            return super().get_ancestors(*args, **kwargs)
 
     def get_ancestors_include_self(self):
         warnings.warn("The `get_ancestors_include_self` method is deprecated,"
@@ -240,11 +240,11 @@ class PageContentItem(models.Model):
     sort = models.IntegerField(_('sort'), blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        super(PageContentItem, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.content_item.set_used_on_pages_json()
 
     def delete(self, *args, **kwargs):
-        super(PageContentItem, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
         self.content_item.set_used_on_pages_json()
 
     def move(self, next_item_id=None, block_name=None):
@@ -307,10 +307,10 @@ class Image(models.Model):
             existing_image.delete()
 
         self.get_image_information()
-        super(Image, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        super(Image, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
         self.image.storage.delete(self.image.name)
 
     def get_image_information(self):
@@ -363,10 +363,10 @@ class File(models.Model):
         for existing_file in existing_files:
             existing_file.delete()
 
-        super(File, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        super(File, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
         self.file.storage.delete(self.file.name)
 
     def get_filename(self):

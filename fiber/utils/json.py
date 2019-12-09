@@ -22,7 +22,7 @@ class JSONFormField(forms.CharField):
 
         kwargs['widget'] = JSONWidget(schema=self.schema, prefill_from=self.prefill_from)
 
-        super(JSONFormField, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def clean(self, value):
         if not value:
@@ -46,12 +46,12 @@ class JSONField(models.TextField):
         else:
             self.prefill_from = None
 
-        super(JSONField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def formfield(self, **kwargs):
         kwargs['schema'] = self.schema
         kwargs['prefill_from'] = self.prefill_from
-        return super(JSONField, self).formfield(form_class=JSONFormField, **kwargs)
+        return super().formfield(form_class=JSONFormField, **kwargs)
 
     def to_python(self, value):
         if value is None:
@@ -79,7 +79,7 @@ class JSONField(models.TextField):
             return None
         if isinstance(value, dict):
             value = json.dumps(value)
-        return super(JSONField, self).get_db_prep_save(value, *args, **kwargs)
+        return super().get_db_prep_save(value, *args, **kwargs)
 
     def from_db_value(self, value, *args, **kwargs):
         return self.to_python(value)

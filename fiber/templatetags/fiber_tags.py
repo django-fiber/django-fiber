@@ -21,7 +21,7 @@ PERMISSIONS = load_class(PERMISSION_CLASS)
 register = template.Library()
 
 
-class MenuHelper(object):
+class MenuHelper:
     """
     Helper class for show_menu tag, for convenience/clarity
     """
