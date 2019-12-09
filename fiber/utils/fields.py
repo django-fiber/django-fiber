@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.admin.options import FORMFIELD_FOR_DBFIELD_DEFAULTS
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from fiber import editor
 

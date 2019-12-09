@@ -3,7 +3,7 @@ import re
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, URLValidator
 from django.utils.encoding import smart_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .urls import get_named_url_from_quoted_url, is_quoted_url
 

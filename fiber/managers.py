@@ -3,7 +3,7 @@ import re
 
 from django.db import models
 from django.utils.encoding import force_text
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from mptt.managers import TreeManager
 
@@ -64,10 +64,10 @@ class ContentItemManager(models.Manager):
 
         def add_group(label, slug, children):
             if children:
-                # Use ugettext instead of ugettext_lazy because result must be serializable.
+                # Use gettext instead of gettext_lazy because result must be serializable.
                 result.append(
                     dict(
-                        label=ugettext(label),
+                        label=gettext(label),
                         children=children,
                         id=slug
                     )

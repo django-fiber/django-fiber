@@ -7,7 +7,7 @@ from django import forms
 from django.contrib.admin.widgets import AdminFileWidget
 from django.db.models.fields.files import ImageFieldFile
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from fiber.app_settings import DETAIL_THUMBNAIL_OPTIONS
 from fiber.utils.images import get_thumbnail, ThumbnailException

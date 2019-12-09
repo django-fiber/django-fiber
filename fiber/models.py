@@ -10,8 +10,8 @@ from django.core.files.images import get_image_dimensions
 from django.db import models
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from mptt.managers import TreeManager
 from mptt.models import MPTTModel
@@ -55,7 +55,7 @@ class ContentItem(models.Model):
             contents = u' '.join(htmlentitydecode(strip_tags(self.content_html)).strip().split())
             if len(contents) > 50:
                 contents = contents[:50] + '...'
-            return contents or ugettext('[ EMPTY ]')  # TODO: find out why ugettext_lazy doesn't work here
+            return contents or gettext('[ EMPTY ]')  # TODO: find out why gettext_lazy doesn't work here
 
     @classmethod
     def get_add_url(cls):

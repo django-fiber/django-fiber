@@ -3,7 +3,7 @@ import six
 from django.db.models import Q
 from django.db.models.deletion import ProtectedError
 from django.utils.encoding import smart_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics
 from rest_framework import renderers
