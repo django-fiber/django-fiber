@@ -14,7 +14,7 @@ def format_list(l, must_sort=True, separator=' '):
     Format a list as a string. Default the items in the list are sorted.
     E.g.
     >>> format_list([3, 2, 1])
-    u'1 2 3'
+    '1 2 3'
     """
     titles = [force_text(v) for v in l]
     if must_sort:

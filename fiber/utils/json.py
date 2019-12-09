@@ -30,7 +30,7 @@ class JSONFormField(forms.CharField):
         try:
             return json.loads(value)
         except Exception as exception:
-            raise forms.ValidationError(u'JSON decode error: %s' % force_text(exception))
+            raise forms.ValidationError('JSON decode error: %s' % force_text(exception))
 
 
 class JSONField(models.TextField):

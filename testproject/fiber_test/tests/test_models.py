@@ -282,33 +282,33 @@ class PageContentItemTest(TestCase):
         item_c = PageContentItem.objects.create(page=page, content_item=content_c, block_name='main', sort=2)
 
         # 1. get content
-        self.assertEqual(u'a b c', get_content(page.id))
+        self.assertEqual('a b c', get_content(page.id))
 
         # 2. move 'a' before 'c'
         item_a.move(item_c.id)
 
-        self.assertEqual(u'b a c', get_content(page.id))
+        self.assertEqual('b a c', get_content(page.id))
 
         # 3. move 'c' before 'a'
         item_c.move(item_a.id)
-        self.assertEqual(u'b c a', get_content(page.id))
+        self.assertEqual('b c a', get_content(page.id))
 
         # 4. move 'b' last
         item_b.move()
-        self.assertEqual(u'c a b', get_content(page.id))
+        self.assertEqual('c a b', get_content(page.id))
 
         # 5. move 'a' to block 'side'
         item_a.move(block_name='side')
-        self.assertEqual(u'c b', get_content(page.id, 'main'))
-        self.assertEqual(u'a', get_content(page.id, 'side'))
+        self.assertEqual('c b', get_content(page.id, 'main'))
+        self.assertEqual('a', get_content(page.id, 'side'))
 
         # 6. move 'c' before 'a' in block 'side'
         item_a = PageContentItem.objects.get(id=item_a.id)
         item_c = PageContentItem.objects.get(id=item_c.id)
 
         item_c.move(item_a.id, block_name='side')
-        self.assertEqual(u'b', get_content(page.id, 'main'))
-        self.assertEqual(u'c a', get_content(page.id, 'side'))
+        self.assertEqual('b', get_content(page.id, 'main'))
+        self.assertEqual('c a', get_content(page.id, 'side'))
 
 
 class TestContentItem(TestCase):

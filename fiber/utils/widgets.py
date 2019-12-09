@@ -101,4 +101,4 @@ class AdminImageWidgetWithPreview(AdminFileWidget):
             except ThumbnailException as e:
                 output.append('<p>{0}</p>'.format(str(e)))
         output.append(super().render(name, value, attrs, renderer))
-        return mark_safe(u''.join(output))
+        return mark_safe(''.join(output))

@@ -49,7 +49,7 @@ class ContentItem(models.Model):
         if self.name:
             return self.name
         else:
-            contents = u' '.join(htmlentitydecode(strip_tags(self.content_html)).strip().split())
+            contents = ' '.join(htmlentitydecode(strip_tags(self.content_html)).strip().split())
             if len(contents) > 50:
                 contents = contents[:50] + '...'
             return contents or gettext('[ EMPTY ]')  # TODO: find out why gettext_lazy doesn't work here

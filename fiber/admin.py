@@ -159,7 +159,7 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
         absolute_url = page.get_absolute_url()
         if absolute_url:
-            view_on_site += u'<a href="%s" title="%s" target="_blank"><img src="%sfiber/admin/images/world.gif" width="16" height="16" alt="%s" /></a>' % \
+            view_on_site += '<a href="%s" title="%s" target="_blank"><img src="%sfiber/admin/images/world.gif" width="16" height="16" alt="%s" /></a>' % \
                             (absolute_url, _('View on site'), settings.STATIC_URL, _('View on site'))
 
         return view_on_site
@@ -172,25 +172,25 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
         # first child cannot be moved up, last child cannot be moved down
         if not page.is_first_child():
-            actions += u'<a href="%s/move_up" title="%s"><img src="%sfiber/admin/images/arrow_up.gif" width="16" height="16" alt="%s" /></a> ' % (
+            actions += '<a href="%s/move_up" title="%s"><img src="%sfiber/admin/images/arrow_up.gif" width="16" height="16" alt="%s" /></a> ' % (
                 page.pk, _('Move up'), settings.STATIC_URL, _('Move up'))
         else:
-            actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
+            actions += '<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
                 settings.STATIC_URL,)
 
         if not page.is_last_child():
-            actions += u'<a href="%s/move_down" title="%s"><img src="%sfiber/admin/images/arrow_down.gif" width="16" height="16" alt="%s" /></a> ' % (
+            actions += '<a href="%s/move_down" title="%s"><img src="%sfiber/admin/images/arrow_down.gif" width="16" height="16" alt="%s" /></a> ' % (
                 page.pk, _('Move down'), settings.STATIC_URL, _('Move down'))
         else:
-            actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
+            actions += '<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
                 settings.STATIC_URL,)
 
         # add subpage
-        actions += u'<a href="add/?%s=%s" title="%s"><img src="%sfiber/admin/images/page_new.gif" width="16" height="16" alt="%s" /></a> ' % \
+        actions += '<a href="add/?%s=%s" title="%s"><img src="%sfiber/admin/images/page_new.gif" width="16" height="16" alt="%s" /></a> ' % \
                    (self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL,
                     _('Add sub page'))
 
-        return u'<span class="nobr">%s</span>' % (actions,)
+        return '<span class="nobr">%s</span>' % (actions,)
 
     action_links.short_description = _('Actions')
     action_links.allow_tags = True
