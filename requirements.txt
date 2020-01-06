@@ -1,6 +1,4 @@
 django-mptt>=0.10
-# django_compressor>=2.3
-django-compressor@https://github.com/django-compressor/django-compressor/archive/develop.zip
-djangorestframework>=3.9.3
-# easy-thumbnails>=2.6.0
-easy-thumbnails@https://github.com/SmileyChris/easy-thumbnails/archive/master.zip
+django_compressor>=2.4
+djangorestframework>=3.11
+easy-thumbnails>=2.7
