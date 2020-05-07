@@ -1,15 +1,12 @@
 import os
 
-try:
-    import html
-except ImportError:
-    from django.utils.six.moves.html_parser import HTMLParser
+import html
 
 from unittest import skipUnless
 
 from django.http import HttpResponse, StreamingHttpResponse
 from django.test import SimpleTestCase
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 from fiber.middleware import ObfuscateEmailAddressMiddleware
 
@@ -26,18 +23,14 @@ class TestEmailAddressObfuscation(SimpleTestCase):
         """Check if the given content is really not present in the response"""
         content = 'example@example.com'
         self.assertNotEqual(
-            force_text(self.middleware.process_response(None, HttpResponse(content)).content),
+            force_str(self.middleware.process_response(None, HttpResponse(content)).content),
             content)
 
     def test_is_html_escaped(self):
         """Unescape the escaped response to see if it's the original content"""
-        try:
-            h = html
-        except:
-            h = HTMLParser()
         content = 'example@example.com'
-        self.assertEqual(h.unescape(
-            force_text(self.middleware.process_response(None, HttpResponse(content)).content)),
+        self.assertEqual(html.unescape(
+            force_str(self.middleware.process_response(None, HttpResponse(content)).content)),
             content)
 
 
@@ -52,7 +45,7 @@ class TestEmailAddressReplacement(SimpleTestCase):
     def assertResponse(self, content, expected):
         """Little helper assertion to dry things up"""
         self.assertEqual(
-            force_text(self.middleware.process_response(None, HttpResponse(content)).content),
+            force_str(self.middleware.process_response(None, HttpResponse(content)).content),
             expected)
 
     def test_simple(self):
@@ -114,7 +107,7 @@ class TestEmailAddressReplacement(SimpleTestCase):
     def test_replacement_in_very_large_page(self):
         with open(os.path.join(os.path.dirname(__file__), 'very_large_page.html')) as f:
             content = f.read()
-        output = force_text(self.middleware.process_response(None, HttpResponse(content)).content)
+        output = force_str(self.middleware.process_response(None, HttpResponse(content)).content)
         self.assertIn('<a href="!!mailto:info@example.com!!">!!info@example.com!!</a>', output, msg='href not replaced')
         self.assertIn('<img alt="!!alt@example.com!!"', output, msg='alt not replaced')
 
@@ -129,19 +122,19 @@ class TestNonReplacement(SimpleTestCase):
         content = 'Contact me at: spam@example.com'
         response = HttpResponse(content, content_type='text/plain')
         self.assertEqual(
-            force_text(self.middleware.process_response(None, response).content), content)
+            force_str(self.middleware.process_response(None, response).content), content)
 
     @skipUnless(StreamingHttpResponse, 'StreamingHttpResponse is not available')
     def test_skips_streaming(self):
         content = 'Contact me at: spam@example.com'
         response = StreamingHttpResponse(content)
-        self.assertEqual(''.join(force_text(s) for s in self.middleware.process_response(None, response)), content)
+        self.assertEqual(''.join(force_str(s) for s in self.middleware.process_response(None, response)), content)
 
     def test_twitter_username(self):
         content = 'On twitter I am known as @example'
         response = HttpResponse(content)
         self.assertEqual(
-            force_text(self.middleware.process_response(None, response).content), content)
+            force_str(self.middleware.process_response(None, response).content), content)
 
 
 class TestNewStyleMiddleware(TestNewStyleMiddlewareMixin, SimpleTestCase):

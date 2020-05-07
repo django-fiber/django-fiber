@@ -4,7 +4,7 @@ from unittest import skipUnless
 from django.contrib.auth.models import AnonymousUser, User
 from django.http import HttpResponse, StreamingHttpResponse
 from django.test import RequestFactory, TestCase, SimpleTestCase
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 import fiber.middleware
 
@@ -53,7 +53,7 @@ class TestAtFiberLoginRedirect(TestCase):
     def test_follow_redirect_shows_login_in_body(self):
         """Following the redirect adds fiber-data to body"""
         response = self.client.get('/empty/@fiber', follow=True)
-        self.assertRegex(force_text(response.content), '<body data-fiber-data="{&quot;show_login&quot;: true}"></body>')
+        self.assertRegex(force_str(response.content), '<body data-fiber-data="{&quot;show_login&quot;: true}"></body>')
 
     def test_does_nothing_for_non_html_response(self):
         """Middleware skips non-html responses"""
@@ -88,25 +88,25 @@ class TestModifiedResponse(TestCase):
 
     def test_get_admin_url(self):
         response = self.client.get('/admin/')
-        self.assertRegex(force_text(response.content), '<body data-fiber-data="{&quot;backend&quot;: true}"')
+        self.assertRegex(force_str(response.content), '<body data-fiber-data="{&quot;backend&quot;: true}"')
 
     def test_get_frontend_url(self):
         response = self.client.get('/empty/')
-        self.assertRegex(force_text(response.content), '<body data-fiber-data="{&quot;frontend&quot;: true}"')
+        self.assertRegex(force_str(response.content), '<body data-fiber-data="{&quot;frontend&quot;: true}"')
 
     def test_wraps_body(self):
         response = self.client.get(self.page.get_absolute_url())
-        self.assertRegex(force_text(response.content),
+        self.assertRegex(force_str(response.content),
                          re.compile('<div id="wpr-body">.*lorem ipsum.*</div>', re.DOTALL))
 
     def test_set_page_id(self):
         response = self.client.get(self.page.get_absolute_url())
         expected = '<body data-fiber-data="{&quot;frontend&quot;: true, &quot;page_id&quot;: %s}"' % self.page.pk
-        self.assertRegex(force_text(response.content), expected)
+        self.assertRegex(force_str(response.content), expected)
 
     def test_adds_sidebar(self):
         response = self.client.get('/empty/')
-        self.assertIn('<div id="df-sidebar">', force_text(response.content))
+        self.assertIn('<div id="df-sidebar">', force_str(response.content))
 
     @skipUnless(StreamingHttpResponse, 'StreamingHttpResponse is not available')
     def test_skips_streaming(self):
@@ -125,8 +125,8 @@ class TestResponseNotModified(TestCase):
         A normal request has no trace of fiber
         """
         response = self.client.get('/empty/')
-        self.assertNotIn('data-fiber-data', force_text(response.content))
-        self.assertNotIn('<div id="df-sidebar">', force_text(response.content))
+        self.assertNotIn('data-fiber-data', force_str(response.content))
+        self.assertNotIn('<div id="df-sidebar">', force_str(response.content))
 
 
 class TestSetLoginSessionMethod(TestCase):

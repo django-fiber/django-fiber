@@ -1,10 +1,7 @@
 from django.template import Template, Context
 from django.test import TestCase
 from django.contrib.auth.models import User, AnonymousUser
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from fiber.models import Page
 from ...test_util import RenderMixin
@@ -520,7 +517,7 @@ class TestEdgeCases(TestCase):
 
 class TestStaffMenu(BaseTestShowMenu):
     def setUp(self):
-        super(TestStaffMenu, self).setUp()
+        super().setUp()
         self.staff = User.objects.create_user('staff', 'staff@example.com', password='staff')
         self.staff.is_staff = True
         self.staff.save()

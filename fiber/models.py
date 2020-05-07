@@ -2,17 +2,13 @@ import os
 import json
 import warnings
 
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
 from django.core.files.images import get_image_dimensions
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
+from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from mptt.managers import TreeManager
 from mptt.models import MPTTModel
@@ -29,7 +25,6 @@ from .utils.json import JSONField
 from .utils.urls import get_named_url_from_quoted_url, is_quoted_url
 
 
-@python_2_unicode_compatible
 class ContentItem(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -51,10 +46,10 @@ class ContentItem(models.Model):
         if self.name:
             return self.name
         else:
-            contents = u' '.join(htmlentitydecode(strip_tags(self.content_html)).strip().split())
+            contents = ' '.join(htmlentitydecode(strip_tags(self.content_html)).strip().split())
             if len(contents) > 50:
                 contents = contents[:50] + '...'
-            return contents or ugettext('[ EMPTY ]')  # TODO: find out why ugettext_lazy doesn't work here
+            return contents or gettext('[ EMPTY ]')  # TODO: find out why gettext_lazy doesn't work here
 
     @classmethod
     def get_add_url(cls):
@@ -82,7 +77,6 @@ class ContentItem(models.Model):
         return json.dumps(self.used_on_pages_data, sort_keys=True)
 
 
-@python_2_unicode_compatible
 class Page(MPTTModel):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -119,7 +113,7 @@ class Page(MPTTModel):
         else:
             old_url = ''
 
-        super(Page, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         if old_url:
             new_url = self.get_absolute_url()
@@ -188,7 +182,7 @@ class Page(MPTTModel):
                 node = node.parent
             return ancestors
         else:
-            return super(Page, self).get_ancestors(*args, **kwargs)
+            return super().get_ancestors(*args, **kwargs)
 
     def get_ancestors_include_self(self):
         warnings.warn("The `get_ancestors_include_self` method is deprecated,"
@@ -243,11 +237,11 @@ class PageContentItem(models.Model):
     sort = models.IntegerField(_('sort'), blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        super(PageContentItem, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.content_item.set_used_on_pages_json()
 
     def delete(self, *args, **kwargs):
-        super(PageContentItem, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
         self.content_item.set_used_on_pages_json()
 
     def move(self, next_item_id=None, block_name=None):
@@ -287,7 +281,6 @@ def images_directory(instance, filename):
     return os.path.join(IMAGES_DIR, filename)
 
 
-@python_2_unicode_compatible
 class Image(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -311,10 +304,10 @@ class Image(models.Model):
             existing_image.delete()
 
         self.get_image_information()
-        super(Image, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        super(Image, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
         self.image.storage.delete(self.image.name)
 
     def get_image_information(self):
@@ -347,7 +340,6 @@ def files_directory(instance, filename):
     return os.path.join(FILES_DIR, filename)
 
 
-@python_2_unicode_compatible
 class File(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     updated = models.DateTimeField(_('updated'), auto_now=True)
@@ -368,10 +360,10 @@ class File(models.Model):
         for existing_file in existing_files:
             existing_file.delete()
 
-        super(File, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        super(File, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
         self.file.storage.delete(self.file.name)
 
     def get_filename(self):

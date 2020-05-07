@@ -1,11 +1,11 @@
-"""
+r"""
 The `Sitemaps protocol <http://en.wikipedia.org/wiki/Sitemaps>`_ allows a webmaster
 to inform search engines about URLs on a website that are available for crawling.
 Django comes with a high-level framework that makes generating sitemap XML files easy.
 
-Install the sitemap application as per the `instructions in the django documentation 
-<https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/>`_, then edit your 
-project's ``urls.py`` and add a reference to Fiber's Sitemap class in order to 
+Install the sitemap application as per the `instructions in the django documentation
+<https://docs.djangoproject.com/en/dev/ref/contrib/sitemaps/>`_, then edit your
+project's ``urls.py`` and add a reference to Fiber's Sitemap class in order to
 included all the publicly-viewable Fiber pages:
 
 .. code-block:: python
@@ -21,6 +21,7 @@ from django.contrib.sitemaps import Sitemap
 
 from .models import Page
 
+
 class FiberSitemap(Sitemap):
 
     changefreq = 'monthly'
@@ -30,4 +31,3 @@ class FiberSitemap(Sitemap):
 
     def lastmod(self, obj):
         return obj.updated
-

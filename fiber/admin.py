@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import admin, messages
 from django.contrib.admin.utils import model_ngettext
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.db.models.deletion import ProtectedError
 from django.core.exceptions import PermissionDenied
 
@@ -18,7 +18,7 @@ from .utils.widgets import AdminImageWidgetWithPreview
 perms = load_class(PERMISSION_CLASS)
 
 
-class UserPermissionMixin(object):
+class UserPermissionMixin:
 
     def has_change_permission(self, request, obj=None):
         """
@@ -26,7 +26,7 @@ class UserPermissionMixin(object):
         """
         if obj:  # obj can be None for list views
             return perms.can_edit(request.user, obj)
-        return super(UserPermissionMixin, self).has_change_permission(request)
+        return super().has_change_permission(request)
 
     def has_delete_permission(self, request, obj=None):
         """
@@ -50,7 +50,7 @@ class UserPermissionMixin(object):
         """
         Notifies the PERMISSION_CLASS that an `obj` was created by `user`.
         """
-        super(UserPermissionMixin, self).save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)
         perms.object_created(request.user, obj)
 
 
@@ -61,7 +61,7 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
     actions = ['really_delete_selected']
 
     def get_actions(self, request):
-        actions = super(FileAdmin, self).get_actions(request)
+        actions = super().get_actions(request)
         if 'delete_selected' in actions:
             del actions[
                 'delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
@@ -113,7 +113,7 @@ class ImageAdminWithPreview(ImageAdmin):
             request = kwargs.pop("request", None)
             kwargs['widget'] = AdminImageWidgetWithPreview
             return db_field.formfield(**kwargs)
-        return super(ImageAdminWithPreview, self).formfield_for_dbfield(db_field, **kwargs)
+        return super().formfield_for_dbfield(db_field, **kwargs)
 
 
 class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
@@ -159,7 +159,7 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
         absolute_url = page.get_absolute_url()
         if absolute_url:
-            view_on_site += u'<a href="%s" title="%s" target="_blank"><img src="%sfiber/admin/images/world.gif" width="16" height="16" alt="%s" /></a>' % \
+            view_on_site += '<a href="%s" title="%s" target="_blank"><img src="%sfiber/admin/images/world.gif" width="16" height="16" alt="%s" /></a>' % \
                             (absolute_url, _('View on site'), settings.STATIC_URL, _('View on site'))
 
         return view_on_site
@@ -172,25 +172,25 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
         # first child cannot be moved up, last child cannot be moved down
         if not page.is_first_child():
-            actions += u'<a href="%s/move_up" title="%s"><img src="%sfiber/admin/images/arrow_up.gif" width="16" height="16" alt="%s" /></a> ' % (
+            actions += '<a href="%s/move_up" title="%s"><img src="%sfiber/admin/images/arrow_up.gif" width="16" height="16" alt="%s" /></a> ' % (
                 page.pk, _('Move up'), settings.STATIC_URL, _('Move up'))
         else:
-            actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
+            actions += '<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
                 settings.STATIC_URL,)
 
         if not page.is_last_child():
-            actions += u'<a href="%s/move_down" title="%s"><img src="%sfiber/admin/images/arrow_down.gif" width="16" height="16" alt="%s" /></a> ' % (
+            actions += '<a href="%s/move_down" title="%s"><img src="%sfiber/admin/images/arrow_down.gif" width="16" height="16" alt="%s" /></a> ' % (
                 page.pk, _('Move down'), settings.STATIC_URL, _('Move down'))
         else:
-            actions += u'<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
+            actions += '<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
                 settings.STATIC_URL,)
 
         # add subpage
-        actions += u'<a href="add/?%s=%s" title="%s"><img src="%sfiber/admin/images/page_new.gif" width="16" height="16" alt="%s" /></a> ' % \
+        actions += '<a href="add/?%s=%s" title="%s"><img src="%sfiber/admin/images/page_new.gif" width="16" height="16" alt="%s" /></a> ' % \
                    (self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL,
                     _('Add sub page'))
 
-        return u'<span class="nobr">%s</span>' % (actions,)
+        return '<span class="nobr">%s</span>' % (actions,)
 
     action_links.short_description = _('Actions')
     action_links.allow_tags = True
@@ -201,7 +201,7 @@ class FiberAdminContentItemAdmin(UserPermissionMixin, fiber_admin.ModelAdmin):
     form = forms.ContentItemAdminForm
 
     def __init__(self, *args, **kwargs):
-        super(FiberAdminContentItemAdmin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # remove content template choices if there are no choices
         if len(CONTENT_TEMPLATE_CHOICES) == 0:
@@ -219,7 +219,7 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
     form = forms.PageForm
 
     def __init__(self, *args, **kwargs):
-        super(FiberAdminPageAdmin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # remove template choices if there are no choices
         if len(TEMPLATE_CHOICES) == 0:
@@ -249,7 +249,7 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
             obj.parent = below_page
             obj.insert_at(below_page, position='last-child', save=False)
 
-        super(FiberAdminPageAdmin, self).save_model(request, obj, form, change)
+        super().save_model(request, obj, form, change)
 
 
 admin.site.register(ContentItem, ContentItemAdmin)

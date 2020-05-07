@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 import json
 
 from warnings import warn
@@ -7,7 +6,7 @@ from django import forms
 from django.contrib.admin.widgets import AdminFileWidget
 from django.db.models.fields.files import ImageFieldFile
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from fiber.app_settings import DETAIL_THUMBNAIL_OPTIONS
 from fiber.utils.images import get_thumbnail, ThumbnailException
@@ -17,14 +16,14 @@ class FiberTextarea(forms.Textarea):
 
     def render(self, name, value, attrs=None, renderer=None):
         attrs['class'] = 'fiber-editor'
-        return super(FiberTextarea, self).render(name, value, attrs, renderer)
+        return super().render(name, value, attrs, renderer)
 
 
 class FiberCombobox(forms.Select):
 
     def render(self, name, value, attrs=None, renderer=None):
         attrs['class'] = 'fiber-combobox'
-        return super(FiberCombobox, self).render(name, value, attrs, renderer)
+        return super().render(name, value, attrs, renderer)
 
 
 class JSONWidget(forms.Textarea):
@@ -40,7 +39,7 @@ class JSONWidget(forms.Textarea):
         else:
             self.prefill_from = None
 
-        super(JSONWidget, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def render(self, name, value, attrs=None, renderer=None):
         attrs['class'] = 'fiber-jsonwidget'
@@ -81,7 +80,7 @@ class JSONWidget(forms.Textarea):
             'name': name,
             'json': json.dumps(schema),
         }
-        output = super(JSONWidget, self).render(name, value, attrs, renderer)
+        output = super().render(name, value, attrs, renderer)
         return output + mark_safe(jquery)
 
 
@@ -101,5 +100,5 @@ class AdminImageWidgetWithPreview(AdminFileWidget):
                                                                                       thumbnail.height))
             except ThumbnailException as e:
                 output.append('<p>{0}</p>'.format(str(e)))
-        output.append(super(AdminImageWidgetWithPreview, self).render(name, value, attrs, renderer))
-        return mark_safe(u''.join(output))
+        output.append(super().render(name, value, attrs, renderer))
+        return mark_safe(''.join(output))

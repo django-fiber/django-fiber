@@ -1,13 +1,8 @@
 import json
 
 from django.test import TestCase
-from django.contrib.auth.models import User
-from django.utils.encoding import force_text
-
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
+from django.urls import reverse
+from django.utils.encoding import force_str
 
 from fiber.models import Page, ContentItem, PageContentItem
 from ..test_util import format_list, condense_html_whitespace
@@ -222,7 +217,7 @@ class PageTest(TestCase):
         )
 
     def test_unicode(self):
-        self.assertEqual(force_text(Page(title='abc')), 'abc')
+        self.assertEqual(force_str(Page(title='abc')), 'abc')
 
     def test_is_first_child(self):
         # setup
@@ -282,48 +277,48 @@ class PageContentItemTest(TestCase):
         item_c = PageContentItem.objects.create(page=page, content_item=content_c, block_name='main', sort=2)
 
         # 1. get content
-        self.assertEqual(u'a b c', get_content(page.id))
+        self.assertEqual('a b c', get_content(page.id))
 
         # 2. move 'a' before 'c'
         item_a.move(item_c.id)
 
-        self.assertEqual(u'b a c', get_content(page.id))
+        self.assertEqual('b a c', get_content(page.id))
 
         # 3. move 'c' before 'a'
         item_c.move(item_a.id)
-        self.assertEqual(u'b c a', get_content(page.id))
+        self.assertEqual('b c a', get_content(page.id))
 
         # 4. move 'b' last
         item_b.move()
-        self.assertEqual(u'c a b', get_content(page.id))
+        self.assertEqual('c a b', get_content(page.id))
 
         # 5. move 'a' to block 'side'
         item_a.move(block_name='side')
-        self.assertEqual(u'c b', get_content(page.id, 'main'))
-        self.assertEqual(u'a', get_content(page.id, 'side'))
+        self.assertEqual('c b', get_content(page.id, 'main'))
+        self.assertEqual('a', get_content(page.id, 'side'))
 
         # 6. move 'c' before 'a' in block 'side'
         item_a = PageContentItem.objects.get(id=item_a.id)
         item_c = PageContentItem.objects.get(id=item_c.id)
 
         item_c.move(item_a.id, block_name='side')
-        self.assertEqual(u'b', get_content(page.id, 'main'))
-        self.assertEqual(u'c a', get_content(page.id, 'side'))
+        self.assertEqual('b', get_content(page.id, 'main'))
+        self.assertEqual('c a', get_content(page.id, 'side'))
 
 
 class TestContentItem(TestCase):
     def test_unicode(self):
         # with name
-        self.assertEqual(force_text(ContentItem(name='abc')), 'abc')
+        self.assertEqual(force_str(ContentItem(name='abc')), 'abc')
 
         # without name, no content
-        self.assertEqual(force_text(ContentItem()), '[ EMPTY ]')
+        self.assertEqual(force_str(ContentItem()), '[ EMPTY ]')
 
         # without name, content length < 50
-        self.assertEqual(force_text(ContentItem(content_html='xyz')), 'xyz')
+        self.assertEqual(force_str(ContentItem(content_html='xyz')), 'xyz')
 
         # without name, content length > 50
-        self.assertEqual(force_text(ContentItem(content_html='abcdefghij' * 6)),
+        self.assertEqual(force_str(ContentItem(content_html='abcdefghij' * 6)),
                          'abcdefghijabcdefghijabcdefghijabcdefghijabcdefghij...')
 
     def test_get_add_url(self):

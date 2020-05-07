@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 
 from django.test.utils import override_settings
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.test import TestCase
 
 from fiber.utils import date
@@ -16,7 +16,7 @@ class TestFriendlyDateTime(TestCase):
         now = timezone.now()
         if delta_kwargs:
             now = now + timedelta(**delta_kwargs)
-        return force_text(date.friendly_datetime(now))
+        return force_str(date.friendly_datetime(now))
 
     def test_just_now(self):
         self.assertEqual(self.get_now(), 'just now')
@@ -62,13 +62,13 @@ class TestFriendlyDateTime(TestCase):
 
     def test_timestamp(self):
         timestamp = int(time.mktime((datetime.now() - timedelta(seconds=40)).timetuple()))
-        self.assertEqual(force_text(date.friendly_datetime(timestamp)), '40 seconds ago')
+        self.assertEqual(force_str(date.friendly_datetime(timestamp)), '40 seconds ago')
 
 
 @override_settings(USE_TZ=True, TIME_ZONE='Europe/Amsterdam')
 class TestFriendlyDateTimeWithTZ(TestFriendlyDateTime):
     def test_naive_datetime(self):
-        self.assertEqual(force_text(date.friendly_datetime(datetime.now() + timedelta(days=-1))), 'yesterday')
+        self.assertEqual(force_str(date.friendly_datetime(datetime.now() + timedelta(days=-1))), 'yesterday')
 
 
 class TestInvalidFriendlyDateTime(TestCase):

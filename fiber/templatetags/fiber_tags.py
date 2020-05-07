@@ -1,12 +1,12 @@
 import json
 import operator
+
 from copy import copy
 from functools import reduce
 
 from django import template
 from django.contrib.auth.models import AnonymousUser
 from django.template import TemplateSyntaxError
-from django.utils import six
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
@@ -21,7 +21,7 @@ PERMISSIONS = load_class(PERMISSION_CLASS)
 register = template.Library()
 
 
-class MenuHelper(object):
+class MenuHelper:
     """
     Helper class for show_menu tag, for convenience/clarity
     """
@@ -181,7 +181,7 @@ def show_page_content(context, page_or_block_name, block_name=None):
     {% show_page_content other_page "block_name" %}   use other_page for content items lookup
     """
     page_or_block_name = page_or_block_name or None
-    if isinstance(page_or_block_name, six.string_types) and block_name is None:
+    if isinstance(page_or_block_name, str) and block_name is None:
         # Single argument e.g. {% show_page_content 'main' %}
         block_name = page_or_block_name
         try:
