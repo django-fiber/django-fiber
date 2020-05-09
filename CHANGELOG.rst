@@ -1,7 +1,7 @@
 Changelog for Django-Fiber
 ==========================
 
-1.7 (unreleased)
+1.7 (2020-05-09)
 ----------------
 
 - Django 3.0 support.
