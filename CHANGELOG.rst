@@ -4,10 +4,13 @@ Changelog for Django-Fiber
 1.7 (unreleased)
 ----------------
 
+- Django 3.0 support.
+- Python 3.8 support
+- Dropped Django 1.11, 2.0, 2.1.
+- Dropped Python 2.7.
 - Reset 'Content-Length' header in AdminPageMiddleware and
   ObfuscateEmailAddressMiddleware to make sure clients read
   the full response.
-
 
 1.6.1 (2019-10-17)
 ------------------
