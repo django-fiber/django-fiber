@@ -1,24 +1,23 @@
 # English base text for Django Fiber
 # Copyright (C) 2011 Ride The Pony
 # This file is distributed under the same license as the Django Fiber package.
-#
+# 
 # Translators:
 # Fábio C. Barrionuevo da Luz <bnafta@gmail.com>, 2011-2012
-# Fábio C. Barrionuevo da Luz <bnafta@gmail.com>, 2015
+# Fábio C. Barrionuevo da Luz <bnafta@gmail.com>, 2015,2018
 # Guilherme Gondim <semente+transifex@taurinus.org>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: django-fiber\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-17 17:59+0100\n"
-"PO-Revision-Date: 2017-09-19 10:40+0000\n"
+"PO-Revision-Date: 2018-04-01 15:53+0000\n"
 "Last-Translator: Fábio C. Barrionuevo da Luz <bnafta@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/django-fiber/"
-"django-fiber/language/pt_BR/)\n"
-"Language: pt_BR\n"
+"Language-Team: Portuguese (Brazil) (http://www.transifex.com/django-fiber/django-fiber/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Language: English\n"
 
@@ -32,9 +31,7 @@ msgstr "%(count)d %(items)s excluídos com sucesso."
 msgid ""
 "%(count)d %(items)s not deleted, because that would require deleting "
 "protected related objects."
-msgstr ""
-"%(count)d %(items)s não excluídos, pois isso exigiria a exclusão de objetos "
-"protegidos relacionados."
+msgstr "%(count)d %(items)s não excluídos, pois isso exigiria a exclusão de objetos protegidos relacionados."
 
 #: admin.py:91
 msgid "Delete selected files"
@@ -90,8 +87,7 @@ msgstr "Modelo"
 
 #: admin_forms.py:50
 msgid "A named url can't be combined with a redirect page"
-msgstr ""
-"Uma url nomeada não pode ser combinada com uma página de redirecionamento"
+msgstr "Uma url nomeada não pode ser combinada com uma página de redirecionamento"
 
 #: admin_views.py:32
 msgid "This account is inactive."
@@ -99,11 +95,9 @@ msgstr "Esta conta está inativa."
 
 #: admin_views.py:37
 msgid ""
-"Please enter a correct username and password. Note that both fields are case-"
-"sensitive."
-msgstr ""
-"Por favor, insira um nome de usuário e senha corretos. Note que ambos campos "
-"são sensíveis a maiúsculas e minúsculas."
+"Please enter a correct username and password. Note that both fields are "
+"case-sensitive."
+msgstr "Por favor, insira um nome de usuário e senha corretos. Note que ambos campos são sensíveis a maiúsculas e minúsculas."
 
 #: managers.py:76
 msgid "used more than once"
@@ -252,9 +246,7 @@ msgstr "%(file_name)s excluído com sucesso."
 msgid ""
 "%(file_name)s is not deleted, because that would require deleting protected "
 "related objects."
-msgstr ""
-"%(file_name)s não foi excluído, pois isso exigiria a exclusão de objetos "
-"protegidos relacionados."
+msgstr "%(file_name)s não foi excluído, pois isso exigiria a exclusão de objetos protegidos relacionados."
 
 #: templates/fiber/admin.html:9
 msgid "Log out"
@@ -278,10 +270,8 @@ msgid "%s seconds ago"
 msgstr "%s segundos atrás"
 
 #: utils/date.py:38
-#, fuzzy
-#| msgid "%s minutes ago"
 msgid "a minute ago"
-msgstr "%s minutos atrás"
+msgstr "minutos atrás"
 
 #: utils/date.py:40
 #, python-format
@@ -316,10 +306,8 @@ msgid "%s weeks ago"
 msgstr "%s semanas atrás"
 
 #: utils/date.py:56
-#, fuzzy
-#| msgid "%s months ago"
 msgid "a month ago"
-msgstr "%s meses atrás"
+msgstr "meses atrás"
 
 #: utils/date.py:58
 #, python-format
@@ -327,10 +315,8 @@ msgid "%s months ago"
 msgstr "%s meses atrás"
 
 #: utils/date.py:61
-#, fuzzy
-#| msgid "%s years ago"
 msgid "a year ago"
-msgstr "%s anos atrás"
+msgstr "anos atrás"
 
 #: utils/date.py:62
 #, python-format
