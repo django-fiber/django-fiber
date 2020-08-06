@@ -83,7 +83,7 @@ class AdminPageMiddleware(MiddlewareMixin):
         - has a user with sufficient permissions based on the Permission Class
         - does not match EXCLUDE_URLS (empty by default)
         """
-        if request.is_ajax() or response.status_code != 200:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest' or response.status_code != 200:
             return False
         if (hasattr(request, 'user') and request.user.is_staff) and perms.is_fiber_editor(request.user):
             if EXCLUDE_URLS:
