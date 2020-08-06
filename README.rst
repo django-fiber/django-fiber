@@ -114,15 +114,15 @@ Edit your **urls.py** to add the Fiber site to your url-patterns
 
 ::
 
-    from django.conf.urls import include, url
+    from django.urls import include, path, re_path
     from fiber.views import page
 
     urlpatterns = [
         ...
-        url(r'^api/v2/', include('fiber.rest_api.urls')),
-        url(r'^admin/fiber/', include('fiber.admin_urls')),
+        path('api/v2/', include('fiber.rest_api.urls')),
+        path('admin/fiber/', include('fiber.admin_urls')),
         ...
-        url(r'', page),
+        re_path('', page),
     ]
 
 Post-installation
