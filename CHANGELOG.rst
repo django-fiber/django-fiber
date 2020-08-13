@@ -4,8 +4,8 @@ Changelog for Django-Fiber
 1.8 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- New migration (required because the Page model is based on django-mptt, and django-mptt has removed a number of
+  indexes from fields - django-fiber itself has not changed). See #278
 
 1.7 (2020-05-09)
 ----------------
