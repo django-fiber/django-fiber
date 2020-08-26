@@ -10,14 +10,12 @@ from django.utils.encoding import force_str
 
 from fiber.middleware import ObfuscateEmailAddressMiddleware
 
-from fiber_test.tests.test_utils.test_middleware import TestNewStyleMiddlewareMixin
-
 
 class TestEmailAddressObfuscation(SimpleTestCase):
     """Test the obfuscation method"""
 
     def setUp(self):
-        self.middleware = ObfuscateEmailAddressMiddleware()
+        self.middleware = ObfuscateEmailAddressMiddleware(lambda: None)
 
     def test_is_obfuscated(self):
         """Check if the given content is really not present in the response"""
@@ -39,7 +37,7 @@ class TestEmailAddressReplacement(SimpleTestCase):
 
     def setUp(self):
         """Mock the encoding method, so we can get predictable output"""
-        self.middleware = ObfuscateEmailAddressMiddleware()
+        self.middleware = ObfuscateEmailAddressMiddleware(lambda: None)
         self.middleware.encode_email = lambda email: '!!%s!!' % email
 
     def assertResponse(self, content, expected):
@@ -116,7 +114,7 @@ class TestNonReplacement(SimpleTestCase):
     """Test that email addresses do not get replaced under certain circumstances"""
 
     def setUp(self):
-        self.middleware = ObfuscateEmailAddressMiddleware()
+        self.middleware = ObfuscateEmailAddressMiddleware(lambda: None)
 
     def test_skips_non_html(self):
         content = 'Contact me at: spam@example.com'
@@ -135,7 +133,3 @@ class TestNonReplacement(SimpleTestCase):
         response = HttpResponse(content)
         self.assertEqual(
             force_str(self.middleware.process_response(None, response).content), content)
-
-
-class TestNewStyleMiddleware(TestNewStyleMiddlewareMixin, SimpleTestCase):
-    middleware_factory = ObfuscateEmailAddressMiddleware

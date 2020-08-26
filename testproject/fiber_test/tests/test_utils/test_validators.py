@@ -1,6 +1,6 @@
-from django.conf.urls import url
 from django.core.exceptions import ValidationError
 from django.test import TestCase, override_settings
+from django.urls import path
 from django.views.generic import View
 
 from fiber.models import Page
@@ -12,7 +12,7 @@ class TestView(View):
 
 
 urlpatterns = [
-    url(r'^test_url/$', TestView.as_view(), name='another_named_url'),
+    path('test_url/', TestView.as_view(), name='another_named_url'),
 ]
 
 
