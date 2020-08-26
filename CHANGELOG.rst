@@ -4,6 +4,7 @@ Changelog for Django-Fiber
 1.8 (unreleased)
 ----------------
 
+- Django 3.1 support
 - New migration (required because the Page model is based on django-mptt, and django-mptt has removed a number of
   indexes from fields - django-fiber itself has not changed). See #278
 
