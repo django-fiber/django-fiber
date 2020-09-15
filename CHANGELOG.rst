@@ -1,10 +1,10 @@
 Changelog for Django-Fiber
 ==========================
 
-1.9 (unreleased)
-----------------
+1.8.1 (2020-09-15)
+------------------
 
-- Nothing changed yet.
+- Add missing .py extension to newly added migration. Really fixes #278
 
 
 1.8 (2020-08-27)
