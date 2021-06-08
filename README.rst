@@ -1,7 +1,7 @@
 Django Fiber
 ============
 
-|Travis build image| |PyPI version| |Coverage Status|
+|Build image| |PyPI version| |Coverage Status|
 
 An important message about this project
 ---------------------------------------
@@ -151,11 +151,12 @@ for the latest changes.
 
 |Analytics|
 
-.. |Travis build image| image:: https://secure.travis-ci.org/django-fiber/django-fiber.svg?branch=dev
-   :target: http://travis-ci.org/#!/django-fiber/django-fiber
+.. |Build image| image:: https://github.com/django-fiber/django-fiber/workflows/CI/badge.svg?branch=master
+     :target: https://github.com/django-fiber/django-fiber/actions?workflow=CI
+     :alt: CI Status
 .. |PyPI version| image:: https://img.shields.io/pypi/v/django-fiber.svg
    :target: https://pypi.python.org/pypi/django-fiber/
-.. |Coverage Status| image:: https://coveralls.io/repos/django-fiber/django-fiber/badge.svg?branch=dev
-   :target: https://coveralls.io/r/django-fiber/django-fiber
+.. |Coverage Status| image:: https://codecov.io/github/django-fiber/django-fiber/coverage.svg?branch=master
+    :target: https://codecov.io/github/django-fiber/django-fiber?branch=master
 .. |Analytics| image:: https://ga-beacon.appspot.com/UA-24341330-5/django-fiber/readme
    :target: https://github.com/django-fiber/django-fiber
