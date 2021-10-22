@@ -1,7 +1,7 @@
 Changelog for Django-Fiber
 ==========================
 
-1.9 (unreleased)
+1.9 (2021-10-22)
 ----------------
 
 - Django 3.2 support.
