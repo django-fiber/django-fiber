@@ -1,20 +1,17 @@
+import json
 import random
 import re
-import json
-
-from urllib.parse import unquote
-
 from django.http import HttpResponseRedirect
-from django.template import loader, RequestContext
+from django.template import loader
 from django.urls import reverse
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import force_str
 from django.utils.html import escape
+from urllib.parse import unquote
 
 from .app_settings import LOGIN_STRING, EXCLUDE_URLS, EDITOR, PERMISSION_CLASS
 from .models import Page
 from .utils.import_util import import_element, load_class
-
 
 perms = load_class(PERMISSION_CLASS)
 
@@ -129,6 +126,11 @@ class AdminPageMiddleware(MiddlewareMixin):
             # Reset 'Content-Length' header (usually set by CommonMiddleware)
             # to make sure clients read the full response body
             response['Content-Length'] = str(len(response.content))
+        # In Django 3.0 the X-Frame-Options HTTP header default value was set to 'deny'. This meant
+        # that the Fiber admin views - that load part of the admin in a frame - no longer worked.
+        # Rather than forcing the entire website to use the X_FRAME_OPTIONS setting to change the
+        # X-Frame-Options for then entire site, we only do it for the pages used by Fiber.
+        response['X-Frame-Options'] = 'SAMEORIGIN'
         return response
 
     def is_django_admin(self, request):
