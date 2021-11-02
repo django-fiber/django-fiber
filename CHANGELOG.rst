@@ -4,7 +4,7 @@ Changelog for Django-Fiber
 1.10 (unreleased)
 -----------------
 
-- Nothing changed yet.
+-  X-frame-options change broke the page editor - see #289.
 
 
 1.9 (2021-10-22)
