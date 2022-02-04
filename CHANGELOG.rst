@@ -4,7 +4,7 @@ Changelog for Django-Fiber
 1.10 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Checked compatibility with Django 4.0.
 
 
 1.9.1 (2021-11-02)
