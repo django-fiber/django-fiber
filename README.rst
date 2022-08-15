@@ -57,10 +57,9 @@ Setup
 
 Open **settings.py** and add the following to your INSTALLED_APPS
 
-::
+.. code-block:: python
 
    INSTALLED_APPS = (
-        ...
         'mptt',
         'compressor',
         'easy_thumbnails',
@@ -70,37 +69,37 @@ Open **settings.py** and add the following to your INSTALLED_APPS
 
 Add Fiber to the MIDDLEWARE_CLASSES list
 
-::
+.. code-block:: python
 
     import django.conf.global_settings as DEFAULT_SETTINGS
 
     MIDDLEWARE_CLASSES = DEFAULT_SETTINGS.MIDDLEWARE_CLASSES + (
-        ...
         'fiber.middleware.ObfuscateEmailAddressMiddleware',
         'fiber.middleware.AdminPageMiddleware',
+        ...
     )
 
 (Or, add the same items to ``MIDDLEWARE`` if you are using Django 1.10 or later.)
 
 Add the request context processor
 
-::
+.. code-block:: python
 
     TEMPLATES = [
         {
-            ...
             'OPTIONS': {
                 'context_processors': [
-                    ...
                     'django.template.context_processors.request',
+                    ...
                 ]
             }
+            ...
         },
     ]
 
 And configure compressor
 
-::
+.. code-block:: python
 
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -112,7 +111,7 @@ And configure compressor
 
 Edit your **urls.py** to add the Fiber site to your url-patterns
 
-::
+.. code-block:: python
 
     from django.urls import include, path, re_path
     from fiber.views import page
