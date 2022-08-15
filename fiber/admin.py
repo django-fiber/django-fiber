@@ -172,25 +172,25 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
         # first child cannot be moved up, last child cannot be moved down
         if not page.is_first_child():
-            actions += '<a href="%s/move_up" title="%s"><img src="%sfiber/admin/images/arrow_up.gif" width="16" height="16" alt="%s" /></a> ' % (
+            actions += '<a href="{}/move_up" title="{}"><img src="{}fiber/admin/images/arrow_up.gif" width="16" height="16" alt="{}" /></a> '.format(
                 page.pk, _('Move up'), settings.STATIC_URL, _('Move up'))
         else:
-            actions += '<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
-                settings.STATIC_URL,)
+            actions += '<img src="{}fiber/admin/images/blank.gif" width="16" height="16" alt="" /> '.format(
+                settings.STATIC_URL)
 
         if not page.is_last_child():
-            actions += '<a href="%s/move_down" title="%s"><img src="%sfiber/admin/images/arrow_down.gif" width="16" height="16" alt="%s" /></a> ' % (
+            actions += '<a href="{}/move_down" title="{}"><img src="{}fiber/admin/images/arrow_down.gif" width="16" height="16" alt="{}" /></a> '.format(
                 page.pk, _('Move down'), settings.STATIC_URL, _('Move down'))
         else:
-            actions += '<img src="%sfiber/admin/images/blank.gif" width="16" height="16" alt="" /> ' % (
-                settings.STATIC_URL,)
+            actions += '<img src="{}fiber/admin/images/blank.gif" width="16" height="16" alt="" /> '.format(
+                settings.STATIC_URL)
 
         # add subpage
         actions += '<a href="add/?%s=%s" title="%s"><img src="%sfiber/admin/images/page_new.gif" width="16" height="16" alt="%s" /></a> ' % \
                    (self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL,
                     _('Add sub page'))
 
-        return '<span class="nobr">%s</span>' % (actions,)
+        return f'<span class="nobr">{actions}</span>'
 
     action_links.short_description = _('Actions')
     action_links.allow_tags = True

@@ -177,7 +177,7 @@ class FileList(IEUploadFixMixin, FiberListCreateAPIView):
 
         sort_order = self.request.query_params.get('sortorder', 'asc')
 
-        qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
+        qs = qs.order_by('{}{}'.format('-' if sort_order != 'asc' else '', order_by))
 
         return qs
 
@@ -242,7 +242,7 @@ class ImageList(IEUploadFixMixin, FiberListCreateAPIView):
 
         sort_order = self.request.query_params.get('sortorder', 'asc')
 
-        qs = qs.order_by('%s%s' % ('-' if sort_order != 'asc' else '', order_by))
+        qs = qs.order_by('{}{}'.format('-' if sort_order != 'asc' else '', order_by))
 
         return qs
 

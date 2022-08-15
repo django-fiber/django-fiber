@@ -153,9 +153,9 @@ class AdminPageMiddleware(MiddlewareMixin):
 
     def get_logout_url(self, request):
         if request.META['QUERY_STRING']:
-            return '%s?next=%s?%s' % (reverse('admin:logout'), request.path_info, request.META['QUERY_STRING'])
+            return '{}?next={}?{}'.format(reverse('admin:logout'), request.path_info, request.META['QUERY_STRING'])
         else:
-            return '%s?next=%s' % (reverse('admin:logout'), request.path_info)
+            return '{}?next={}'.format(reverse('admin:logout'), request.path_info)
 
 
 class ObfuscateEmailAddressMiddleware(MiddlewareMixin):
