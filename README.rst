@@ -26,7 +26,7 @@ About Django Fiber
 ------------------
 
 Do you want to see a Django Fiber screencast, to get a feel for what  it can do
-for you? `Check it out on Vimeo <http://vimeo.com/django-fiber/django-fiber>`_
+for you? `Check it out on Vimeo <https://vimeo.com/24678409>`_
 
 Convinced? Want to use Django Fiber in your own Django project? Then follow the
 instructions below.
