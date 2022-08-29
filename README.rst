@@ -148,8 +148,6 @@ Changelog
 See `CHANGELOG.md <https://github.com/django-fiber/django-fiber/blob/master/CHANGELOG.rst>`_
 for the latest changes.
 
-|Analytics|
-
 .. |Build image| image:: https://github.com/django-fiber/django-fiber/workflows/CI/badge.svg?branch=master
      :target: https://github.com/django-fiber/django-fiber/actions?workflow=CI
      :alt: CI Status
@@ -157,5 +155,3 @@ for the latest changes.
    :target: https://pypi.python.org/pypi/django-fiber/
 .. |Coverage Status| image:: https://codecov.io/github/django-fiber/django-fiber/coverage.svg?branch=master
     :target: https://codecov.io/github/django-fiber/django-fiber?branch=master
-.. |Analytics| image:: https://ga-beacon.appspot.com/UA-24341330-5/django-fiber/readme
-   :target: https://github.com/django-fiber/django-fiber
