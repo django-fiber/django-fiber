@@ -983,7 +983,7 @@ return (window.jQuery = window.$ = jQuery);
 	};
 
 	// Make sure that the options inside disabled selects aren't marked as disabled
-	// (WebKit marks them as diabled)
+	// (WebKit marks them as disabled)
 	select.disabled = true;
 	jQuery.support.optDisabled = !opt.disabled;
 
@@ -1550,7 +1550,7 @@ jQuery.fn.extend({
 					classNames = value.split( rspaces );
 
 				while ( (className = classNames[ i++ ]) ) {
-					// check each className given, space seperated list
+					// check each className given, space separated list
 					state = isBool ? state : !self.hasClass( className );
 					self[ state ? "addClass" : "removeClass" ]( className );
 				}

@@ -15,13 +15,13 @@
  */
  
 (function($) {
-    /** jQuery.toJSON( json-serializble )
+    /** jQuery.toJSON( json-serializable )
         Converts the given argument into a JSON respresentation.
 
         If an object has a "toJSON" function, that will be used to get the representation.
         Non-integer/string keys are skipped in the object, as are keys that point to a function.
 
-        json-serializble:
+        json-serializable:
             The *thing* to be converted.
      **/
     $.toJSON = function(o)

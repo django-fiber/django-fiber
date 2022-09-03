@@ -945,7 +945,7 @@ QUnit.equiv = function () {
         // for string, boolean, number and null
         function useStrictEquality(b, a) {
             if (b instanceof a.constructor || a instanceof b.constructor) {
-                // to catch short annotaion VS 'new' annotation of a declaration
+                // to catch short annotation VS 'new' annotation of a declaration
                 // e.g. var i = 1;
                 //      var j = new Number(1);
                 return a == b;
@@ -972,7 +972,7 @@ QUnit.equiv = function () {
             "regexp": function (b, a) {
                 return QUnit.objectType(b) === "regexp" &&
                     a.source === b.source && // the regex itself
-                    a.global === b.global && // and its modifers (gmi) ...
+                    a.global === b.global && // and its modifiers (gmi) ...
                     a.ignoreCase === b.ignoreCase &&
                     a.multiline === b.multiline;
             },
