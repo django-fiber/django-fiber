@@ -5,7 +5,7 @@ def get_admin_change_url(instance):
     """
     Return url for editing this instance in the admin.
     """
-    named_url = 'admin:%s_%s_change' % (instance._meta.app_label, instance._meta.object_name.lower())
+    named_url = f'admin:{instance._meta.app_label}_{instance._meta.object_name.lower()}_change'
     return reverse(named_url, args=(instance.pk,))
 
 

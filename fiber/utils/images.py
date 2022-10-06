@@ -12,7 +12,7 @@ def get_thumbnail(image, thumbnail_options):
             return thumbnail
         except InvalidImageFormatError as e:
             raise ThumbnailException(str(e))
-        except IOError as e:
+        except OSError as e:
             raise ThumbnailException(str(e))
     except ImportError:
         return

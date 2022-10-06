@@ -96,9 +96,9 @@ class AdminImageWidgetWithPreview(AdminFileWidget):
             try:
                 thumbnail = get_thumbnail(file_name, thumbnail_options=DETAIL_THUMBNAIL_OPTIONS)
                 if thumbnail:
-                    output.append('<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width,
+                    output.append('<img src="{}" width="{}" height="{}" />'.format(thumbnail.url, thumbnail.width,
                                                                                       thumbnail.height))
             except ThumbnailException as e:
-                output.append('<p>{0}</p>'.format(str(e)))
+                output.append(f'<p>{str(e)}</p>')
         output.append(super().render(name, value, attrs, renderer))
         return mark_safe(''.join(output))

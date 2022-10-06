@@ -53,11 +53,11 @@ class ContentItem(models.Model):
 
     @classmethod
     def get_add_url(cls):
-        named_url = 'fiber_admin:%s_%s_add' % (cls._meta.app_label, cls._meta.object_name.lower())
+        named_url = f'fiber_admin:{cls._meta.app_label}_{cls._meta.object_name.lower()}_add'
         return reverse(named_url)
 
     def get_change_url(self):
-        named_url = 'fiber_admin:%s_%s_change' % (self._meta.app_label, self._meta.object_name.lower())
+        named_url = f'fiber_admin:{self._meta.app_label}_{self._meta.object_name.lower()}_change'
         return reverse(named_url, args=(self.id, ))
 
     def set_used_on_pages_json(self):
@@ -134,17 +134,17 @@ class Page(MPTTModel):
             else:
                 # relative url
                 if self.parent:
-                    return '%s/%s/' % (self.parent.get_absolute_url().rstrip('/'), self.url.strip('/'))
+                    return '{}/{}/'.format(self.parent.get_absolute_url().rstrip('/'), self.url.strip('/'))
                 else:
                     return ''  # TODO: make sure this can never happen (in model.save()?)
 
     @classmethod
     def get_add_url(cls):
-        named_url = 'fiber_admin:%s_%s_add' % (cls._meta.app_label, cls._meta.object_name.lower())
+        named_url = f'fiber_admin:{cls._meta.app_label}_{cls._meta.object_name.lower()}_add'
         return reverse(named_url)
 
     def get_change_url(self):
-        named_url = 'fiber_admin:%s_%s_change' % (self._meta.app_label, self._meta.object_name.lower())
+        named_url = f'fiber_admin:{self._meta.app_label}_{self._meta.object_name.lower()}_change'
         return reverse(named_url, args=(self.id, ))
 
     def get_content_for_block(self, block_name):
@@ -330,7 +330,7 @@ class Image(models.Model):
         try:
             thumbnail = get_thumbnail(self.image, thumbnail_options=LIST_THUMBNAIL_OPTIONS)
             if thumbnail:
-                return mark_safe('<img src="{0}" width="{1}" height="{2}" />'.format(thumbnail.url, thumbnail.width, thumbnail.height))
+                return mark_safe(f'<img src="{thumbnail.url}" width="{thumbnail.width}" height="{thumbnail.height}" />')
         except ThumbnailException as e:
             return str(e)
     preview.short_description = _('Preview')
