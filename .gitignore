@@ -3,5 +3,6 @@
 /dist/
 /testproject/reports/
 /testproject/static/
+/testproject/media/
 django_fiber.egg-info
 .tox
