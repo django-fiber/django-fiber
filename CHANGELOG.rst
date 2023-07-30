@@ -4,7 +4,7 @@ Changelog for Django-Fiber
 1.11 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Dropped support for Django 2.2, 4.0 and Python 3.6, 3.7.
 
 
 1.10 (2022-10-08)
