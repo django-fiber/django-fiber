@@ -1,4 +1,4 @@
-django-mptt>=0.13
-django_compressor>=4.1
-djangorestframework>=3.14
-easy-thumbnails>=2.7.2
+django-mptt>=0.15
+django_compressor>=4.4
+djangorestframework>=3.15.0
+easy-thumbnails>=2.8.5
