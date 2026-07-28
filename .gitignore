@@ -1,8 +1,31 @@
-*.pyc
+# Editors
+/.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments and local configuration
+/.venv/
+/venv/
+/env/
+.env
+.env.*
+
+# Test and coverage output
+/.tox/
+/.coverage
+/.coverage.*
+/coverage.xml
+/htmlcov/
+/testproject/reports/
+
+# Packaging output
 /build/
 /dist/
-/testproject/reports/
+
+# Test project runtime data
+/testproject/testproject_db
 /testproject/static/
 /testproject/media/
-django_fiber.egg-info
-.tox
