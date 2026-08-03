@@ -25,6 +25,7 @@ from .models import Page
 class FiberSitemap(Sitemap):
 
     changefreq = 'monthly'
+    protocol = 'https'
 
     def items(self):
         return Page.objects.filter(is_public=True)

@@ -54,6 +54,7 @@ class UserPermissionMixin:
         perms.object_created(request.user, obj)
 
 
+@admin.register(File)
 class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
     list_display = ('__str__', 'title', 'updated',)
     date_hierarchy = 'updated'
@@ -67,6 +68,9 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
                 'delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
         return actions
 
+    @admin.action(
+        description=_('Delete selected files')
+    )
     def really_delete_selected(self, request, queryset):
         deleted_count = 0
         protected_count = 0
@@ -94,7 +98,6 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
                                      "count": protected_count, "items": model_ngettext(self.opts, protected_count)
                                  })
 
-    really_delete_selected.short_description = _('Delete selected files')
 
 
 class ImageAdmin(FileAdmin):
@@ -116,6 +119,7 @@ class ImageAdminWithPreview(ImageAdmin):
         return super().formfield_for_dbfield(db_field, **kwargs)
 
 
+@admin.register(ContentItem)
 class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
     list_display = ('__str__', 'unused')
     form = forms.ContentItemAdminForm
@@ -127,12 +131,14 @@ class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
     date_hierarchy = 'updated'
     search_fields = ('name', get_editor_field_name('content_html'))
 
+    @admin.display(
+        boolean=True
+    )
     def unused(self, obj):
         if obj.used_on_pages_data is None:
             return True
         return False
 
-    unused.boolean = True
 
 
 class PageContentItemInline(UserPermissionMixin, admin.TabularInline):
@@ -140,6 +146,7 @@ class PageContentItemInline(UserPermissionMixin, admin.TabularInline):
     extra = 1
 
 
+@admin.register(Page)
 class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
     form = forms.PageForm
     fieldsets = (
@@ -154,6 +161,9 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page__title')
 
+    @admin.display(
+        description=''
+    )
     def view_on_site_link(self, page):
         view_on_site = ''
 
@@ -164,9 +174,10 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
         return view_on_site
 
-    view_on_site_link.short_description = ''
-    view_on_site_link.allow_tags = True
 
+    @admin.display(
+        description=_('Actions')
+    )
     def action_links(self, page):
         actions = ''
 
@@ -192,8 +203,6 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
         return f'<span class="nobr">{actions}</span>'
 
-    action_links.short_description = _('Actions')
-    action_links.allow_tags = True
 
 
 class FiberAdminContentItemAdmin(UserPermissionMixin, fiber_admin.ModelAdmin):
@@ -252,14 +261,11 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-admin.site.register(ContentItem, ContentItemAdmin)
 
 if IMAGE_PREVIEW:
     admin.site.register(Image, ImageAdminWithPreview)
 else:
     admin.site.register(Image, ImageAdmin)
-admin.site.register(File, FileAdmin)
-admin.site.register(Page, PageAdmin)
 
 fiber_admin.site.register(ContentItem, FiberAdminContentItemAdmin)
 fiber_admin.site.register(Page, FiberAdminPageAdmin)
