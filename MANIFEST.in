@@ -1,7 +1,11 @@
-include *.rst
-include *.md
+include CHANGELOG.rst
+include LICENSE.rst
+include README.rst
+include pyproject.toml
+include requirements.txt
 recursive-include fiber/templates *
 recursive-include fiber/static *
 recursive-include fiber/locale *
-global-exclude */.DS_Store
-include requirements.txt
+global-exclude .DS_Store
+global-exclude *.py[cod]
+global-exclude __pycache__

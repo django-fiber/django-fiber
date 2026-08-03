@@ -6,15 +6,14 @@ New releases
 ============
 
 In order to make releasing a new version slightly easier, this project has been set up to use
-`Zest-releaser <http://zestreleaser.readthedocs.io/en/latest/>`_, which will need to be installed on your local dev
-machine::
+`Zest-releaser <https://zestreleaser.readthedocs.io/en/latest/>`_, together with the other release tools::
 
-    pip install zest.releaser[recommended]
+    python -m pip install -r release-requirements.txt
 
-The `[recommended]` adds a number of optional packages that make Zest-releaser more convenient.
+The ``[recommended]`` extra adds optional packages that make Zest.releaser more convenient.
 
 To use Zest.releaser: rather than copy-and-paste the excellent instructions from their docs,
-`here is a link to their documentation <http://zestreleaser.readthedocs.io/en/latest/overview.html#available-commands>`_.
+`here is a link to their documentation <https://zestreleaser.readthedocs.io/en/latest/overview.html#available-commands>`_.
 
 Note that the ``prerelease`` command has some custom hooks in order to:
 
@@ -50,4 +49,3 @@ If any strings in the project have been modified, they need to be sent up to Tra
     cd <fiber folder of project>
     django-admin.py makemessages --all
     tx push --source --translations
-

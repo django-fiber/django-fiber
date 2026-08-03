@@ -1,0 +1,4 @@
+build
+check-manifest
+twine
+zest.releaser[recommended]
