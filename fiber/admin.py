@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import admin, messages
 from django.contrib.admin.utils import model_ngettext
 from django.utils.translation import gettext_lazy as _
+from django.utils.html import format_html
 from django.db.models.deletion import ProtectedError
 from django.core.exceptions import PermissionDenied
 
@@ -169,8 +170,8 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
 
         absolute_url = page.get_absolute_url()
         if absolute_url:
-            view_on_site += '<a href="%s" title="%s" target="_blank"><img src="%sfiber/admin/images/world.gif" width="16" height="16" alt="%s" /></a>' % \
-                            (absolute_url, _('View on site'), settings.STATIC_URL, _('View on site'))
+            view_on_site = format_html('<a href="{}" title="{}" target="_blank"><img src="{}fiber/admin/images/world.gif" width="16" height="16" alt="{}" /></a>',
+                            absolute_url, _('View on site'), settings.STATIC_URL, _('View on site'))
 
         return view_on_site
 
@@ -179,29 +180,29 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
         description=_('Actions')
     )
     def action_links(self, page):
-        actions = ''
+        actions = []
 
         # first child cannot be moved up, last child cannot be moved down
         if not page.is_first_child():
-            actions += '<a href="{}/move_up" title="{}"><img src="{}fiber/admin/images/arrow_up.gif" width="16" height="16" alt="{}" /></a> '.format(
-                page.pk, _('Move up'), settings.STATIC_URL, _('Move up'))
+            actions.append(format_html('<a href="{}/move_up" title="{}"><img src="{}fiber/admin/images/arrow_up.gif" width="16" height="16" alt="{}" /></a> ',
+                page.pk, _('Move up'), settings.STATIC_URL, _('Move up')))
         else:
-            actions += '<img src="{}fiber/admin/images/blank.gif" width="16" height="16" alt="" /> '.format(
-                settings.STATIC_URL)
+            actions.append(format_html('<img src="{}fiber/admin/images/blank.gif" width="16" height="16" alt="" /> ',
+                settings.STATIC_URL))
 
         if not page.is_last_child():
-            actions += '<a href="{}/move_down" title="{}"><img src="{}fiber/admin/images/arrow_down.gif" width="16" height="16" alt="{}" /></a> '.format(
-                page.pk, _('Move down'), settings.STATIC_URL, _('Move down'))
+            actions.append(format_html('<a href="{}/move_down" title="{}"><img src="{}fiber/admin/images/arrow_down.gif" width="16" height="16" alt="{}" /></a> ',
+                page.pk, _('Move down'), settings.STATIC_URL, _('Move down')))
         else:
-            actions += '<img src="{}fiber/admin/images/blank.gif" width="16" height="16" alt="" /> '.format(
-                settings.STATIC_URL)
+            actions.append(format_html('<img src="{}fiber/admin/images/blank.gif" width="16" height="16" alt="" /> ',
+                settings.STATIC_URL))
 
         # add subpage
-        actions += '<a href="add/?%s=%s" title="%s"><img src="%sfiber/admin/images/page_new.gif" width="16" height="16" alt="%s" /></a> ' % \
-                   (self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL,
-                    _('Add sub page'))
+        actions.append(format_html('<a href="add/?{}={}" title="{}"><img src="{}fiber/admin/images/page_new.gif" width="16" height="16" alt="{}" /></a> ',
+                   self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL,
+                    _('Add sub page')))
 
-        return f'<span class="nobr">{actions}</span>'
+        return format_html('<span class="nobr">{}{}{}</span>', *actions)
 
 
 
