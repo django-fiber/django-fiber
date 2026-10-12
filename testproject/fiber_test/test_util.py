@@ -3,11 +3,6 @@ import re
 from django.template import Template, Context
 from django.utils.encoding import force_str
 
-try:
-    from django.utils.timezone import make_aware, utc
-except ImportError:
-    make_aware, utc = None, None
-
 
 def format_list(l, must_sort=True, separator=' '):
     """
