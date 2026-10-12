@@ -1,1 +1,2 @@
-Django
+-r requirements.txt
+Sphinx>=7,<9
