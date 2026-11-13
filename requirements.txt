@@ -1,5 +1,5 @@
 Django>=4.2.30,<4.3
 django-mptt>=0.18
-django_compressor>=4.6
+django-compressor>=4.6
 djangorestframework>=3.17.1
 easy-thumbnails>=2.10.1

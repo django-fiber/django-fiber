@@ -19,8 +19,10 @@ upgrade branch being worked on, and preserve compatibility with the versions in
   canonical sequence and acceptance policy for the modernization branches.
 - `run_tests` and `run_coverage` are the supported local test wrappers.
 - `requirements.txt` contains runtime dependencies and
-  `test-requirements.txt` contains local test tooling. Packaging metadata is in
-  `setup.py` and `setup.cfg` until the packaging upgrade changes it.
+  `test-requirements.txt`, `docs-requirements.txt`, and
+  `release-requirements.txt` contain tooling for their named roles. Packaging
+  metadata and build configuration are in `pyproject.toml`; release and
+  manifest-tool configuration remain in `setup.cfg`.
 - `.github/workflows/` and `tox.ini` define the CI and compatibility matrices.
 - `CHANGELOG.rst` records user-visible changes.
 
@@ -120,6 +122,15 @@ Build the documentation, when documentation or public APIs change, with:
 
 ```console
 python -m sphinx -W -b html docs docs/_build/html
+```
+
+For packaging changes, install `release-requirements.txt`, then build and
+validate both distributions:
+
+```console
+python -m build
+python -m twine check --strict dist/*
+check-manifest
 ```
 
 ## Code and test expectations

@@ -10,6 +10,10 @@ Changelog for Django-Fiber
 - Raised the minimum versions of django-mptt to 0.18, django-compressor to
   4.6, Django REST framework to 3.17.1, and easy-thumbnails to 2.10.1.
 - Dropped support for older Django and Python versions.
+- Moved package metadata and build configuration to ``pyproject.toml`` and
+  separated runtime, test, documentation, and release requirements.
+- Removed the obsolete ``setup.py`` publishing shim and universal-wheel
+  configuration.
 
 
 1.10 (2022-10-08)
