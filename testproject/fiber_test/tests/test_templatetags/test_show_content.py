@@ -28,24 +28,24 @@ class TestShowContent(RenderMixin, TestCase):
         self.assertRendered(
             '{% load fiber_tags %}{% show_content "contact" %}',
             '''
-            <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(contact_pk)s, "url": "%(edit_url_contact)s", "add_url": "", "page_id": 1, "block_name": "" }' class="content">
+            <div data-fiber-data='{{ "can_edit": true, "type": "content_item", "id": {contact_pk}, "url": "{edit_url_contact}", "add_url": "", "page_id": 1, "block_name": "" }}' class="content">
                 <p><a href="mailto:email@example.com">Contact me<a></p>
-            </div>''' % {
-                'contact_pk': self.contact.pk,
-                'edit_url_contact': reverse('fiber_admin:fiber_contentitem_change', args=[self.contact.pk])
-            }, {'fiber_page': self.home, 'user': self.staff})
+            </div>'''.format(
+                contact_pk=self.contact.pk,
+                edit_url_contact=reverse('fiber_admin:fiber_contentitem_change', args=[self.contact.pk])
+            ), {'fiber_page': self.home, 'user': self.staff})
 
     def test_show_content_staff_non_fiber_page(self):
         """Render a content item for a staff user on a non-fiber page"""
         self.assertRendered(
             '{% load fiber_tags %}{% show_content "contact" %}',
             '''
-            <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(contact_pk)s, "url": "%(edit_url_contact)s" }' class="content">
+            <div data-fiber-data='{{ "can_edit": true, "type": "content_item", "id": {contact_pk}, "url": "{edit_url_contact}" }}' class="content">
                 <p><a href="mailto:email@example.com">Contact me<a></p>
-            </div>''' % {
-                'contact_pk': self.contact.pk,
-                'edit_url_contact': reverse('fiber_admin:fiber_contentitem_change', args=[self.contact.pk])
-            }, {'user': self.staff})
+            </div>'''.format(
+                contact_pk=self.contact.pk,
+                edit_url_contact=reverse('fiber_admin:fiber_contentitem_change', args=[self.contact.pk])
+            ), {'user': self.staff})
 
     def test_show_content_that_does_not_exist(self):
         self.assertRendered('{% load fiber_tags %}{% show_content "missing" %}', '')
@@ -72,7 +72,7 @@ class TestAutoCreate(RenderMixin, TestCase):
         self.assertRendered(
             '{% load fiber_tags %}{% show_content "missing" %}',
             '''
-            <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(item_pk)s, "url": "%(edit_url_item)s" }' class="content"></div>''' % {
-                'item_pk': 1,
-                'edit_url_item': reverse('fiber_admin:fiber_contentitem_change', args=[1])
-            }, {'user': self.staff})
+            <div data-fiber-data='{{ "can_edit": true, "type": "content_item", "id": {item_pk}, "url": "{edit_url_item}" }}' class="content"></div>'''.format(
+                item_pk=1,
+                edit_url_item=reverse('fiber_admin:fiber_contentitem_change', args=[1])
+            ), {'user': self.staff})

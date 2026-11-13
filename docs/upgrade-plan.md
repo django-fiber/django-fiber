@@ -74,6 +74,10 @@ dependency upgrades with complete UI rewrites.
   the intended interpreter for local development and test setup.
 - Set the minimum compatible versions to django-mptt 0.18, django-compressor
   4.6, Django REST framework 3.17.1, and easy-thumbnails 2.10.1.
+- Add cross-platform Python scripts that run current, isolated
+  `django-upgrade` and `pyupgrade` versions across all tracked Python files
+  except migrations. Run them for Django 4.2 and Python 3.10 before manual
+  compatibility work.
 - Align dependency bounds, tox, CI, classifiers, README, and changelog.
 - Resolve project-owned deprecation warnings, including the test import of
   `django.utils.timezone.utc` and the sitemap protocol warning.

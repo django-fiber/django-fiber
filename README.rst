@@ -34,19 +34,13 @@ instructions below.
 Requirements
 ------------
 
-These dependencies are automatically installed::
-
-    Pillow>=2.2.1
-    django-mptt>=0.8
-    django_compressor>=2.0
-    djangorestframework>=3.4
-    easy-thumbnails>=2.2
+Fiber requires Python 3.10 and Django 4.2.30 or later in the Django 4.2
+release series.
 
 Installation
 ------------
 
-We're assuming you are using Django 1.9-2.0. Then simply install Fiber
-using pip::
+Install Fiber using pip::
 
     $ pip install django-fiber
 

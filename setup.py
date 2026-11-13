@@ -20,7 +20,7 @@ setup(
     license='Apache License, Version 2.0',
 
     install_requires=reqs,
-    python_requires='>=3.6',
+    python_requires='>=3.10',
 
     description='Django Fiber - a simple, user-friendly CMS for all your Django projects',
     long_description=open('README.rst').read(),
@@ -38,19 +38,12 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Framework :: Django',
-        'Framework :: Django :: 3.2',
-        'Framework :: Django :: 4.0',
-        'Framework :: Django :: 4.1',
+        'Framework :: Django :: 4.2',
     ],
     keywords=['cms', 'django']
 )

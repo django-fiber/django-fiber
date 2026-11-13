@@ -30,17 +30,17 @@ class TestShowPageContent(RenderMixin, TestCase):
         self.assertRendered(
             '{% load fiber_tags %}{% show_page_content "main" %}',
             '''
-            <div data-fiber-data='{ "can_edit":true, "type": "content_item", "add_url": "%(add_url)s", "page_id": %(home_pk)s, "block_name": "main" }'>
-                <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(home_content_pk)s, "url": "%(edit_url_home_content)s", "add_url": "%(add_url)s", "page_id": %(home_pk)s, "block_name": "main", "page_content_item_id": %(home_page_content_pk)s, "used_on_pages": [{&quot;title&quot;: &quot;Home&quot;, &quot;url&quot;: &quot;&quot;}] }' class="content">
+            <div data-fiber-data='{{ "can_edit":true, "type": "content_item", "add_url": "{add_url}", "page_id": {home_pk}, "block_name": "main" }}'>
+                <div data-fiber-data='{{ "can_edit": true, "type": "content_item", "id": {home_content_pk}, "url": "{edit_url_home_content}", "add_url": "{add_url}", "page_id": {home_pk}, "block_name": "main", "page_content_item_id": {home_page_content_pk}, "used_on_pages": [{{&quot;title&quot;: &quot;Home&quot;, &quot;url&quot;: &quot;&quot;}}] }}' class="content">
                     <p>homepage</p>
                 </div>
-            </div>''' % {
-                'home_pk': self.home.pk,
-                'add_url': reverse('fiber_admin:fiber_contentitem_add'),
-                'home_page_content_pk': self.home_page_content.pk,
-                'home_content_pk': self.home_content.pk,
-                'edit_url_home_content': reverse('fiber_admin:fiber_contentitem_change', args=[self.home_content.pk])
-            }, {'fiber_page': self.home, 'user': self.staff})
+            </div>'''.format(
+                home_pk=self.home.pk,
+                add_url=reverse('fiber_admin:fiber_contentitem_add'),
+                home_page_content_pk=self.home_page_content.pk,
+                home_content_pk=self.home_content.pk,
+                edit_url_home_content=reverse('fiber_admin:fiber_contentitem_change', args=[self.home_content.pk])
+            ), {'fiber_page': self.home, 'user': self.staff})
 
     def test_show_page_content_with_other(self):
         """The show_page_content templatetag should support rendering content from multiple pages in one view."""
@@ -53,26 +53,26 @@ class TestShowPageContent(RenderMixin, TestCase):
         self.assertRendered(
             '{% load fiber_tags %}{% show_page_content about_page "main" %}{% show_page_content "main" %}',
             '''
-            <div data-fiber-data='{ "can_edit":true, "type": "content_item", "add_url": "%(add_url)s", "page_id": %(about_pk)s, "block_name": "main" }'>
-                <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(about_content_pk)s, "url": "%(edit_url_about_content)s", "add_url": "%(add_url)s", "page_id": %(about_pk)s, "block_name": "main", "page_content_item_id": %(about_page_content_pk)s, "used_on_pages": [{&quot;title&quot;: &quot;About&quot;, &quot;url&quot;: &quot;&quot;}] }' class="content">
+            <div data-fiber-data='{{ "can_edit":true, "type": "content_item", "add_url": "{add_url}", "page_id": {about_pk}, "block_name": "main" }}'>
+                <div data-fiber-data='{{ "can_edit": true, "type": "content_item", "id": {about_content_pk}, "url": "{edit_url_about_content}", "add_url": "{add_url}", "page_id": {about_pk}, "block_name": "main", "page_content_item_id": {about_page_content_pk}, "used_on_pages": [{{&quot;title&quot;: &quot;About&quot;, &quot;url&quot;: &quot;&quot;}}] }}' class="content">
                     <p>about</p>
                 </div>
             </div>
-            <div data-fiber-data='{ "can_edit":true, "type": "content_item", "add_url": "%(add_url)s", "page_id": %(home_pk)s, "block_name": "main" }'>
-                <div data-fiber-data='{ "can_edit": true, "type": "content_item", "id": %(home_content_pk)s, "url": "%(edit_url_home_content)s", "add_url": "%(add_url)s", "page_id": %(home_pk)s, "block_name": "main", "page_content_item_id": %(home_page_content_pk)s, "used_on_pages": [{&quot;title&quot;: &quot;Home&quot;, &quot;url&quot;: &quot;&quot;}] }' class="content">
+            <div data-fiber-data='{{ "can_edit":true, "type": "content_item", "add_url": "{add_url}", "page_id": {home_pk}, "block_name": "main" }}'>
+                <div data-fiber-data='{{ "can_edit": true, "type": "content_item", "id": {home_content_pk}, "url": "{edit_url_home_content}", "add_url": "{add_url}", "page_id": {home_pk}, "block_name": "main", "page_content_item_id": {home_page_content_pk}, "used_on_pages": [{{&quot;title&quot;: &quot;Home&quot;, &quot;url&quot;: &quot;&quot;}}] }}' class="content">
                     <p>homepage</p>
                 </div>
-            </div>''' % {
-                'about_pk': self.about.pk,
-                'home_pk': self.home.pk,
-                'add_url': reverse('fiber_admin:fiber_contentitem_add'),
-                'about_page_content_pk': self.about_page_content.pk,
-                'home_page_content_pk': self.home_page_content.pk,
-                'about_content_pk': self.about_content.pk,
-                'home_content_pk': self.home_content.pk,
-                'edit_url_about_content': reverse('fiber_admin:fiber_contentitem_change', args=[self.about_content.pk]),
-                'edit_url_home_content': reverse('fiber_admin:fiber_contentitem_change', args=[self.home_content.pk])
-            }, {'fiber_page': self.home, 'about_page': self.about, 'user': self.staff})
+            </div>'''.format(
+                about_pk=self.about.pk,
+                home_pk=self.home.pk,
+                add_url=reverse('fiber_admin:fiber_contentitem_add'),
+                about_page_content_pk=self.about_page_content.pk,
+                home_page_content_pk=self.home_page_content.pk,
+                about_content_pk=self.about_content.pk,
+                home_content_pk=self.home_content.pk,
+                edit_url_about_content=reverse('fiber_admin:fiber_contentitem_change', args=[self.about_content.pk]),
+                edit_url_home_content=reverse('fiber_admin:fiber_contentitem_change', args=[self.home_content.pk])
+            ), {'fiber_page': self.home, 'about_page': self.about, 'user': self.staff})
 
     def test_single_argument_lookup(self):
         self.assertRendered(

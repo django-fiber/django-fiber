@@ -81,6 +81,25 @@ Exercise every configured compatibility environment with:
 tox
 ```
 
+When raising the minimum Django version, rewrite all tracked Python files
+except migrations with:
+
+```console
+python scripts/django_upgrade.py TARGET_VERSION [additional options]
+```
+
+For example, target Django 4.2 with
+`python scripts/django_upgrade.py 4.2`. Then, when raising the minimum Python
+version, run:
+
+```console
+python scripts/pyupgrade.py TARGET_FLAG [additional options]
+```
+
+For example, target Python 3.10 and later with
+`python scripts/pyupgrade.py --py310-plus`. These scripts use `pipx` to run
+current versions of the upgrade tools in isolated environments.
+
 Invoke test-project management commands from the root, with the path shown:
 
 ```console

@@ -71,15 +71,15 @@ class JSONWidget(forms.Textarea):
                 warn('The path for prefill_from field "%s" is incorrect!' % path)
         jquery = '''
         <script type="text/javascript">
-        if (schema == null) {
-            var schema = {};
-        }
-        schema['%(name)s'] = %(json)s;
+        if (schema == null) {{
+            var schema = {{}};
+        }}
+        schema['{name}'] = {json};
         </script>
-        ''' % {
-            'name': name,
-            'json': json.dumps(schema),
-        }
+        '''.format(
+            name=name,
+            json=json.dumps(schema),
+        )
         output = super().render(name, value, attrs, renderer)
         return output + mark_safe(jquery)
 

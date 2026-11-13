@@ -530,36 +530,36 @@ class TestStaffMenu(BaseTestShowMenu):
             self.assertRendered(
                 '{% load fiber_tags %}{% show_menu "main" 1 1 "all" %}',
                 '''
-                <ul data-fiber-data='{ "type": "page", "add_url": "%(add_url)s", "parent_id": %(menu_pk)s }'>
+                <ul data-fiber-data='{{ "type": "page", "add_url": "{add_url}", "parent_id": {menu_pk} }}'>
                     <li class="home first df-non-public">
-                        <a href="/" data-fiber-data='{ "can_edit": true, "type": "page", "id": %(home_pk)s, "parent_id": %(menu_pk)s, "url": "%(edit_url_home)s", "add_url": "%(add_url)s" }'>home</a>
+                        <a href="/" data-fiber-data='{{ "can_edit": true, "type": "page", "id": {home_pk}, "parent_id": {menu_pk}, "url": "{edit_url_home}", "add_url": "{add_url}" }}'>home</a>
                     </li>
                     <li class="about">
-                        <a href="/about/" data-fiber-data='{ "can_edit": true, "type": "page", "id": %(about_pk)s, "parent_id": %(menu_pk)s, "url": "%(edit_url_about)s", "add_url": "%(add_url)s" }'>about</a>
+                        <a href="/about/" data-fiber-data='{{ "can_edit": true, "type": "page", "id": {about_pk}, "parent_id": {menu_pk}, "url": "{edit_url_about}", "add_url": "{add_url}" }}'>about</a>
                     </li>
                     <li class="news">
-                        <a href="/news/" data-fiber-data='{ "can_edit": true, "type": "page", "id": %(news_pk)s, "parent_id": %(menu_pk)s, "url": "%(edit_url_news)s", "add_url": "%(add_url)s" }'>news</a>
+                        <a href="/news/" data-fiber-data='{{ "can_edit": true, "type": "page", "id": {news_pk}, "parent_id": {menu_pk}, "url": "{edit_url_news}", "add_url": "{add_url}" }}'>news</a>
                     </li>
                     <li class="products">
-                        <a href="/products/" data-fiber-data='{ "can_edit": true, "type": "page", "id": %(products_pk)s, "parent_id": %(menu_pk)s, "url": "%(edit_url_products)s", "add_url": "%(add_url)s" }'>products</a>
+                        <a href="/products/" data-fiber-data='{{ "can_edit": true, "type": "page", "id": {products_pk}, "parent_id": {menu_pk}, "url": "{edit_url_products}", "add_url": "{add_url}" }}'>products</a>
                     </li>
                     <li class="contact last">
-                        <a href="/contact/" data-fiber-data='{ "can_edit": true, "type": "page", "id": %(contact_pk)s, "parent_id": %(menu_pk)s, "url": "%(edit_url_contact)s", "add_url": "%(add_url)s" }'>contact</a>
+                        <a href="/contact/" data-fiber-data='{{ "can_edit": true, "type": "page", "id": {contact_pk}, "parent_id": {menu_pk}, "url": "{edit_url_contact}", "add_url": "{add_url}" }}'>contact</a>
                     </li>
-                </ul>''' % {
-                    'menu_pk': self.main.pk,
-                    'add_url': reverse('fiber_admin:fiber_page_add'),
-                    'home_pk': self.home.pk,
-                    'edit_url_home': reverse(change_page, args=[self.home.pk]),
-                    'about_pk': self.about.pk,
-                    'edit_url_about': reverse(change_page, args=[self.about.pk]),
-                    'news_pk': self.news.pk,
-                    'edit_url_news': reverse(change_page, args=[self.news.pk]),
-                    'products_pk': self.products.pk,
-                    'edit_url_products': reverse(change_page, args=[self.products.pk]),
-                    'contact_pk': self.contact.pk,
-                    'edit_url_contact': reverse(change_page, args=[self.contact.pk])
-                }, {
+                </ul>'''.format(
+                    menu_pk=self.main.pk,
+                    add_url=reverse('fiber_admin:fiber_page_add'),
+                    home_pk=self.home.pk,
+                    edit_url_home=reverse(change_page, args=[self.home.pk]),
+                    about_pk=self.about.pk,
+                    edit_url_about=reverse(change_page, args=[self.about.pk]),
+                    news_pk=self.news.pk,
+                    edit_url_news=reverse(change_page, args=[self.news.pk]),
+                    products_pk=self.products.pk,
+                    edit_url_products=reverse(change_page, args=[self.products.pk]),
+                    contact_pk=self.contact.pk,
+                    edit_url_contact=reverse(change_page, args=[self.contact.pk])
+                ), {
                     'user': self.staff,
                     'fiber_page': self.home
                 })
@@ -572,11 +572,11 @@ class TestStaffMenu(BaseTestShowMenu):
         self.assertRendered(
             '{% load fiber_tags %}{% show_menu "empty" 1 1 %}',
             '''
-            <ul data-fiber-data='{ "type": "page", "add_url": "%(add_url)s", "parent_id": %(menu_pk)s }'></ul>
-            ''' % {
-                'menu_pk': menu.pk,
-                'add_url': reverse('fiber_admin:fiber_page_add')
-            }, {
+            <ul data-fiber-data='{{ "type": "page", "add_url": "{add_url}", "parent_id": {menu_pk} }}'></ul>
+            '''.format(
+                menu_pk=menu.pk,
+                add_url=reverse('fiber_admin:fiber_page_add')
+            ), {
                 'user': self.staff,
                 'fiber_page': self.home
             })

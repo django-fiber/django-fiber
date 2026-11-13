@@ -20,6 +20,7 @@ class TestSitemap(TestCase):
 
         urls = FiberSitemap().get_urls()
         self.assertEqual(len(urls), 2)
+        self.assertTrue(all(url['location'].startswith('https://') for url in urls))
 
     def test_public(self):
         """

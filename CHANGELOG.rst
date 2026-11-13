@@ -4,7 +4,12 @@ Changelog for Django-Fiber
 1.11 (unreleased)
 -----------------
 
-- Dropped support for Django 2.2, 4.0 and Python 3.6, 3.7.
+- Fixed escaped action and view-on-site links in the Pages admin changelist.
+
+- Added support for Django 4.2.30 on Python 3.10.
+- Raised the minimum versions of django-mptt to 0.18, django-compressor to
+  4.6, Django REST framework to 3.17.1, and easy-thumbnails to 2.10.1.
+- Dropped support for older Django and Python versions.
 
 
 1.10 (2022-10-08)

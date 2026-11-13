@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import admin, messages
 from django.contrib.admin.utils import model_ngettext
 from django.utils.translation import gettext_lazy as _
+from django.utils.html import format_html
 from django.db.models.deletion import ProtectedError
 from django.core.exceptions import PermissionDenied
 
@@ -54,6 +55,7 @@ class UserPermissionMixin:
         perms.object_created(request.user, obj)
 
 
+@admin.register(File)
 class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
     list_display = ('__str__', 'title', 'updated',)
     date_hierarchy = 'updated'
@@ -67,6 +69,9 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
                 'delete_selected']  # the original delete selected action doesn't remove associated files, because .delete() is never called
         return actions
 
+    @admin.action(
+        description=_('Delete selected files')
+    )
     def really_delete_selected(self, request, queryset):
         deleted_count = 0
         protected_count = 0
@@ -94,7 +99,6 @@ class FileAdmin(UserPermissionMixin, admin.ModelAdmin):
                                      "count": protected_count, "items": model_ngettext(self.opts, protected_count)
                                  })
 
-    really_delete_selected.short_description = _('Delete selected files')
 
 
 class ImageAdmin(FileAdmin):
@@ -116,6 +120,7 @@ class ImageAdminWithPreview(ImageAdmin):
         return super().formfield_for_dbfield(db_field, **kwargs)
 
 
+@admin.register(ContentItem)
 class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
     list_display = ('__str__', 'unused')
     form = forms.ContentItemAdminForm
@@ -127,12 +132,14 @@ class ContentItemAdmin(UserPermissionMixin, admin.ModelAdmin):
     date_hierarchy = 'updated'
     search_fields = ('name', get_editor_field_name('content_html'))
 
+    @admin.display(
+        boolean=True
+    )
     def unused(self, obj):
         if obj.used_on_pages_data is None:
             return True
         return False
 
-    unused.boolean = True
 
 
 class PageContentItemInline(UserPermissionMixin, admin.TabularInline):
@@ -140,6 +147,7 @@ class PageContentItemInline(UserPermissionMixin, admin.TabularInline):
     extra = 1
 
 
+@admin.register(Page)
 class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
     form = forms.PageForm
     fieldsets = (
@@ -154,46 +162,48 @@ class PageAdmin(UserPermissionMixin, MPTTModelAdmin):
     list_per_page = 1000
     search_fields = ('title', 'url', 'redirect_page__title')
 
+    @admin.display(
+        description=''
+    )
     def view_on_site_link(self, page):
         view_on_site = ''
 
         absolute_url = page.get_absolute_url()
         if absolute_url:
-            view_on_site += '<a href="%s" title="%s" target="_blank"><img src="%sfiber/admin/images/world.gif" width="16" height="16" alt="%s" /></a>' % \
-                            (absolute_url, _('View on site'), settings.STATIC_URL, _('View on site'))
+            view_on_site = format_html('<a href="{}" title="{}" target="_blank"><img src="{}fiber/admin/images/world.gif" width="16" height="16" alt="{}" /></a>',
+                            absolute_url, _('View on site'), settings.STATIC_URL, _('View on site'))
 
         return view_on_site
 
-    view_on_site_link.short_description = ''
-    view_on_site_link.allow_tags = True
 
+    @admin.display(
+        description=_('Actions')
+    )
     def action_links(self, page):
-        actions = ''
+        actions = []
 
         # first child cannot be moved up, last child cannot be moved down
         if not page.is_first_child():
-            actions += '<a href="{}/move_up" title="{}"><img src="{}fiber/admin/images/arrow_up.gif" width="16" height="16" alt="{}" /></a> '.format(
-                page.pk, _('Move up'), settings.STATIC_URL, _('Move up'))
+            actions.append(format_html('<a href="{}/move_up" title="{}"><img src="{}fiber/admin/images/arrow_up.gif" width="16" height="16" alt="{}" /></a> ',
+                page.pk, _('Move up'), settings.STATIC_URL, _('Move up')))
         else:
-            actions += '<img src="{}fiber/admin/images/blank.gif" width="16" height="16" alt="" /> '.format(
-                settings.STATIC_URL)
+            actions.append(format_html('<img src="{}fiber/admin/images/blank.gif" width="16" height="16" alt="" /> ',
+                settings.STATIC_URL))
 
         if not page.is_last_child():
-            actions += '<a href="{}/move_down" title="{}"><img src="{}fiber/admin/images/arrow_down.gif" width="16" height="16" alt="{}" /></a> '.format(
-                page.pk, _('Move down'), settings.STATIC_URL, _('Move down'))
+            actions.append(format_html('<a href="{}/move_down" title="{}"><img src="{}fiber/admin/images/arrow_down.gif" width="16" height="16" alt="{}" /></a> ',
+                page.pk, _('Move down'), settings.STATIC_URL, _('Move down')))
         else:
-            actions += '<img src="{}fiber/admin/images/blank.gif" width="16" height="16" alt="" /> '.format(
-                settings.STATIC_URL)
+            actions.append(format_html('<img src="{}fiber/admin/images/blank.gif" width="16" height="16" alt="" /> ',
+                settings.STATIC_URL))
 
         # add subpage
-        actions += '<a href="add/?%s=%s" title="%s"><img src="%sfiber/admin/images/page_new.gif" width="16" height="16" alt="%s" /></a> ' % \
-                   (self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL,
-                    _('Add sub page'))
+        actions.append(format_html('<a href="add/?{}={}" title="{}"><img src="{}fiber/admin/images/page_new.gif" width="16" height="16" alt="{}" /></a> ',
+                   self.model._mptt_meta.parent_attr, page.pk, _('Add sub page'), settings.STATIC_URL,
+                    _('Add sub page')))
 
-        return f'<span class="nobr">{actions}</span>'
+        return format_html('<span class="nobr">{}{}{}</span>', *actions)
 
-    action_links.short_description = _('Actions')
-    action_links.allow_tags = True
 
 
 class FiberAdminContentItemAdmin(UserPermissionMixin, fiber_admin.ModelAdmin):
@@ -252,14 +262,11 @@ class FiberAdminPageAdmin(UserPermissionMixin, fiber_admin.MPTTModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-admin.site.register(ContentItem, ContentItemAdmin)
 
 if IMAGE_PREVIEW:
     admin.site.register(Image, ImageAdminWithPreview)
 else:
     admin.site.register(Image, ImageAdmin)
-admin.site.register(File, FileAdmin)
-admin.site.register(Page, PageAdmin)
 
 fiber_admin.site.register(ContentItem, FiberAdminContentItemAdmin)
 fiber_admin.site.register(Page, FiberAdminPageAdmin)
