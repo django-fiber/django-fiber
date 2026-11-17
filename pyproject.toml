@@ -80,3 +80,4 @@ push-changes = false
 release = false
 upload-pypi = false
 "prereleaser.before" = ["release.releaser_hooks.prereleaser_before"]
+"postreleaser.after" = ["release.releaser_hooks.trigger_pypi_workflow"]

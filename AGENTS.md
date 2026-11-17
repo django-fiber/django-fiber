@@ -275,3 +275,16 @@ Python 3.12 is the newest version compatible with the transitional Django 4.2
 release tooling. Keep the application matrix on its planned interpreters.
 Zest prepares commits and a tag locally; automatic pushes and uploads are disabled.
 Do not run this command to publish a transitional modernization milestone.
+
+The prerelease hook runs release-tool tests, the supported unit wrapper, migration
+and Django checks, Python compilation, manifest validation, and distribution
+build/metadata checks. A failure stops preparation. Documentation and translation
+validation are added in branches 6a and 6b.
+
+After preparation, push the release commits and exact tag to the main repository.
+The postrelease hook attempts `gh workflow run` only when that tag is already
+remote and GitHub authentication is available; normally it prints a command to
+run after pushing. A dispatch failure leaves the completed local release intact.
+Publication is not complete until the workflow and PyPI files are verified.
+Follow `docs/development.rst` for setup, release gates, and artifact-preserving
+retries. Do not enable `PYPI_PUBLISH_ENABLED` before the required acceptance gates.

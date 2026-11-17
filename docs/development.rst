@@ -68,6 +68,34 @@ If the artifact has expired or its hashes disagree, stop and investigate; a
 corrected source requires a new version. Check both wheel and source archive
 on PyPI before marking publication complete. A successful upload needs no retry.
 
+Prepare, push, publish, and verify
+----------------------------------
+
+Only prepare a real release after its acceptance gate. Start with a clean,
+up-to-date ``master`` and reviewed changelog, then run the isolated command above.
+Do not use ``--no-input`` on a developer checkout for verification: it makes real
+release commits and tags. Validation of this tooling uses disposable repositories.
+
+Zest leaves a release commit and tag followed by a development-version commit.
+Push both commits and the release tag yourself. For example, replace ``TAG``
+with the exact release tag::
+
+    git push origin master
+    git push origin refs/tags/TAG
+    gh workflow run publish-pypi.yml --repo django-fiber/django-fiber --ref master -f release_tag=TAG
+
+The postrelease hook normally runs before that push. It checks the release tag
+on the commit preceding the development commit, compares the remote tag object
+with the local tag, and checks GitHub CLI authentication before dispatching.
+An unavailable tag, missing CLI, authentication error, or failed dispatch prints
+a recoverable manual command and does not undo the completed local preparation.
+After fixing the cause and pushing, run that command; do not repeat fullrelease.
+
+Watch the workflow in GitHub Actions and check both distributions on PyPI.
+A dispatched workflow, a successful local preparation, or a skipped publication
+job is not a completed publication. Read the Docs validation/publication and
+Transifex management are implemented in the following branches, 6a and 6b.
+
 Development and documentation dependencies
 ==========================================
 
