@@ -14,6 +14,11 @@ Use its latest patch. This tooling choice does not change the Python 3.10
 application baseline. The command installs the project and release tools in
 its own environment; it does not use the active virtual environment.
 
+Before preparing a release, the hook runs release-tool tests, ``./run_tests``,
+migration and Django system checks, Python compilation checks, manifest
+validation, and a clean distribution build with strict metadata validation.
+There is no new project-wide lint policy. A failing check stops preparation.
+
 Zest prepares local release commits and a tag, then advances the development
 version. Automatic pushes, distribution uploads, and Zest's distribution
 checkout/build step are disabled. Do not publish from a transitional branch;

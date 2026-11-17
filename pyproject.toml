@@ -78,4 +78,4 @@ python-file-with-version = "fiber/__init__.py"
 push-changes = false
 release = false
 upload-pypi = false
-"prereleaser.middle" = ["release.releaser_hooks.prereleaser_middle"]
+"prereleaser.before" = ["release.releaser_hooks.prereleaser_before"]
