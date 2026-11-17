@@ -50,6 +50,7 @@ docs = [
 ]
 release = [
     "build",
+    "packaging",
     "check-manifest",
     "twine",
     "zest.releaser[recommended]",

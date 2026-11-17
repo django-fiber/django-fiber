@@ -24,6 +24,21 @@ version. Automatic pushes, distribution uploads, and Zest's distribution
 checkout/build step are disabled. Do not publish from a transitional branch;
 see the release gates in ``docs/upgrade-plan.md``.
 
+Distribution build workflow
+---------------------------
+
+The manually dispatched ``publish-pypi.yml`` workflow must run from ``master``.
+It checks that the tag matches the source version, is checked out exactly, and
+is contained in ``master``. It builds on Python 3.14 without installing Django
+or application dependencies; application tests remain on their planned matrix.
+The wheel and source metadata must both identify django-fiber at the tagged
+version, and strict Twine validation must pass.
+
+Artifacts are named with the run ID and build attempt and retained for 30 days.
+A rebuild gets a new artifact. A later publication retry must use the original
+successful build's artifact ID, rather than deriving a name from its own attempt.
+There are no TestPyPI builds or uploads.
+
 Development and documentation dependencies
 ==========================================
 

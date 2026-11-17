@@ -1,0 +1,57 @@
+name: Publish to PyPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Release tag (must match fiber.__version__)
+        required: true
+        type: string
+
+concurrency:
+  group: publish-pypi-${{ inputs.release_tag }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_id: ${{ steps.distributions.outputs.artifact-id }}
+    steps:
+      - name: Require workflow from master
+        env:
+          DISPATCH_REF: ${{ github.ref }}
+        run: test "$DISPATCH_REF" = refs/heads/master
+      - uses: actions/checkout@v7
+        with:
+          ref: refs/tags/${{ inputs.release_tag }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+      - name: Install build tools without application dependencies
+        run: python -m pip install build packaging twine
+      - name: Validate source tag
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: python -m release.validation "$RELEASE_TAG"
+      - name: Build distributions once
+        run: python -m build --outdir dist
+      - name: Validate distributions
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          python -m release.validation "$RELEASE_TAG" --dist dist
+          python -m twine check --strict dist/*
+      - name: Retain validated distributions
+        id: distributions
+        uses: actions/upload-artifact@v7
+        with:
+          name: pypi-distributions-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
