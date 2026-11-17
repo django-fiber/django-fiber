@@ -55,3 +55,36 @@ jobs:
           path: dist/
           if-no-files-found: error
           retention-days: 30
+
+  publish:
+    if: github.ref == 'refs/heads/master' && vars.PYPI_PUBLISH_ENABLED == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/django-fiber
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+      - name: Download the original validated artifact
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact_id }}
+          path: dist/
+          digest-mismatch: error
+      - name: Verify any existing PyPI files before retrying
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: python -m release.upload_checks "$RELEASE_TAG" dist
+      - name: Publish to PyPI through trusted publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true

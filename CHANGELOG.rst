@@ -4,6 +4,8 @@ Changelog for Django-Fiber
 1.11 (unreleased)
 -----------------
 
+- Added manually dispatched PyPI trusted publishing with validated release artifacts.
+
 - Isolated release preparation and disabled automatic pushes and direct uploads.
 
 - Fixed escaped action and view-on-site links in the Pages admin changelist.

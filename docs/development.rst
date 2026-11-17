@@ -39,6 +39,35 @@ A rebuild gets a new artifact. A later publication retry must use the original
 successful build's artifact ID, rather than deriving a name from its own attempt.
 There are no TestPyPI builds or uploads.
 
+Trusted publishing setup and recovery
+--------------------------------------
+
+A maintainer must configure the existing django-fiber PyPI project with a
+GitHub trusted publisher: owner ``django-fiber``, repository ``django-fiber``,
+workflow ``publish-pypi.yml``, and environment ``pypi``. Create that GitHub
+Actions environment with required reviewers, prevent self-review, and restrict
+its deployment branch to ``master``. No PyPI API token is needed.
+
+The repository variable ``PYPI_PUBLISH_ENABLED`` defaults to absent/disabled.
+Set it to ``true`` only after the backend release gate (branch 13) and branches
+6, 6a, and 6b have been accepted. Keep it disabled throughout transitional
+implementation. The frontend milestone is branch 21. Environment reviewers
+must verify the relevant acceptance record and tag before approving publication.
+See the `trusted publisher documentation
+<https://docs.pypi.org/trusted-publishers/adding-a-publisher/>`_.
+
+A publish-only rerun downloads the artifact ID output by the successful build,
+including when the rerun's attempt number has changed. For transient failures,
+rerun only failed jobs, for example ``gh run rerun RUN_ID --failed``. Do not
+restart a build after any file for that version has reached PyPI.
+
+For a partial upload, the retry checks existing filenames and SHA256 hashes
+against the retained artifact before skipping identical uploaded files. Changed
+or unexpected files stop publication; never overwrite them or move the tag.
+If the artifact has expired or its hashes disagree, stop and investigate; a
+corrected source requires a new version. Check both wheel and source archive
+on PyPI before marking publication complete. A successful upload needs no retry.
+
 Development and documentation dependencies
 ==========================================
 
