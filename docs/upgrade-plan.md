@@ -17,9 +17,19 @@ release. Frontend dependencies are upgraded conservatively, ending on jQuery
 3.7.1 and the last open-source CKEditor 4 release rather than combining
 dependency upgrades with complete UI rewrites.
 
+This pass also covers release documentation on Read the Docs and translation
+management through Transifex's native GitHub integration. Both services remain
+independent of package publication; releases include reviewed translations
+already merged into the repository.
+
 ## Working rules
 
 - Each numbered section below corresponds to a distinct Git branch.
+- Lettered branches are inserted follow-ups: branch 4 is already merged, so
+  complete 4a before 6; complete 6, 6a, and 6b before starting 7. The former
+  branch 5 is folded into branch 6 so publishing workflows and zest.releaser
+  upgrades are reviewed together. Keep the later branch numbers and publication
+  gates unchanged.
 - `upgrade/01-repository-hygiene` is based directly on `master`, independently
   of the planning branch. Merge branches 0 and 1 before creating branch 2 from
   the updated `master`; base each later branch on its predecessor.
@@ -33,9 +43,16 @@ dependency upgrades with complete UI rewrites.
 - When a branch establishes or changes the default local Python version, add or
   update the root `.python-version`. Keep the full supported-version matrix in
   tox and CI rather than using `.python-version` as a replacement for it.
-- Use `uv` only to bootstrap a managed Python interpreter and local virtual
-  environment. Keep the test wrapper, tox configuration, dependency files, and
+- Use `uv` for optional interpreter/environment bootstrap and isolated release
+  preparation. Keep the test wrapper, tox configuration, dependency files, and
   CI usable without requiring `uv`.
+- Explicitly select and record the Python major/minor for build, release, and
+  documentation tools, accepting its latest compatible patch. Prefer the newest
+  stable, supported interpreter compatible with the dependencies each command
+  actually loads. Commands that initialize Django must respect its Python
+  compatibility table; build-only tools may use a newer interpreter. Verify
+  tooling environments separately from the branch's application test matrix:
+  this does not advance the planned public Python support or local baseline.
 - Do not publish a modernization release from a transitional Django branch.
   The planned publication gates are the completed backend milestone at branch
   13 and the completed frontend milestone at branch 21.
@@ -99,31 +116,127 @@ passed on Python 3.10 with Django 4.2.30 and current compatible dependencies.
 - Validate wheel and source distribution contents with `python -m build`,
   `twine check --strict`, and `check-manifest`.
 
-### 5. `upgrade/05-publishing-workflows`
+### 4a. `upgrade/04a-dependency-consolidation`
+
+- Follow up the merged packaging branch using django-minipub commit
+  `fe22faa54357838596108512d7ff5188a00c6aa9` as an example.
+- Make `pyproject.toml` the authoritative runtime dependency list. Remove
+  duplicated declarations and redundant requirements files. Update installation
+  commands to install the project and its named extras directly, rather than
+  retaining requirements files that only reference the project or an extra.
+- Keep development, documentation, and release dependencies separated by role,
+  using extras or tooling requirements without copying runtime bounds.
+- Update tox, CI, Read the Docs installation, manifests, README, and contributor
+  instructions together. Verify clean installations through each documented
+  path and rerun package validation and the full application suite.
+
+### 6. `upgrade/06-isolated-release-automation`
+
+This branch combines the former publishing-workflow step with the zest.releaser
+upgrades. Implement and validate publication without uploading to PyPI. Actual
+publication waits for branches 6, 6a, and 6b to be complete and the applicable
+backend or frontend release gate to be accepted.
 
 - Port the intent of django-minipub commit
   `d02ca2c05513eb1985387c48eb03f793daeab6b4`.
-- Add separately dispatched TestPyPI and production PyPI workflows.
+- Add a manually dispatched production PyPI workflow only. Do not add TestPyPI
+  builds, development-version rewriting, or TestPyPI publisher configuration.
 - Build once, validate the version and tag, retain immutable artifacts, and
   publish through GitHub trusted publishing with least-privilege permissions.
-- Require production publication to use a tag contained in `master`.
-- Give TestPyPI builds unique development versions.
-- Document the external GitHub environment and PyPI/TestPyPI trusted-publisher
-  setup.
-
-### 6. `upgrade/06-isolated-release-automation`
+- Require the workflow itself to run from `master` and the release tag to be
+  contained in `master`. Validate tag, source version, and built distribution
+  metadata before publication.
+- Use attempt-specific artifact names when rebuilding. Retrying only a failed
+  publish job must reuse the original validated artifacts. Document recovery
+  from partial uploads without rebuilding or replacing published files.
+- Select a build interpreter using the tooling rule above rather than copying
+  django-minipub's Python 3.14 setting without validation.
+- Document the external GitHub environment and PyPI trusted-publisher setup.
+  Validate builds and failure/retry paths without uploading; the first real
+  PyPI publication still requires the branch 13 or 21 acceptance gate.
 
 - Port the intent of django-minipub commit
   `c772f3ed158532419ad99ef1607437d9b9a11c6a`.
 - Move release hooks into a dedicated `release` package.
 - Run zest.releaser in an isolated `uvx` environment.
+- Pass `--python` explicitly: `uvx` does not use the project's `.python-version`.
+  Choose the newest supported interpreter compatible with the branch's Django
+  and all release-hook dependencies, and verify the complete command from a
+  clean environment. Keep the application matrix checks on their planned
+  interpreters, including the transitional Python 3.10 baseline.
 - Keep local release preparation non-publishing by default.
 - Have the prerelease hook run unit tests, migration checks, lint/static checks,
-  and package validation.
+  and package validation. Add strict documentation and translation validation
+  in branches 6a and 6b, including their dependencies in the isolated environment.
 - Have the postrelease hook dispatch the trusted publishing workflow through
   `gh`, printing a recoverable manual command if the tag or GitHub
   authentication is unavailable.
-- Expand `AGENTS.md` with the final release procedure.
+- Document the normal sequence: prepare locally, push commits and tag, dispatch
+  publication, and verify its result. With automatic pushes disabled, the
+  postrelease hook normally prints the manual dispatch command because the tag
+  is not yet on GitHub; do not describe that as completed publication.
+- Add focused tests for failed prerelease checks, an unpushed tag, unavailable
+  GitHub authentication, and dispatch failure without losing the local release.
+- Update both `AGENTS.md` and `docs/development.rst` with the final procedure.
+
+### 6a. `upgrade/06a-release-documentation`
+
+- Adapt django-photologue commit
+  `4df3862735a2b46fced965df48dac35603a76157` and its later documentation changes,
+  rather than copying project-specific paths, theme choices, or service settings.
+- Build HTML before release preparation with
+  `python -m sphinx -E -W --keep-going -b html docs docs/_build/html`.
+  Install documentation dependencies in the isolated release environment and
+  keep them compatible with its selected interpreter.
+- Make documentation paths independent of the invocation directory. Ensure
+  Django initialization does not silence Sphinx warnings, and verify that a
+  deliberately introduced warning fails the build.
+- Update the existing `.readthedocs.yaml` to install the checked-out project
+  and documentation dependencies, select a compatible supported interpreter,
+  and fail on warnings. Do not depend on the package already being on PyPI.
+- Use Read the Docs' native GitHub integration for release-tag builds. Document
+  account-side activation/build rules that match Fiber's actual tag format,
+  disable automatic branch/PR builds, and verify `stable` plus a deep-link
+  preserving redirect from `latest`. Do not add a custom token-based publisher.
+- Verify a manual build of the current implementation commit without publishing
+  a package or creating a release tag. Verify versioned documentation and
+  aliases at the next permitted release; historical tag rebuilds are out of scope.
+- Document independent PyPI and documentation status checks and retries. A
+  documentation failure must not cause a successful PyPI upload to be repeated;
+  fixes to published tagged source require a new release, not a moved tag.
+
+### 6b. `upgrade/06b-transifex-integration`
+
+- Adapt django-photologue commits
+  `91a586048ff9cfa179e19708334e174a921e305d`,
+  `131070fef625afd79c9933d75f55d2abee06fb08`, and
+  `e27086d69c178b8b3ec157dfc8f412fd6be62860`, reviewing the current files too.
+- Configure Transifex's native GitHub integration through `transifex.yml` for
+  both existing Fiber resources: `django.po` for Python/templates and
+  `djangojs.po` for JavaScript. Preserve the English source catalogues, existing
+  translations, resource history, and any required language-code mappings.
+- Inspect the existing account/resource configuration before migration. Reuse
+  the existing resources rather than creating duplicates; do not copy
+  Photologue's resource identifiers or delete catalogues merely because its
+  migration removed empty ones. Record any Fiber-specific empty-catalogue
+  decisions and retain nonempty translations.
+- Keep source strings in Git and translated text in Transifex. Document source
+  extraction for both domains, and commit catalogue updates with string changes.
+- Batch translation updates into reviewed pull requests, using Photologue's
+  all-language grouping and 60-minute interval as the starting settings. Accept
+  partial translations and disable Transifex changes to source catalogues.
+- Add `bin/compile_translations.py` to validate syntax and format placeholders
+  with GNU gettext and compile both domains. Replace each committed `.mo` only
+  after its compilation succeeds; review and commit compiled updates before
+  merging. Test invalid placeholders and preservation of existing output on
+  compilation failure, and verify Python and JavaScript translation loading.
+- Run translation validation before release without downloading from Transifex.
+  Pending translation PRs, incomplete languages, or Transifex availability must
+  not block publication of translations already merged into Git.
+- Document service setup, resource preservation, PR review, compilation, and
+  recovery. Retire `.tx/config` and obsolete CLI instructions after verifying
+  the native mappings. Keep one-time migration details in the implementation
+  record and ongoing maintenance instructions in contributor documentation.
 
 ### 7. `upgrade/07-django50`
 
@@ -285,7 +398,13 @@ passed on Python 3.10 with Django 4.2.30 and current compatible dependencies.
 ### Packaging and publishing
 
 - Trusted publishing will remain unavailable until maintainers configure the
-  GitHub environments and trusted publishers on PyPI and TestPyPI.
+  GitHub environment and trusted publisher on PyPI. TestPyPI is out of scope.
+- Read the Docs and Transifex require account-side integration setup as well as
+  repository changes. Record service checks and any pending administrator work
+  separately; do not claim a live integration based only on configuration files.
+- Release/documentation tools may use newer Python than the transitional local
+  baseline only after dependency compatibility and clean-environment checks.
+  A tooling interpreter alone does not establish public application support.
 - GitHub Actions and third-party action versions must be checked against their
   current stable releases when the workflow branch is implemented.
 - Do not publish from the Django 4.2, 5.0, or 5.1 milestones. The intended
@@ -309,6 +428,9 @@ Run validation in proportion to each branch, including:
 - The branch's complete tox and CI matrix.
 - Wheel and source distribution build and installation checks.
 - `twine check --strict` and manifest validation.
+- Strict Sphinx HTML builds and verification that warnings fail the build.
+- Translation compilation/format checks for both Python and JavaScript domains,
+  plus release-hook failure and publication-retry checks without live uploads.
 - Static-file discovery and Django Compressor rendering when frontend assets
   change.
 - Review of browser console errors, failed requests, and jQuery Migrate output.
@@ -316,6 +438,8 @@ Run validation in proportion to each branch, including:
 No database schema or public Python API changes are expected. Intentional public
 compatibility changes are limited to documented Python and Django requirements,
 packaging metadata, and the release process.
+Documentation hosting and translation synchronization change operational
+procedures, while preserving existing translations and public translation APIs.
 
 ## Manual browser acceptance checklist
 

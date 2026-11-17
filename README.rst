@@ -45,6 +45,13 @@ Install Fiber using pip::
     $ pip install django-fiber
 
 
+For development, install the checkout and its tools from the repository root::
+
+    $ python -m pip install -e '.[dev]'
+
+Run ``./run_tests`` for the unit suite or ``tox`` for the compatibility matrix.
+The ``docs`` and ``release`` extras provide documentation and release tools.
+Runtime dependencies and all extras are defined in ``pyproject.toml``.
 
 Setup
 ~~~~~

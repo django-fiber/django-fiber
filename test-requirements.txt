@@ -1,6 +1,0 @@
--r requirements.txt
-coverage>=4.2
-coveralls
-pipx
-tox
-tox-gh-actions

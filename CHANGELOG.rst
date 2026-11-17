@@ -6,6 +6,10 @@ Changelog for Django-Fiber
 
 - Fixed escaped action and view-on-site links in the Pages admin changelist.
 
+- Consolidated dependencies in ``pyproject.toml``. Install development,
+  documentation, and release tools with the ``dev``, ``docs``, and ``release``
+  extras; the separate requirements files have been removed.
+
 - Added support for Django 4.2.30 on Python 3.10.
 - Raised the minimum versions of django-mptt to 0.18, django-compressor to
   4.6, Django REST framework to 3.17.1, and easy-thumbnails to 2.10.1.
