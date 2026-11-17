@@ -12,6 +12,8 @@ def prereleaser_before(data):
     root = data['workingdir']
     env = dict(os.environ, PATH=str(Path(sys.executable).parent) + os.pathsep + os.environ.get('PATH', ''))
     commands = [
+        [sys.executable, '-m', 'sphinx', '-E', '-W', '--keep-going',
+         '-b', 'html', 'docs', 'docs/_build/html'],
         [sys.executable, '-m', 'unittest', 'discover', '-s', 'release/tests'],
         ['sh', './run_tests'],
         [sys.executable, 'testproject/manage.py', 'makemigrations', '--check', '--dry-run'],

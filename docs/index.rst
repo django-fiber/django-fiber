@@ -18,6 +18,7 @@ Contents
    advanced-usage
    contributors
    development
+   releasing
    settings
 
    library
