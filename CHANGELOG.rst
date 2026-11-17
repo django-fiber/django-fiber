@@ -1,7 +1,7 @@
 Changelog for Django-Fiber
 ==========================
 
-1.11 (unreleased)
+1.11 (2026-11-17)
 -----------------
 
 - Temporarily disabled Transifex synchronization pending account setup; local
