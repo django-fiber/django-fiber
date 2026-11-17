@@ -1,6 +1,12 @@
 Changelog for Django-Fiber
 ==========================
 
+1.12 (unreleased)
+-----------------
+
+- Nothing changed yet.
+
+
 1.11 (2026-11-17)
 -----------------
 
