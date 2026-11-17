@@ -71,3 +71,11 @@ include = ["fiber*"]
 
 [tool.setuptools.dynamic]
 version = { attr = "fiber.__version__" }
+
+[tool.zest-releaser]
+less-zeroes = true
+python-file-with-version = "fiber/__init__.py"
+push-changes = false
+release = false
+upload-pypi = false
+"prereleaser.middle" = ["release.releaser_hooks.prereleaser_middle"]

@@ -5,24 +5,19 @@ Development
 New releases
 ============
 
-In order to make releasing a new version slightly easier, this project has been set up to use
-`Zest-releaser <https://zestreleaser.readthedocs.io/en/latest/>`_, together with the other release tools::
+Prepare releases from a clean checkout of ``master`` with an isolated environment::
 
-    python -m pip install -e '.[dev,release]'
+    uvx --python 3.12 --from zest.releaser --with-editable '.[dev,release]' fullrelease
 
-The ``[recommended]`` extra adds optional packages that make Zest.releaser more convenient.
+Python 3.12 is the newest interpreter supported by this branch's Django 4.2.
+Use its latest patch. This tooling choice does not change the Python 3.10
+application baseline. The command installs the project and release tools in
+its own environment; it does not use the active virtual environment.
 
-To use Zest.releaser: rather than copy-and-paste the excellent instructions from their docs,
-`here is a link to their documentation <https://zestreleaser.readthedocs.io/en/latest/overview.html#available-commands>`_.
-
-Note that the ``prerelease`` command has some custom hooks in order to:
-
-1. Run all the unit tests before a release.
-2. There is no 2!
-
-.. note::
-
-    In order for Django-Fiber to be uploaded to PyPI, you will need write privileges.
+Zest prepares local release commits and a tag, then advances the development
+version. Automatic pushes, distribution uploads, and Zest's distribution
+checkout/build step are disabled. Do not publish from a transitional branch;
+see the release gates in ``docs/upgrade-plan.md``.
 
 Development and documentation dependencies
 ==========================================

@@ -262,3 +262,16 @@ OS, Python/Django versions, and the result in the pull request.
   acceptance checks.
 - Keep generated artifacts and local test-project data out of the diff, and
   review the final diff for unrelated changes before requesting review.
+
+## Release preparation
+
+Run from a clean checkout of `master`:
+
+```console
+uvx --python 3.12 --from zest.releaser --with-editable '.[dev,release]' fullrelease
+```
+
+Python 3.12 is the newest version compatible with the transitional Django 4.2
+release tooling. Keep the application matrix on its planned interpreters.
+Zest prepares commits and a tag locally; automatic pushes and uploads are disabled.
+Do not run this command to publish a transitional modernization milestone.

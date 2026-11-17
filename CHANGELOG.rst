@@ -4,6 +4,8 @@ Changelog for Django-Fiber
 1.11 (unreleased)
 -----------------
 
+- Isolated release preparation and disabled automatic pushes and direct uploads.
+
 - Fixed escaped action and view-on-site links in the Pages admin changelist.
 
 - Consolidated dependencies in ``pyproject.toml``. Install development,
