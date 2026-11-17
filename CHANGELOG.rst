@@ -4,6 +4,8 @@ Changelog for Django-Fiber
 1.11 (unreleased)
 -----------------
 
+- Temporarily disabled Transifex synchronization pending account setup; local
+  translation validation and compilation remain available.
 - Added native Transifex GitHub integration configuration and validation of
   Python and JavaScript translations before merging and releasing.
 - Validate documentation before release preparation and configure strict

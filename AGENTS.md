@@ -295,10 +295,12 @@ retries. Do not enable `PYPI_PUBLISH_ENABLED` before the required acceptance gat
 
 ## Translation updates
 
-The native Transifex GitHub integration is configured in `transifex.yml` for
-both `django` and `djangojs`. Keep English source strings in Git and translated
-text in Transifex. Review translation pull requests and run
+Transifex integration is temporarily disabled; its mappings in `transifex.yml`
+are commented out pending account setup. Keep source and translated catalogues
+in Git and review ordinary translation pull requests. Run
 `python bin/compile_translations.py` with GNU gettext installed before merging.
 Commit the resulting tracked `.mo` updates with their `.po` changes. A failed
 compilation preserves that file's existing output; earlier files may already
-have compiled. See `docs/translations.rst` for extraction and maintenance.
+have compiled. See `docs/translations.rst` for extraction, maintenance, and
+future reactivation. Deferred Transifex setup does not block releases or the
+next modernization branch.

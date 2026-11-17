@@ -116,6 +116,7 @@ Install documentation tools and build HTML from the repository root::
 Translations
 ============
 
-See :doc:`translations` for native Transifex integration, source string
-extraction, and review/compilation of translation updates. Translations already
-merged into Git are included in releases without contacting Transifex.
+Transifex integration is temporarily disabled pending account setup. See
+:doc:`translations` for source string extraction and local review/compilation of
+translation updates. Translations already merged into Git are included in
+releases without contacting Transifex.

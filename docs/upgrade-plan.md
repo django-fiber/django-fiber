@@ -18,9 +18,10 @@ release. Frontend dependencies are upgraded conservatively, ending on jQuery
 dependency upgrades with complete UI rewrites.
 
 This pass also covers release documentation on Read the Docs and translation
-management through Transifex's native GitHub integration. Both services remain
-independent of package publication; releases include reviewed translations
-already merged into the repository.
+validation and compilation. Native Transifex GitHub integration is temporarily
+disabled pending resolution of its account setup. Releases include reviewed
+translations already merged into the repository; deferred Transifex setup does
+not block later branches or publication gates.
 
 ## Working rules
 
@@ -206,6 +207,12 @@ backend or frontend release gate to be accepted.
   fixes to published tagged source require a new release, not a moved tag.
 
 ### 6b. `upgrade/06b-transifex-integration`
+
+Current decision: keep local translation validation and compilation active, but
+comment out the Transifex mappings and defer account setup and first-sync
+verification. The integration requirements below describe future reactivation;
+service setup is not an acceptance prerequisite for later branches or releases.
+Preserve all existing catalogues and resource history when revisiting it.
 
 - Adapt django-photologue commits
   `91a586048ff9cfa179e19708334e174a921e305d`,
@@ -399,9 +406,11 @@ backend or frontend release gate to be accepted.
 
 - Trusted publishing will remain unavailable until maintainers configure the
   GitHub environment and trusted publisher on PyPI. TestPyPI is out of scope.
-- Read the Docs and Transifex require account-side integration setup as well as
-  repository changes. Record service checks and any pending administrator work
-  separately; do not claim a live integration based only on configuration files.
+- Read the Docs requires account-side integration setup as well as repository
+  changes. Record service checks and any pending administrator work separately;
+  do not claim a live integration based only on configuration files. Transifex
+  integration is temporarily disabled, with its account setup and first sync
+  explicitly deferred. Local translation checks remain required.
 - Release/documentation tools may use newer Python than the transitional local
   baseline only after dependency compatibility and clean-environment checks.
   A tooling interpreter alone does not establish public application support.

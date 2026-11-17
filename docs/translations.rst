@@ -1,12 +1,19 @@
 Translations and Transifex
 ==========================
 
-Fiber's native Transifex GitHub integration maps two resources in
-``transifex.yml``: ``django.po`` for Python/templates and ``djangojs.po`` for
-JavaScript. The English source catalogues live under
-``fiber/locale/en/LC_MESSAGES/``. Keep source strings in Git and translated text
-in Transifex. The existing resources and their translation history must be
-preserved when connecting the integration.
+Transifex integration is temporarily disabled while its account setup is
+unresolved. Its mappings in ``transifex.yml`` are commented out for future use.
+Account setup and first-sync verification are deferred and do not block releases
+or the next modernization branch.
+
+Existing translations remain in Git. Submit translation changes through ordinary
+pull requests and use the local validation and compilation steps below. Both
+``django.po`` (Python/templates) and ``djangojs.po`` (JavaScript) remain supported,
+with English source catalogues under ``fiber/locale/en/LC_MESSAGES/``.
+
+If the native GitHub integration was already connected in Transifex, disable or
+disconnect it in the Transifex dashboard too. Commenting out repository mappings
+does not change account-side settings. No account-side change was made here.
 
 Source string changes
 ---------------------
@@ -21,15 +28,14 @@ Install the project and GNU gettext. On Ubuntu, install gettext with
     python bin/compile_translations.py
 
 Review and commit the English catalogue changes with the code change, including
-any regenerated compiled files. Transifex reads the source catalogues after the
-change reaches ``master``; the integration does not extract strings from code.
-Do not replace the English catalogues with translations downloaded from Transifex.
+any regenerated compiled files. Maintain source and translated catalogues in
+Git while synchronization is disabled.
 
 Review translation updates
 --------------------------
 
-The integration sends batches of translations as pull requests. Check out the
-PR branch and run this from the repository root::
+Check out the translation pull request branch and run this from the repository
+root::
 
     python bin/compile_translations.py
 
@@ -39,7 +45,7 @@ only after its own compilation succeeds. If another catalogue fails, earlier
 successful files may already have been updated; review the complete diff.
 
 Commit the regenerated tracked ``.mo`` files with the reviewed ``.po`` changes
-before merging. Repeat compilation if Transifex updates the PR again. CI checks
+before merging. Repeat compilation when the PR changes. CI checks
 that compilation leaves the committed catalogues unchanged. Empty and fuzzy
 translations fall back to source strings; partial translations are welcome.
 
@@ -47,8 +53,12 @@ The prerelease hook performs the same local compilation. Releases use reviewed
 translations already merged into Git. They neither download translations nor
 wait for pending PRs, complete languages, or Transifex availability.
 
-Integration settings
---------------------
+Future reactivation
+-------------------
+
+The following settings are retained for future use, not current setup work.
+Before enabling synchronization, verify the existing resources and translations,
+then uncomment ``transifex.yml`` and review the service settings below.
 
 In the existing Transifex project's Settings > Integrations > GitHub:
 
@@ -78,10 +88,10 @@ rejects empty target catalogues, resolve that with the administrator before
 syncing; do not delete nonempty translations or existing resources to bypass an
 import error. Review and compile the first translation PR before merging it.
 
-Maintenance and recovery
-------------------------
+Recovery after reactivation
+---------------------------
 
-If updates stop arriving, inspect the integration activity log, linked branch,
+Once the integration is deliberately re-enabled, if updates stop arriving, inspect the integration activity log, linked branch,
 configuration path, resource mapping, language codes, and GitHub app access.
 An administrator can retry a sync independently of a release. Keep failed or
 unexpected translation changes in an unmerged PR until reviewed and compiled.
