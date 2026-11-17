@@ -23,8 +23,9 @@ There is no new project-wide lint policy. A failing check stops preparation.
 
 Zest prepares local release commits and a tag, then advances the development
 version. Automatic pushes, distribution uploads, and Zest's distribution
-checkout/build step are disabled. Do not publish from a transitional branch;
-see the release gates in ``docs/upgrade-plan.md``.
+checkout/build step are disabled. Publish only accepted release milestones
+from ``master``; see the release gates in ``docs/upgrade-plan.md``. The initial
+milestone is Django 4.2 after branch 6b, followed by Django 5.0 after branch 7.
 
 Distribution build workflow
 ---------------------------
@@ -51,10 +52,11 @@ Actions environment with required reviewers, prevent self-review, and restrict
 its deployment branch to ``master``. No PyPI API token is needed.
 
 The repository variable ``PYPI_PUBLISH_ENABLED`` defaults to absent/disabled.
-Set it to ``true`` only after the backend release gate (branch 13) and branches
-6, 6a, and 6b have been accepted. Keep it disabled throughout transitional
-implementation. The frontend milestone is branch 21. Environment reviewers
-must verify the relevant acceptance record and tag before approving publication.
+Set it to ``true`` only after the applicable release milestone and its checks
+have been accepted. The first permitted release is Django 4.2 after branches
+6, 6a, and 6b; the second is Django 5.0 after branch 7. Final backend and frontend
+milestones remain branches 13 and 21. Environment reviewers must verify the
+relevant acceptance record and tag before approving each publication.
 See the `trusted publisher documentation
 <https://docs.pypi.org/trusted-publishers/adding-a-publisher/>`_.
 

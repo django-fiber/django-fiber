@@ -199,8 +199,9 @@ Treat `django-upgrade` and `pyupgrade` as aids rather than proof of
 compatibility. Their output requires review, and the complete automated and
 manual acceptance checks still apply.
 
-Do not publish from a transitional modernization branch. Publication gates are
-defined in `docs/upgrade-plan.md`.
+Publish only accepted release milestones from `master`. The first is Django 4.2
+after branches 6, 6a, and 6b; the next is Django 5.0 after branch 7. Publication
+gates and required checks are defined in `docs/upgrade-plan.md`.
 
 ## Manual frontend checklist
 
@@ -274,7 +275,8 @@ uvx --python 3.12 --from zest.releaser --with-editable '.[dev,docs,release]' ful
 Python 3.12 is the newest version compatible with the transitional Django 4.2
 release tooling. Keep the application matrix on its planned interpreters.
 Zest prepares commits and a tag locally; automatic pushes and uploads are disabled.
-Do not run this command to publish a transitional modernization milestone.
+Run this command for a real release only after its milestone acceptance checks
+are complete; Django 4.2 and Django 5.0 are now permitted compatibility releases.
 
 The prerelease hook runs release-tool tests, the supported unit wrapper, migration
 and Django checks, Python compilation, strict Sphinx documentation builds, manifest

@@ -12,8 +12,10 @@ on the next branch.
 The initial compatibility target is Python 3.10 with Django 4.2. The final
 backend target for this modernization pass is Python 3.11 through 3.14 with
 Django 5.2 LTS. Python 3.10 is a transitional interpreter for the Django 4.2
-through 5.2 upgrade and is removed before the first backend modernization
-release. Frontend dependencies are upgraded conservatively, ending on jQuery
+through 5.2 upgrade and is removed at the final backend modernization
+milestone. Publish an initial Django 4.2 compatibility release after the release
+tooling branches are accepted, followed by a Django 5.0 release after step 7.
+Frontend dependencies are upgraded conservatively, ending on jQuery
 3.7.1 and the last open-source CKEditor 4 release rather than combining
 dependency upgrades with complete UI rewrites.
 
@@ -29,8 +31,8 @@ not block later branches or publication gates.
 - Lettered branches are inserted follow-ups: branch 4 is already merged, so
   complete 4a before 6; complete 6, 6a, and 6b before starting 7. The former
   branch 5 is folded into branch 6 so publishing workflows and zest.releaser
-  upgrades are reviewed together. Keep the later branch numbers and publication
-  gates unchanged.
+  upgrades are reviewed together. Keep the later branch numbers unchanged;
+  publication gates are listed in the release milestones below.
 - `upgrade/01-repository-hygiene` is based directly on `master`, independently
   of the planning branch. Merge branches 0 and 1 before creating branch 2 from
   the updated `master`; base each later branch on its predecessor.
@@ -54,12 +56,37 @@ not block later branches or publication gates.
   compatibility table; build-only tools may use a newer interpreter. Verify
   tooling environments separately from the branch's application test matrix:
   this does not advance the planned public Python support or local baseline.
-- Do not publish a modernization release from a transitional Django branch.
-  The planned publication gates are the completed backend milestone at branch
-  13 and the completed frontend milestone at branch 21.
+- Publish the Django 4.2 compatibility milestone after branches 6, 6a, and 6b
+  are accepted, then a Django 5.0 milestone after branch 7 is accepted. Retain
+  the final backend milestone at branch 13 and frontend milestone at branch 21.
+  Publish reviewed release tags contained in `master`, not upgrade-branch heads.
 - Update this document if implementation findings require the sequence or target
   to change.
 - Do not commit `testproject/testproject_db`; it is local test-project data.
+
+## Release milestones
+
+| Milestone | Compatibility target | Prerequisite |
+| --- | --- | --- |
+| Initial compatibility release | Django 4.2 / Python 3.10 | Accepted branches through 6b |
+| Second compatibility release | Django 5.0 / Python 3.10 | Accepted branch 7 |
+| Final backend modernization release | Django 5.2 / Python 3.11 through 3.14 | Accepted branch 13 |
+| Complete frontend modernization release | Final backend matrix and upgraded frontend | Accepted branch 21 |
+
+For each milestone, run the full supported test matrix, migration checks, local
+translation checks, strict documentation and distribution validation, and the
+manual frontend checklist. Record live CI and Read the Docs build results and
+confirm the PyPI trusted publisher and protected GitHub environment are ready.
+Only then prepare the release version and tag from clean, up-to-date `master`,
+push the commits and tag, and approve the publishing workflow. Verify PyPI files
+and the release documentation before declaring publication complete.
+
+The initial two releases are explicit transitional compatibility milestones.
+Their release notes must state that Django 4.2/5.0 and Python 3.10 no longer
+receive upstream security fixes; these releases do not change the maintained
+endpoint of Django 5.2 on Python 3.11 through 3.14. Disabled Transifex integration
+is not a release blocker. Local release preparation remains non-publishing by
+default; this plan change does not itself create a tag or enable publication.
 
 ## Branch sequence
 
@@ -135,8 +162,8 @@ passed on Python 3.10 with Django 4.2.30 and current compatible dependencies.
 
 This branch combines the former publishing-workflow step with the zest.releaser
 upgrades. Implement and validate publication without uploading to PyPI. Actual
-publication waits for branches 6, 6a, and 6b to be complete and the applicable
-backend or frontend release gate to be accepted.
+publication of the initial Django 4.2 release waits for branches 6, 6a, and 6b
+to be accepted and all checks for that release milestone to be complete.
 
 - Port the intent of django-minipub commit
   `d02ca2c05513eb1985387c48eb03f793daeab6b4`.
@@ -154,7 +181,8 @@ backend or frontend release gate to be accepted.
   django-minipub's Python 3.14 setting without validation.
 - Document the external GitHub environment and PyPI trusted-publisher setup.
   Validate builds and failure/retry paths without uploading; the first real
-  PyPI publication still requires the branch 13 or 21 acceptance gate.
+  PyPI publication requires the applicable acceptance gate in Release milestones;
+  the first permitted milestone is Django 4.2 after branch 6b.
 
 - Port the intent of django-minipub commit
   `c772f3ed158532419ad99ef1607437d9b9a11c6a`.
@@ -252,6 +280,8 @@ Preserve all existing catalogues and resource history when revisiting it.
 - Review the Django 5.0 release notes and deprecation timeline.
 - Update dependency bounds, tox, CI, classifiers, README, and changelog.
 - Run tests with warnings enabled and complete the browser acceptance gate.
+- Treat acceptance of this branch as the Django 5.0 compatibility release gate;
+  prepare a second release using the release-milestone checks above.
 
 ### 8. `upgrade/08-django51`
 
@@ -374,8 +404,8 @@ Preserve all existing catalogues and resource history when revisiting it.
 - Django 4.2, 5.0, and 5.1 are transitional targets because they no longer
   receive security updates. The maintained endpoint is Django 5.2 LTS.
 - Python 3.10 is used only as a transitional, `uv`-managed interpreter and
-  reaches upstream end of life in October 2026. It is not part of the published
-  endpoint.
+  reached upstream end of life in October 2026. It is included in the initial
+  Django 4.2 and 5.0 compatibility releases, but not the final published endpoint.
 - django-mptt states that compatibility with new Django versions is maintained.
   Version 0.18 also passed the django-fiber test suite through Django 6.0 during
   planning, so continuing to use it is acceptable. Replacing MPTT is out of
@@ -416,9 +446,10 @@ Preserve all existing catalogues and resource history when revisiting it.
   A tooling interpreter alone does not establish public application support.
 - GitHub Actions and third-party action versions must be checked against their
   current stable releases when the workflow branch is implemented.
-- Do not publish from the Django 4.2, 5.0, or 5.1 milestones. The intended
-  modernization releases follow acceptance of branch 13 for the backend and
-  branch 21 for the complete frontend pass.
+- Django 4.2 and Django 5.0 releases are explicitly permitted by the release
+  milestones above, with the same automated, browser, and service checks as
+  later releases. Django 5.1 remains an intermediate upgrade branch. Final
+  modernization releases follow branches 13 and 21.
 
 ### Local state
 

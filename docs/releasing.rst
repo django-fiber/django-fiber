@@ -76,9 +76,10 @@ upload or release tag.
 At the next permitted final release, verify that its pushed tag triggers a
 build and that its versioned documentation, ``stable``, and the ``latest``
 redirect all serve the expected release. Until then, ``stable`` may continue
-to serve the existing published version. Do not publish a transitional package
-or create a release tag just to test this setup. Historical tag rebuilds are
-outside this work.
+to serve the existing published version. Django 4.2 after branch 6b and Django
+5.0 after branch 7 are permitted release milestones once their acceptance checks
+pass. Create release tags only for accepted releases, rather than to test this
+setup. Historical tag rebuilds are outside this work.
 
 Record the tested commit, Python/Django/Sphinx versions, local build and warning
 regression results, Read the Docs build URL and result, and alias/redirect checks
