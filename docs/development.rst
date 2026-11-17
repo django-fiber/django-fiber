@@ -17,7 +17,8 @@ its own environment; it does not use the active virtual environment.
 Before preparing a release, the hook runs release-tool tests, ``./run_tests``,
 migration and Django system checks, Python compilation checks, strict Sphinx
 documentation builds, manifest validation, and a clean distribution build with
-strict metadata validation.
+strict metadata validation. GNU gettext (``msgfmt``) must be installed; the
+hook validates and compiles both translation domains first.
 There is no new project-wide lint policy. A failing check stops preparation.
 
 Zest prepares local release commits and a tag, then advances the development
@@ -95,8 +96,8 @@ After fixing the cause and pushing, run that command; do not repeat fullrelease.
 Watch the workflow in GitHub Actions and check both distributions on PyPI.
 A dispatched workflow, a successful local preparation, or a skipped publication
 job is not a completed publication. Also verify the Read the Docs release build
-and aliases as described in :doc:`releasing`. Transifex management follows in
-branch 6b.
+and aliases as described in :doc:`releasing`. Translation management is described in
+:doc:`translations`.
 
 Development and documentation dependencies
 ==========================================
@@ -115,25 +116,6 @@ Install documentation tools and build HTML from the repository root::
 Translations
 ============
 
-Translation strings are managed through Transifex - `here's the Django-Fiber project page <https://www.transifex.com/django-fiber/django-fiber/dashboard/>`_.
-
-The intention is to always have several Transifex maintainers (at present there are 2).
-
-If you are listed as maintainer on Transifex, here's a checklist of common actions that you can perform:
-
-Pull from Transifex
--------------------
-Get translated strings from Transifex and add them to your local copy of the project - the following assumes that you
-have already set up your connection to Transifex on your local computer::
-
-    cd <fiber folder of project>
-    tx pull -a --force
-    django-admin.py compilemessages
-
-Push to Transifex
------------------
-If any strings in the project have been modified, they need to be sent up to Transifex for translation::
-
-    cd <fiber folder of project>
-    django-admin.py makemessages --all
-    tx push --source --translations
+See :doc:`translations` for native Transifex integration, source string
+extraction, and review/compilation of translation updates. Translations already
+merged into Git are included in releases without contacting Transifex.

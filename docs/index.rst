@@ -19,6 +19,7 @@ Contents
    contributors
    development
    releasing
+   translations
    settings
 
    library

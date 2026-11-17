@@ -1,0 +1,11 @@
+filters:
+  - filter_type: file
+    file_format: PO
+    source_file: fiber/locale/en/LC_MESSAGES/django.po
+    source_language: en
+    translation_files_expression: 'fiber/locale/<lang>/LC_MESSAGES/django.po'
+  - filter_type: file
+    file_format: PO
+    source_file: fiber/locale/en/LC_MESSAGES/djangojs.po
+    source_language: en
+    translation_files_expression: 'fiber/locale/<lang>/LC_MESSAGES/djangojs.po'
