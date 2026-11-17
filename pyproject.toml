@@ -50,6 +50,7 @@ docs = [
 ]
 release = [
     "build",
+    "packaging",
     "check-manifest",
     "twine",
     "zest.releaser[recommended]",
@@ -71,3 +72,12 @@ include = ["fiber*"]
 
 [tool.setuptools.dynamic]
 version = { attr = "fiber.__version__" }
+
+[tool.zest-releaser]
+less-zeroes = true
+python-file-with-version = "fiber/__init__.py"
+push-changes = false
+release = false
+upload-pypi = false
+"prereleaser.before" = ["release.releaser_hooks.prereleaser_before"]
+"postreleaser.after" = ["release.releaser_hooks.trigger_pypi_workflow"]

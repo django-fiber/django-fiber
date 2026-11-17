@@ -8,26 +8,35 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     strategy:
       fail-fast: false # If one test fails, complete the other jobs.
       matrix:
         python: [ '3.10' ]
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v7
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e '.[dev]'
+      - name: Check release tooling
+        run: python -m unittest discover -s release/tests
       - name: Run tests
         run: tox
       - name: Coverage
         run: |
           coverage run testproject/manage.py test fiber_test
+          coverage xml -o coverage.xml
       - name: Upload coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v7
         with:
           name: Python ${{ matrix.python }}
+          files: coverage.xml
+          disable_search: true
+          use_oidc: true
