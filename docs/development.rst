@@ -8,7 +8,7 @@ New releases
 In order to make releasing a new version slightly easier, this project has been set up to use
 `Zest-releaser <https://zestreleaser.readthedocs.io/en/latest/>`_, together with the other release tools::
 
-    python -m pip install -r release-requirements.txt
+    python -m pip install -e '.[dev,release]'
 
 The ``[recommended]`` extra adds optional packages that make Zest.releaser more convenient.
 
@@ -23,6 +23,20 @@ Note that the ``prerelease`` command has some custom hooks in order to:
 .. note::
 
     In order for Django-Fiber to be uploaded to PyPI, you will need write privileges.
+
+Development and documentation dependencies
+==========================================
+
+Install development tools from the repository root::
+
+    python -m pip install -e '.[dev]'
+
+Run the tests with ``./run_tests`` or the compatibility matrix with ``tox``.
+
+Install documentation tools and build HTML from the repository root::
+
+    python -m pip install -e '.[docs]'
+    python -m sphinx -W -b html docs docs/_build/html
 
 Translations
 ============

@@ -37,6 +37,24 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "coverage[toml]>=4.2",
+    "coveralls",
+    "pipx",
+    "tox",
+    "tox-gh-actions",
+]
+docs = [
+    "Sphinx>=7,<9",
+]
+release = [
+    "build",
+    "check-manifest",
+    "twine",
+    "zest.releaser[recommended]",
+]
+
 [project.urls]
 Homepage = "https://github.com/django-fiber/django-fiber"
 Documentation = "https://django-fiber.readthedocs.io/"

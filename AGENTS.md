@@ -18,11 +18,9 @@ upgrade branch being worked on, and preserve compatibility with the versions in
 - `docs/` contains the Sphinx documentation. `docs/upgrade-plan.md` is the
   canonical sequence and acceptance policy for the modernization branches.
 - `run_tests` and `run_coverage` are the supported local test wrappers.
-- `requirements.txt` contains runtime dependencies and
-  `test-requirements.txt`, `docs-requirements.txt`, and
-  `release-requirements.txt` contain tooling for their named roles. Packaging
-  metadata and build configuration are in `pyproject.toml`; release and
-  manifest-tool configuration remain in `setup.cfg`.
+- `pyproject.toml` contains runtime dependencies, the `dev`, `docs`, and `release`
+  extras, packaging metadata, and build configuration. Release and manifest-tool
+  configuration remain in `setup.cfg`.
 - `.github/workflows/` and `tox.ini` define the CI and compatibility matrices.
 - `CHANGELOG.rst` records user-visible changes.
 
@@ -43,7 +41,7 @@ this is an optional bootstrap:
 uv python install 3.10
 uv venv --managed-python --python 3.10 --seed
 source .venv/bin/activate
-python -m pip install -r requirements.txt -r test-requirements.txt
+python -m pip install -e '.[dev]'
 ```
 
 On Windows, activate with `.venv\Scripts\activate` instead. If a root
@@ -121,13 +119,15 @@ migration and commit it only when the model-state change is intentional.
 Build the documentation, when documentation or public APIs change, with:
 
 ```console
+python -m pip install -e '.[docs]'
 python -m sphinx -W -b html docs docs/_build/html
 ```
 
-For packaging changes, install `release-requirements.txt`, then build and
-validate both distributions:
+For packaging changes, install the `release` extra, then build and validate
+both distributions:
 
 ```console
+python -m pip install -e '.[release]'
 python -m build
 python -m twine check --strict dist/*
 check-manifest

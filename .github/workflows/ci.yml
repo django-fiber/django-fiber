@@ -21,12 +21,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r test-requirements.txt
+          python -m pip install -e '.[dev]'
       - name: Run tests
         run: tox
       - name: Coverage
         run: |
-          pip install coverage[toml]
           coverage run testproject/manage.py test fiber_test
       - name: Upload coverage
         uses: codecov/codecov-action@v1
