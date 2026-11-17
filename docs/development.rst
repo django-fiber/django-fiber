@@ -7,7 +7,7 @@ New releases
 
 Prepare releases from a clean checkout of ``master`` with an isolated environment::
 
-    uvx --python 3.12 --from zest.releaser --with-editable '.[dev,release]' fullrelease
+    uvx --python 3.12 --from zest.releaser --with-editable '.[dev,docs,release]' fullrelease
 
 Python 3.12 is the newest interpreter supported by this branch's Django 4.2.
 Use its latest patch. This tooling choice does not change the Python 3.10
@@ -15,8 +15,9 @@ application baseline. The command installs the project and release tools in
 its own environment; it does not use the active virtual environment.
 
 Before preparing a release, the hook runs release-tool tests, ``./run_tests``,
-migration and Django system checks, Python compilation checks, manifest
-validation, and a clean distribution build with strict metadata validation.
+migration and Django system checks, Python compilation checks, strict Sphinx
+documentation builds, manifest validation, and a clean distribution build with
+strict metadata validation.
 There is no new project-wide lint policy. A failing check stops preparation.
 
 Zest prepares local release commits and a tag, then advances the development
@@ -93,8 +94,9 @@ After fixing the cause and pushing, run that command; do not repeat fullrelease.
 
 Watch the workflow in GitHub Actions and check both distributions on PyPI.
 A dispatched workflow, a successful local preparation, or a skipped publication
-job is not a completed publication. Read the Docs validation/publication and
-Transifex management are implemented in the following branches, 6a and 6b.
+job is not a completed publication. Also verify the Read the Docs release build
+and aliases as described in :doc:`releasing`. Transifex management follows in
+branch 6b.
 
 Development and documentation dependencies
 ==========================================
@@ -108,7 +110,7 @@ Run the tests with ``./run_tests`` or the compatibility matrix with ``tox``.
 Install documentation tools and build HTML from the repository root::
 
     python -m pip install -e '.[docs]'
-    python -m sphinx -W -b html docs docs/_build/html
+    python -m sphinx -E -W --keep-going -b html docs docs/_build/html
 
 Translations
 ============

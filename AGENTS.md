@@ -120,7 +120,7 @@ Build the documentation, when documentation or public APIs change, with:
 
 ```console
 python -m pip install -e '.[docs]'
-python -m sphinx -W -b html docs docs/_build/html
+python -m sphinx -E -W --keep-going -b html docs docs/_build/html
 ```
 
 For packaging changes, install the `release` extra, then build and validate
@@ -268,7 +268,7 @@ OS, Python/Django versions, and the result in the pull request.
 Run from a clean checkout of `master`:
 
 ```console
-uvx --python 3.12 --from zest.releaser --with-editable '.[dev,release]' fullrelease
+uvx --python 3.12 --from zest.releaser --with-editable '.[dev,docs,release]' fullrelease
 ```
 
 Python 3.12 is the newest version compatible with the transitional Django 4.2
@@ -277,14 +277,16 @@ Zest prepares commits and a tag locally; automatic pushes and uploads are disabl
 Do not run this command to publish a transitional modernization milestone.
 
 The prerelease hook runs release-tool tests, the supported unit wrapper, migration
-and Django checks, Python compilation, manifest validation, and distribution
-build/metadata checks. A failure stops preparation. Documentation and translation
-validation are added in branches 6a and 6b.
+and Django checks, Python compilation, strict Sphinx documentation builds, manifest
+validation, and distribution build/metadata checks. A failure stops preparation.
+Translation validation is added in branch 6b.
 
 After preparation, push the release commits and exact tag to the main repository.
 The postrelease hook attempts `gh workflow run` only when that tag is already
 remote and GitHub authentication is available; normally it prints a command to
 run after pushing. A dispatch failure leaves the completed local release intact.
-Publication is not complete until the workflow and PyPI files are verified.
+Publication is not complete until the workflow, PyPI files, and Read the Docs
+release build are verified. Follow `docs/releasing.rst` for documentation setup
+and recovery.
 Follow `docs/development.rst` for setup, release gates, and artifact-preserving
 retries. Do not enable `PYPI_PUBLISH_ENABLED` before the required acceptance gates.

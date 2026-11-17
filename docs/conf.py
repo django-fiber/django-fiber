@@ -12,16 +12,18 @@
 import sys
 import os
 from datetime import datetime
+from pathlib import Path
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('../testproject/'))
-sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-os.environ['DJANGO_SETTINGS_MODULE'] = 'testproject.testproject.settings'
 import django
+from django.conf import settings
 
+# Resolve imports from this file, independently of Sphinx's working directory.
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / 'testproject'))
+sys.path.insert(0, str(ROOT))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'testproject.testproject.settings'
+# Django's logging setup must not disable Sphinx's existing warning loggers.
+settings.LOGGING_CONFIG = None
 django.setup()
 
 # -- General configuration -----------------------------------------------------
@@ -35,7 +37,7 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.todo',
               'sphinx.ext.viewcode']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = []
 
 # The suffix of source filenames.
 source_suffix = '.rst'
