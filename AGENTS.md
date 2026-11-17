@@ -279,7 +279,9 @@ Do not run this command to publish a transitional modernization milestone.
 The prerelease hook runs release-tool tests, the supported unit wrapper, migration
 and Django checks, Python compilation, strict Sphinx documentation builds, manifest
 validation, and distribution build/metadata checks. A failure stops preparation.
-Translation validation is added in branch 6b.
+Translation validation and compilation run first, using GNU gettext (`msgfmt`).
+Releases include only translations already merged into Git; no Transifex
+download or translation-completion check runs during a release.
 
 After preparation, push the release commits and exact tag to the main repository.
 The postrelease hook attempts `gh workflow run` only when that tag is already
@@ -290,3 +292,13 @@ release build are verified. Follow `docs/releasing.rst` for documentation setup
 and recovery.
 Follow `docs/development.rst` for setup, release gates, and artifact-preserving
 retries. Do not enable `PYPI_PUBLISH_ENABLED` before the required acceptance gates.
+
+## Translation updates
+
+The native Transifex GitHub integration is configured in `transifex.yml` for
+both `django` and `djangojs`. Keep English source strings in Git and translated
+text in Transifex. Review translation pull requests and run
+`python bin/compile_translations.py` with GNU gettext installed before merging.
+Commit the resulting tracked `.mo` updates with their `.po` changes. A failed
+compilation preserves that file's existing output; earlier files may already
+have compiled. See `docs/translations.rst` for extraction and maintenance.

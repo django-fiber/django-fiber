@@ -4,6 +4,8 @@ Changelog for Django-Fiber
 1.11 (unreleased)
 -----------------
 
+- Added native Transifex GitHub integration configuration and validation of
+  Python and JavaScript translations before merging and releasing.
 - Validate documentation before release preparation and configure strict
   release-tag builds on Read the Docs.
 - Added manually dispatched PyPI trusted publishing with validated release artifacts.
